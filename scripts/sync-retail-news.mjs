@@ -5,151 +5,53 @@ const FEEDS = [
   {name:'Google News · Retail AI',url:'https://news.google.com/rss/search?q=retail+AI+agent+inventory+shopping+when%3A7d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'行业聚合'},
   {name:'Google News · China Retail AI',url:'https://news.google.com/rss/search?q=China+retail+AI+shopping+Qwen+Taobao+JD+when%3A14d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售',sourceType:'行业聚合'},
   {name:'Google News · Agentic Commerce',url:'https://news.google.com/rss/search?q=%22agentic+commerce%22+shopping+retail+when%3A14d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce',sourceType:'行业聚合'},
-  {name:'Google News · Amazon AI',url:'https://news.google.com/rss/search?q=site%3Aaboutamazon.com+AI+shopping+Rufus+Alexa+retail+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购',sourceType:'官方'},
-  {name:'Google News · Google Commerce',url:'https://news.google.com/rss/search?q=site%3Ablog.google+shopping+Gemini+agentic+commerce+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce',sourceType:'官方'},
-  {name:'Google News · OpenAI Shopping',url:'https://news.google.com/rss/search?q=site%3Aopenai.com+shopping+commerce+product+discovery+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购',sourceType:'官方'},
-  {name:'Google News · Claude Commerce',url:'https://news.google.com/rss/search?q=site%3Aclaude.com+commerce+agent+shopping+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购',sourceType:'官方'},
-  {name:'Google News · Alibaba Qwen',url:'https://news.google.com/rss/search?q=site%3Aalibabagroup.com+Qwen+Taobao+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售',sourceType:'官方'},
-  {name:'Google News · Walmart AI',url:'https://news.google.com/rss/search?q=site%3Acorporate.walmart.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'官方'},
-  {name:'Google News · JD AI Retail',url:'https://news.google.com/rss/search?q=site%3Ajdcorporateblog.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售',sourceType:'官方'},
-  {name:'Google News · NRF Retail AI',url:'https://news.google.com/rss/search?q=retail+AI+NRF+store+operations+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'行业媒体'},
-  {name:'Google News · Retail Dive AI',url:'https://news.google.com/rss/search?q=site%3Aretaildive.com+AI+retail+shopping+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'行业媒体'}
+  {name:'Amazon AI',url:'https://news.google.com/rss/search?q=site%3Aaboutamazon.com+AI+shopping+Rufus+Alexa+retail+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购',sourceType:'官方'},
+  {name:'Google Commerce',url:'https://news.google.com/rss/search?q=site%3Ablog.google+shopping+Gemini+agentic+commerce+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce',sourceType:'官方'},
+  {name:'OpenAI Shopping',url:'https://news.google.com/rss/search?q=site%3Aopenai.com+shopping+commerce+product+discovery+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购',sourceType:'官方'},
+  {name:'Alibaba Qwen',url:'https://news.google.com/rss/search?q=site%3Aalibabagroup.com+Qwen+Taobao+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售',sourceType:'官方'},
+  {name:'Walmart AI',url:'https://news.google.com/rss/search?q=site%3Acorporate.walmart.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'官方'},
+  {name:'JD AI Retail',url:'https://news.google.com/rss/search?q=site%3Ajdcorporateblog.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售',sourceType:'官方'},
+  {name:'Retail Dive AI',url:'https://news.google.com/rss/search?q=site%3Aretaildive.com+AI+retail+shopping+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营',sourceType:'行业媒体'}
 ]
 
 const seedFile = new URL('../src/data/retailNews.generated.js', import.meta.url)
 const publicFile = new URL('../public/retail-news.json', import.meta.url)
+const eventsFile = new URL('../public/retail-events.json', import.meta.url)
+const dailyFile = new URL('../public/retail-daily.json', import.meta.url)
 
-function decode(value = '') {
-  return value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-}
-
-function tag(xml, name) {
-  const re = new RegExp('<' + name + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + name + '>', 'i')
-  return decode(xml.match(re)?.[1]?.trim() || '')
-}
-
-function guessTags(title = '') {
-  const rules = [
-    ['AI 导购', /shopping assistant|shopping agent|导购|购物助手/i],
-    ['Agent', /agentic|agent/i],
-    ['支付', /checkout|payment|支付/i],
-    ['库存', /inventory|stock|supply chain|库存|供应链/i],
-    ['推荐', /recommend|recommendation|推荐/i],
-    ['零售App', /app|mobile|应用/i]
-  ]
-  return rules.filter(([, re]) => re.test(title)).map(([name]) => name)
-}
-
-async function fetchFeed(feed) {
-  try {
-    const response = await fetch(feed.url, {headers:{'user-agent':'ai-grocery-store-retail-sync/1.0'}})
-    if (!response.ok) throw new Error('HTTP ' + response.status)
-    const xml = await response.text()
-    return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,15).map((m,index) => {
-      const raw = m[1], title = tag(raw,'title'), link = tag(raw,'link'), pubDate = tag(raw,'pubDate'), sourceName = tag(raw,'source')
-      if (!title || !link) return null
-      const parsed = Date.parse(pubDate)
-      return {
-        id:'feed-' + feed.name.replace(/[^a-z0-9]+/gi,'-').toLowerCase() + '-' + index + '-' + (parsed || Date.now()),
-        source:sourceName || feed.name, sourceType:feed.sourceType,
-        date:Number.isNaN(parsed) ? new Date().toISOString().slice(0,10) : new Date(parsed).toISOString().slice(0,10),
-        lane:feed.lane,
-        title,
-        summary:'信源原文自动同步。页面不改写事实；请打开原文查看完整报道与上下文。',
-        impact:'自动进入零售 AI 雷达，暂不将标题解释为经营结论。',
-        action:'下一步：核对原文、原始披露和后续进展，再进入案例追踪。',
-        tags:[...new Set([feed.lane,...guessTags(title)])].slice(0,4),
-        url:link
-      }
-    }).filter(Boolean)
-  } catch (error) {
-    console.warn('[retail-sync] ' + feed.name + ': ' + error.message)
-    return []
-  }
-}
-
-
-function tokenize(text='') {
-  return new Set((text.toLowerCase().match(/[a-z0-9]+|[\\u4e00-\\u9fff]{2,4}/g) || []).filter(x=>x.length>1))
-}
-function similarity(a,b) {
-  const A=tokenize(a), B=tokenize(b), union=new Set([...A,...B])
-  return union.size ? [...A].filter(x=>B.has(x)).length/union.size : 0
-}
-function heuristicScore(item) {
-  const text=item.title+' '+item.summary
-  let relevance=35, impact=35
-  if(/retail|shopping|commerce|store|grocery|零售|购物|电商|门店|商超/i.test(text)) relevance+=22
-  if(/agent|AI|人工智能|assistant|智能/i.test(text)) relevance+=18
-  if(/inventory|pricing|checkout|payment|recommend|forecast|库存|定价|支付|结算|推荐|预测|履约/i.test(text)) impact+=18
-  if(/revenue|sales|labor|cost|conversion|margin|收入|销售|人效|成本|转化|利润/i.test(text)) impact+=14
-  if(item.sourceType==='官方') relevance+=8
-  return {relevanceScore:Math.min(100,relevance),impactScore:Math.min(100,impact)}
-}
-async function scoreWithLLM(items) {
-  const apiKey=process.env.OPENAI_API_KEY
-  if(!apiKey||!items.length) return []
-  const base=process.env.OPENAI_BASE_URL||'https://api.openai.com/v1'
-  const model=process.env.RETAIL_LLM_MODEL||'gpt-5-mini'
-  const payload=items.map((item,index)=>({index,title:item.title,source:item.source,lane:item.lane,date:item.date}))
-  const system='你是AI零售情报雷达筛选器。评估新闻是否值得零售经营者继续追踪。relevance=与AI零售直接相关程度；impact=对导购、转化、客单、库存、履约、人效、损耗、门店运营、支付、平台格局的潜在影响；novelty=新颖程度；evidence=信源可信度。均0-100整数。keep仅在relevance>=60且impact>=45时为true。reason不超过35个中文字符。不要编造事实，只输出JSON数组。'
-  try {
-    const response=await fetch(base.replace(/\/$/,'')+'/chat/completions',{method:'POST',headers:{authorization:'Bearer '+apiKey,'content-type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(payload)}],temperature:0.1})})
-    if(!response.ok) throw new Error('LLM HTTP '+response.status)
-    const data=await response.json(), content=data.choices?.[0]?.message?.content||'', match=content.match(/\[[\s\S]*\]/)
-    if(!match) throw new Error('LLM JSON missing')
-    return JSON.parse(match[0])
-  } catch(error) { console.warn('[retail-radar] LLM fallback: '+error.message); return [] }
-}
-function cluster(items) {
-  const clusters=[]
-  for(const item of items) {
-    let target=clusters.find(c=>similarity(c.items[0].title,item.title)>=0.28)
-    if(!target){target={id:'cluster-'+(clusters.length+1),items:[]};clusters.push(target)}
-    target.items.push(item)
-  }
-  return clusters
-}
-function rank(items) {
-  const now=Date.now()
-  return items.map(item=>{
-    const age=Math.max(0,(now-Date.parse(item.date+'T12:00:00Z'))/86400000)
-    const freshness=Math.max(0,100-age*8), clusterBoost=Math.min(20,Math.max(0,(item.clusterSize||1)-1)*7)
-    const sourceBoost=item.sourceType==='官方'?10:item.sourceType==='行业媒体'?6:2
-    const relevance=item.relevanceScore||50, impact=item.impactScore||40, novelty=item.noveltyScore||50, evidence=item.evidenceScore||60
-    item.heatScore=Math.min(100,Math.round(relevance*.30+impact*.30+novelty*.10+evidence*.10+freshness*.12+clusterBoost+sourceBoost))
-    return item
-  }).sort((a,b)=>b.heatScore-a.heatScore)
-}
-function buildDigest(items) {
-  const today=new Date().toISOString().slice(0,10), top=items.filter(x=>x.date>=today).slice(0,5)
-  return {date:today,generatedAt:new Date().toISOString(),title:'AI 零售日报',lead:top[0]?.title||'今日暂无足够新情报',bullets:top.slice(0,4).map(x=>({title:x.title,source:x.source,heatScore:x.heatScore,reason:x.llmReason||x.impact})),method:'信源抓取 → AI 零售影响评分 → 事件聚簇 → 热度排序 → 日报'}
-}
+function decode(v=''){return v.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>')}
+function tag(xml,name){const r=new RegExp('<'+name+'(?:\\s[^>]*)?>([\\s\\S]*?)</'+name+'>','i');return decode((xml.match(r)||[])[1]||'')}
+function tokens(s=''){return new Set((s.toLowerCase().match(/[a-z0-9]+|[\u4e00-\u9fff]{2,4}/g)||[]).filter(x=>x.length>1))}
+function sim(a,b){const A=tokens(a),B=tokens(b),U=new Set([...A,...B]);return U.size?[...A].filter(x=>B.has(x)).length/U.size:0}
+function hash(s=''){let h=2166136261;for(const ch of s.toLowerCase()){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+function tags(t=''){const rules=[['AI 导购',/shopping assistant|shopping agent|导购|购物助手/i],['Agent',/agentic|agent/i],['支付',/checkout|payment|支付/i],['库存',/inventory|stock|supply chain|库存|供应链/i],['推荐',/recommend|recommendation|推荐/i],['门店',/store|shop|门店/i],['履约',/delivery|fulfillment|履约/i],['定价',/pricing|price|定价|价格/i]];return rules.filter(x=>x[1].test(t)).map(x=>x[0])}
+async function fetchFeed(feed){try{const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/3.0'}});if(!r.ok)throw Error('HTTP '+r.status);const xml=await r.text();return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,18).map((m,i)=>{const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source');if(!title||!url)return null;const d=Date.parse(pd);return {id:'feed-'+hash(title+url),source:source||feed.name,sourceType:feed.sourceType,date:isNaN(d)?new Date().toISOString().slice(0,10):new Date(d).toISOString().slice(0,10),publishedAt:isNaN(d)?null:new Date(d).toISOString(),lane:feed.lane,title,summary:'信源原文自动同步；事实以原始报道为准。',impact:'等待 AI 零售影响判断。',action:'打开原文核对事件，再观察后续经营结果。',tags:[feed.lane,...tags(title)].slice(0,5),url}}).filter(Boolean)}catch(e){console.warn('[retail-radar] '+feed.name+': '+e.message);return []}}
+function heuristic(x){const t=x.title;let r=30,i=30,e=x.sourceType==='官方'?90:x.sourceType==='行业媒体'?72:55;if(/retail|shopping|commerce|store|grocery|零售|购物|电商|门店/i.test(t))r+=28;if(/agent|AI|人工智能|assistant|智能/i.test(t))r+=20;if(/inventory|pricing|checkout|payment|recommend|forecast|库存|定价|支付|推荐|预测|履约/i.test(t))i+=22;if(/revenue|sales|labor|cost|conversion|margin|收入|销售|人效|成本|转化|利润/i.test(t))i+=18;return {relevanceScore:Math.min(100,r),impactScore:Math.min(100,i),evidenceScore:e}}
+async function llm(system,data){const key=process.env.OPENAI_API_KEY;if(!key)return null;const base=process.env.OPENAI_BASE_URL||'https://api.openai.com/v1',model=process.env.RETAIL_LLM_MODEL||'gpt-5-mini';try{const r=await fetch(base.replace(/\/$/,'')+'/chat/completions',{method:'POST',headers:{authorization:'Bearer '+key,'content-type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(data)}],temperature:.1})});if(!r.ok)throw Error('LLM HTTP '+r.status);const j=await r.json(),c=j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content||'',m=c.match(/```(?:json)?\s*([\s\S]*?)\s*```/)||c.match(/\[[\s\S]*\]/)||c.match(/\{[\s\S]*\}/);return m?JSON.parse(m[1]||m[0]):null}catch(e){console.warn('[retail-radar] LLM fallback: '+e.message);return null}}
+async function score(items){const data=items.map((x,i)=>({index:i,title:x.title,source:x.source,lane:x.lane,date:x.date}));const r=await llm('你是AI零售情报筛选器。relevance=与AI零售直接相关程度；impact=对导购、转化、客单、库存、履约、人效、损耗、门店运营、支付、平台格局的影响；novelty=新颖程度；evidence=证据可信度。均0-100。keep仅在relevance>=60且impact>=45时为true。不要编造事实。输出JSON数组。',data);return Array.isArray(r)?r:[]}
+async function cluster(items,oldEvents){const candidates=items.map((x,i)=>({index:i,title:x.title,source:x.source,candidates:oldEvents.map((e,j)=>({eventIndex:j,title:e.title,score:sim(x.title,e.title)})).filter(y=>y.score>=.18).sort((a,b)=>b.score-a.score).slice(0,4)}));const r=await llm('你是事件聚簇器。判断新闻是否与候选为同一持续事件。same或followup表示同一事件，new表示新事件。只有事实对象、公司/产品和核心动作高度一致才合并。输出JSON数组：index,type,eventIndex,title。new时title不超过24字。',candidates);const decisions=new Map((Array.isArray(r)?r:[]).map(x=>[Number(x.index),x]));const events=oldEvents.map(e=>({...e,items:[]}));for(const c of candidates){const d=decisions.get(c.index);let e=null;if(d&&d.type!=='new'&&events[Number(d.eventIndex)])e=events[Number(d.eventIndex)];if(!e){const title=(d&&d.title)||c.title;e={id:'event-'+hash(title),title,items:[],firstDate:items[c.index].date}}e.items.push(items[c.index]);if(!events.includes(e))events.push(e)}return events.filter(e=>e.items.length)}
+function scoreEvents(events){const now=Date.now();return events.map(e=>{const sources=[...new Set(e.items.map(x=>x.source))],latest=e.items.slice().sort((a,b)=>b.date.localeCompare(a.date))[0],age=Math.max(0,(now-Date.parse(latest.date+'T12:00:00Z'))/86400000),fresh=Math.max(0,100-age*10),impact=e.items.reduce((s,x)=>s+(x.impactScore||40),0)/e.items.length,rel=e.items.reduce((s,x)=>s+(x.relevanceScore||40),0)/e.items.length,evidence=e.items.reduce((s,x)=>s+(x.evidenceScore||60),0)/e.items.length;e.sourceCount=sources.length;e.reportCount=e.items.length;e.latestAt=latest.date;e.heatScore=Math.min(100,Math.round(impact*.32+rel*.20+evidence*.13+fresh*.15+Math.min(30,sources.length*9)+(e.items.some(x=>x.sourceType==='官方')?10:0)));e.status=age<=2?'active':'cooling';e.sources=sources;e.lane=latest.lane;e.tags=[...new Set(e.items.flatMap(x=>x.tags||[]))].slice(0,6);return e}).sort((a,b)=>b.heatScore-a.heatScore)}
+async function enrich(events){const data=events.slice(0,20).map((e,i)=>({index:i,id:e.id,title:e.title,heatScore:e.heatScore,sourceCount:e.sourceCount,latestAt:e.latestAt,lane:e.lane,reports:e.items.slice(0,3).map(x=>({title:x.title,source:x.source,date:x.date}))}));const r=await llm('你是零售行业编辑。只基于事件资料生成summary(发生了什么<=70字)、why(为什么值得零售经营者关注<=55字)、watch(下一步验证什么<=55字)。不得编造数字。输出JSON数组并保留index。',data);if(Array.isArray(r))r.forEach(x=>{const e=events[Number(x.index)];if(e){e.summary=x.summary||'';e.impact=x.why||'';e.watch=x.watch||''}});return events}
+async function digest(events){const top=events.slice(0,8),r=await llm('你是AI零售日报编辑。只能根据事件资料写日报。输出JSON：lead<=80字、sections数组(title,summary,eventId)、watchlist数组。不要编造数字。',top.map(e=>({id:e.id,title:e.title,heatScore:e.heatScore,sourceCount:e.sourceCount,latestAt:e.latestAt,summary:e.summary,impact:e.impact,watch:e.watch})));return {date:new Date().toISOString().slice(0,10),generatedAt:new Date().toISOString(),title:'AI 零售日报',lead:(r&&r.lead)||(top[0]&&top[0].summary)||'等待今日情报聚合完成',sections:Array.isArray(r&&r.sections)?r.sections:top.slice(0,5).map(e=>({title:e.title,summary:e.summary,eventId:e.id})),watchlist:Array.isArray(r&&r.watchlist)?r.watchlist:top.slice(0,5).map(e=>e.watch||'继续观察后续披露'),method:'信源 → AI筛选 → 候选召回 → LLM事件判断 → 事件热度 → 日报'}}
 const previousModule=await import(seedFile.href+'?t='+Date.now())
 const previous=previousModule.retailNews||[]
+let oldEvents=[]
+try{const r=await fetch(eventsFile);if(r.ok)oldEvents=(await r.json()).events||[]}catch{}
+const raw=(await Promise.all(FEEDS.map(fetchFeed))).flat(),seen=new Set()
+const unique=raw.filter(x=>{const k=x.title.toLowerCase();if(seen.has(k))return false;seen.add(k);return true})
 const previousByTitle=new Map(previous.map(x=>[x.title.toLowerCase().trim(),x]))
-const results=(await Promise.all(FEEDS.map(fetchFeed))).flat()
-const seen=new Set()
-const unique=results.filter(item=>{const key=item.title.toLowerCase().replace(/\\s+/g,' ');if(seen.has(key))return false;seen.add(key);return true})
-const scoredInput=unique.filter(item=>!previousByTitle.has(item.title.toLowerCase().trim())).slice(0,30)
-const llmScores=await scoreWithLLM(scoredInput)
-const llmByIndex=new Map(llmScores.map(x=>[Number(x.index),{relevanceScore:Number(x.relevance||0),impactScore:Number(x.impact||0),noveltyScore:Number(x.novelty||0),evidenceScore:Number(x.evidence||0),keep:Boolean(x.keep),llmReason:String(x.reason||'')}]))
-const fresh=unique.map(item=>{
-  const old=previousByTitle.get(item.title.toLowerCase().trim()), heuristic=heuristicScore(item)
-  const llm=old?.scoredBy ? old : llmByIndex.get(scoredInput.findIndex(x=>x.title===item.title))
-  return {...item,...heuristic,...(llm||{}),scoredBy:llm?'llm+heuristic':'heuristic'}
-}).filter(item=>(item.keep??true)&&(item.relevanceScore||0)>=45)
-const curated=previous.filter(item=>!item.id?.startsWith('feed-'))
-const all=[...fresh,...curated]
-const clusters=cluster(all)
-clusters.forEach(c=>c.items.forEach(item=>{item.clusterId=c.id;item.clusterSize=c.items.length;item.clusterTitle=c.items[0].title}))
-const ranked=rank(all).slice(0,80)
-const digest=buildDigest(ranked)
-const output='// AUTO-GENERATED by scripts/sync-retail-news.mjs.\\n// Do not edit manually.\\n\\nexport const retailNewsLastSyncedAt = '+JSON.stringify(new Date().toISOString())+'\\n\\nexport const retailNews = '+JSON.stringify(ranked,null,2)+'\\n'
+const fresh=unique.filter(x=>!previousByTitle.has(x.title.toLowerCase().trim())).slice(0,36)
+const scores=await score(fresh),scoreMap=new Map(scores.map(x=>[Number(x.index),x]))
+const scored=fresh.map((x,i)=>{const h=heuristic(x),s=scoreMap.get(i);return {...x,...h,...(s?{relevanceScore:Number(s.relevance||0),impactScore:Number(s.impact||0),noveltyScore:Number(s.novelty||0),evidenceScore:Number(s.evidence||0),keep:Boolean(s.keep),llmReason:String(s.reason||'')}:{}),scoredBy:s?'llm+heuristic':'heuristic'}}).filter(x=>(x.keep??true)&&(x.relevanceScore||0)>=45)
+const existing=unique.filter(x=>previousByTitle.has(x.title.toLowerCase().trim())).map(x=>({...x,...previousByTitle.get(x.title.toLowerCase().trim())}))
+const items=[...existing,...scored]
+const events=await cluster(items,oldEvents),enriched=await enrich(scoreEvents(events)),rankedEvents=scoreEvents(enriched)
+const eventByItem=new Map(rankedEvents.flatMap(e=>e.items.map(x=>[x.id,e]))),rankedItems=items.map(x=>{const e=eventByItem.get(x.id);return {...x,eventId:e&&e.id,eventTitle:e&&e.title,eventHeatScore:e&&e.heatScore,eventSourceCount:e&&e.sourceCount,eventReportCount:e&&e.reportCount,eventSummary:e&&e.summary,eventImpact:e&&e.impact,eventWatch:e&&e.watch}}).sort((a,b)=>(b.eventHeatScore||0)-(a.eventHeatScore||0)).slice(0,100)
+const generatedAt=new Date().toISOString(),report=await digest(rankedEvents)
+const output='// AUTO-GENERATED by scripts/sync-retail-news.mjs.\\n// Do not edit manually.\\n\\nexport const retailNewsLastSyncedAt = '+JSON.stringify(generatedAt)+'\\n\\nexport const retailNews = '+JSON.stringify(rankedItems,null,2)+'\\n'
 await mkdir(new URL('../src/data/',import.meta.url),{recursive:true})
 await writeFile(seedFile,output,'utf8')
-await writeFile(publicFile,JSON.stringify({generatedAt:new Date().toISOString(),items:ranked},null,2),'utf8')
-await writeFile(new URL('../public/retail-daily.json',import.meta.url),JSON.stringify(digest,null,2),'utf8')
-console.log('[retail-radar] fetched='+unique.length+' llmScored='+llmScores.length+' clusters='+clusters.length+' kept='+ranked.length)
+await writeFile(publicFile,JSON.stringify({generatedAt,items:rankedItems},null,2),'utf8')
+await writeFile(eventsFile,JSON.stringify({generatedAt,events:rankedEvents.map(e=>{const copy={...e};delete copy.items;return copy})},null,2),'utf8')
+await writeFile(dailyFile,JSON.stringify(report,null,2),'utf8')
+console.log('[retail-radar] fetched='+unique.length+' fresh='+fresh.length+' scored='+scores.length+' events='+rankedEvents.length)
