@@ -31,11 +31,18 @@ const sections = [
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
     { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
+  { id:'retail-taobao', label:'淘宝平台动作', icon:'▣', group:'平台动作' },
+  { id:'retail-jd', label:'京东平台动作', icon:'▣', group:'平台动作' },
+  { id:'retail-meituan', label:'美团平台动作', icon:'▣', group:'平台动作' },
+  { id:'retail-pdd', label:'拼多多平台动作', icon:'▣', group:'平台动作' },
   { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
 ]
 
 function navigate(id, { syncHash = true } = {}) {
   activeSection.value = id
+  const platformLane = ({ 'retail-taobao':'淘宝', 'retail-jd':'京东', 'retail-meituan':'美团', 'retail-pdd':'拼多多' })[id]
+  if (platformLane) activeNewsLane.value = platformLane
+  else if (id === 'retail-news') activeNewsLane.value = '全部'
   selectedNews.value = null
   detail.value = null
   selectedCase.value = null
@@ -113,7 +120,7 @@ onMounted(() => {
     <main class="app-main">
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
-      <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
+      <RetailNewsShelf v-else-if="['retail-news','retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
