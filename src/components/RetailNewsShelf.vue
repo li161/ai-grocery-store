@@ -79,6 +79,15 @@ const eventReports=computed(()=>selectedEvent.value?.reports?.length ? selectedE
             <div class="lifecycle-next"><b>下一步验证</b><p>{{ selectedEvent.lifecycle.nextMilestone }}</p></div>
           </div>
 
+          <section v-if="selected.eventMerchantImpact || selectedEvent?.merchantImpact" class="merchant-strategy-card">
+            <div class="event-side-head"><h2>商家策略观察</h2><span>分析推断</span></div>
+            <p>{{ selected.eventMerchantImpact || selectedEvent?.merchantImpact }}</p>
+            <small>置信度：{{ ({high:'较高',medium:'中等',low:'较低'})[selected.eventImpactConfidence || selectedEvent?.impactConfidence || 'low'] }} · 请结合平台原文及店铺实际数据判断</small>
+            <ul v-if="(selected.eventMerchantActions || selectedEvent?.merchantActions || []).length">
+              <li v-for="action in (selected.eventMerchantActions || selectedEvent?.merchantActions || [])" :key="action">{{ action }}</li>
+            </ul>
+          </section>
+
           <div class="event-progress">
             <div class="event-progress-head">
               <strong>最新进展</strong>
