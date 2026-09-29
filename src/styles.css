@@ -536,3 +536,106 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
 .empty-metric{max-width:600px;margin:60px auto;text-align:center}.empty-metric span{display:block;color:#397c7f;font-size:12px;font-weight:700}.empty-metric strong{display:block;margin-top:12px;font-size:25px}.empty-metric p{color:#7a868b;font-size:13px;line-height:1.8}
 @media(max-width:900px){.event-detail-page{width:min(100% - 36px,720px)}.event-layout{grid-template-columns:1fr}.event-detail-header h1{font-size:39px}.event-side{grid-template-columns:1fr 1fr}.event-tags-card{grid-column:1/-1}}
 @media(max-width:700px){.event-detail-page{width:calc(100% - 28px);padding-top:10px}.event-detail-header h1{font-size:32px}.event-meta{flex-wrap:wrap;gap:12px}.event-tabs{width:100%;overflow:auto}.event-tabs button{white-space:nowrap;padding:9px 13px}.event-layout{margin-top:24px}.event-card-head,.event-summary{padding-left:20px;padding-right:20px}.event-summary{margin-left:20px;margin-right:20px;font-size:14px}.event-generated{padding-left:20px;padding-right:20px}.event-progress{padding-left:20px}.event-side{grid-template-columns:1fr}.event-tags-card{grid-column:auto}.event-tab-panel{padding:30px 20px}.timeline-event{grid-template-columns:72px 12px 1fr;gap:10px}.timeline-event article h2{font-size:18px}}
+
+/* ===== readability pass: desktop navigation + event intelligence ===== */
+@media(min-width:801px){
+  .store-sidebar{
+    width:250px;
+    padding:24px 14px 18px;
+  }
+  .sidebar-brand{
+    padding:5px 12px 34px;
+    gap:13px;
+  }
+  .sidebar-brand .brand-mark{
+    width:40px;height:40px;
+    font-size:16px;
+  }
+  .sidebar-brand strong{font-size:19px}
+  .sidebar-brand small{font-size:8px;margin-top:4px}
+  .sidebar-group{margin-bottom:25px}
+  .sidebar-group-title{
+    padding:0 14px 9px;
+    font-size:10px;
+    letter-spacing:.14em;
+  }
+  .sidebar-item{
+    height:48px;
+    gap:13px;
+    padding:0 14px;
+    font-size:14px;
+    border-radius:5px;
+  }
+  .sidebar-item i{width:20px;font-size:17px}
+  .sidebar-item b{font-size:8px;padding:4px 6px}
+  .sidebar-search,.sidebar-theme{
+    height:44px;
+    padding:0 13px;
+    font-size:12px;
+    margin-bottom:9px;
+  }
+  .sidebar-search kbd{font-size:9px;padding:3px 6px}
+  .sidebar-theme small{font-size:8px}
+  .sidebar-footer{font-size:10px;padding:12px 13px 3px}
+  .sidebar-footer small{font-size:7px}
+  .app-main{margin-left:250px}
+}
+
+.event-detail-page{
+  font-size:14px;
+}
+.event-breadcrumb{
+  height:42px;
+  gap:12px;
+  font-size:14px;
+}
+.event-breadcrumb button,
+.event-breadcrumb span{font-size:14px}
+.event-detail-header{padding-top:34px}
+.event-eyebrow{font-size:14px}
+.event-eyebrow b{font-size:12px;padding:6px 11px}
+.event-detail-header h1{
+  max-width:1120px;
+  margin:24px 0 20px;
+  font-size:clamp(42px,3.1vw,58px);
+  line-height:1.2;
+}
+.event-meta{gap:30px;font-size:14px}
+.event-meta strong{font-size:17px}
+.event-tabs{margin-top:36px}
+.event-tabs button{
+  padding:11px 22px;
+  font-size:14px;
+}
+.event-tabs button b{font-size:12px}
+.event-layout{grid-template-columns:minmax(0,1fr) 370px;gap:30px;margin-top:40px}
+.event-card-head{padding:31px 31px 12px}
+.event-card-head h2{font-size:23px}
+.event-card-head span{font-size:12px}
+.event-summary{
+  margin:12px 31px 0;
+  font-size:18px;
+  line-height:2;
+}
+.event-generated{padding:22px 31px 25px;font-size:12px}
+.event-progress{padding:23px 52px 27px 31px}
+.event-progress-head strong{font-size:14px}
+.event-progress-head time{font-size:13px}
+.event-progress p{font-size:14px}
+.event-side-card{padding:27px 27px 25px}
+.event-side-head h2{font-size:19px}
+.event-side-head span{font-size:12px}
+.event-side-card>p{font-size:14px;line-height:1.85}
+.event-side-card>small{font-size:12px}
+.side-caption{font-size:13px!important}
+.source-story small{font-size:12px}
+.source-story strong{font-size:15px}
+.event-tags span{font-size:12px}
+.timeline-event>time{font-size:13px}
+.timeline-event article span{font-size:12px}
+.timeline-event article h2{font-size:25px}
+.timeline-event article p{font-size:15px}
+.timeline-event article a{font-size:13px}
+.empty-metric span{font-size:13px}
+.empty-metric strong{font-size:27px}
+.empty-metric p{font-size:14px}
