@@ -21,7 +21,7 @@ defineProps({
       <button v-for="item in sections.filter(s => s.group === group)" :key="item.id" class="sidebar-item" :class="{active:activeSection===item.id}" @click="onNavigate(item.id)">
         <i>{{ item.icon }}</i><span>{{ item.label }}</span>
         <b v-if="item.id === 'retail-news'">NEW</b>
-        <b v-else-if="item.id.startsWith('retail-') && item.id !== 'retail-news'" class="platform-nav-mark">2026</b>
+
       </button>
     </div>
 
