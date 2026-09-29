@@ -152,7 +152,7 @@ const eventReports=computed(()=>selectedEvent.value?.reports?.length ? selectedE
 
     <template v-else>
       <header class="news-module-head">
-        <div><div class="module-kicker"><span>04</span> RETAIL INTELLIGENCE <small>零售情报</small></div><h1>零售情报时间线</h1><p>不把新闻压成一句结论。每条情报都保留：发生了什么、为什么重要、下一步看什么。</p></div>
+        <div><div class="module-kicker"><span>04</span> RETAIL INTELLIGENCE <small>零售情报</small></div><h1>{{ ['淘宝','京东','美团','拼多多'].includes(activeLane) ? activeLane + '平台动作 · 2026 年度归档' : '零售情报时间线' }}</h1><p>{{ ['淘宝','京东','美团','拼多多'].includes(activeLane) ? '按平台归集今年已检索到的公开规则、产品、流量、费用与经营政策；每条保留原文入口，年度检索受公开索引范围限制。' : '不把新闻压成一句结论。每条情报都保留：发生了什么、为什么重要、下一步看什么。' }}</p></div>
         <div class="news-sync"><span class="live-dot"></span><strong>自动雷达中</strong><small>{{ syncLabel }}</small></div>
         <aside class="daily-radar">
           <span>DAILY · AI 零售日报</span>
