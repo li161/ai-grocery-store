@@ -49,7 +49,7 @@ const detailTab=ref('overview')
             <span>AI 综合</span>
           </div>
 
-          <p class="event-summary">{{ selected.summary }}</p>
+          <p class="event-summary">{{ selected.eventSummary || selected.summary }}</p>
 
           <div class="event-generated">
             信息状态 · {{ selected.source }} · {{ selected.date }} · 原文直达
@@ -60,7 +60,7 @@ const detailTab=ref('overview')
               <strong>最新进展</strong>
               <time>{{ selected.date }}</time>
             </div>
-            <p>{{ selected.action }}</p>
+            <p>{{ selected.eventWatch || selected.action }}</p>
             <span>›</span>
           </div>
         </main>
@@ -68,12 +68,12 @@ const detailTab=ref('overview')
         <aside class="event-side">
           <section class="event-side-card">
             <div class="event-side-head"><h2>为什么热</h2></div>
-            <p>{{ selected.impact }}</p>
+            <p>{{ selected.eventImpact || selected.impact }}</p>
             <small>当前情报 · {{ selected.lane }}</small>
           </section>
 
           <section class="event-side-card">
-            <div class="event-side-head"><h2>原始信源</h2><span>1 篇</span></div>
+            <div class="event-side-head"><h2>原始信源</h2><span>{{ selected.eventSourceCount || 1 }} 个</span></div>
             <p class="side-caption">不把二次转述当成事实，直接打开原文核对。</p>
             <a :href="selected.url" target="_blank" rel="noopener" class="source-story">
               <small>{{ selected.source }}</small>
