@@ -1,37 +1,165 @@
 <script setup>
 import { computed, ref } from 'vue'
-const props = defineProps({ platform: String, items: { type: Array, default: () => [] }, meta: { type: Object, default: () => ({}) } })
+
+const props = defineProps({
+  items: { type: Array, default: () => [] },
+  meta: { type: Object, default: () => ({}) }
+})
 const keyword = ref('')
+const activePlatform = ref('全部')
 const activeType = ref('全部')
+const platforms = ['全部', '淘宝', '京东', '美团', '拼多多']
 const types = ['全部','App/产品功能','AI导购/购物助手','商家经营工具','流量/营销/补贴','平台规则/费用','履约/供应链','治理/算法']
 function category(item) {
-  if (item.actionType) return item.actionType
+  if (item.actionType && types.includes(item.actionType)) return item.actionType
   const s = [item.title,item.summary,...(item.tags||[])].join(' ')
-  if (/导购|购物助手|千问|AI购物|找同款/.test(s)) return 'AI导购/购物助手'
-  if (/App|版本|上线|新功能|产品发布|改版/.test(s)) return 'App/产品功能'
-  if (/流量|营销|补贴|优惠|大促|返佣|招商/.test(s)) return '流量/营销/补贴'
+  if (/导购|购物助手|千问|AI购物|找同款|东东/.test(s)) return 'AI导购/购物助手'
+  if (/App|版本|上线|新功能|产品发布|改版|客户端/.test(s)) return 'App/产品功能'
+  if (/流量|营销|补贴|优惠|大促|返佣|招商|广告投放/.test(s)) return '流量/营销/补贴'
   if (/配送|履约|物流|取餐|库存|供应链|ERP|接口/.test(s)) return '履约/供应链'
-  if (/算法|治理|恶意|隐私|合规|评价/.test(s)) return '治理/算法'
-  if (/商家|经营|掌柜|客服|运营/.test(s)) return '商家经营工具'
+  if (/算法|治理|恶意|隐私|合规|评价|食品安全/.test(s)) return '治理/算法'
+  if (/商家|经营|掌柜|客服|运营|商户/.test(s)) return '商家经营工具'
   return '平台规则/费用'
 }
-const allItems = computed(() => props.items.filter(x => (x.platform || x.lane) === props.platform))
-const counts = computed(() => Object.fromEntries(types.map(t => [t, t === '全部' ? allItems.value.length : allItems.value.filter(x => category(x) === t).length])))
-const shown = computed(() => allItems.value.map(x => ({...x,displayType:category(x)})).filter(x => activeType.value === '全部' || x.displayType === activeType.value).filter(x => !keyword.value || [x.title,x.summary,x.impact,x.action,x.source,...(x.tags||[])].join(' ').toLowerCase().includes(keyword.value.toLowerCase())).sort((a,b) => String(b.publishedAt||b.date).localeCompare(String(a.publishedAt||a.date))))
+const normalized = computed(() => props.items.map(item => ({ ...item, displayPlatform: item.platform || item.lane || '待识别', displayType: category(item) })))
+const counts = computed(() => Object.fromEntries(platforms.map(p => [p, p === '全部' ? normalized.value.length : normalized.value.filter(x => x.displayPlatform === p).length])))
+const typeCounts = computed(() => Object.fromEntries(types.map(t => [t, t === '全部' ? filteredPlatform.value.length : filteredPlatform.value.filter(x => x.displayType === t).length])))
+const filteredPlatform = computed(() => normalized.value.filter(x => activePlatform.value === '全部' || x.displayPlatform === activePlatform.value))
+const shown = computed(() => filteredPlatform.value
+  .filter(x => activeType.value === '全部' || x.displayType === activeType.value)
+  .filter(x => !keyword.value || [x.title,x.summary,x.impact,x.action,x.source,x.displayPlatform,...(x.tags||[])].join(' ').toLowerCase().includes(keyword.value.toLowerCase()))
+  .sort((a,b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || ''))))
+const verifiedCount = computed(() => normalized.value.filter(x => /官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(x.status || '')).length)
+function formatDate(item) {
+  const date = String(item.publishedAt || item.date || '')
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '日期待核验'
+}
 </script>
+
 <template>
-<section class="platform-page">
-  <header class="platform-hero"><div><div class="eyebrow">PLATFORM RADAR · {{ meta.year || 2026 }} 年度平台动作</div><h1>{{ platform }} <em>平台动作</em></h1><p>独立追踪平台产品、App 迭代、AI 导购、商家工具、规则与流量机制的变化。</p><div class="hero-tags"><span>App 与产品功能</span><span>AI 导购</span><span>商家经营工具</span><span>规则与流量</span></div></div><div class="hero-stat"><strong>{{ allItems.length }}</strong><span>条年度记录</span></div></header>
-  <aside class="coverage"><strong>监控范围</strong><p>官方新闻与公告、App 版本记录、开放平台文档、商家产品发布及可信行业报道。平台动作独立归档；商家影响属于分析推断，不与公告事实混写。</p></aside>
-  <div v-if="meta.sourceDirectory?.length" class="source-directory"><strong>平台官方信源入口</strong><div><a v-for="source in meta.sourceDirectory.filter(x => x.platform === platform)" :key="source.url" :href="source.url" target="_blank" rel="noopener noreferrer">{{ source.name }} ↗</a></div></div>
-  <div v-if="meta.sourceHealth?.queries" class="collection-health"><span>采集状态</span><b>{{ meta.sourceHealth.healthy }}/{{ meta.sourceHealth.queries }} 检索成功</b><span>候选 {{ meta.sourceHealth.newlyFound || 0 }} 条</span><span>京东官方公告 {{ meta.sourceHealth.jdOfficialNotices || 0 }} 条</span></div>
-  <div class="toolbar"><input v-model="keyword" placeholder="搜索导购功能、App 更新、商家工具、规则……"><span>{{ shown.length }} / {{ allItems.length }} 条</span></div>
-  <nav class="filters"><button v-for="t in types" :key="t" :class="{active:activeType===t}" @click="activeType=t">{{ t }} <b>{{ counts[t] }}</b></button></nav>
-  <div v-if="shown.length" class="action-list"><article v-for="item in shown" :key="item.id || item.title" class="action-card"><div class="date"><strong>{{ item.publishedAt || item.date || '日期待核验' }}</strong><small>发布日期</small></div><div class="body"><div class="meta"><b>{{ item.displayType }}</b><span>{{ item.source }}</span><small>{{ item.sourceType || '公开来源' }}</small><small v-if="item.status" class="status">{{ item.status }}</small></div><h2>{{ item.title }}</h2><p>{{ item.summary }}</p><div v-if="item.impact || item.action" class="impact"><div v-if="item.impact"><strong>对商家的潜在影响</strong><p>{{ item.impact }}</p></div><div v-if="item.action"><strong>建议关注</strong><p>{{ item.action }}</p></div></div><div class="foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join('  ') }}</span><a :href="item.url" target="_blank" rel="noopener noreferrer">查看原文 ↗</a></div></div></article></div>
-  <div v-else class="empty"><h2>{{ keyword || activeType !== '全部' ? '没有匹配记录' : platform + '年度记录正在补齐' }}</h2><p>此处不会用其他平台新闻填充，也不会将未经核验的内容当作事实。后续将持续补充官方公告、App 版本和产品发布。</p><button @click="activeType='全部';keyword=''">清除筛选</button></div>
-  <footer>最后归档：{{ meta.generatedAt || '等待自动同步' }}<p>{{ meta.coverageNote }}</p><small>公开检索无法保证覆盖平台内所有商家后台公告、灰度测试和仅对部分商家开放的功能。</small></footer>
-</section>
+  <section class="platform-actions-module section">
+    <div class="module-kicker"><span>04</span> PLATFORM RADAR <small>平台动作追踪</small></div>
+    <header class="platform-heading section-head compact">
+      <div>
+        <h1>{{ meta.year || 2026 }} 平台动作</h1>
+        <p>集中追踪淘宝、京东、美团、拼多多的产品迭代、AI 导购、商家工具、规则和经营机制变化。</p>
+      </div>
+      <div class="platform-summary"><strong>{{ normalized.length }}</strong><span>条归档线索</span><small>{{ verifiedCount }} 条有明确来源状态</small></div>
+    </header>
+
+    <div class="platform-tabs" role="tablist" aria-label="选择平台">
+      <button v-for="p in platforms" :key="p" role="tab" :aria-selected="activePlatform===p" :class="{active:activePlatform===p}" @click="activePlatform=p;activeType='全部'">
+        {{ p === '全部' ? '全部平台' : p }} <b>{{ counts[p] }}</b>
+      </button>
+    </div>
+
+    <div class="platform-source-strip">
+      <div><strong>信源覆盖</strong><span>官方公告 / 规则中心 / App 版本 / 开放平台 / 官方新闻 / 行业报道</span></div>
+      <div v-if="meta.sourceHealth?.queries" class="source-health">
+        <b>{{ meta.sourceHealth.healthy }}/{{ meta.sourceHealth.queries }}</b> 检索成功
+        <span v-if="meta.sourceHealth.failed">· {{ meta.sourceHealth.failed }} 失败</span>
+        <span>· {{ meta.sourceHealth.newlyFound || 0 }} 条本轮候选</span>
+      </div>
+    </div>
+
+    <div v-if="meta.sourceDirectory?.length" class="source-directory">
+      <span>官方入口</span>
+      <a v-for="source in meta.sourceDirectory.filter(x => activePlatform === '全部' || x.platform === activePlatform)" :key="source.platform + source.url" :href="source.url" target="_blank" rel="noopener noreferrer"><b>{{ source.platform }}</b>{{ source.name }} ↗</a>
+    </div>
+
+    <div class="platform-toolbar">
+      <label><span>⌕</span><input v-model="keyword" placeholder="搜索功能名称、公告、商家规则、流量或费用……"></label>
+      <span class="result-count">显示 {{ shown.length }} / {{ filteredPlatform.length }} 条</span>
+    </div>
+    <nav class="platform-type-tabs" aria-label="动作类型">
+      <button v-for="t in types" :key="t" :class="{active:activeType===t}" @click="activeType=t">{{ t }} <b>{{ typeCounts[t] }}</b></button>
+    </nav>
+
+    <div v-if="shown.length" class="platform-action-list">
+      <article v-for="item in shown" :key="item.id || item.url || item.title" class="platform-action-card">
+        <div class="action-date"><strong>{{ formatDate(item) }}</strong><span>{{ item.displayPlatform }}</span></div>
+        <div class="action-content">
+          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ item.source || '公开信源' }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
+          <h2>{{ item.title }}</h2>
+          <p class="action-summary">{{ item.summary || '已发现相关平台动态，需进一步核对原文内容。' }}</p>
+          <div v-if="item.impact || item.action" class="action-interpretation">
+            <div v-if="item.impact"><strong>潜在经营影响 · 分析推断</strong><p>{{ item.impact }}</p></div>
+            <div v-if="item.action"><strong>建议核查</strong><p>{{ item.action }}</p></div>
+          </div>
+          <div class="action-foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join('　') }}</span><a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">查看原始来源 ↗</a></div>
+        </div>
+      </article>
+    </div>
+    <div v-else class="platform-empty">
+      <strong>{{ keyword || activeType !== '全部' ? '没有匹配的记录' : '该筛选下暂时没有可展示记录' }}</strong>
+      <p>不会用其他平台的数据填充空缺。后续采集到新线索后，将按平台、发布时间和来源状态归档。</p>
+      <button @click="keyword='';activeType='全部';activePlatform='全部'">重置筛选</button>
+    </div>
+
+    <footer class="platform-footer">
+      <div><strong>采集边界</strong><p>{{ meta.coverageNote || '持续监测平台公开公告、产品发布、App 版本和商家经营规则。' }}</p></div>
+      <small>状态说明：官方确认表示有可追溯的官方来源；自动发现·待核验表示搜索候选，需回查原文后才能作为事实使用。公开数据无法覆盖仅对特定商家开放的后台通知、灰度功能或私域通知。</small>
+      <span>最近归档：{{ meta.generatedAt || '尚无成功同步记录' }}</span>
+    </footer>
+  </section>
 </template>
+
 <style scoped>
-.platform-page{max-width:1160px;margin:auto;padding:34px 36px 70px;color:var(--text-primary,#18201c)}.platform-hero{display:flex;justify-content:space-between;gap:28px;align-items:center;padding:30px;border:1px solid var(--line,#e4e8e4);border-radius:22px;background:var(--surface,#fff)}.eyebrow{font-size:11px;letter-spacing:.12em;color:var(--text-secondary,#737b75);font-weight:700}.platform-hero h1{font-size:clamp(30px,4vw,44px);margin:20px 0 10px;letter-spacing:-.04em}.platform-hero h1 em{font-style:normal;color:#159765}.platform-hero p{max-width:660px;line-height:1.8;color:var(--text-secondary,#69736c);font-size:13px}.hero-tags{display:flex;gap:8px;flex-wrap:wrap}.hero-tags span{font-size:11px;padding:6px 9px;border:1px solid var(--line,#e4e8e4);border-radius:999px}.hero-stat{border-left:1px solid var(--line,#e4e8e4);padding:10px 0 10px 28px;display:flex;flex-direction:column;align-items:center;min-width:100px}.hero-stat strong{font-size:44px;color:#159765}.hero-stat span{font-size:12px;color:var(--text-secondary,#69736c)}.coverage{margin:18px 0 22px;padding:16px 20px;border-radius:14px;background:var(--surface-soft,#f7f9f7);border:1px solid var(--line,#e4e8e4)}.coverage strong{font-size:12px}.coverage p{font-size:12px;line-height:1.8;color:var(--text-secondary,#69736c);margin:5px 0 0}.source-directory{margin:-10px 0 22px;padding:0 2px}.source-directory>strong{font-size:11px;color:var(--text-secondary,#69736c)}.source-directory>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.source-directory a{font-size:11px;color:#0b8757;text-decoration:none;border:1px solid var(--line,#e4e8e4);border-radius:7px;padding:6px 9px}.collection-health{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:-10px 0 20px;font-size:10px;color:var(--text-secondary,#69736c)}.collection-health b{color:#0b8757;font-weight:600}.toolbar{display:flex;gap:15px;align-items:center;margin-bottom:14px;color:var(--text-secondary,#69736c);font-size:12px}.toolbar input{flex:1;max-width:540px;padding:12px;border:1px solid var(--line,#e4e8e4);border-radius:11px;background:var(--surface,#fff);color:inherit}.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px}.filters button{padding:8px 10px;border:1px solid var(--line,#e4e8e4);border-radius:999px;background:var(--surface,#fff);font-size:11px;color:var(--text-secondary,#69736c);cursor:pointer}.filters button.active{border-color:#159765;color:#0b8757;background:rgba(21,151,101,.09)}.filters b{margin-left:4px}.action-list{display:grid;gap:12px}.action-card{display:grid;grid-template-columns:125px 1fr;gap:20px;padding:20px;border:1px solid var(--line,#e4e8e4);border-radius:17px;background:var(--surface,#fff)}.date{display:flex;flex-direction:column;gap:5px;font-size:12px}.date small,.meta,.foot{color:var(--text-secondary,#737b75);font-size:11px}.body{min-width:0}.meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.meta b{font-weight:500;color:#0b8757;background:rgba(21,151,101,.1);padding:4px 7px;border-radius:5px}.meta .status{color:#a16207;background:rgba(234,179,8,.12);padding:4px 6px;border-radius:5px}.body h2{font-size:17px;line-height:1.55;margin:12px 0 6px}.body>p{font-size:13px;line-height:1.8;color:var(--text-secondary,#69736c);margin:0}.impact{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.impact>div{background:var(--surface-soft,#f7f9f7);padding:11px;border-radius:10px}.impact strong{font-size:11px;color:#0b8757}.impact p{font-size:12px;line-height:1.7;color:var(--text-secondary,#69736c);margin:5px 0 0}.foot{display:flex;justify-content:space-between;gap:12px;margin-top:15px}.foot a{color:#0b8757;text-decoration:none;white-space:nowrap}.empty{text-align:center;padding:60px 20px;border:1px dashed var(--line,#d9dfda);border-radius:18px}.empty p{max-width:520px;margin:auto;color:var(--text-secondary,#69736c);font-size:13px;line-height:1.8}.empty button{margin-top:15px;padding:8px 12px;border:1px solid var(--line,#e4e8e4);border-radius:9px;background:var(--surface,#fff)}footer{border-top:1px solid var(--line,#e4e8e4);margin-top:28px;padding-top:18px;color:var(--text-secondary,#737b75);font-size:11px;line-height:1.8}footer p{margin:4px 0}@media(max-width:700px){.platform-page{padding:20px 14px 50px}.platform-hero{padding:20px;align-items:flex-start}.hero-stat{min-width:70px;padding-left:12px}.hero-stat strong{font-size:32px}.action-card{grid-template-columns:1fr;gap:10px;padding:16px}.date{flex-direction:row}.impact{grid-template-columns:1fr}.foot{flex-direction:column}}
+.platform-actions-module{max-width:1240px;margin:0 auto;min-width:0}
+.platform-heading{align-items:flex-start!important;gap:24px}
+.platform-heading h1{margin:0 0 10px;font-size:clamp(27px,3.3vw,38px);letter-spacing:-.035em}
+.platform-heading p{max-width:720px;line-height:1.8}
+.platform-summary{flex:0 0 auto;min-width:112px;padding:13px 16px;border:1px solid var(--line,#e4e8e4);border-radius:13px;background:var(--surface,#fff);display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.platform-summary strong{font-size:30px;line-height:1.2;color:var(--accent,#159765)}
+.platform-summary span,.platform-summary small{font-size:11px;color:var(--text-secondary,#737b75)}
+.platform-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 15px;padding-bottom:15px;border-bottom:1px solid var(--line,#e4e8e4)}
+.platform-tabs button,.platform-type-tabs button{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line,#e4e8e4);border-radius:9px;background:var(--surface,#fff);color:var(--text-secondary,#69736c);font-size:12px;cursor:pointer;transition:background .15s,border-color .15s}
+.platform-tabs button.active,.platform-type-tabs button.active{background:var(--accent-soft,rgba(21,151,101,.09));border-color:var(--accent,#159765);color:var(--text-primary,#18201c)}
+.platform-tabs button b,.platform-type-tabs button b{font-size:10px;color:var(--text-secondary,#737b75);font-weight:600}
+.platform-source-strip{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:13px;padding:12px 14px;border:1px solid var(--line,#e4e8e4);border-radius:11px;background:var(--surface-soft,#f7f9f7)}
+.platform-source-strip>div:first-child{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px}
+.platform-source-strip strong{font-size:11px}
+.platform-source-strip span,.source-health{font-size:11px;color:var(--text-secondary,#737b75)}
+.source-health b{color:var(--accent,#159765)}
+.source-directory{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:0 0 20px}
+.source-directory>span{font-size:11px;color:var(--text-secondary,#737b75);margin-right:3px}
+.source-directory a{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid var(--line,#e4e8e4);border-radius:7px;color:var(--text-secondary,#69736c);font-size:10px;text-decoration:none;background:var(--surface,#fff)}
+.source-directory a b{color:var(--accent,#159765);font-weight:600}
+.source-directory a:hover{border-color:var(--accent,#159765);color:var(--text-primary,#18201c)}
+.platform-toolbar{display:flex;align-items:center;gap:14px;margin:18px 0 12px}
+.platform-toolbar label{display:flex;align-items:center;gap:9px;max-width:620px;flex:1;min-width:0;padding:0 12px;border:1px solid var(--line,#e4e8e4);border-radius:9px;background:var(--surface,#fff)}
+.platform-toolbar label span{font-size:20px;color:var(--text-secondary,#737b75)}
+.platform-toolbar input{width:100%;min-width:0;padding:11px 0;border:0;outline:none;background:transparent;color:var(--text-primary,#18201c);font:inherit;font-size:12px}
+.result-count{white-space:nowrap;color:var(--text-secondary,#737b75);font-size:11px}
+.platform-type-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:17px}
+.platform-type-tabs button{padding:7px 9px;font-size:10px}
+.platform-action-list{display:grid;gap:10px}
+.platform-action-card{display:grid;grid-template-columns:108px minmax(0,1fr);gap:19px;padding:19px 20px;border:1px solid var(--line,#e4e8e4);border-radius:13px;background:var(--surface,#fff);transition:border-color .15s}
+.platform-action-card:hover{border-color:var(--accent,#159765)}
+.action-date{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-top:3px}
+.action-date strong{font-size:12px;font-weight:650;color:var(--text-primary,#18201c)}
+.action-date span{padding:4px 7px;border-radius:5px;background:var(--surface-soft,#f7f9f7);color:var(--text-secondary,#69736c);font-size:10px}
+.action-content{min-width:0}
+.action-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--text-secondary,#737b75)}
+.action-meta>b{padding:4px 7px;border-radius:5px;background:var(--accent-soft,rgba(21,151,101,.09));color:var(--accent,#159765);font-weight:600}
+.action-meta small{padding:3px 6px;border-radius:5px;background:rgba(217,119,6,.1);color:#b7791f;font-size:10px}
+.action-meta small.verified{background:var(--accent-soft,rgba(21,151,101,.09));color:var(--accent,#159765)}
+.action-content h2{margin:10px 0 6px;font-size:16px;line-height:1.55;font-weight:650;color:var(--text-primary,#18201c)}
+.action-summary{margin:0;color:var(--text-secondary,#69736c);font-size:12px;line-height:1.8}
+.action-interpretation{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.action-interpretation>div{padding:10px 11px;border-radius:8px;background:var(--surface-soft,#f7f9f7)}
+.action-interpretation strong{font-size:10px;color:var(--text-primary,#38413b)}
+.action-interpretation p{margin:5px 0 0;color:var(--text-secondary,#69736c);font-size:11px;line-height:1.7}
+.action-foot{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:12px;color:var(--text-secondary,#8a918c);font-size:10px}
+.action-foot>span{line-height:1.7;overflow-wrap:anywhere}
+.action-foot a{flex-shrink:0;color:var(--accent,#159765);text-decoration:none}
+.platform-empty{text-align:center;padding:54px 20px;border:1px dashed var(--line,#d9dfda);border-radius:13px}
+.platform-empty strong{font-size:14px}
+.platform-empty p{max-width:520px;margin:10px auto;color:var(--text-secondary,#69736c);font-size:12px;line-height:1.8}
+.platform-empty button{padding:8px 12px;border:1px solid var(--line,#e4e8e4);border-radius:8px;background:var(--surface,#fff);color:var(--text-primary,#18201c);font-size:11px;cursor:pointer}
+.platform-footer{display:grid;gap:9px;margin-top:24px;padding-top:17px;border-top:1px solid var(--line,#e4e8e4);color:var(--text-secondary,#737b75);font-size:11px;line-height:1.8}
+.platform-footer strong{color:var(--text-primary,#38413b);font-size:11px}
+.platform-footer p{margin:4px 0}
+.platform-footer>small{font-size:10px}
+@media(max-width:760px){.platform-heading{flex-direction:column}.platform-summary{flex-direction:row;align-items:center;gap:8px;width:100%;box-sizing:border-box}.platform-summary strong{font-size:22px}.platform-toolbar{align-items:stretch;flex-direction:column;gap:8px}.platform-toolbar label{max-width:none;flex:none}.result-count{text-align:right}.platform-action-card{grid-template-columns:1fr;gap:9px;padding:14px}.action-date{flex-direction:row;align-items:center;justify-content:space-between}.action-interpretation{grid-template-columns:1fr}.action-foot{flex-direction:column}.action-foot a{align-self:flex-start}}
 </style>
