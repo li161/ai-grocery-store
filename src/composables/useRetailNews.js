@@ -19,6 +19,7 @@ export function useRetailNews() {
   const liveNews = ref(fallbackNews)
   const eventHistory = ref([])
   const annualPlatformNews = ref([])
+  const platformArchiveMeta = ref({ year: new Date().getFullYear(), coverageNote: '年度公开平台动作归档', generatedAt: null })
   const lastSyncedAt = ref(seedSyncedAt)
   const liveState = ref('fallback')
   const dailyDigest = ref({ title:'AI 零售日报', lead:'等待首次雷达同步', bullets:[], method:'信源抓取 → AI 零售影响评分 → 事件聚簇 → 热度排序 → 日报' })
@@ -36,6 +37,7 @@ export function useRetailNews() {
       if (archiveResponse.ok) {
         const archive = await archiveResponse.json()
         annualPlatformNews.value = Array.isArray(archive.items) ? archive.items : []
+        platformArchiveMeta.value = { year: archive.year || new Date().getFullYear(), coverageNote: archive.coverageNote || '', generatedAt: archive.generatedAt || null, sourceHealth: archive.sourceHealth || {} }
       }
       if (eventsResponse.ok) {
         const eventPayload = await eventsResponse.json()
@@ -72,5 +74,5 @@ export function useRetailNews() {
   onMounted(() => { refresh(); timer = window.setInterval(refresh, REFRESH_MS) })
   onBeforeUnmount(() => window.clearInterval(timer))
 
-  return { lanes, activeLane, keyword, filteredNews, eventHistory, syncLabel, dailyDigest, annualPlatformNews, refresh }
+  return { lanes, activeLane, keyword, filteredNews, eventHistory, syncLabel, dailyDigest, annualPlatformNews, platformArchiveMeta, refresh }
 }
