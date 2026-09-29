@@ -1,6 +1,11 @@
 name: Sync Platform Actions
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/sync-platform-actions.mjs'
+      - '.github/workflows/sync-platform-actions.yml'
   schedule:
     - cron: '17 2 * * *'
   workflow_dispatch:
@@ -23,6 +28,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Validate collection script syntax
+        run: node --check scripts/sync-platform-actions.mjs
       - name: Collect platform action candidates
         run: npm run sync:platform
       - name: Commit annual platform archive
