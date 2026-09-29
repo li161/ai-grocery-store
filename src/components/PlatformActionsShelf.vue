@@ -79,7 +79,7 @@ function formatDate(item) {
       <article v-for="item in shown" :key="item.id || item.url || item.title" class="platform-action-card">
         <div class="action-date"><strong>{{ formatDate(item) }}</strong><span>{{ item.displayPlatform }}</span></div>
         <div class="action-content">
-          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ item.source || '公开信源' }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
+          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ item.sourceType === '微信公众号文章检索' ? '公众号索引 · ' + (item.source || '微信文章公开索引') : (item.source || '公开信源') }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
           <h2>{{ item.title }}</h2>
           <p class="action-summary">{{ item.summary || '已发现相关平台动态，需进一步核对原文内容。' }}</p>
           <div v-if="item.impact || item.action" class="action-interpretation">
