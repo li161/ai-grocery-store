@@ -108,6 +108,23 @@ async function mapLimit(items, limit, fn) {
   }))
   return output
 }
+
+async function resolveGoogleRedirect(item) {
+  if (!/news\\.google\\.com\\/rss\\/articles/i.test(item.url || '')) return item
+  try {
+    const response = await fetch(item.url, {
+      redirect: 'follow',
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; RetailPlatformRadar/1.0)', accept: 'text/html,application/xhtml+xml' },
+      signal: AbortSignal.timeout(9000)
+    })
+    const finalUrl = response.url
+    const host = new URL(finalUrl).hostname.toLowerCase()
+    if (host !== 'news.google.com' && !host.endsWith('.google.com')) {
+      return { ...item, url: finalUrl, status: '自动发现·已解析至发布站点，内容仍需核验' }
+    }
+  } catch {}
+  return item
+}
 function quarterWindows() {
   const windows = []
   let cursor = new Date(start)
@@ -226,8 +243,12 @@ const jdOfficialItems = Array.isArray(jdOfficialResult) ? jdOfficialResult : jdO
 const meituanRulesResult = await fetchMeituanRuleDirectory()
 const meituanRuleItems = meituanRulesResult.items
 const found = [...results.flatMap(result => result.items), ...jdOfficialItems, ...meituanRuleItems].filter(relevance)
+const [resolvedPrevious, resolvedFound] = await Promise.all([
+  mapLimit((previous.items || []).filter(relevance), 5, resolveGoogleRedirect),
+  mapLimit(found, 5, resolveGoogleRedirect)
+])
 const merged = new Map()
-for (const rawItem of [...(previous.items || []).filter(relevance), ...found]) {
+for (const rawItem of [...resolvedPrevious, ...resolvedFound]) {
   // Clean legacy HTML descriptions and label Google News redirect URLs honestly.
   const item = {
     ...rawItem,
