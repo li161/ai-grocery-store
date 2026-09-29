@@ -20,26 +20,170 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d8ae
 .hanging-nav button:hover{color:#e2bc7b}
 .nav-search-trigger{margin:0 0 0 auto;padding:10px 17px;border:1px solid #8f7658;border-radius:22px;background:#29251f;color:#bdb3a7;font-size:12px;backdrop-filter:none}
 
-/* --- immersive hero: one background, four spatial zones --- */
+/* --- reference storefront hero ---
+   The supplied second image is the actual store scene.
+   The UI below is intentionally an overlay so the composition stays one-to-one
+   with the approved reference instead of rebuilding shelves in HTML.
+--- */
 
-.store-hero{height:100svh;min-height:760px;max-height:none;position:relative;isolation:isolate;overflow:hidden;color:#fff}
-.store-backdrop{position:absolute;inset:0;z-index:-5;background:url("https://ibloeven.de/media/pages/projekte/zurheide-feine-kost-crown-dusseldorf/4ac3c2f653-1671619641/3-1000x.jpg") center/cover no-repeat;filter:saturate(.92) contrast(1.05)}
-.store-backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#140e0bd0 0%,#1b110ab0 28%,#1d140d55 55%,#100d0a38 100%),linear-gradient(0deg,#120c08e8 0%,transparent 32%,#0f0b0866 100%)}
-.scene-light{position:absolute;inset:0;z-index:-4;background:radial-gradient(ellipse at 50% 35%,#ffdca32b,transparent 42%);mix-blend-mode:screen}
-.hero-sign{position:absolute;z-index:5;left:6.5%;top:22%;width:500px;padding:30px 40px 28px;background:#f4e8d3f2;color:#23180f;border:8px solid #3c291b;box-shadow:0 18px 30px #09060388,inset 0 0 0 1px #8b7255}
-.hero-sign:after{content:"";position:absolute;inset:8px;border:1px solid #a68b68;pointer-events:none}
-.sign-kicker{display:block;position:relative;z-index:1;font-size:11px;letter-spacing:.28em;font-weight:800;color:#745635}.hero-sign h1{position:relative;z-index:1;margin:13px 0 4px;font-family:"Playfair Display","Noto Sans SC",serif;font-size:76px;line-height:.95;letter-spacing:-.08em}.hero-sign p{position:relative;z-index:1;margin:12px 0 0;font-size:13px;font-weight:700}
-.scene-note{position:absolute;z-index:10;left:6.5%;top:45.5%;width:365px;min-width:0;display:flex;align-items:center;gap:8px;padding:11px 14px;background:#17110de8;border-left:3px solid #d3aa68;box-shadow:0 10px 22px #0007;font-size:12px}.scene-note strong{color:#e1bd7f}.scene-note>span:first-child{color:#d9b16e}
+.store-hero{
+  position:relative;
+  height:100svh;
+  min-height:760px;
+  overflow:hidden;
+  isolation:isolate;
+  color:#fff;
+}
 
-.back-lab{position:absolute;z-index:2;left:47%;top:24%;width:31%;min-width:440px;max-width:620px;background:#27211ce8;border:1px solid #b58c59aa;padding:16px 18px 18px;box-shadow:0 16px 30px #0007}
-.back-lab-title{font-size:15px;font-weight:800;color:#eee5d8}.back-lab-title small{display:block;color:#a99b89;font-size:9px;margin:4px 0 12px 23px}.lab-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.lab-grid span{min-height:76px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(#504942,#332f2a);border:1px solid #71675d;color:#eee6db;font-size:12px}.lab-grid small{display:block;color:#aaa096;font-size:8px;margin-top:6px}
+.store-backdrop{
+  position:absolute;
+  inset:0;
+  z-index:-5;
+  background-image:url("https://ibloeven.de/media/pages/projekte/zurheide-feine-kost-crown-dusseldorf/4ac3c2f653-1671619641/3-1000x.jpg");
+  background-repeat:no-repeat;
+  background-size:101.8% auto;
+  background-position:calc(50% - 2px) -6.86vh;
+  background-color:#17100b;
+  filter:saturate(.96) contrast(1.03);
+}
 
-.tool-island{position:absolute;z-index:7;left:19%;bottom:0;width:38%;min-width:650px;max-width:780px;padding:15px 18px 0;background:#1c1510ee;border:1px solid #a57d4caa;box-shadow:0 22px 40px #0009}
-.island-header{display:flex;align-items:end;gap:12px;padding-bottom:10px;border-bottom:1px solid #b68b5b55}.island-header strong{font-size:15px}.island-header small{font-size:9px;color:#b0a092}.hero-products{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px 0 12px}.hero-product{min-height:137px;border:0;background:#f4ecdf;color:#211912;padding:11px 9px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 8px 13px #0005;transition:.22s}.hero-product:hover{transform:translateY(-6px)}.hero-pack{width:48px;height:56px;display:grid;place-items:center;border-radius:4px;font-size:23px;font-weight:800;box-shadow:inset 0 -7px #00000012}.hero-product strong{margin-top:auto;font-size:12px}.hero-product small{margin-top:4px;font-size:8px;color:#7c7065}.wood-shelf{height:14px;margin:0 -22px;background:linear-gradient(#9a6b3d,#4f321c);box-shadow:0 10px 20px #000b}
+.store-backdrop::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(15,10,7,.28) 0%,rgba(15,10,7,.21) 48%,rgba(15,10,7,.18) 100%),
+    linear-gradient(0deg,rgba(10,7,5,.17) 0%,transparent 38%,rgba(10,7,5,.12) 100%);
+}
 
-.industry-island{position:absolute;z-index:6;right:3.5%;bottom:0;width:23%;min-width:300px;padding:15px 14px 0;background:#1f1710ed;box-shadow:0 22px 38px #0009;border:1px solid #b68b5b88}.industry-island-title{font-size:15px;color:#eee4d6;border-bottom:1px solid #b68b5b55;padding-bottom:10px}.industry-island-title small{display:block;margin:4px 0 0 25px;font-size:8px;color:#a99a87}.industry-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:13px 0}.industry-mini-grid button{height:78px;border:1px solid #5c5146;background:#eee5d7;color:#3a3027;font-weight:800;font-size:10px;box-shadow:0 4px 8px #0004}.industry-mini-grid span{display:block;font-size:17px;margin-bottom:6px;color:#5f5b53}.industry-beam{height:11px;margin:0 -14px;background:linear-gradient(#9c6c3d,#50331d);box-shadow:0 7px 14px #0009}
+.hero-sign{
+  position:absolute;
+  z-index:8;
+  left:6.35%;
+  top:21.55%;
+  width:min(23.15vw,474px);
+  min-width:440px;
+  padding:30px 38px 27px;
+  background:rgba(247,237,219,.96);
+  color:#23180f;
+  border:8px solid #3d2a1b;
+  box-shadow:0 16px 28px rgba(9,6,3,.48),inset 0 0 0 1px #8f7658;
+}
 
-.hero-cta{position:absolute;z-index:15;left:5.7%;bottom:7%;display:flex;gap:10px}.hero-cta button{height:48px;padding:0 22px;border-radius:3px;font-size:13px;font-weight:800}.cta-primary{border:1px solid #e0b56c;background:#dfb66f;color:#28190c;box-shadow:0 8px 18px #0006}.cta-secondary{border:1px solid #f4e7d3aa;background:#17110dcc;color:#fff}
+.hero-sign::after{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid #aa8c67;
+  pointer-events:none;
+}
+
+.sign-kicker{
+  position:relative;
+  z-index:1;
+  display:block;
+  color:#775936;
+  font-size:11px;
+  line-height:1;
+  letter-spacing:.28em;
+  font-weight:800;
+}
+
+.hero-sign h1{
+  position:relative;
+  z-index:1;
+  margin:15px 0 7px;
+  font-family:"Playfair Display","Noto Sans SC",serif;
+  font-size:clamp(64px,4.15vw,85px);
+  line-height:.93;
+  letter-spacing:-.075em;
+  white-space:nowrap;
+}
+
+.hero-sign p{
+  position:relative;
+  z-index:1;
+  margin:13px 0 0;
+  font-size:13px;
+  line-height:1.3;
+  font-weight:800;
+}
+
+.scene-note{
+  position:absolute;
+  z-index:10;
+  left:6.35%;
+  top:44.8%;
+  width:376px;
+  min-height:49px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 15px;
+  background:rgba(20,14,10,.93);
+  border-left:3px solid #d6ae6d;
+  box-shadow:0 10px 22px rgba(0,0,0,.46);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.scene-note>span:first-child{color:#d8b06e}
+.scene-note strong{color:#e0bb79}
+
+.hero-cta{
+  position:absolute;
+  z-index:15;
+  left:6.35%;
+  bottom:7%;
+  display:flex;
+  gap:16px;
+}
+
+.hero-cta button{
+  height:58px;
+  padding:0 27px;
+  border-radius:4px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+
+.cta-primary{
+  border:1px solid #e6bd7a;
+  background:#e4b873;
+  color:#28190c;
+  box-shadow:0 8px 18px rgba(0,0,0,.38);
+}
+
+.cta-secondary{
+  border:1px solid rgba(239,225,207,.78);
+  background:rgba(24,18,14,.88);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(0,0,0,.32);
+}
+
+.hero-counter{
+  position:absolute;
+  z-index:15;
+  right:3.45%;
+  bottom:0;
+  display:flex;
+  background:rgba(21,15,11,.88);
+  border:1px solid rgba(197,160,106,.28);
+  box-shadow:0 12px 24px rgba(0,0,0,.34);
+}
+
+.hero-counter div{
+  min-width:88px;
+  padding:13px 18px 12px;
+  border-right:1px solid rgba(255,255,255,.1);
+  text-align:center;
+}
+
+.hero-counter div:last-child{border-right:0}
+.hero-counter strong{display:block;color:#e8c58a;font-size:24px;line-height:1.05}
+.hero-counter strong span{font-size:14px}
+.hero-counter small{display:block;margin-top:5px;color:#bcb0a1;font-size:8px;white-space:nowrap}
 
 /* --- catalogue sections --- */
 .section{width:min(1180px,90vw);margin:0 auto;padding:105px 0}.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:32px}.section-head.compact{margin-bottom:28px}.eyebrow{font-size:10px;letter-spacing:.2em;color:#986d3c;font-weight:800}.section h2{font-size:44px;line-height:1.05;letter-spacing:-.05em;margin:10px 0}.section-head p{color:var(--muted);font-size:13px;line-height:1.7;max-width:450px;margin:0}.receipt{min-width:155px;padding:12px 14px;border:1px dashed #b6a28a;text-align:right}.receipt span{display:block;font-size:9px;color:#9a7040;letter-spacing:.15em}.receipt strong{display:block;font-size:14px;margin:3px 0}.receipt small{font-size:9px;color:#897d70}
@@ -70,103 +214,3 @@ footer{padding:30px 6vw;background:#171614;color:#8e8780;display:flex;align-item
 .bundle-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.bundle-boxes i{height:82px;background:linear-gradient(145deg,#b86c58,#7d3e35);display:flex;align-items:flex-end;padding:9px;color:#f9e9dc;font-size:9px;font-style:normal;font-weight:700;box-shadow:0 8px 12px #0005}.bundle-boxes i:nth-child(2){background:linear-gradient(145deg,#65789c,#394b6b)}.bundle-boxes i:nth-child(3){background:linear-gradient(145deg,#4f817a,#2f5f59)}
 .hero-counter{position:absolute;z-index:15;right:3.5%;bottom:0;display:flex;background:#17110de0;border:1px solid #c5a06a44}.hero-counter div{padding:14px 19px;border-right:1px solid #fff1;min-width:82px}.hero-counter div:last-child{border:0}.hero-counter strong{display:block;color:#e6c58d;font-size:25px}.hero-counter strong span{font-size:14px}.hero-counter small{font-size:8px;color:#b8ab9e}
 
-
-/* =========================================================
-   REFERENCE HERO LOCK
-   Desktop composition follows the approved storefront mockup.
-   Keep these spatial relationships stable when adding content.
-   ========================================================= */
-@media (min-width: 1051px){
-  .store-hero{
-    min-height: 760px;
-    height: 100svh;
-  }
-
-  /* left visual anchor */
-  .hero-sign{
-    left: 6.1%;
-    top: 21.5%;
-    width: 500px;
-  }
-
-  .scene-note{
-    left: 6.1%;
-    top: 45.2%;
-    width: 370px;
-  }
-
-  /* back room stays visually behind the shelves */
-  .back-lab{
-    left: 46.8%;
-    top: 22.8%;
-    width: 31.5%;
-    min-width: 0;
-    max-width: 620px;
-  }
-
-  /* central foreground shelf = primary content anchor */
-  .tool-island{
-    left: 18.2%;
-    bottom: 0;
-    width: min(46vw, 770px);
-    min-width: 650px;
-    max-width: 770px;
-  }
-
-  /* right shelf is independent and vertically aligned with tool shelf */
-  .industry-island{
-    right: 3.4%;
-    bottom: 0;
-    width: 23.5%;
-    min-width: 300px;
-  }
-
-  /* bundle sits behind the industry shelf, not on top of it */
-  .bundle-island{
-    z-index: 5;
-    right: 7%;
-    bottom: 0;
-    width: 27%;
-    min-width: 380px;
-    max-width: 480px;
-  }
-
-  .hero-counter{
-    z-index: 9;
-    right: 3.4%;
-    bottom: 0;
-  }
-
-  .hero-cta{
-    left: 5.8%;
-    bottom: 7%;
-  }
-}
-
-/* prevent the bundle from becoming a giant floating block */
-.bundle-island{
-  max-height: 270px;
-  overflow: hidden;
-}
-.bundle-island-head{
-  padding: 14px 18px 11px;
-}
-.bundle-boxes{
-  padding: 10px;
-}
-.bundle-boxes i{
-  height: 88px;
-}
-
-/* At tablet width the desktop spatial composition is intentionally simplified. */
-@media (max-width: 1050px) and (min-width: 701px){
-  .bundle-island,
-  .hero-counter{
-    display:none;
-  }
-  .tool-island{
-    left: 7%;
-    width: 58%;
-    min-width: 0;
-  }
-}
