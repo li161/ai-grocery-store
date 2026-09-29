@@ -14,7 +14,7 @@ defineProps({
 
 <template>
   <section id="home" class="store-hero">
-    <div class="store-backdrop" aria-hidden="true"></div>
+    <img class="store-backdrop" src="/ai-grocery-store/store-bg.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high" />
 
     <div class="hero-sign">
       <span class="sign-kicker">WELCOME TO</span>
