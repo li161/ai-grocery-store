@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 
 const YEAR = new Date().getUTCFullYear()
-const archiveFile = new URL('../public/platform-actions-2026.json', import.meta.url)
+const archiveFile = new URL('../public/platform-actions-' + YEAR + '.json', import.meta.url)
 const start = new Date(Date.UTC(YEAR, 0, 1))
 const now = new Date()
 const tomorrow = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1))
@@ -53,14 +53,23 @@ function tag(block, name) {
 function parseFeed(xml, query) {
   return [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map(match => {
     const block = match[1]
-    const title = tag(block, 'title').replace(/\s+-\s+[^-]+$/, '').trim()
+    const title = tag(block, 'title').trim()
     const url = tag(block, 'link')
     const publishedAt = tag(block, 'pubDate')
     const date = new Date(publishedAt)
     const summary = tag(block, 'description')
     const source = tag(block, 'source') || 'Google News RSS'
-    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, ...query, sourceType: '公开检索候选', status: '自动发现·待核验' }
+    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, platform: query.platform, query: query.query, actionType: classifyAction(title + ' ' + summary), sourceType: '公开检索候选', status: '自动发现·待核验' }
   }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
+}
+function classifyAction(text = '') {
+  if (/导购|购物助手|千问|AI购物|找同款|东东|自然语言搜索/.test(text)) return 'AI导购/购物助手'
+  if (/流量|营销|补贴|优惠|大促|返佣|招商|广告投放|活动报名/.test(text)) return '流量/营销/补贴'
+  if (/配送|履约|物流|取餐|库存|供应链|ERP|接口/.test(text)) return '履约/供应链'
+  if (/算法|治理|恶意|隐私|合规|食品安全|违规处理/.test(text)) return '治理/算法'
+  if (/App|版本|上线|新功能|产品发布|改版|客户端|推出/.test(text)) return 'App/产品功能'
+  if (/商家|经营|掌柜|客服|运营|商户|工具|专家团|经营中心/.test(text)) return '商家经营工具'
+  return '平台规则/费用'
 }
 function relevance(item) {
   const text = item.title + ' ' + item.summary + ' ' + item.source
@@ -114,7 +123,7 @@ async function fetchJdOfficialNotices() {
     const rawRows = Array.isArray(payload) ? payload : (payload.data || payload.list || payload.rows || [])
     const rows = Array.isArray(rawRows) ? rawRows : (rawRows.list || rawRows.rows || rawRows.records || [])
     const parseDate = value => {
-      const match = String(value || '').match(/(\\d{4})年(\\d{1,2})月(\\d{1,2})日/)
+      const match = String(value || '').match(/(\d{4})年(\d{1,2})月(\d{1,2})日/)
       if (match) return match[1] + '-' + match[2].padStart(2,'0') + '-' + match[3].padStart(2,'0')
       const date = new Date(value)
       return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0,10)
@@ -201,7 +210,7 @@ const meituanRuleItems = meituanRulesResult.items
 const found = [...results.flatMap(result => result.items), ...jdOfficialItems, ...meituanRuleItems].filter(relevance)
 const merged = new Map()
 for (const item of [...(previous.items || []), ...found]) {
-  const key = String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
+  const key = String(item.platform || item.lane || 'unknown') + ':' + String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
   if (!key) continue
   const existing = merged.get(key)
   if (!existing) merged.set(key, { ...item, platform: item.platform || item.lane })
