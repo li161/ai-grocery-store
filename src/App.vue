@@ -5,6 +5,7 @@ import StoreHero from './components/StoreHero.vue'
 import ToolShelf from './components/ToolShelf.vue'
 import RetailNewsShelf from './components/RetailNewsShelf.vue'
 import HotRank from './components/HotRank.vue'
+import ContentDetail from './components/ContentDetail.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
@@ -29,16 +30,34 @@ const sections = [
   { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
 ]
 
-function navigate(id) {
+function navigate(id, { syncHash = true } = {}) {
   activeSection.value = id
   selectedNews.value = null
   detail.value = null
-  window.scrollTo({ top:0, behavior:'auto' })
+  if (syncHash) history.replaceState(null, '', '#' + id)
+  window.scrollTo({ top: 0, behavior: 'auto' })
 }
 function openTool(tool) { drawerTool.value = tool }
 function openToolByName(name) {
   const tool = tools.find(item => item.name === name)
   if (tool) openTool(tool)
+}
+function closeOverlays() {
+  drawerTool.value = null
+  detail.value = null
+  selectedNews.value = null
+  showSearch.value = false
+}
+function handleKeydown(event) {
+  if (event.key === 'Escape') return closeOverlays()
+  if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+    event.preventDefault()
+    showSearch.value = true
+  }
+}
+function restoreSectionFromHash() {
+  const id = location.hash.slice(1)
+  if (sections.some(section => section.id === id)) navigate(id, { syncHash: false })
 }
 function openIndustry(item) {
   activeSection.value = 'industry'
@@ -66,7 +85,11 @@ function toggleTheme() {
 onMounted(() => {
   darkMode.value = localStorage.getItem('ai-grocery-theme') === 'dark'
   document.documentElement.dataset.theme = darkMode.value ? 'dark' : 'light'
+  restoreSectionFromHash()
+  window.addEventListener('keydown', handleKeydown)
+  window.addEventListener('hashchange', restoreSectionFromHash)
 })
+
 </script>
 
 <template>
@@ -114,7 +137,7 @@ onMounted(() => {
     </transition>
 
     <transition name="fade">
-      <div v-if="detail" class="detail-mask" @click.self="closeDetail"><article class="detail-page"><button class="detail-close" @click="closeDetail">×</button><header class="detail-hero"><span class="eyebrow">{{ detail.type === 'industry' ? 'INDUSTRY INTELLIGENCE' : 'READY-MADE AI KIT' }}</span><div class="detail-title-row"><span class="detail-icon">{{ detail.icon || 'AI' }}</span><div><h2>{{ detail.name || detail.title }}</h2><p>{{ detail.text || detail.flow || detail.audience }}</p></div></div><p class="detail-headline">{{ detail.headline || detail.trigger }}</p></header><div class="detail-grid"><section class="detail-main"><div class="detail-block"><span class="detail-label">具体介绍</span><p>{{ detail.summary || detail.trigger }}</p></div><div class="detail-block"><span class="detail-label">可以直接拿来做什么</span><div class="action-list"><div v-for="(item,index) in (detail.actions || detail.steps || [])" :key="item"><b>0{{ index + 1 }}</b><span>{{ item }}</span></div></div></div></section><aside class="detail-side"><div v-if="detail.tools" class="detail-block"><span class="detail-label">推荐工具</span><div class="tool-chips"><button v-for="tool in detail.tools" :key="tool" @click="openToolByName(tool)">{{ tool }} ↗</button></div></div><div v-if="detail.sources" class="detail-block"><span class="detail-label">依据 / 来源</span><a v-for="source in detail.sources" :key="source.url" class="source-item" :href="source.url" target="_blank" rel="noopener"><strong>{{ source.title }}</strong><small>{{ source.name }} · {{ source.date }} ↗</small></a></div></aside></div></article></div>
+      <ContentDetail v-if="detail" :detail="detail" :onClose="closeDetail" :onOpenTool="openToolByName" />
     </transition>
 
     <transition name="fade">
