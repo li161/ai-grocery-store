@@ -639,3 +639,177 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
 .empty-metric span{font-size:13px}
 .empty-metric strong{font-size:27px}
 .empty-metric p{font-size:14px}
+
+/* ===== intelligence detail: align with the store's warm editorial system ===== */
+.intelligence-detail{
+  color:var(--ink);
+  background:var(--paper);
+}
+.intelligence-detail .event-breadcrumb{
+  border-bottom:1px solid #cdbca7;
+}
+.intelligence-detail .event-breadcrumb button:hover{
+  color:#9a7040;
+}
+.intelligence-detail .event-eyebrow{
+  color:#806f5d;
+}
+.intelligence-detail .event-eyebrow b{
+  color:#76552f;
+  background:#e8dccb;
+  border:1px solid #d4c1a7;
+  border-radius:3px;
+}
+.intelligence-detail .event-detail-header h1{
+  color:#211a14;
+  font-family:"Noto Sans SC","DM Sans",sans-serif;
+  font-weight:800;
+  letter-spacing:-.045em;
+}
+.intelligence-detail .event-meta{
+  color:#75695d;
+}
+.intelligence-detail .event-meta strong{
+  color:#3b2a1b;
+}
+.intelligence-detail .event-tabs{
+  margin-top:30px;
+  padding:0;
+  gap:0;
+  background:transparent;
+  border:0;
+  border-bottom:1px solid #cdbca7;
+  border-radius:0;
+}
+.intelligence-detail .event-tabs button{
+  position:relative;
+  padding:12px 18px 11px;
+  border:0;
+  border-radius:0;
+  color:#75695d;
+  font-size:13px;
+  font-weight:700;
+  background:transparent;
+  box-shadow:none;
+}
+.intelligence-detail .event-tabs button:hover{
+  color:#3b2617;
+  background:#e9dfd2;
+}
+.intelligence-detail .event-tabs button.active{
+  color:#3b2617;
+  background:transparent;
+  box-shadow:none;
+}
+.intelligence-detail .event-tabs button.active:after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:-1px;
+  height:2px;
+  background:#9a7040;
+}
+.intelligence-detail .event-tabs button b{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  margin-left:4px;
+  padding:0 4px;
+  border-radius:9px;
+  background:#e8ddce;
+  color:#7a644c;
+  font-size:10px;
+}
+.intelligence-detail .event-layout{
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:22px;
+  margin-top:28px;
+}
+.intelligence-detail .event-main-card,
+.intelligence-detail .event-side-card,
+.intelligence-detail .event-tab-panel{
+  border:1px solid #d4c5b3;
+  border-radius:3px;
+  background:#f8f0e4;
+  box-shadow:none;
+}
+.intelligence-detail .event-card-head{
+  padding:25px 28px 8px;
+}
+.intelligence-detail .event-card-head h2,
+.intelligence-detail .event-side-head h2{
+  color:#3b2617;
+  font-weight:800;
+}
+.intelligence-detail .event-summary{
+  margin:10px 28px 0;
+  color:#675c51;
+  font-size:16px;
+  line-height:1.95;
+}
+.intelligence-detail .event-generated{
+  padding:18px 28px 21px;
+  color:#9a8a78;
+  border-top:0;
+}
+.intelligence-detail .event-progress{
+  border-top:1px solid #d8c9b7;
+  padding:19px 45px 21px 28px;
+}
+.intelligence-detail .event-progress p,
+.intelligence-detail .event-side-card>p{
+  color:#75695d;
+}
+.intelligence-detail .event-side{
+  gap:12px;
+}
+.intelligence-detail .event-side-card{
+  padding:22px 23px;
+}
+.intelligence-detail .source-story{
+  border-top:1px solid #d8c9b7;
+}
+.intelligence-detail .event-tags span{
+  background:#eee4d7;
+  border:1px solid #d8c9b7;
+  border-radius:2px;
+  color:#6d5b47;
+}
+.intelligence-detail .event-tab-panel{
+  margin-top:28px;
+  padding:36px 42px;
+}
+.intelligence-detail .timeline-event>i{
+  background:#9a7040;
+}
+.intelligence-detail .timeline-event>i:after{
+  background:#d4c5b3;
+}
+.intelligence-detail .timeline-event article span{
+  color:#9a7040;
+}
+.intelligence-detail .timeline-event article a{
+  color:#8a6338;
+}
+.intelligence-detail .empty-metric span{
+  color:#9a7040;
+}
+.intelligence-detail .empty-metric strong{
+  color:#3b2617;
+}
+@media(max-width:700px){
+  .intelligence-detail .event-tabs{
+    overflow-x:auto;
+  }
+  .intelligence-detail .event-tabs button{
+    flex:none;
+    padding:11px 14px;
+  }
+  .intelligence-detail .event-tabs button.active:after{
+    left:10px;
+    right:10px;
+  }
+}
