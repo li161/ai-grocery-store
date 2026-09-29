@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 const props=defineProps({news:{type:Array,required:true},onOpen:{type:Function,required:true}})
 const ranked=computed(()=>props.news.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,10))
-const score=(item,index)=>Math.max(62,92-index*7)
+const score=(item,index)=>item.heatScore ?? Math.max(62,92-index*7)
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const score=(item,index)=>Math.max(62,92-index*7)
     </div>
 
     <div class="hot-list">
-      <div class="hot-list-title"><strong>继续看 No.04–10</strong><span>按店内热度排序 · 点击查看完整情报</span></div>
+      <div class="hot-list-title"><strong>继续看 No.04–10</strong><span>按 AI 零售影响 + 新鲜度 + 信源 + 事件聚簇排序 · 点击查看完整情报</span></div>
       <button v-for="(item,index) in ranked.slice(3)" :key="item.id" @click="onOpen(item)">
         <b>{{ String(index+4).padStart(2,'0') }}</b><div><strong>{{ item.title }}</strong><p>{{ item.date }} · {{ item.source }} · {{ item.summary }}</p></div><span>{{ score(item,index+3) }}</span>
       </button>
