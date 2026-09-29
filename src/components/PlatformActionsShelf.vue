@@ -23,17 +23,32 @@ function category(item) {
   if (/商家|经营|掌柜|客服|运营|商户/.test(s)) return '商家经营工具'
   return '平台规则/费用'
 }
-const normalized = computed(() => props.items.map(item => ({ ...item, displayPlatform: item.platform || item.lane || '待识别', displayType: category(item) })))
+function normalizePlatform(item) {
+  const raw = String(item.platform || item.lane || '').trim()
+  if (/淘宝|天猫|淘天|阿里/.test(raw)) return '淘宝'
+  if (/京东|京麦/.test(raw)) return '京东'
+  if (/美团|大众点评/.test(raw)) return '美团'
+  if (/拼多多|多多/.test(raw)) return '拼多多'
+  const text = String(item.title || '') + ' ' + String(item.summary || '')
+  const hits = [
+    /淘宝|天猫|千问|淘天|淘宝闪购/.test(text) ? '淘宝' : '',
+    /京东|京麦|京东秒送/.test(text) ? '京东' : '',
+    /美团|大众点评|美团闪购|CatPaw|智能掌柜|袋鼠管家/.test(text) ? '美团' : '',
+    /拼多多|多多买菜|拼多多商家版/.test(text) ? '拼多多' : ''
+  ].filter(Boolean)
+  return hits.length === 1 ? hits[0] : (raw || '待识别')
+}
+const normalized = computed(() => props.items.map(item => ({ ...item, displayPlatform: normalizePlatform(item), displayType: category(item) })))
 const counts = computed(() => Object.fromEntries(platforms.map(p => [p, p === '全部' ? normalized.value.length : normalized.value.filter(x => x.displayPlatform === p).length])))
 const typeCounts = computed(() => Object.fromEntries(types.map(t => [t, t === '全部' ? filteredPlatform.value.length : filteredPlatform.value.filter(x => x.displayType === t).length])))
 const filteredPlatform = computed(() => normalized.value.filter(x => activePlatform.value === '全部' || x.displayPlatform === activePlatform.value))
-const shown = computed(() => filteredPlatform.value
-  .filter(x => {
-    if (activeWindow.value === '全部归档') return true
-    const days = activeWindow.value === '7天' ? 7 : 30
-    const stamp = Date.parse(String(x.publishedAt || x.date || ''))
-    return Number.isFinite(stamp) && stamp >= Date.now() - days * 86400000 && stamp <= Date.now() + 86400000
-  })
+const windowedPlatform = computed(() => filteredPlatform.value.filter(x => {
+  if (activeWindow.value === '全部归档') return true
+  const days = activeWindow.value === '7天' ? 7 : 30
+  const stamp = Date.parse(String(x.publishedAt || x.date || ''))
+  return Number.isFinite(stamp) && stamp >= Date.now() - days * 86400000 && stamp <= Date.now() + 86400000
+}))
+const shown = computed(() => windowedPlatform.value
   .filter(x => activeType.value === '全部' || x.displayType === activeType.value)
   .filter(x => !keyword.value || [x.title,x.summary,x.impact,x.action,x.source,x.displayPlatform,...(x.tags||[])].join(' ').toLowerCase().includes(keyword.value.toLowerCase()))
   .sort((a,b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || ''))))
@@ -41,6 +56,19 @@ const verifiedCount = computed(() => normalized.value.filter(x => /官方.*确�
 const recentCount = computed(() => normalized.value.filter(x => { const d = Date.parse(String(x.publishedAt || x.date || '')); return Number.isFinite(d) && d >= Date.now() - 7 * 86400000 && d <= Date.now() + 86400000 }).length)
 const unresolvedLinkCount = computed(() => normalized.value.filter(x => /news\.google\.com/i.test(x.url || '')).length)
 function isGoogleRedirect(item) { return /news\.google\.com/i.test(item.url || '') }
+function sourceLabel(item) {
+  if (isGoogleRedirect(item)) return 'Google News 索引 · ' + (item.source || '原文地址待确认')
+  if (item.sourceType === '微信公众号文章检索') return '公众号索引 · ' + (item.source || '微信文章公开索引')
+  return (item.sourceType ? item.sourceType + ' · ' : '') + (item.source || '公开信源')
+}
+function statusLabel(item) {
+  if (isGoogleRedirect(item)) return '检索跳转页·非原文直链'
+  if (item.status) return item.status
+  if (/官方/.test(item.sourceType || '') || /美团规则中心/.test(item.source || '')) return '官方目录/来源可查·正文待核验'
+  if (/应用商店|政策文本存档|版本记录/.test(item.sourceType || '')) return '公开记录可查·细节待核验'
+  if (/媒体报道/.test(item.sourceType || '')) return '媒体报道·关键事实待核验'
+  return '自动发现·待核验'
+}
 function formatDate(item) {
   const date = String(item.publishedAt || item.date || '')
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '日期待核验'
@@ -95,7 +123,7 @@ function formatDateTime(value) {
 
     <div class="platform-toolbar">
       <label><span>⌕</span><input v-model="keyword" placeholder="搜索功能名称、公告、商家规则、流量或费用……"></label>
-      <span class="result-count">显示 {{ shown.length }} / {{ filteredPlatform.length }} 条</span>
+      <span class="result-count">显示 {{ shown.length }} / {{ windowedPlatform.length }} 条</span>
     </div>
     <nav class="platform-type-tabs" aria-label="动作类型">
       <button v-for="t in types" :key="t" :class="{active:activeType===t}" @click="activeType=t">{{ t }} <b>{{ typeCounts[t] }}</b></button>
@@ -105,7 +133,7 @@ function formatDateTime(value) {
       <article v-for="item in shown" :key="item.id || item.url || item.title" class="platform-action-card">
         <div class="action-date"><strong>{{ formatDate(item) }}</strong><span>{{ item.displayPlatform }}</span></div>
         <div class="action-content">
-          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ isGoogleRedirect(item) ? 'Google News 索引 · ' + (item.source || '原文地址待确认') : (item.sourceType === '微信公众号文章检索' ? '公众号索引 · ' + (item.source || '微信文章公开索引') : (item.source || '公开信源')) }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
+          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ sourceLabel(item) }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ statusLabel(item) }}</small></div>
           <h2>{{ item.title }}</h2>
           <p class="action-summary">{{ item.summary || '已发现相关平台动态，需进一步核对原文内容。' }}</p>
           <div v-if="item.impact || item.action" class="action-interpretation">
