@@ -48,4 +48,6 @@ const emit=defineEmits(['update:activeLane','update:keyword','closeDetail'])
       </div>
       <div v-if="!news.length" class="news-empty">没有匹配的情报，换个关键词试试。</div>
     </section>
+    </template>
+  </section>
 </template>
