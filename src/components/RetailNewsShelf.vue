@@ -16,7 +16,7 @@ const detailTab=ref('overview')
     <div v-if="selected" class="event-detail-page intelligence-detail">
       <nav class="event-breadcrumb" aria-label="当前位置">
         <button @click="emit('closeDetail')">←</button>
-        <button @click="emit('closeDetail')">热点榜</button>
+        <button @click="emit('closeDetail')">零售情报</button>
         <span>/</span>
         <span>事件详情</span>
       </nav>
