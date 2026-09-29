@@ -28,7 +28,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY || secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || secrets.OPENAI_BASE_URL }}
-          RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL }}
+          RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL || 'deepseek-v4-flash' }}
         run: npm run sync:retail
 
       - name: Commit changed intelligence
