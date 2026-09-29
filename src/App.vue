@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import StoreNav from './components/StoreNav.vue'
 import StoreHero from './components/StoreHero.vue'
 import ToolShelf from './components/ToolShelf.vue'
