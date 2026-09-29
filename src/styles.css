@@ -960,3 +960,11 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
 }
 
 .story-meta small{margin-left:auto;font-size:7px;color:var(--app-muted);font-weight:500}.event-eyebrow small{font-size:10px;color:var(--app-muted);font-weight:500}.news-module + .news-module{border-top:1px solid var(--app-line)}
+
+/* Home + intelligence are one continuous storefront module. */
+.home-intelligence-stack{width:100%;display:flex;flex-direction:column}
+.home-intelligence-stack>.news-module{order:0;width:min(1220px,calc(100% - 84px));margin:0 auto;padding-bottom:46px}
+.home-intelligence-stack>.store-hero{order:1}
+/* Keep the footer sentence clear of the persistent sidebar. */
+footer{padding-left:calc(250px + 32px);padding-right:32px}
+@media(max-width:800px){footer{padding-left:20px;padding-right:20px}.home-intelligence-stack>.news-module{width:calc(100% - 30px)}}
