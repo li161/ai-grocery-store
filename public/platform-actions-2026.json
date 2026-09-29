@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-29T06:39:28.483Z",
+  "generatedAt": "2026-09-29T07:19:39.723Z",
   "year": 2026,
-  "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。 Google News RSS 返回的链接可能是跳转页，页面会明确标记为检索结果，不将其误称为原文直链。",
+  "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
     {
       "platform": "淘宝",
@@ -99,14 +99,14 @@
     "healthy": 32,
     "failed": 0,
     "newlyFound": 8,
-    "archivedItems": 52,
+    "archivedItems": 53,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 8,
-      "京东": 13,
+      "京东": 14,
       "美团": 19,
       "拼多多": 12
     }
@@ -122,6 +122,18 @@
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "发布AI专家团，开放第三方生态，京东让电商AI真正“懂”生意 - sohu.com",
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOMXB0X0hhQnVLRnJ4ekhaY1prUjd0dnQ3c2RFWnBGSVE3Qll3ZVNsbHNjNjdPZHBvYnBTQXRLeDBTbTduVEpMb1dHYlBUU0gzNmU4YXBtenVhX2Z0VVFQUnJLNlBXV1U2YV9qR3hod25WdE9pMWl6cnotN1doUm42NUNydHFrdWx3WWJhMA?oc=5",
+      "publishedAt": "2026-09-29",
+      "summary": "发布AI专家团，开放第三方生态，京东让电商AI真正“懂”生意 &nbsp;&nbsp; sohu.com",
+      "source": "sohu.com",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
