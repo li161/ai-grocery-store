@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { retailCases } from '../data/retailCases'
-const selected=ref(retailCases[0])
+const props=defineProps({ caseData: { type:Object, default:null } })
+const selected=ref(props.caseData || retailCases[0])
 </script>
 
 <template>
-<section class="case-tracker section">
+<section v-if="selected" class="case-tracker section">
   <header class="tracker-head">
     <button class="tracker-back" @click="$emit('back')">← 返回经营结果</button>
     <div class="module-kicker"><span>05</span> CASE TRACKING <small>案例追踪</small></div>
