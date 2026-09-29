@@ -51,6 +51,7 @@ function closeOverlays() {
   drawerTool.value = null
   detail.value = null
   selectedNews.value = null
+  selectedCase.value = null
   showSearch.value = false
 }
 function handleKeydown(event) {
