@@ -997,3 +997,10 @@ footer{padding-left:calc(250px + 32px);padding-right:32px}
 .timeline-event h2{font-size:19px;line-height:1.45;margin:0 0 7px;color:var(--app-ink)}
 .timeline-event p{font-size:13px;line-height:1.8;color:var(--app-muted);margin:0 0 10px}
 .timeline-event a{font-size:11px;color:var(--app-ink);text-decoration:none}
+
+
+/* Retail intelligence precision layer */
+.event-business-dimensions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:18px 0 4px;padding-top:14px;border-top:1px solid rgba(40,34,27,.1)}
+.event-business-dimensions span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;margin-right:4px}
+.event-business-dimensions b,.business-chip{font-size:10px;font-weight:600;padding:4px 8px;border:1px solid rgba(100,74,35,.22);background:rgba(181,139,63,.08);border-radius:2px}
+.business-chip{margin-right:5px;display:inline-block}
