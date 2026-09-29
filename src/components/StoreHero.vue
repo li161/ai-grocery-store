@@ -1,4 +1,5 @@
 <script setup>
+const baseUrl = import.meta.env.BASE_URL
 defineProps({
   onNavigate: { type: Function, required: true },
   onOpenTool: { type: Function, required: true },
@@ -14,7 +15,7 @@ defineProps({
 
 <template>
   <section id="home" class="store-hero">
-    <img class="store-backdrop" src="/ai-grocery-store/store-bg.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high" />
+    <img class="store-backdrop" :src="baseUrl + 'store-bg.webp'" alt="" aria-hidden="true" decoding="async" fetchpriority="high" />
 
     <div class="hero-sign">
       <span class="sign-kicker">WELCOME TO</span>
