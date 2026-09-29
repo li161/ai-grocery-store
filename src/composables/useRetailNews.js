@@ -9,6 +9,7 @@ export function useRetailNews() {
   const filteredNews = computed(() => {
     const q = keyword.value.trim().toLowerCase()
     return retailNews
+      .slice()
       .filter(item => activeLane.value === '全部' || item.lane === activeLane.value)
       .filter(item => !q || [item.title, item.summary, item.source, ...(item.tags || [])].join(' ').toLowerCase().includes(q))
       .sort((a, b) => String(b.date).localeCompare(String(a.date)))
