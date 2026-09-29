@@ -145,6 +145,48 @@ async function fetchJdOfficialNotices() {
   }
 }
 
+async function fetchMeituanRuleDirectory() {
+  try {
+    const response = await fetch('https://rules-center.meituan.com/', {
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; RetailPlatformRadar/1.0)', accept: 'text/html,application/xhtml+xml' },
+      signal: AbortSignal.timeout(18000)
+    })
+    if (!response.ok) throw new Error('HTTP ' + response.status)
+    const html = await response.text()
+    const rows = []
+    const anchors = [...html.matchAll(/<a\\b[^>]*href=["']([^"']+)["'][^>]*>([\\s\\S]*?)<\\/a>/gi)]
+    for (const match of anchors) {
+      const title = decode(match[2]).replace(/\\s+/g, ' ').trim()
+      if (!title || title.length < 6 || !/商户|商家|美团闪购|到店餐饮|服务零售|商品|履约|品质|违规|规则|公告|食品安全|大闸蟹|花束|隐私|配送/.test(title)) continue
+      const vicinity = html.slice(Math.max(0, match.index - 180), Math.min(html.length, match.index + match[0].length + 260))
+      const dateMatch = vicinity.match(/(20\\d{2})[\\/.年-](\\d{1,2})[\\/.月-](\\d{1,2})日?/)
+      if (!dateMatch) continue
+      const publishedAt = dateMatch[1] + '-' + dateMatch[2].padStart(2, '0') + '-' + dateMatch[3].padStart(2, '0')
+      if (!publishedAt.startsWith(String(YEAR))) continue
+      let url
+      try { url = new URL(match[1], 'https://rules-center.meituan.com/').href } catch { continue }
+      if (!/^https:\\/\\/rules-center\\.meituan\\.com\\//i.test(url)) continue
+      let actionType = '平台规则/费用'
+      if (/履约|配送|库存|供应链/.test(title)) actionType = '履约/供应链'
+      else if (/流量|营销|补贴|活动|优惠/.test(title)) actionType = '流量/营销/补贴'
+      else if (/App|产品|功能|上线|AI/.test(title)) actionType = 'App/产品功能'
+      rows.push({
+        id: 'meituan-rule-' + publishedAt + '-' + title,
+        platform: '美团', lane: '美团', actionType, date: publishedAt, publishedAt,
+        source: '美团规则中心', sourceType: '官方规则目录自动抓取',
+        status: '官方目录线索·正文待核验', title,
+        summary: '该条目从美团规则中心公开目录自动发现。采集器只记录目录标题、日期和链接；适用范围、生效日期及具体责任以规则正文为准。',
+        impact: '该规则可能影响商家商品信息、履约流程或违规风险，具体影响需以规则正文核对。',
+        action: '打开原文核对适用业态、规则生效时间、商家义务、违规处置和申诉机制。',
+        url, tags: ['美团规则中心', actionType], official: true
+      })
+    }
+    return { items: rows, status: 'ok' }
+  } catch (error) {
+    return { items: [], status: 'error', error: String(error.message || error) }
+  }
+}
+
 let previous = { items: [] }
 try { previous = JSON.parse(await readFile(archiveFile, 'utf8')) } catch {}
 const windows = (!previous.sourceHealth || now.getUTCDay() === 0)
@@ -175,7 +217,7 @@ const health = {
   newlyFound: found.length,
   archivedItems: items.length,
   jdOfficialNotices: jdOfficialItems.length,
-  jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',
+  jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',\n  meituanRuleNotices: meituanRuleItems.length,\n  meituanRulesStatus: meituanRulesResult.status,
   byPlatform: Object.fromEntries(['淘宝','京东','美团','拼多多'].map(p => [p, items.filter(x => (x.platform || x.lane) === p).length]))
 }
 const archive = {
