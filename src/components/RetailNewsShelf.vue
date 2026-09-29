@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 defineProps({
   lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true},
-  news:{type:Array,required:true}, syncLabel:{type:String,required:true}, selected:{type:Object,default:null},
+  news:{type:Array,required:true}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null},
   onOpen:{type:Function,required:true}
 })
 
@@ -115,7 +115,12 @@ const detailTab=ref('overview')
     <template v-else>
       <header class="news-module-head">
         <div><div class="module-kicker"><span>04</span> RETAIL INTELLIGENCE <small>零售情报</small></div><h1>零售情报时间线</h1><p>不把新闻压成一句结论。每条情报都保留：发生了什么、为什么重要、下一步看什么。</p></div>
-        <div class="news-sync"><span class="live-dot"></span><strong>自动补货中</strong><small>{{ syncLabel }}</small></div>
+        <div class="news-sync"><span class="live-dot"></span><strong>自动雷达中</strong><small>{{ syncLabel }}</small></div>
+        <aside class="daily-radar">
+          <span>DAILY · AI 零售日报</span>
+          <strong>{{ dailyDigest.lead }}</strong>
+          <small>{{ dailyDigest.bullets?.length || 0 }} 条重点 · {{ dailyDigest.method }}</small>
+        </aside>
       </header>
 
       <div class="news-lanes">
