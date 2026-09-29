@@ -50,18 +50,6 @@ const FEED_DEFS = [
   {name:'中国即时零售 AI',query:'淘宝闪购 京东秒送 美团 即时零售 AI 调度 配送 预测',lane:'中国零售',sourceType:'行业媒体'},
   {name:'中国电商 AI 媒体',query:'电商 AI 智能体 导购 数字人 客服 商家工具 36氪 亿邦动力',lane:'中国零售',sourceType:'行业媒体'},
   {name:'中国零售科技媒体',query:'零售科技 AI 商超 数字化 供应链 联商网 亿邦动力',lane:'中国零售',sourceType:'行业媒体'},
-  {name:'淘宝平台动作',query:'淘宝 天猫 商家规则 新功能 产品发布 搜索流量 广告 佣金 大促 营销工具 2026',lane:'淘宝',sourceType:'行业媒体'},
-  {name:'淘宝天猫官方规则',query:'site:rule.tmall.com OR site:tmall.com/wow/seller/act/guize 淘宝 天猫 商家规则 公告 2026',lane:'淘宝',sourceType:'官方'},
-  {name:'阿里官方商家产品',query:'site:alibabagroup.com OR site:alibaba.com 淘宝 天猫 商家 产品发布 规则更新 AI经营 2026',lane:'淘宝',sourceType:'官方'},
-  {name:'京东平台动作',query:'京东 商家规则 新功能 产品发布 流量 搜索 广告 佣金 促销 政策 2026',lane:'京东',sourceType:'行业媒体'},
-  {name:'京东官方商家公告',query:'site:rule.jd.com OR site:jd.com 京东 商家公告 规则更新 产品上线 营销工具 2026',lane:'京东',sourceType:'官方'},
-  {name:'京东开放平台公告',query:'site:open.jd.com OR site:opendj.jd.com 京东 商家 开放平台 公告 接口 产品 2026',lane:'京东',sourceType:'官方'},
-  {name:'美团平台动作',query:'美团 商家规则 新功能 即时零售 流量 营销 配送 佣金 补贴 调整 2026',lane:'美团',sourceType:'行业媒体'},
-  {name:'美团官方规则中心',query:'site:rules-center.meituan.com 商家规则 公告 美团闪购 到店餐饮 服务零售 2026',lane:'美团',sourceType:'官方'},
-  {name:'美团官方产品动态',query:'site:meituan.com 美团 商家 产品上线 经营工具 配送 营销 公告 2026',lane:'美团',sourceType:'官方'},
-  {name:'拼多多平台动作',query:'拼多多 商家规则 新功能 平台政策 流量 活动 补贴 费用 调整 2026',lane:'拼多多',sourceType:'行业媒体'},
-  {name:'拼多多官方公告',query:'site:pinduoduo.com OR site:investor.pddholdings.com 拼多多 公告 商家规则 产品发布 2026',lane:'拼多多',sourceType:'官方'},
-  {name:'拼多多商家运营变化',query:'拼多多 商家 运营工具 搜索推荐 广告 费用 促销 规则调整 2026',lane:'拼多多',sourceType:'行业媒体'},
   {name:'Retail AI Investment',query:'retail AI startup funding shopping agent commerce investment',lane:'平台博弈',sourceType:'行业媒体'},
   {name:'Retail AI Results',query:'retailer AI pilot results sales conversion labor productivity ROI',lane:'经营结果',sourceType:'行业媒体'}
 ]
@@ -82,12 +70,6 @@ function buildFeeds(){
       else feeds.push({...def,name:def.name+' · '+after+'~'+before,url:googleUrl(def.query,after,before)})
     }
   }
-  const year = today.getUTCFullYear()
-  const annualAfter = year + '-01-01'
-  const annualBefore = isoDay(addDays(today, 1))
-  for (const def of FEED_DEFS.filter(x => ['淘宝','京东','美团','拼多多'].includes(x.lane))) {
-    feeds.push({...def,name:def.name+' · 年度归档',url:googleUrl(def.query,annualAfter,annualBefore),annualArchive:true})
-  }
   return feeds
 }
 const FEEDS=buildFeeds()
@@ -95,7 +77,6 @@ const FEEDS=buildFeeds()
 
 const seedFile = new URL('../src/data/retailNews.generated.js', import.meta.url)
 const publicFile = new URL('../public/retail-news.json', import.meta.url)
-const platformArchiveFile = new URL('../public/platform-actions-2026.json', import.meta.url)
 const eventsFile = new URL('../public/retail-events.json', import.meta.url)
 const dailyFile = new URL('../public/retail-daily.json', import.meta.url)
 const healthFile = new URL('../public/retail-source-health.json', import.meta.url)
@@ -160,14 +141,6 @@ async function mapLimit(items,limit,fn){
   await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));return out
 }
 const raw=(await mapLimit(FEEDS,8,fetchFeed)).flat(),seen=new Set()
-const archiveYear = new Date().getUTCFullYear()
-let priorPlatformArchive = []
-try {
-  const priorArchive = JSON.parse(await readFile(platformArchiveFile, 'utf8'))
-  if (Number(priorArchive.year) === archiveYear && Array.isArray(priorArchive.items)) priorPlatformArchive = priorArchive.items
-} catch {}
-const discoveredPlatformArchive = raw.filter(x => ['淘宝','京东','美团','拼多多'].includes(x.lane) && String(x.date).startsWith(String(archiveYear)))
-const platformArchive = [...new Map([...priorPlatformArchive, ...discoveredPlatformArchive].map(x => [String(x.title||'').toLowerCase().trim(),x])).values()].sort((a,b)=>String(b.date).localeCompare(String(a.date)))
 const todayMs=Date.now()
 const LIVE_DAYS=7
 const liveCutoff=todayMs-LIVE_DAYS*86400000
@@ -194,7 +167,6 @@ await mkdir(new URL('../src/data/',import.meta.url),{recursive:true})
 await mkdir(historyDir,{recursive:true})
 await writeFile(seedFile,output,'utf8')
 await writeFile(publicFile,JSON.stringify({generatedAt,items:rankedItems},null,2),'utf8')
-await writeFile(platformArchiveFile,JSON.stringify({generatedAt,year:archiveYear,coverageNote:'年度检索归档：基于平台官方公告与公开新闻检索，RSS 搜索结果存在条数与索引限制，不代表平台全部公告；每条保留原文链接。',items:platformArchive},null,2),'utf8')
 await writeFile(eventsFile,JSON.stringify({generatedAt,events:rankedEvents.map(e=>{const copy={...e};delete copy.items;return copy})},null,2),'utf8')
 await writeFile(dailyFile,JSON.stringify(report,null,2),'utf8')
 await writeFile(changesFile,JSON.stringify(changes,null,2),'utf8')
