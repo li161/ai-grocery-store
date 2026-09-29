@@ -1,4 +1,10 @@
 <script setup>
+const lifecycleOrder = ['announcement','agreement','launch','expansion','disclosure','result']
+function lifecyclePassed(stage,current){
+  const a=lifecycleOrder.indexOf(stage), b=lifecycleOrder.indexOf(current)
+  return b>=0 && a>=0 && a<b
+}
+
 import { computed, ref } from 'vue'
 
 const props=defineProps({ lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true}, news:{type:Array,required:true}, events:{type:Array,default:()=>[]}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null}, onOpen:{type:Function,required:true} })
@@ -56,6 +62,21 @@ const eventReports=computed(()=>selectedEvent.value?.reports?.length ? selectedE
           <div v-if="selected.businessDimensions?.length" class="event-business-dimensions">
             <span>经营影响</span>
             <b v-for="dimension in selected.businessDimensions" :key="dimension">{{ dimension }}</b>
+          </div>
+
+          <div v-if="selectedEvent?.lifecycle" class="event-lifecycle">
+            <div class="event-lifecycle-head">
+              <div><span>EVENT LIFECYCLE</span><strong>{{ selectedEvent.lifecycle.stageLabel }}</strong></div>
+              <small>当前阶段</small>
+            </div>
+            <div class="event-lifecycle-track">
+              <i v-for="stage in ['announcement','agreement','launch','expansion','disclosure','result']" :key="stage" :class="{active: stage===selectedEvent.lifecycle.stage, passed: lifecyclePassed(stage, selectedEvent.lifecycle.stage)}"></i>
+            </div>
+            <div class="event-lifecycle-labels"><span>宣布</span><span>合作</span><span>上线</span><span>扩张</span><span>披露</span><span>结果</span></div>
+            <div v-if="selectedEvent.lifecycle.confirmedMilestones?.length" class="lifecycle-list">
+              <b>已确认</b><span v-for="item in selectedEvent.lifecycle.confirmedMilestones" :key="item">✓ {{ item }}</span>
+            </div>
+            <div class="lifecycle-next"><b>下一步验证</b><p>{{ selectedEvent.lifecycle.nextMilestone }}</p></div>
           </div>
 
           <div class="event-progress">
