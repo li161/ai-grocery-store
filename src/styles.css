@@ -41,10 +41,10 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d8ae
   z-index:-5;
   background-image:url("/ai-grocery-store/store-bg.webp");
   background-repeat:no-repeat;
-  background-size:101.8% auto;
-  background-position:calc(50% - 2px) -6.86vh;
+  background-size:cover;
+  background-position:center center;
   background-color:#17100b;
-  filter:saturate(.96) contrast(1.03);
+  filter:none; image-rendering:auto;
 }
 
 .store-backdrop::after{
@@ -484,4 +484,14 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
 .hot-list>button>b{color:#806e5c}
 .hot-list>button>span{color:#8f673b}
 .hot-head>time,.news-sync,.timeline-toolbar,.module-note{color:#8a7a69}
+
+
+
+/* native-resolution backdrop: avoid enlarging a low-resolution crop */
+.store-backdrop{
+  background-size:cover;
+  background-position:center center;
+  filter:none;
+  image-rendering:auto;
+}
 
