@@ -214,3 +214,42 @@ footer{padding:30px 6vw;background:#171614;color:#8e8780;display:flex;align-item
 .bundle-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.bundle-boxes i{height:82px;background:linear-gradient(145deg,#b86c58,#7d3e35);display:flex;align-items:flex-end;padding:9px;color:#f9e9dc;font-size:9px;font-style:normal;font-weight:700;box-shadow:0 8px 12px #0005}.bundle-boxes i:nth-child(2){background:linear-gradient(145deg,#65789c,#394b6b)}.bundle-boxes i:nth-child(3){background:linear-gradient(145deg,#4f817a,#2f5f59)}
 .hero-counter{position:absolute;z-index:15;right:3.5%;bottom:0;display:flex;background:#17110de0;border:1px solid #c5a06a44}.hero-counter div{padding:14px 19px;border-right:1px solid #fff1;min-width:82px}.hero-counter div:last-child{border:0}.hero-counter strong{display:block;color:#e6c58d;font-size:25px}.hero-counter strong span{font-size:14px}.hero-counter small{font-size:8px;color:#b8ab9e}
 
+
+/* --- intelligence shelves / clickable detail pages --- */
+.industry-card,.bundle-card{font:inherit;text-align:left;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s}
+.industry-card:hover,.bundle-card:hover{transform:translateY(-6px);box-shadow:0 18px 34px #3a2a1b26;border-color:#b79263}
+.industry-card:focus-visible,.bundle-card:focus-visible{outline:2px solid #b78a55;outline-offset:3px}
+.industry-card .industry-shelf-label{display:flex;justify-content:space-between}
+.industry-card .industry-shelf-label:after{content:"查看行业情报 →";font-size:8px;color:#9a7040}
+.bundle-foot{color:#5b4835}.bundle-foot:after{content:"查看完整套装";color:#9b7042;margin-left:auto;margin-right:8px}
+
+.detail-mask{position:fixed;inset:0;z-index:100;background:#0d0b09d9;backdrop-filter:blur(12px);overflow:auto;padding:54px 24px}
+.detail-page{width:min(1080px,100%);margin:auto;background:#f5eee3;color:var(--ink);box-shadow:0 35px 90px #0008;position:relative}
+.detail-close{position:absolute;z-index:2;right:18px;top:15px;width:40px;height:40px;border:1px solid #c8b59d;background:#eee4d6;color:#5d4e40;font-size:26px;line-height:1}
+.detail-hero{padding:54px 58px 42px;background:linear-gradient(120deg,#2a2119,#463321);color:#f5ecdf}
+.detail-hero .eyebrow{color:#d8b477}
+.detail-title-row{display:flex;align-items:center;gap:20px;margin-top:18px}
+.detail-icon{width:62px;height:62px;border:1px solid #c5a16d;border-radius:50%;display:grid;place-items:center;color:#e1bd7c;font-size:24px;flex:none}
+.detail-title-row h2{margin:0;font-size:44px;letter-spacing:-.05em}
+.detail-title-row p{margin:6px 0 0;color:#bdb0a1;font-size:12px}
+.detail-headline{max-width:760px;margin:25px 0 0;font-size:19px;line-height:1.6;color:#ead5b3}
+.detail-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:0}
+.detail-main,.detail-side{padding:42px 48px}
+.detail-side{background:#eae0d2;border-left:1px solid #d2c2ae}
+.detail-block+.detail-block{margin-top:35px}
+.detail-label{display:block;margin-bottom:13px;color:#9b7040;font-size:9px;font-weight:800;letter-spacing:.16em}
+.detail-block>p{margin:0;color:#675c51;font-size:13px;line-height:1.9}
+.action-list{border-top:1px solid #d4c5b3}
+.action-list>div{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #d4c5b3}
+.action-list b{font-size:10px;color:#aa7d49}.action-list span{font-size:12px}
+.tool-chips{display:flex;flex-wrap:wrap;gap:7px}
+.tool-chips span{padding:7px 10px;background:#f8f1e7;border:1px solid #d5c6b4;font-size:10px;font-weight:700}
+.source-item{display:block;padding:13px 0;border-bottom:1px solid #d0c1ae;text-decoration:none;color:#493d31}
+.source-item strong{display:block;font-size:11px;line-height:1.5}.source-item small{display:block;margin-top:5px;color:#8d7e6e;font-size:8px}
+.source-item:hover strong{color:#9b7040}
+
+@media(max-width:700px){
+  .detail-mask{padding:18px 12px}
+  .detail-hero{padding:38px 24px 30px}.detail-title-row h2{font-size:32px}.detail-headline{font-size:15px}
+  .detail-grid{grid-template-columns:1fr}.detail-main,.detail-side{padding:30px 24px}.detail-side{border-left:0;border-top:1px solid #d2c2ae}
+}
