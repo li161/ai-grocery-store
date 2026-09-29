@@ -95,7 +95,8 @@ async function fetchJdOfficialNotices() {
     const response = await fetch('https://opendj.jd.com/api/notice.htm', { headers: { 'user-agent': 'Mozilla/5.0 (compatible; RetailPlatformRadar/1.0)', accept: 'application/json' }, signal: AbortSignal.timeout(18000) })
     if (!response.ok) throw new Error('HTTP ' + response.status)
     const payload = await response.json()
-    const rows = Array.isArray(payload) ? payload : (payload.data || payload.list || payload.rows || [])
+    const rawRows = Array.isArray(payload) ? payload : (payload.data || payload.list || payload.rows || [])
+    const rows = Array.isArray(rawRows) ? rawRows : (rawRows.list || rawRows.rows || rawRows.records || [])
     const parseDate = value => {
       const match = String(value || '').match(/(\\d{4})年(\\d{1,2})月(\\d{1,2})日/)
       if (match) return match[1] + '-' + match[2].padStart(2,'0') + '-' + match[3].padStart(2,'0')
