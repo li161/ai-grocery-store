@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-29T06:29:07.218Z",
+  "generatedAt": "2026-09-29T06:39:28.483Z",
   "year": 2026,
-  "coverageNote": "独立平台动作雷达：按季度检索 App/产品迭代、AI导购、商家经营工具、流量营销、平台规则、履约供应链和治理动态。自动发现记录标记为“待核验”；官方公告与 App 版本记录的已核验条目保留状态。公开搜索有索引与结果条数限制，不能保证覆盖仅在商家后台、私域或灰度发布的全部动作。",
+  "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
     {
       "platform": "淘宝",
@@ -72,23 +72,43 @@
       "platform": "拼多多",
       "name": "拼多多商家帮助中心",
       "url": "https://mms.pinduoduo.com/"
+    },
+    {
+      "platform": "淘宝",
+      "name": "公众号文章检索（微信文章公开索引）",
+      "url": "https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E6%B7%98%E5%AE%9D%20%E5%A4%A9%E7%8C%AB%20%E5%95%86%E5%AE%B6"
+    },
+    {
+      "platform": "京东",
+      "name": "公众号文章检索（微信文章公开索引）",
+      "url": "https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E4%BA%AC%E4%B8%9C%20%E4%BA%AC%E9%BA%A6%20%E5%95%86%E5%AE%B6"
+    },
+    {
+      "platform": "美团",
+      "name": "公众号文章检索（微信文章公开索引）",
+      "url": "https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E7%BE%8E%E5%9B%A2%20%E5%95%86%E5%AE%B6%20%E5%8D%B3%E6%97%B6%E9%9B%B6%E5%94%AE"
+    },
+    {
+      "platform": "拼多多",
+      "name": "公众号文章检索（微信文章公开索引）",
+      "url": "https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E6%8B%BC%E5%A4%9A%E5%A4%9A%20%E5%95%86%E5%AE%B6%20%E8%A7%84%E5%88%99"
     }
   ],
   "sourceHealth": {
-    "queries": 84,
-    "healthy": 84,
+    "queries": 32,
+    "healthy": 32,
     "failed": 0,
-    "newlyFound": 106,
-    "archivedItems": 126,
+    "newlyFound": 8,
+    "archivedItems": 52,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 30,
-      "京东": 28,
-      "美团": 32,
-      "拼多多": 36
+      "淘宝": 8,
+      "京东": 13,
+      "美团": 19,
+      "拼多多": 12
     }
   },
   "items": [
@@ -105,54 +125,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "title": "关于一批手表黄金饰品杂项处置专场的公告- 海关/政府拍卖公告 - paimai.jd.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWVFBhU1hsaVA0VU5wVG9JWE5rUEp1dWV5cU5jYnlhaGc3YUdseVFGV212cC1nenlSUEFlWEpnejBndVpyWmpFTTJYNWNKdw?oc=5",
-      "publishedAt": "2026-09-28",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWVFBhU1hsaVA0VU5wVG9JWE5rUEp1dWV5cU5jYnlhaGc3YUdseVFGV212cC1nenlSUEFlWEpnejBndVpyWmpFTTJYNWNKdw?oc=5\" target=\"_blank\">关于一批手表黄金饰品杂项处置专场的公告- 海关/政府拍卖公告</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">paimai.jd.com</font>",
-      "source": "paimai.jd.com",
-      "platform": "京东",
-      "query": "site:rule.jd.com OR site:jd.com 京东 商家规则 费用 佣金 政策调整 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "【一拍】【渔获物】粤南澳渔32199船渔获物一批- 海关/政府拍卖公告 - paimai.jd.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5xYTA3eUxGUjBsUG5kWGQ2ZWNVMW16RmhtWTBpTncwaUJRbVBESmlOem5rR0VuMTViTnpKaVBidEo4MFdLb0steXFSQWprdw?oc=5",
-      "publishedAt": "2026-09-28",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE5xYTA3eUxGUjBsUG5kWGQ2ZWNVMW16RmhtWTBpTncwaUJRbVBESmlOem5rR0VuMTViTnpKaVBidEo4MFdLb0steXFSQWprdw?oc=5\" target=\"_blank\">【一拍】【渔获物】粤南澳渔32199船渔获物一批- 海关/政府拍卖公告</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">paimai.jd.com</font>",
-      "source": "paimai.jd.com",
-      "platform": "京东",
-      "query": "site:rule.jd.com OR site:jd.com 京东 商家规则 费用 佣金 政策调整 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5",
-      "publishedAt": "2026-09-28",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5\" target=\"_blank\">双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5",
-      "publishedAt": "2026-09-28",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5\" target=\"_blank\">双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "拼多多",
-      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "AI能力赋能、四大升级举措加持商家在京东里的增长新机会来了- 零售 - EBRUN.com",
       "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1ucmZiSXAtcTJUZklobWlrM3l0a2xoMXB0aXZFRnhGMWphWENHLWhsak1QRVNDem96LUJCZVhwY1U3SE9VS0dQNmdjVVZtSkFwWFhQNw?oc=5",
       "publishedAt": "2026-09-28",
@@ -165,18 +137,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "title": "双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5",
-      "publishedAt": "2026-09-28",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE1FVnA1Ni1fUUkzMkhycy1xT2kxN2dCZmZJeHZreUpLck1BX2Z0YmVjNnVsY21ZSU1ENEhSOGZ3RldRSDdvUUxobzFINEtFZzZMNzEyTTBFYUFwSVhYMXNaVXF1WGVUWWJuZWVVVkxFazBJWTg?oc=5\" target=\"_blank\">双11已打响 淘宝天猫 京东 抖音 快手 拼多多 微信小店等发布招商政策</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "京东",
-      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "这个11.11，京东以生态厚度助力商家加速增长 - 电商派",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAwYndyVUJFUi1GcWtpU0JuekZSM3VncUM5TGJPLWpGNEU5dC01eGJXSGRXTFlYN01LNVB5VEhUMm9zeUF1bWlRbllGWk1xV3BXMXhSdzJ1bzlRQ1hGVzhzUg?oc=5",
       "publishedAt": "2026-09-28",
@@ -185,78 +145,6 @@
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5\" target=\"_blank\">618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5\" target=\"_blank\">618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "京东",
-      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "yabo体育app登录入口全新升级：打造极致体育观赛体验 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1sdF9WWk9abUswdmkxaHpjb0pyaWZsWG84UHlvUUo5RmQtdng4Y2lYWW9UQ3dSdEhJQ0phVFI1bzM3UGdhVHcyTzdPMU93MFVPcXc?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiUkFVX3lxTE1sdF9WWk9abUswdmkxaHpjb0pyaWZsWG84UHlvUUo5RmQtdng4Y2lYWW9UQ3dSdEhJQ0phVFI1bzM3UGdhVHcyTzdPMU93MFVPcXc?oc=5\" target=\"_blank\">yabo体育app登录入口全新升级：打造极致体育观赛体验</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "2026年618大促开启：万博app最新版官网X10直降800元，全系现货+24期免息攻略 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFAwb0NXQXFVb2pRcV9TVHQyYVpaZmVpLUhzd3pucFBSeUF2OEp1RmFxR0VQT2txY3Vlb2VTZjBzX0p3UDRnSnZuMVpSZWFMdEtKbDZ4UjdnS3FjM1hwLWc?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiXkFVX3lxTFAwb0NXQXFVb2pRcV9TVHQyYVpaZmVpLUhzd3pucFBSeUF2OEp1RmFxR0VQT2txY3Vlb2VTZjBzX0p3UDRnSnZuMVpSZWFMdEtKbDZ4UjdnS3FjM1hwLWc?oc=5\" target=\"_blank\">2026年618大促开启：万博app最新版官网X10直降800元，全系现货+24期免息攻略</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiW0FVX3lxTFAxVXotaDN5ZER5cjY1Y0hfclhndzBCUGdaVDNPT1Y0T1U2SVhrQXdNN05sMmNSWjFRcVpCdXA5MWtwU1ZIR1ZxeU9ZOTFyblZ2RHlrU25Jcm5jbE0?oc=5\" target=\"_blank\">618前夜，火狐APP支持5.0大更新！三大场景实测：这才是今年最值得装的宝藏APP</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "金年登陆入口最新版2026新版上线：全新界面与赛事直播功能详解 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE05SVYwZlRuMkk2QWpQS1R5TGdlTWI3YnpnWUFMYm0zWDVoeDJNLTFrSGIwUHJWTlY4YUpzUlhNVlFBRXE3b1gxNEhXT212QQ?oc=5",
-      "publishedAt": "2026-09-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE05SVYwZlRuMkk2QWpQS1R5TGdlTWI3YnpnWUFMYm0zWDVoeDJNLTFrSGIwUHJWTlY4YUpzUlhNVlFBRXE3b1gxNEhXT212QQ?oc=5\" target=\"_blank\">金年登陆入口最新版2026新版上线：全新界面与赛事直播功能详解</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "App/产品功能",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -282,78 +170,6 @@
       ],
       "url": "https://apps.apple.com/mo/app/pinduoduo-seller-center/id1229469444",
       "status": "已由应用版本记录确认"
-    },
-    {
-      "title": "全面升级，jinnianhui体育网站登录入口值得关注？2026年主流平台亮点与入手指南 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9RbmJEaXBOZkZPb0Iyb2VlNmNPeElqcVh1LUxjNWRvS2RHRGc1SkhsdUN0YjF4ZWhTaE5Wem1zZnVmMGxZRXFMN1FkS3k0M0ZDM1dEWWdmaU1xXzNCanRnZA?oc=5",
-      "publishedAt": "2026-09-26",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiYEFVX3lxTE9RbmJEaXBOZkZPb0Iyb2VlNmNPeElqcVh1LUxjNWRvS2RHRGc1SkhsdUN0YjF4ZWhTaE5Wem1zZnVmMGxZRXFMN1FkS3k0M0ZDM1dEWWdmaU1xXzNCanRnZA?oc=5\" target=\"_blank\">全面升级，jinnianhui体育网站登录入口值得关注？2026年主流平台亮点与入手指南</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "亚博官方app2026年全面升级：新增AI教练与实时数据功能，用户注册量突破8000万-体坛网_体坛+ - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBSMTlzNEJINlBTSjVCdTIwckUxYVpqbUYtN29VLXhQQUNtYnU3bU82RUxOZnhfSTF1RmhMeGx1X1dKRmRjR21GMXBCZkFHdEl1Qk13MUFUblVBTHo4Y01VenJWaFRET002S3pN?oc=5",
-      "publishedAt": "2026-09-26",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMia0FVX3lxTFBSMTlzNEJINlBTSjVCdTIwckUxYVpqbUYtN29VLXhQQUNtYnU3bU82RUxOZnhfSTF1RmhMeGx1X1dKRmRjR21GMXBCZkFHdEl1Qk13MUFUblVBTHo4Y01VenJWaFRET002S3pN?oc=5\" target=\"_blank\">亚博官方app2026年全面升级：新增AI教练与实时数据功能，用户注册量突破8000万-体坛网_体坛+</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "从展品到爆品：杏彩9号彩下载APP如何重塑智能健康穿戴新纪元 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBTVjFBS2ZsRE85aC04aTAtS2dEbXBiMERkVUZacFZLbldVYjZpb0R4NUFGM0swM1RDZkF2WGQxRWYtLXdIb0lHbk1oQk9aUHRHcFVLZTctc18tSTNHQ0xfOXRjWnlIRUJtWm5tTFZBM2Z1QQ?oc=5",
-      "publishedAt": "2026-09-26",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMickFVX3lxTFBTVjFBS2ZsRE85aC04aTAtS2dEbXBiMERkVUZacFZLbldVYjZpb0R4NUFGM0swM1RDZkF2WGQxRWYtLXdIb0lHbk1oQk9aUHRHcFVLZTctc18tSTNHQ0xfOXRjWnlIRUJtWm5tTFZBM2Z1QQ?oc=5\" target=\"_blank\">从展品到爆品：杏彩9号彩下载APP如何重塑智能健康穿戴新纪元</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "亚搏安卓最新版：2026年全新升级，开启智能娱乐新体验- 体坛网_体坛+ - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE52M0pwaFNNMktweFpYbWtTMTAwZG82QXlyS292YjZBRDl5Tmg5RW9HZ2VmcUF0aVpiRHpMN2lQZGJScE5sSUhvWGFWMmg1WlNCbVppZzF4UDE1U0Fia2c?oc=5",
-      "publishedAt": "2026-09-25",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiXkFVX3lxTE52M0pwaFNNMktweFpYbWtTMTAwZG82QXlyS292YjZBRDl5Tmg5RW9HZ2VmcUF0aVpiRHpMN2lQZGJScE5sSUhvWGFWMmg1WlNCbVppZzF4UDE1U0Fia2c?oc=5\" target=\"_blank\">亚搏安卓最新版：2026年全新升级，开启智能娱乐新体验- 体坛网_体坛+</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "j9九游会备用下载2026全面升级：一站式娱乐平台开启‘快静活省稳易’新时代！ - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9lc0w0MzlRX0JrVnVmRExWZllyZGpxMGFsQlZROENRWGhCX1JrU2Mybm9SNFprb2FZLXQySnlUNl9vQXkxM2VIYVNqT2FkYnZweDUzRDF0TmtFMEh5YjBEV1RDUQ?oc=5",
-      "publishedAt": "2026-09-25",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiY0FVX3lxTE9lc0w0MzlRX0JrVnVmRExWZllyZGpxMGFsQlZROENRWGhCX1JrU2Mybm9SNFprb2FZLXQySnlUNl9vQXkxM2VIYVNqT2FkYnZweDUzRDF0TmtFMEh5YjBEV1RDUQ?oc=5\" target=\"_blank\">j9九游会备用下载2026全面升级：一站式娱乐平台开启‘快静活省稳易’新时代！</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "北欧风休闲城建游戏《永丰APP客户端》9月9日正式发售 1.0版本内容全面揭晓 - womenofchina.com",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9SVWFja1dNOXJqY1BJQlZJcTlQZHBrQW5ZT19ROUhwQ09uZW51Vm1aVEV4Q3pST0VOODZWNEJ3QmpialZEODMyMXA5dEFEd2RqN1lfdjRhTzlERE9faVlZVnlzbw?oc=5",
-      "publishedAt": "2026-09-24",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiY0FVX3lxTE9SVWFja1dNOXJqY1BJQlZJcTlQZHBrQW5ZT19ROUhwQ09uZW51Vm1aVEV4Q3pST0VOODZWNEJ3QmpialZEODMyMXA5dEFEd2RqN1lfdjRhTzlERE9faVlZVnlzbw?oc=5\" target=\"_blank\">北欧风休闲城建游戏《永丰APP客户端》9月9日正式发售 1.0版本内容全面揭晓</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">womenofchina.com</font>",
-      "source": "womenofchina.com",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
     },
     {
       "title": "零售日报：京东京麦+鲲驰组合：AI经营SOP重塑商家生意系统- 栏目 - EBRUN.com",
@@ -402,18 +218,6 @@
       "url": "https://www.xinhuanet.com/tech/20260923/68acc114e0474050af0bd1e5f49be536/c.html"
     },
     {
-      "title": "华体汇备用下载入口：全新升级版带来极致体育娱乐体验 - womenofchina.com",
-      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBPQ05UR2xCbFRNbmdHRzVZYVJPNzJxSGNaa01VMFZpaXBIX2VzNDdRdjRfQnFKZ3RjcmxkY2d0QlVOSVpkVF9tbS1VREhnSGNtYW9mUFpkZWluUmZVc1VIUmxIWU01Nkk?oc=5",
-      "publishedAt": "2026-09-23",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBPQ05UR2xCbFRNbmdHRzVZYVJPNzJxSGNaa01VMFZpaXBIX2VzNDdRdjRfQnFKZ3RjcmxkY2d0QlVOSVpkVF9tbS1VREhnSGNtYW9mUFpkZWluUmZVc1VIUmxIWU01Nkk?oc=5\" target=\"_blank\">华体汇备用下载入口：全新升级版带来极致体育娱乐体验</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">womenofchina.com</font>",
-      "source": "womenofchina.com",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "京东发布首批京麦AI专家团，招募三方好工具共建AI经营新范式 - 投资界",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFB5S1F1VkE2MGF6SWQyc3FReTVhWWxrVHJzemhkd0dmOGZyLXU0elRfckZNX24xQVcwa0pod0lGYS02aWJrNjY4d2NfdXdITVpicjltbkRR?oc=5",
       "publishedAt": "2026-09-23",
@@ -434,18 +238,6 @@
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "AI导购“百团大战”开打：电商十年逻辑正在被改写 - 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPRXRlWDRRSWIzYXA1UkpZVFNlWFJISXVDUVY5OWZSMElaNlZxQWtGcHZpM05ibk43RGNBR285eTNFUlExeldibTd5VG5aYmxhc3V3QUFsaDY3ZDZCWWxrYTJOR0VIOUVNZjBVNkMyT1dsWW5NYlByMzIwbjhTMmlIeVF5SjJoSWNH?oc=5",
-      "publishedAt": "2026-09-22",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiiAFBVV95cUxPRXRlWDRRSWIzYXA1UkpZVFNlWFJISXVDUVY5OWZSMElaNlZxQWtGcHZpM05ibk43RGNBR285eTNFUlExeldibTd5VG5aYmxhc3V3QUFsaDY3ZDZCWWxrYTJOR0VIOUVNZjBVNkMyT1dsWW5NYlByMzIwbjhTMmlIeVF5SjJoSWNH?oc=5\" target=\"_blank\">AI导购“百团大战”开打：电商十年逻辑正在被改写</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">搜狐网</font>",
-      "source": "搜狐网",
-      "platform": "淘宝",
-      "query": "天猫 AI空间站 Token充值中心 数字商品 上线 2026",
-      "actionType": "AI导购/购物助手",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -555,42 +347,6 @@
       "url": "https://rules-center.meituan.com/"
     },
     {
-      "title": "尊时凯龙app网址最新版全面升级：2026新版功能介绍与下载指南 - 体坛",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1yT2pURWp3OEx3SVQyZzZjalhGVGV4VGZ4M1lWWTFxLXRUeWQzaDV0dnpHd1JlYVBDeUFldHB5eDlLX0FaZll3RFJVb2k3S0d0ZWJoRm9rakRMZlZ2ODFmSkZVWUUtSzhpWmtRRENYbnBYckloaklB?oc=5",
-      "publishedAt": "2026-09-17",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMid0FVX3lxTE1yT2pURWp3OEx3SVQyZzZjalhGVGV4VGZ4M1lWWTFxLXRUeWQzaDV0dnpHd1JlYVBDeUFldHB5eDlLX0FaZll3RFJVb2k3S0d0ZWJoRm9rakRMZlZ2ODFmSkZVWUUtSzhpWmtRRENYbnBYckloaklB?oc=5\" target=\"_blank\">尊时凯龙app网址最新版全面升级：2026新版功能介绍与下载指南</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">体坛</font>",
-      "source": "体坛",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "当AI劝你下单：入口热，需求冷？ - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE15dmg4TG1jZko1am5iSHNWWEljWlBUVWNQRDEyZXg0ejNmSE1WWF9sVXBxc2QtOWpjQ203WVJNOFN1VFYzeGtLRlA5UkZCdw?oc=5",
-      "publishedAt": "2026-09-16",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE15dmg4TG1jZko1am5iSHNWWEljWlBUVWNQRDEyZXg0ejNmSE1WWF9sVXBxc2QtOWpjQ203WVJNOFN1VFYzeGtLRlA5UkZCdw?oc=5\" target=\"_blank\">当AI劝你下单：入口热，需求冷？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "淘宝",
-      "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "交汇点观察｜AI模型算力被摆上电商货架，记者体验像“充话费”一样买算力 - 新华报业网",
-      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBsWVNwZVNyUjY1aFBCOGJ4Q1ZEcUhPWGJWUmlBaGdibWZiX2QyZDIyMm9XQmQxQmQ0Wkt2Z2JncWhEU1p4eGR1M0dIdGtvUnF0U3dVUER6aWxKRTVCMldUamdwMURHdmp0Q2p3?oc=5",
-      "publishedAt": "2026-09-16",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMia0FVX3lxTFBsWVNwZVNyUjY1aFBCOGJ4Q1ZEcUhPWGJWUmlBaGdibWZiX2QyZDIyMm9XQmQxQmQ0Wkt2Z2JncWhEU1p4eGR1M0dIdGtvUnF0U3dVUER6aWxKRTVCMldUamdwMURHdmp0Q2p3?oc=5\" target=\"_blank\">交汇点观察｜AI模型算力被摆上电商货架，记者体验像“充话费”一样买算力</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新华报业网</font>",
-      "source": "新华报业网",
-      "platform": "淘宝",
-      "query": "天猫 AI空间站 Token充值中心 数字商品 上线 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "id": "pdd-ai-search-shopping-2026-09-15",
       "platform": "拼多多",
       "lane": "拼多多",
@@ -610,105 +366,6 @@
         "商品属性"
       ],
       "url": "https://finance.eastmoney.com/a/202609153874654649.html"
-    },
-    {
-      "title": "大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力 - 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPV2tiM3c3ZmxadndLTHBkWndEX3llYlVfN3FCcDk0aWdRMHR0WmkxWTdpclA5TjVFdFVLMzN1QlF1TkFudXlWMWdfWjlsWXprV0hySmx5Y2xiQWhuUnFJVUt6QkFRUW9JYnBieEcyN19vT0swYzVSLXF1M0ZZUzRNLXB5Uno5X1F2?oc=5",
-      "publishedAt": "2026-09-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiiAFBVV95cUxPV2tiM3c3ZmxadndLTHBkWndEX3llYlVfN3FCcDk0aWdRMHR0WmkxWTdpclA5TjVFdFVLMzN1QlF1TkFudXlWMWdfWjlsWXprV0hySmx5Y2xiQWhuUnFJVUt6QkFRUW9JYnBieEcyN19vT0swYzVSLXF1M0ZZUzRNLXB5Uno5X1F2?oc=5\" target=\"_blank\">大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">搜狐网</font>",
-      "source": "搜狐网",
-      "platform": "京东",
-      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力 - 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1RQ0JwUzhuQ3RKQmFnbUp5ZjlBUGkwMjBLLU52N1pFcWYtODhFblpnX2kzTXFGbGIwa2VTTzc5ZVYyWW9MZk9zUTVfQ2E1cFloOU9B?oc=5",
-      "publishedAt": "2026-09-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTE1RQ0JwUzhuQ3RKQmFnbUp5ZjlBUGkwMjBLLU52N1pFcWYtODhFblpnX2kzTXFGbGIwa2VTTzc5ZVYyWW9MZk9zUTVfQ2E1cFloOU9B?oc=5\" target=\"_blank\">大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">搜狐网</font>",
-      "source": "搜狐网",
-      "platform": "美团",
-      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力 - 新京报",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5GOURyNGpvQlRRY2RnclJhejdNeVJ1M2VOSFBIOHRGTV9Kc1BwNVZBSmNzMm5wVHFUU19nMjBIbm9DcjZxdlRGOFJnUFhxQlYtb3JGOUtfS2dsVENrUHdTdlhyN3Y?oc=5",
-      "publishedAt": "2026-09-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZEFVX3lxTE5GOURyNGpvQlRRY2RnclJhejdNeVJ1M2VOSFBIOHRGTV9Kc1BwNVZBSmNzMm5wVHFUU19nMjBIbm9DcjZxdlRGOFJnUFhxQlYtb3JGOUtfS2dsVENrUHdTdlhyN3Y?oc=5\" target=\"_blank\">大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新京报</font>",
-      "source": "新京报",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力 - 新京报",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5GOURyNGpvQlRRY2RnclJhejdNeVJ1M2VOSFBIOHRGTV9Kc1BwNVZBSmNzMm5wVHFUU19nMjBIbm9DcjZxdlRGOFJnUFhxQlYtb3JGOUtfS2dsVENrUHdTdlhyN3Y?oc=5",
-      "publishedAt": "2026-09-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZEFVX3lxTE5GOURyNGpvQlRRY2RnclJhejdNeVJ1M2VOSFBIOHRGTV9Kc1BwNVZBSmNzMm5wVHFUU19nMjBIbm9DcjZxdlRGOFJnUFhxQlYtb3JGOUtfS2dsVENrUHdTdlhyN3Y?oc=5\" target=\"_blank\">大厂AI导购混战：电商告别流量战，比拼AI帮人挑货能力</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新京报</font>",
-      "source": "新京报",
-      "platform": "京东",
-      "query": "京东 App 东东 AI购物助手 视频搜同款 3D商品 语音导购 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "电商巨头开启新混战，商家的投流逻辑要变了 - 投资界",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9KdDA2UDRGcl9TdWc3ZXBMclZDai03eWJpSUYxSnVid2lyR1VQS0NGdy12VzNoNUZLYjdaek9PQzFmWVJEVWVuRDRfWDhlRl9HdUxyYmt3?oc=5",
-      "publishedAt": "2026-09-14",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiVkFVX3lxTE9KdDA2UDRGcl9TdWc3ZXBMclZDai03eWJpSUYxSnVid2lyR1VQS0NGdy12VzNoNUZLYjdaek9PQzFmWVJEVWVuRDRfWDhlRl9HdUxyYmt3?oc=5\" target=\"_blank\">电商巨头开启新混战，商家的投流逻辑要变了</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">投资界</font>",
-      "source": "投资界",
-      "platform": "拼多多",
-      "query": "拼多多 AI搜索 自然语言搜索 灰度测试 上线 2026",
-      "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "id": "meituan-service-retail-fulfillment-2026-09-11",
-      "lane": "美团",
-      "date": "2026-09-11",
-      "publishedAt": "2026-09-11",
-      "source": "美团服务零售商户规则中心",
-      "sourceType": "官方",
-      "title": "服务零售业务商户履约保障管理办法更新",
-      "summary": "服务零售商户规则中心于 2026-09-11 列出履约保障管理办法更新，涉及合作产品履约与商户服务保障。",
-      "impact": "商家需要检查接单、预约、核销、配送或服务交付流程，以及异常订单留证。",
-      "action": "对照门店实际经营的团购、预约、自提和配送服务核对履约要求。",
-      "tags": [
-        "履约保障",
-        "服务零售",
-        "商家规则"
-      ],
-      "url": "https://rules-center.meituan.com/?commonType=3",
-      "platform": "美团",
-      "actionType": "履约/供应链"
-    },
-    {
-      "id": "meituan-service-retail-violation-2026-09-11",
-      "lane": "美团",
-      "date": "2026-09-11",
-      "publishedAt": "2026-09-11",
-      "source": "美团服务零售商户规则中心",
-      "sourceType": "官方",
-      "title": "服务零售业务商户违规处理规范更新",
-      "summary": "服务零售商户规则中心于 2026-09-11 列出违规处理规范更新。",
-      "impact": "商家应重新核对商品/服务描述、交易履约、经营行为和申诉材料留存。",
-      "action": "查看最新规则正文，检查门店操作流程和员工执行规范。",
-      "tags": [
-        "违规处理",
-        "商家合规"
-      ],
-      "url": "https://rules-center.meituan.com/?commonType=3",
-      "platform": "美团",
-      "actionType": "平台规则/费用"
     },
     {
       "id": "meituan-service-retail-violations-2026-09-11",
@@ -842,18 +499,6 @@
       "url": "https://rules-center.meituan.com/"
     },
     {
-      "title": "AI日用品时代到来 天猫成为消费者首选第一排货架 - eu.36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBYTnNXUVZVZmg0UXdKczBVT1RYNlY3cHdRMEJSUEp0MEd0SXJDS0lrVl80Z3NWRzEwZHFBRVFRSUxkX3JSeU03OHdzWGxyR0RHSWQw?oc=5",
-      "publishedAt": "2026-09-03",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTFBYTnNXUVZVZmg0UXdKczBVT1RYNlY3cHdRMEJSUEp0MEd0SXJDS0lrVl80Z3NWRzEwZHFBRVFRSUxkX3JSeU03OHdzWGxyR0RHSWQw?oc=5\" target=\"_blank\">AI日用品时代到来 天猫成为消费者首选第一排货架</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eu.36kr.com</font>",
-      "source": "eu.36kr.com",
-      "platform": "淘宝",
-      "query": "天猫 AI空间站 Token充值中心 数字商品 上线 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "id": "meituan-traceability-label-2026-08-31",
       "platform": "美团",
       "lane": "美团",
@@ -883,42 +528,6 @@
       "platform": "美团",
       "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
       "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "豆包手机二代亮相，一代迎来大版本更新，鸿蒙GUI也已进场 - 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1DVkN4dk40SDBCWlZjcUpqU3hHbXQ1TWFrWXIxRGppQVl2dlgxQUhrd1djZGNsTkZXZ3k5ZGs1Y3lfVUpldjJUOHowdVh4ZV9OVGFub2NR?oc=5",
-      "publishedAt": "2026-08-06",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiVkFVX3lxTE1DVkN4dk40SDBCWlZjcUpqU3hHbXQ1TWFrWXIxRGppQVl2dlgxQUhrd1djZGNsTkZXZ3k5ZGs1Y3lfVUpldjJUOHowdVh4ZV9OVGFub2NR?oc=5\" target=\"_blank\">豆包手机二代亮相，一代迎来大版本更新，鸿蒙GUI也已进场</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">搜狐网</font>",
-      "source": "搜狐网",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "用AI购物，真香还是大可不必？ - CBNData-第一财经商业数据中心",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5JdWw2QnpsRVVvaEJlWXJaSDZSbXlHaDZTYmZHbG1Tbk80SjF0dWpVWjlUZmpwNXNpOTZwWnpjaVNIQ2NUc0tLLUJuSkVHXzg?oc=5",
-      "publishedAt": "2026-08-05",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiT0FVX3lxTE5JdWw2QnpsRVVvaEJlWXJaSDZSbXlHaDZTYmZHbG1Tbk80SjF0dWpVWjlUZmpwNXNpOTZwWnpjaVNIQ2NUc0tLLUJuSkVHXzg?oc=5\" target=\"_blank\">用AI购物，真香还是大可不必？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">CBNData-第一财经商业数据中心</font>",
-      "source": "CBNData-第一财经商业数据中心",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "用AI购物，真香还是大可不必？ - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5UTE5oaHpvcEc4NjNRQTROTlZZVVVxc3VzQnNoVHdkRnViX01JUWZmT2hJem56TlpxZ1lacFlSNWcydVRLMnJIUi1nZTFTUQ?oc=5",
-      "publishedAt": "2026-08-04",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE5UTE5oaHpvcEc4NjNRQTROTlZZVVVxc3VzQnNoVHdkRnViX01JUWZmT2hJem56TlpxZ1lacFlSNWcydVRLMnJIUi1nZTFTUQ?oc=5\" target=\"_blank\">用AI购物，真香还是大可不必？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "AI导购/购物助手",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -969,91 +578,6 @@
       "status": "已由官方技术博客确认"
     },
     {
-      "title": "苹果 Apple Store 应用有望上线“AI 购物助手”，辅助用户挑选商品 - 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5uRkd5SFFiMWxkVkhNTzRhbHB1Ni1XMktIV2hTZzl5M1RKeWxibTFIckdJNlN1VjA2UDAtUjlWeUhENGhsbjRxSGc0VGNfa2RVNGxZZ1ZQcEtJSnRMNTQtZ1lWT0JxdHNkeUFOZU1paG8xcktMUXpWTWRnTTRuVVU?oc=5",
-      "publishedAt": "2026-07-23",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMif0FVX3lxTE5uRkd5SFFiMWxkVkhNTzRhbHB1Ni1XMktIV2hTZzl5M1RKeWxibTFIckdJNlN1VjA2UDAtUjlWeUhENGhsbjRxSGc0VGNfa2RVNGxZZ1ZQcEtJSnRMNTQtZ1lWT0JxdHNkeUFOZU1paG8xcktMUXpWTWRnTTRuVVU?oc=5\" target=\"_blank\">苹果 Apple Store 应用有望上线“AI 购物助手”，辅助用户挑选商品</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新浪财经</font>",
-      "source": "新浪财经",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "id": "jd-delivery-track-2026-07-16",
-      "lane": "京东",
-      "date": "2026-07-16",
-      "publishedAt": "2026-07-16",
-      "source": "京东秒送开放平台",
-      "sourceType": "官方",
-      "title": "关于商家自送轨迹信息回传的公告",
-      "summary": "京东秒送开放平台要求商家自配履约回传物流轨迹信息，并说明需按期完成接口改造，平台后续将开展常态化核查。",
-      "impact": "采用自配或服务商系统的商家需关注订单轨迹回传、系统对接和异常处理。",
-      "action": "联系配送系统服务商确认接口升级、轨迹回传字段和核查状态。",
-      "tags": [
-        "即时零售",
-        "履约",
-        "接口对接"
-      ],
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=409",
-      "platform": "京东",
-      "actionType": "商家经营工具"
-    },
-    {
-      "id": "jd-official-409",
-      "platform": "京东",
-      "lane": "京东",
-      "actionType": "商家经营工具",
-      "date": "2026-07-16",
-      "publishedAt": "2026-07-16",
-      "source": "京东商家开放平台",
-      "sourceType": "官方公告",
-      "status": "已由官方公告确认",
-      "title": "【重要通知】关于商家自送轨迹信息回传的公告",
-      "summary": "致：全体京东秒送开放平台服务商/商家合作伙伴 为提升商家自配履约下的消费者物流体验，构建透明、高效的即时配送服务体系；平台对京东秒送订单的物流轨迹信息做统一的回传要求，请各位服务商合作伙伴需在 8月25日前 完成对接改造；平台将于 9月起 对上述轨迹回传情况开展常态化核查。如后续核查发现服务商未按标准接入，平台将视情节严重程度，采取警告、限期整改、限制接口权限直至终止合作等处理措施。 请大家重点关注本公告需升级接口部分内容； 具体改造内容见链接： https://open.jd.com/v2/#/announcement/detail?listId=201849&itemId=1101752",
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=409",
-      "tags": [
-        "京东开放平台",
-        "商家经营工具"
-      ],
-      "official": true
-    },
-    {
-      "id": "jd-pickup-address-2026-07-06",
-      "platform": "京东",
-      "lane": "京东",
-      "actionType": "履约/供应链",
-      "date": "2026-07-06",
-      "publishedAt": "2026-07-06",
-      "source": "京东秒送开放平台",
-      "sourceType": "官方",
-      "status": "已由官方公告确认",
-      "title": "关于规范餐饮外卖订单取餐地址的通知",
-      "summary": "京东秒送开放平台发布规范餐饮外卖订单取餐地址的通知。",
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=408",
-      "tags": [
-        "即时零售",
-        "外卖履约",
-        "地址配置"
-      ],
-      "official": true,
-      "impact": "商家需检查门店地址、取餐点配置和配送交接信息，减少骑手取餐异常。",
-      "action": "核对门店后台的取餐地址、出餐点及多门店配置。"
-    },
-    {
-      "title": "2026拼多多流量规则升级，专业化代运营成中小商家长效增长抓手 - 中华网",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5EUWZqTkF5b19MbUhJbUZvMUsxR0lDTGVKUzVXN092QnhoZFUwbENKek9hS21DQnlQWU1oallOdGxGT3ltbkpLOFZ4SWtPcjRoa1ZKRm9vaXhwOUFlZlQ3UUV2ZGdzZw?oc=5",
-      "publishedAt": "2026-07-06",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZkFVX3lxTE5EUWZqTkF5b19MbUhJbUZvMUsxR0lDTGVKUzVXN092QnhoZFUwbENKek9hS21DQnlQWU1oallOdGxGT3ltbkpLOFZ4SWtPcjRoa1ZKRm9vaXhwOUFlZlQ3UUV2ZGdzZw?oc=5\" target=\"_blank\">2026拼多多流量规则升级，专业化代运营成中小商家长效增长抓手</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">中华网</font>",
-      "source": "中华网",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "2026拼多多流量规则升级，专业化代运营成中小商家长效增长抓手 - 中华网",
       "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5EUWZqTkF5b19MbUhJbUZvMUsxR0lDTGVKUzVXN092QnhoZFUwbENKek9hS21DQnlQWU1oallOdGxGT3ltbkpLOFZ4SWtPcjRoa1ZKRm9vaXhwOUFlZlQ3UUV2ZGdzZw?oc=5",
       "publishedAt": "2026-07-06",
@@ -1086,25 +610,6 @@
       "actionType": "平台规则/费用"
     },
     {
-      "id": "jd-official-407",
-      "platform": "京东",
-      "lane": "京东",
-      "actionType": "商家经营工具",
-      "date": "2026-06-26",
-      "publishedAt": "2026-06-26",
-      "source": "京东商家开放平台",
-      "sourceType": "官方公告",
-      "status": "已由官方公告确认",
-      "title": "【重要通知】京东秒送软件服务商入驻通知",
-      "summary": "各位开发者伙伴： 为进一步规范京东秒送开放平台生态，提升对商家的服务质量与管理效率。京东秒送开放平台（opendj.jd.com）应用创建、API接口、商家授权等功能将于2026年10月起陆续下线，具体节奏请关注平台后续通知。为避免您的业务受限，请各位开发者按照要求前往京东商家开放平台（open.jd.com）进行入驻申请。 一、对存量ISV开发者的重要通知（请务必关注！） 已成为京东秒送开放平台（opendj.jd.com）的ISV开发者，请在2026年7月30日前在京东商家开放平台（open.jd.com）尽快完成服务商身份注册并缴纳保证金，注册流程参考下方入驻指南： 【入驻指南】 https://open.jd.com/v2/#/doc/begin-guide?listId=1101558 2026年7月30日起，平台有权将对未完成入驻的存量开发者，采取严格的限制措施，包括但不限于开发者账号禁用、商家应用授权应用、API接",
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=407",
-      "tags": [
-        "京东开放平台",
-        "商家经营工具"
-      ],
-      "official": true
-    },
-    {
       "id": "meituan-ai-merchant-guard-2026-06-24",
       "lane": "美团",
       "platform": "美团",
@@ -1127,18 +632,6 @@
       "status": "已由官方频道披露"
     },
     {
-      "title": "AI原生大促元年，技术重构618的人货匹配 - QQ News",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1jVTJxWVR2MWNMQTNNN1FLNV9ldjBmY1NBaW1jaGdjdFRzVmFJZzc0Y054VVV4RDNTRnF5SnlTSjNucnRXdlluUVB5N1J2V1BMbTkyZkpB?oc=5",
-      "publishedAt": "2026-06-24",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiVkFVX3lxTE1jVTJxWVR2MWNMQTNNN1FLNV9ldjBmY1NBaW1jaGdjdFRzVmFJZzc0Y054VVV4RDNTRnF5SnlTSjNucnRXdlluUVB5N1J2V1BMbTkyZkpB?oc=5\" target=\"_blank\">AI原生大促元年，技术重构618的人货匹配</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">QQ News</font>",
-      "source": "QQ News",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "拼多多开放平台 - 拼多多开放平台",
       "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNalFLTzkwWmk4N3Voc091RW4wNkdtcHNueEtGVWlCbkNaUFlDM3R3M0s4UjBEZ1ZUVkhZWFZRTFpFV0w3TndIRFNkOXJfSkVOWkJGTWxKZ1YyY0lmcDg5ZGQ4M3JFUFZGbXNIVUtjcVpWbTJja1JmMFlxTldGNGtjZHhPaw?oc=5",
       "publishedAt": "2026-06-24",
@@ -1146,42 +639,6 @@
       "source": "拼多多开放平台",
       "platform": "拼多多",
       "query": "site:open.pinduoduo.com 拼多多 商家工具 ERP 接口 数据传输 公告 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "百亿补贴的真相 - 21财经",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQRm1hUDdiYjdleXYzOW1WY3lCUTdUNnZUSXpHakJFeS1OWjZFYTFuT1RPV2hPVlRLQ2dEdE9LRUJvYWRQS1Z2WXRUaHNxNVZIUTVRUVUzZUxXcUJObm9xUXlKNTRTTWZaRzJrVDhTbmJKRW5EOU9VamZVMDRNZUVQZGVoRTBCU0dBTWRxck4tUQ?oc=5",
-      "publishedAt": "2026-06-23",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMijwFBVV95cUxQRm1hUDdiYjdleXYzOW1WY3lCUTdUNnZUSXpHakJFeS1OWjZFYTFuT1RPV2hPVlRLQ2dEdE9LRUJvYWRQS1Z2WXRUaHNxNVZIUTVRUVUzZUxXcUJObm9xUXlKNTRTTWZaRzJrVDhTbmJKRW5EOU9VamZVMDRNZUVQZGVoRTBCU0dBTWRxck4tUQ?oc=5\" target=\"_blank\">百亿补贴的真相</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">21财经</font>",
-      "source": "21财经",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "《618消费洞察报告（2026）》：AI未“接管”618，却改写零售逻辑 - eu.36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9MZHBBcnVWaEJzQ3FZYUttZ0ZiSWU4dTBDYXpIWlV3R2pMYW5UMkJpam5ESjhSSDNEMkg1d21sREF1UWp1QzVTOEZSZy1JeEd2dzhR?oc=5",
-      "publishedAt": "2026-06-18",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTE9MZHBBcnVWaEJzQ3FZYUttZ0ZiSWU4dTBDYXpIWlV3R2pMYW5UMkJpam5ESjhSSDNEMkg1d21sREF1UWp1QzVTOEZSZy1JeEd2dzhR?oc=5\" target=\"_blank\">《618消费洞察报告（2026）》：AI未“接管”618，却改写零售逻辑</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eu.36kr.com</font>",
-      "source": "eu.36kr.com",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "“最安静”的618：举目皆AI，谁能夺得用户决策权？ - 21财经",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNRkFGelk2UjdjZGlxZEtORElaMER4YjRTb0s3LS1XdTdUWDVpaFg3eXFOV0k5MmhMcW1BbVNEOHp4empTRzdTTUhVSGhVS1Z1LXRXVmtRcGhGYV9zZy1icGdScTZBb1FsTUNodVM5T21WSTVQcXZSMlgyb2lEVmtIRWxKLVR0azZpVFNtNHMwMA?oc=5",
-      "publishedAt": "2026-06-18",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMijwFBVV95cUxNRkFGelk2UjdjZGlxZEtORElaMER4YjRTb0s3LS1XdTdUWDVpaFg3eXFOV0k5MmhMcW1BbVNEOHp4empTRzdTTUhVSGhVS1Z1LXRXVmtRcGhGYV9zZy1icGdScTZBb1FsTUNodVM5T21WSTVQcXZSMlgyb2lEVmtIRWxKLVR0azZpVFNtNHMwMA?oc=5\" target=\"_blank\">“最安静”的618：举目皆AI，谁能夺得用户决策权？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">21财经</font>",
-      "source": "21财经",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
       "actionType": "平台规则/费用",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
@@ -1199,54 +656,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "title": "AI全面入局618：谁在收割，谁在建仓，谁在离场？ - Caijing",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1nekVBZmd4WEdXdGdobEYzVE8xMzA4YlZNcXlOU2VRR1M5VDRlYnF4VzNYVUpfY3FmYkR3VWl5d2s2UFNUcHdRbW5UWGg1d0FUNkRj?oc=5",
-      "publishedAt": "2026-06-16",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTE1nekVBZmd4WEdXdGdobEYzVE8xMzA4YlZNcXlOU2VRR1M5VDRlYnF4VzNYVUpfY3FmYkR3VWl5d2s2UFNUcHdRbW5UWGg1d0FUNkRj?oc=5\" target=\"_blank\">AI全面入局618：谁在收割，谁在建仓，谁在离场？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Caijing</font>",
-      "source": "Caijing",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "大厂AI，大战618 - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9RM0JlcTJoamZxMUVXQnFfcXBDMWRkeVpqZ25zVUh2TElCY3h3ZkkwRU9yNFoxTzZ1WGxPMU44TzlOV2pQZVVzeDA5bWs2UQ?oc=5",
-      "publishedAt": "2026-06-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE9RM0JlcTJoamZxMUVXQnFfcXBDMWRkeVpqZ25zVUh2TElCY3h3ZkkwRU9yNFoxTzZ1WGxPMU44TzlOV2pQZVVzeDA5bWs2UQ?oc=5\" target=\"_blank\">大厂AI，大战618</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "618乱象揭秘：“百亿补贴”罗生门，“摇一摇”变身“转一转” - eu.36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9vTWJ0TDNzSHJGUFVPcTZkUnE5R3NVUk9VMG5odDRuX3FHallSakxMQkUyUnp1cXNlSUhyaVBEd2VPSmUwV1oxUW5tcUpaYVBUcjhN?oc=5",
-      "publishedAt": "2026-06-11",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTE9vTWJ0TDNzSHJGUFVPcTZkUnE5R3NVUk9VMG5odDRuX3FHallSakxMQkUyUnp1cXNlSUhyaVBEd2VPSmUwV1oxUW5tcUpaYVBUcjhN?oc=5\" target=\"_blank\">618乱象揭秘：“百亿补贴”罗生门，“摇一摇”变身“转一转”</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eu.36kr.com</font>",
-      "source": "eu.36kr.com",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "揭秘百亿补贴五年：被模糊的真相大起底 - eu.36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFA0OU43b09sal9NY0pHZDR1MnVNbENSOGFCVGdHNzRFZWJCeVV6RDdUYVFyWk1nZHdvNHQyTE1vZ09vUTZFQ0VsSUQwWEV4VnlpMTJv?oc=5",
-      "publishedAt": "2026-06-11",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiU0FVX3lxTFA0OU43b09sal9NY0pHZDR1MnVNbENSOGFCVGdHNzRFZWJCeVV6RDdUYVFyWk1nZHdvNHQyTE1vZ09vUTZFQ0VsSUQwWEV4VnlpMTJv?oc=5\" target=\"_blank\">揭秘百亿补贴五年：被模糊的真相大起底</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eu.36kr.com</font>",
-      "source": "eu.36kr.com",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "全新推荐2026年淘宝京东天猫618红包领取口令每日可领最后一波618淘宝京东天猫红包口令实测有效可用618红包口令最新汇总领取步骤全攻略 - news.tom.com",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE8yQ1VwSFZPUlR0UElGemJsX0RfQ01mLVVqcER2RFZSR3k2ZUxMVE1jVUZlWl9xYy1tc0cyTGRZZlY1VWdNUGVJSnhUNXBvSGRUYjZIOFpn?oc=5",
       "publishedAt": "2026-06-04",
@@ -1254,30 +663,6 @@
       "source": "news.tom.com",
       "platform": "淘宝",
       "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "快手APP推出AI购物助手 - 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9Pa3hWQ1AwaktzNnJTVWVHUjRZZnBZR3l0MTFvR19aN003d21JbWxBOHNuN0dvSlBXLXRKMVctMzg5Zlp1RU10UEV4R2JMVDh3N1E?oc=5",
-      "publishedAt": "2026-06-04",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiUkFVX3lxTE9Pa3hWQ1AwaktzNnJTVWVHUjRZZnBZR3l0MTFvR19aN003d21JbWxBOHNuN0dvSlBXLXRKMVctMzg5Zlp1RU10UEV4R2JMVDh3N1E?oc=5\" target=\"_blank\">快手APP推出AI购物助手</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">搜狐网</font>",
-      "source": "搜狐网",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "AI比电商更需要618 - 21财经",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQVFUtX3B2T19veWJ0NmpiT3NVSmdueUhIYTEyZXdFQ3RxdTJCU3ZVQlc0N3VqZHFhRWpsX01tb1lsUFJFdWU1aTBCV2tRV3dCQUpKa2g3T3JJZlVJakgtWk1ueWRkNmlVUVgxeHpfTk5hNUF3R2gyWlpBQjdjRGJDaGFHc2Z3LVdIUURRUUFvNA?oc=5",
-      "publishedAt": "2026-06-03",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMijwFBVV95cUxQVFUtX3B2T19veWJ0NmpiT3NVSmdueUhIYTEyZXdFQ3RxdTJCU3ZVQlc0N3VqZHFhRWpsX01tb1lsUFJFdWU1aTBCV2tRV3dCQUpKa2g3T3JJZlVJakgtWk1ueWRkNmlVUVgxeHpfTk5hNUF3R2gyWlpBQjdjRGJDaGFHc2Z3LVdIUURRUUFvNA?oc=5\" target=\"_blank\">AI比电商更需要618</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">21财经</font>",
-      "source": "21财经",
-      "platform": "淘宝",
-      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
       "actionType": "平台规则/费用",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
@@ -1300,57 +685,9 @@
       "publishedAt": "2026-05-27",
       "summary": "<a href=\"https://news.google.com/rss/articles/CBMif0FVX3lxTFBHTHFoOFpYel9ETGJRelZ2ZVRoMTlaQXlxNjZnUmR0SHhYTlNyOElkbkc2V3ExWV9oSHZuaFFybkdEVkdSRVZWTjBzUjczelBHMXNzYlZsOUlMTzVCcnQ2OWZ5MVRuOHZlTXRxZEtERTNjWW5yT05nMEkwRk04LXM?oc=5\" target=\"_blank\">独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新浪财经</font>",
       "source": "新浪财经",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 - 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBHTHFoOFpYel9ETGJRelZ2ZVRoMTlaQXlxNjZnUmR0SHhYTlNyOElkbkc2V3ExWV9oSHZuaFFybkdEVkdSRVZWTjBzUjczelBHMXNzYlZsOUlMTzVCcnQ2OWZ5MVRuOHZlTXRxZEtERTNjWW5yT05nMEkwRk04LXM?oc=5",
-      "publishedAt": "2026-05-27",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMif0FVX3lxTFBHTHFoOFpYel9ETGJRelZ2ZVRoMTlaQXlxNjZnUmR0SHhYTlNyOElkbkc2V3ExWV9oSHZuaFFybkdEVkdSRVZWTjBzUjczelBHMXNzYlZsOUlMTzVCcnQ2OWZ5MVRuOHZlTXRxZEtERTNjWW5yT05nMEkwRk04LXM?oc=5\" target=\"_blank\">独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新浪财经</font>",
-      "source": "新浪财经",
       "platform": "拼多多",
       "query": "拼多多商家版 App 版本更新 新功能 2026",
       "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "电商专家徐奕胜：2026“618大促”从“拼复杂度”转向“拼诚意” AI从“辅助工具”升级为“决策引擎” - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5OaUxRdWtST1NlS1ZxRE5VcjlVTjNqVHVIeEhwRDU3V1pMSV9JSEltUTNuSlJuQkdpdVVHVk9nLUJZcmtDS3dPcGwxRDhOa1pKRnpJMG55YWRiZDNrQ2NVdGVld29UaXZINlBDQXFUY3Rlelk?oc=5",
-      "publishedAt": "2026-05-20",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE5OaUxRdWtST1NlS1ZxRE5VcjlVTjNqVHVIeEhwRDU3V1pMSV9JSEltUTNuSlJuQkdpdVVHVk9nLUJZcmtDS3dPcGwxRDhOa1pKRnpJMG55YWRiZDNrQ2NVdGVld29UaXZINlBDQXFUY3Rlelk?oc=5\" target=\"_blank\">电商专家徐奕胜：2026“618大促”从“拼复杂度”转向“拼诚意” AI从“辅助工具”升级为“决策引擎”</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "美团",
-      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "电商专家徐奕胜：2026“618大促”从“拼复杂度”转向“拼诚意” AI从“辅助工具”升级为“决策引擎” - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5OaUxRdWtST1NlS1ZxRE5VcjlVTjNqVHVIeEhwRDU3V1pMSV9JSEltUTNuSlJuQkdpdVVHVk9nLUJZcmtDS3dPcGwxRDhOa1pKRnpJMG55YWRiZDNrQ2NVdGVld29UaXZINlBDQXFUY3Rlelk?oc=5",
-      "publishedAt": "2026-05-20",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE5OaUxRdWtST1NlS1ZxRE5VcjlVTjNqVHVIeEhwRDU3V1pMSV9JSEltUTNuSlJuQkdpdVVHVk9nLUJZcmtDS3dPcGwxRDhOa1pKRnpJMG55YWRiZDNrQ2NVdGVld29UaXZINlBDQXFUY3Rlelk?oc=5\" target=\"_blank\">电商专家徐奕胜：2026“618大促”从“拼复杂度”转向“拼诚意” AI从“辅助工具”升级为“决策引擎”</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "京东今年AI研发投入增长将超200%；千问将发布大模型全新版本｜未来商业早参 - mrjjxw.com",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE8tT1ZIMXhKUWgwdlpBcWMzOTRhT1NDSjhOUnlTV1JKcmdSSk5Fdi13OTBsUkVIT292RndHUEtCelZWRnBOYUZJaTl6eWZFS2tscFpkdGo2VzdKSFNMam90Z19nZFhhUQ?oc=5",
-      "publishedAt": "2026-05-19",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZkFVX3lxTE8tT1ZIMXhKUWgwdlpBcWMzOTRhT1NDSjhOUnlTV1JKcmdSSk5Fdi13OTBsUkVIT292RndHUEtCelZWRnBOYUZJaTl6eWZFS2tscFpkdGo2VzdKSFNMam90Z19nZFhhUQ?oc=5\" target=\"_blank\">京东今年AI研发投入增长将超200%；千问将发布大模型全新版本｜未来商业早参</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">mrjjxw.com</font>",
-      "source": "mrjjxw.com",
-      "platform": "拼多多",
-      "query": "拼多多商家版 App 版本更新 新功能 2026",
-      "actionType": "AI导购/购物助手",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -1388,29 +725,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "id": "taobao-wukong-merchant-agent-2026-05-13",
-      "lane": "淘宝",
-      "platform": "淘宝",
-      "actionType": "商家经营工具",
-      "date": "2026-05-13",
-      "publishedAt": "2026-05-13",
-      "source": "阿里巴巴集团季度业绩披露",
-      "sourceType": "官方披露",
-      "title": "阿里披露面向商家运营的 AI 原生企业智能体“悟空”",
-      "summary": "阿里巴巴季度业绩材料提到，商家侧推出 Wukong（悟空）AI 原生企业智能体，将智能体能力融入工作流，服务商家运营效率。具体可用范围和接入方式以官方后续说明为准。",
-      "impact": "商家工作流可能逐步从单点 AI 工具转向商品上架、店铺管理、营销与客服等多环节自动化。",
-      "action": "关注官方商家端开放范围、接入门槛、可执行操作与人工确认机制。",
-      "tags": [
-        "悟空",
-        "商家Agent",
-        "店铺管理",
-        "营销",
-        "客服"
-      ],
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0513/2026051300653.pdf",
-      "status": "已披露，具体商用范围待跟踪"
-    },
-    {
       "id": "taobao-qwen-shopping-assistant-2026-05-11",
       "lane": "淘宝",
       "platform": "淘宝",
@@ -1446,30 +760,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "title": "千问“入淘”对撞豆包“闭环”，618大战从AI电商贴身肉搏开始 - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1ndlYybzIyX3E1ckZJdnViWkRjTGZ6MkZfeWhRdkd2ZjZuZ0NCeU9GWkVFZVhVTTZUalBzUEdLSUpfSllRcXlVS1hEZjllZw?oc=5",
-      "publishedAt": "2026-05-11",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTE1ndlYybzIyX3E1ckZJdnViWkRjTGZ6MkZfeWhRdkd2ZjZuZ0NCeU9GWkVFZVhVTTZUalBzUEdLSUpfSllRcXlVS1hEZjllZw?oc=5\" target=\"_blank\">千问“入淘”对撞豆包“闭环”，618大战从AI电商贴身肉搏开始</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "美团",
-      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "千问“入淘”对撞豆包“闭环”，618大战从AI电商贴身肉搏开始 - 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQUHVtQlZYeXlyXzZ0YWpLTGdJdkUxOTY3WGRNOTU0ZlB3dDNDeF9sejBEYnRVRDRZYmtfSlpkVkY4bjQ4cnVCbmNocWN3YnZ1dmJHNjY1SUpZRUpkMDhVVXVva2FBZUl6eG1hUWMyd0k2Uk1rRXpwb3k2dWVWbWJHSmt6M1c3em9aenBoVXAyUGpzUTg?oc=5",
-      "publishedAt": "2026-05-11",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMikwFBVV95cUxQUHVtQlZYeXlyXzZ0YWpLTGdJdkUxOTY3WGRNOTU0ZlB3dDNDeF9sejBEYnRVRDRZYmtfSlpkVkY4bjQ4cnVCbmNocWN3YnZ1dmJHNjY1SUpZRUpkMDhVVXVva2FBZUl6eG1hUWMyd0k2Uk1rRXpwb3k2dWVWbWJHSmt6M1c3em9aenBoVXAyUGpzUTg?oc=5\" target=\"_blank\">千问“入淘”对撞豆包“闭环”，618大战从AI电商贴身肉搏开始</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">新浪财经</font>",
-      "source": "新浪财经",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” - EBRUN.com",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE95MFh5Z1RIVUxUcTl0Tl9JMGQ5ZTFOX2NFeHlOT3kySUU1WXpvRFd4OElOeWJRZGRvakFPS05kcGhUUW5xNXVBT0FHdWEtZW1kc0Z4bnV3?oc=5",
       "publishedAt": "2026-05-11",
@@ -1478,18 +768,6 @@
       "platform": "拼多多",
       "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
       "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "OTA 升级后续航减200 KM，央视揭秘新能源汽车「锁电」真相；黄仁勋：别怕AI，今天是应届生最好时机：微信测试「组合支付」功能｜极客早知道 - 极客公园",
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1kTW92RGhBdFAxLUQtb0lZLTVUZTI5MUhaTW1MWHlTcVh4YVVIRmZzTmhIaEpPVkdvV0VzdUwyRG9CZU1EUmZzOVV5RDU?oc=5",
-      "publishedAt": "2026-05-10",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTEFVX3lxTE1kTW92RGhBdFAxLUQtb0lZLTVUZTI5MUhaTW1MWHlTcVh4YVVIRmZzTmhIaEpPVkdvV0VzdUwyRG9CZU1EUmZzOVV5RDU?oc=5\" target=\"_blank\">OTA 升级后续航减200 KM，央视揭秘新能源汽车「锁电」真相；黄仁勋：别怕AI，今天是应届生最好时机：微信测试「组合支付」功能｜极客早知道</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">极客公园</font>",
-      "source": "极客公园",
-      "platform": "淘宝",
-      "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
-      "actionType": "平台规则/费用",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -1506,52 +784,6 @@
       "status": "自动发现·待核验"
     },
     {
-      "id": "jd-ai-gou-task-commerce-2026-04-27",
-      "lane": "京东",
-      "platform": "京东",
-      "actionType": "App/产品功能",
-      "date": "2026-04-27",
-      "publishedAt": "2026-04-27",
-      "source": "京东 AI 购 App Store 版本记录",
-      "sourceType": "应用商店版本记录",
-      "title": "京东 AI 购增加 AI 任务中心与自动复购/优惠盯梢任务",
-      "summary": "版本记录显示，京东 AI 购新增任务中心，并支持创建定期自动复购、盯梢优惠和关注新品的 AI 任务。",
-      "impact": "平台尝试把一次性导购延伸到持续购物任务，可能影响复购、价格敏感用户触达与新品发现。",
-      "action": "关注商品价格变化、库存、优惠有效期和复购场景下的商品信息一致性。",
-      "tags": [
-        "AI任务",
-        "自动复购",
-        "优惠监控",
-        "新品发现"
-      ],
-      "url": "https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090",
-      "status": "已由应用版本记录确认"
-    },
-    {
-      "title": "卷流量、卷供应链：全球电商有了新打法 - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBOMHFtRVdZQ0FnZHdsUWVaY2RUYnZucEhNdThDaGRRNHBCY09ubXJ3MERyVVBUd2lfSTlId0R2Q1hKWGY4ZmRubVh3VlFNdw?oc=5",
-      "publishedAt": "2026-04-07",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTFBOMHFtRVdZQ0FnZHdsUWVaY2RUYnZucEhNdThDaGRRNHBCY09ubXJ3MERyVVBUd2lfSTlId0R2Q1hKWGY4ZmRubVh3VlFNdw?oc=5\" target=\"_blank\">卷流量、卷供应链：全球电商有了新打法</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "3月数字零售：拼多多砸千亿组建“新拼姆” 抖音 快手清退大量违规商家 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE02UUhYZG9ORHZOMGhlbk9rOU9PMHU2cXBIOWhBLTBqYzBDNENWMFhuX1c3b01DMi1Ed2ZlaU5KNWUzd1NFSkVFTDRRMm83SFZoXzhlUm5KX1FPYjA0QzJlVzFjMktmZldIYkNFZkRYLUFhV2M?oc=5",
-      "publishedAt": "2026-04-01",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE02UUhYZG9ORHZOMGhlbk9rOU9PMHU2cXBIOWhBLTBqYzBDNENWMFhuX1c3b01DMi1Ed2ZlaU5KNWUzd1NFSkVFTDRRMm83SFZoXzhlUm5KX1FPYjA0QzJlVzFjMktmZldIYkNFZkRYLUFhV2M?oc=5\" target=\"_blank\">3月数字零售：拼多多砸千亿组建“新拼姆” 抖音 快手清退大量违规商家</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 - EBRUN.com",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE0yUldVZEVKQmRfY0M5cmR0WEk2Qm5LWU9QTkJ2N0RxNkRST1ZUUGk1Q0N0RTlqRGpXUl84M2I5WV9rekVHTVFvUEkwVUEzVGdSMWRiWjN3?oc=5",
       "publishedAt": "2026-04-01",
@@ -1560,18 +792,6 @@
       "platform": "拼多多",
       "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
       "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "3月数字零售：拼多多砸千亿组建“新拼姆” 抖音 快手清退大量违规商家 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE02UUhYZG9ORHZOMGhlbk9rOU9PMHU2cXBIOWhBLTBqYzBDNENWMFhuX1c3b01DMi1Ed2ZlaU5KNWUzd1NFSkVFTDRRMm83SFZoXzhlUm5KX1FPYjA0QzJlVzFjMktmZldIYkNFZkRYLUFhV2M?oc=5",
-      "publishedAt": "2026-04-01",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTE02UUhYZG9ORHZOMGhlbk9rOU9PMHU2cXBIOWhBLTBqYzBDNENWMFhuX1c3b01DMi1Ed2ZlaU5KNWUzd1NFSkVFTDRRMm83SFZoXzhlUm5KX1FPYjA0QzJlVzFjMktmZldIYkNFZkRYLUFhV2M?oc=5\" target=\"_blank\">3月数字零售：拼多多砸千亿组建“新拼姆” 抖音 快手清退大量违规商家</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">潮新闻客户端</font>",
-      "source": "潮新闻客户端",
-      "platform": "京东",
-      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
-      "actionType": "App/产品功能",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -1616,18 +836,6 @@
       "actionType": "平台规则/费用"
     },
     {
-      "title": "京东2026年“春晓计划”发布：超350亿资源投入、免费AI工具提效50% - 中华网",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9Sckk0cGJISFFDYmVYcmFTaDdUYkJIdWhFWlNLTjlzRnBqczQ1R0N3N2M5LVhmYkZ5Ml85enFCaXdpdXF2UnJFTTR2Y1YzMzB1ck1SbnB1b0hvSWk2cXc?oc=5",
-      "publishedAt": "2026-03-30",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiXkFVX3lxTE9Sckk0cGJISFFDYmVYcmFTaDdUYkJIdWhFWlNLTjlzRnBqczQ1R0N3N2M5LVhmYkZ5Ml85enFCaXdpdXF2UnJFTTR2Y1YzMzB1ck1SbnB1b0hvSWk2cXc?oc=5\" target=\"_blank\">京东2026年“春晓计划”发布：超350亿资源投入、免费AI工具提效50%</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">中华网</font>",
-      "source": "中华网",
-      "platform": "京东",
-      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
-      "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "id": "meituan-smart-manager-2026-03-26",
       "lane": "美团",
       "platform": "美团",
@@ -1650,42 +858,6 @@
       "status": "已由官方发布确认"
     },
     {
-      "title": "新动向！豆包开启AI购物内测，电商平台加码“一句话购物” - 证券时报网",
-      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1TYkpOLVN1b1NIRU5fX2p3aG1iTVlxaTF4d3MtWlFPc1lFN216T2FoSDBDMmI1R3doX2xUTFg5S280cmxGUHRFMmJMSjU0c1A4anFwZUhhZXUyTGNS?oc=5",
-      "publishedAt": "2026-03-20",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiXEFVX3lxTE1TYkpOLVN1b1NIRU5fX2p3aG1iTVlxaTF4d3MtWlFPc1lFN216T2FoSDBDMmI1R3doX2xUTFg5S280cmxGUHRFMmJMSjU0c1A4anFwZUhhZXUyTGNS?oc=5\" target=\"_blank\">新动向！豆包开启AI购物内测，电商平台加码“一句话购物”</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">证券时报网</font>",
-      "source": "证券时报网",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "AI购物争夺战：巨头抢的不是卖货，是入口 - 21财经",
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOU1o2bkw1cFJOM0dPTktudXlIQkpUeHlOMmpKcnpVc0lQNGdfdUlWVUh2X2Z6WEItSlFIUS1yMGJVS2E5MXhTMDU4Qzg4NU9UdFBtY0M0TkpBMzV3WUhzZHViOEdtWlY0YUpQamRRN1A5M1VHd3Btc0t5S1pNYjgwQWdGdmVrWnpIUnloeUd0Yw?oc=5",
-      "publishedAt": "2026-03-17",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMijwFBVV95cUxOU1o2bkw1cFJOM0dPTktudXlIQkpUeHlOMmpKcnpVc0lQNGdfdUlWVUh2X2Z6WEItSlFIUS1yMGJVS2E5MXhTMDU4Qzg4NU9UdFBtY0M0TkpBMzV3WUhzZHViOEdtWlY0YUpQamRRN1A5M1VHd3Btc0t5S1pNYjgwQWdGdmVrWnpIUnloeUd0Yw?oc=5\" target=\"_blank\">AI购物争夺战：巨头抢的不是卖货，是入口</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">21财经</font>",
-      "source": "21财经",
-      "platform": "拼多多",
-      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "2026赛博引力·AI购物消费洞察报告| AI购物“普及元年”：从工具到专属智能体、落地加速度消费入口要变天 - 每日经济新闻",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5sRjNGV3FZRlUtOFZWTTRoZXd4ZUJrVmpSeEkwOVBnZHVwOHdUaUlSUkdJSThCX0kxcDJ4c01LMGltNEFiWHFZWW85NEFNV3lMRlNCM2VjUXFKZHlTeHdwX3JDVkR1Zw?oc=5",
-      "publishedAt": "2026-03-13",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiZkFVX3lxTE5sRjNGV3FZRlUtOFZWTTRoZXd4ZUJrVmpSeEkwOVBnZHVwOHdUaUlSUkdJSThCX0kxcDJ4c01LMGltNEFiWHFZWW85NEFNV3lMRlNCM2VjUXFKZHlTeHdwX3JDVkR1Zw?oc=5\" target=\"_blank\">2026赛博引力·AI购物消费洞察报告| AI购物“普及元年”：从工具到专属智能体、落地加速度消费入口要变天</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">每日经济新闻</font>",
-      "source": "每日经济新闻",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
       "title": "淘宝PC版上线AI MCP功能：支持OpenClaw搜索比价加购，需手动付款 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFB6eldycURhcXozMVJwb01KRHhnQWpuZ1JjdFBEMl9FMWdsdkVqeHJhOVpwQkkwUFR3aTJiLWh0NDU0WjRGV3VJX0ZaSUFFcjlMNlhOT3VfdmRMWWlpdmo3WGUyOHBSdnZzLWlhZEtJRW52RHFBV283NXZSMTU?oc=5",
       "publishedAt": "2026-03-13",
@@ -1706,42 +878,6 @@
       "platform": "美团",
       "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
       "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "黄埔区天虹街40号地下2层B2152车位 - paimai.jd.com",
-      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1GYXl2UjFOYUNHX19pTy0zRTRjMnVYRFFkUEMtYnRackpKTmZ4d016cHRwMllVaDRCRk5VVXZIWDgxRnpXRjZkQVFnRHM3M1BoUDR6S2IwNA?oc=5",
-      "publishedAt": "2026-02-10",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiV0FVX3lxTE1GYXl2UjFOYUNHX19pTy0zRTRjMnVYRFFkUEMtYnRackpKTmZ4d016cHRwMllVaDRCRk5VVXZIWDgxRnpXRjZkQVFnRHM3M1BoUDR6S2IwNA?oc=5\" target=\"_blank\">黄埔区天虹街40号地下2层B2152车位</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">paimai.jd.com</font>",
-      "source": "paimai.jd.com",
-      "platform": "京东",
-      "query": "site:rule.jd.com OR site:jd.com 京东 商家规则 费用 佣金 政策调整 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "5万+品牌在用，平台的AI电商杀疯了 - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBSaWxPSVBzQWd2TG1TWksyUjI3VlJsNTY0cjJMcjZjMjRNY3NxZHlab2VPMDFwSVhTTndudVVxYWNGb3dtbzhYSTJJYjBIZw?oc=5",
-      "publishedAt": "2026-02-10",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTFBSaWxPSVBzQWd2TG1TWksyUjI3VlJsNTY0cjJMcjZjMjRNY3NxZHlab2VPMDFwSVhTTndudVVxYWNGb3dtbzhYSTJJYjBIZw?oc=5\" target=\"_blank\">5万+品牌在用，平台的AI电商杀疯了</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "美团",
-      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "2025年，商家提的问题，我们都改进了哪些？ - Meituan",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBTRUUtOWluQTJaU3hBUDJCQXhvTkRRcnZRZGRoYWxJSUFEcnlQQnVCUUp0TlFHVDdhajF4V0t6cHdqc0V5TUFoN0hCanJIR3F5VWE2X0J0bkpMZw?oc=5",
-      "publishedAt": "2026-02-05",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiWkFVX3lxTFBTRUUtOWluQTJaU3hBUDJCQXhvTkRRcnZRZGRoYWxJSUFEcnlQQnVCUUp0TlFHVDdhajF4V0t6cHdqc0V5TUFoN0hCanJIR3F5VWE2X0J0bkpMZw?oc=5\" target=\"_blank\">2025年，商家提的问题，我们都改进了哪些？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Meituan</font>",
-      "source": "Meituan",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
-      "actionType": "商家经营工具",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -1771,45 +907,9 @@
       "publishedAt": "2026-01-23",
       "summary": "<a href=\"https://news.google.com/rss/articles/CBMiVkFVX3lxTE9HV1VrZjN1TU9iSHB0ckU3X1hOcW5nMWd2NWxvc3E3cTFSbXFweEpnc2VlRFZNM3hPeDByUF9VWGFxV2VJVUxLSzQ3VUgxZzZIV0ZNYlJn?oc=5\" target=\"_blank\">美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">EBRUN.com</font>",
       "source": "EBRUN.com",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI - EBRUN.com",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9HV1VrZjN1TU9iSHB0ckU3X1hOcW5nMWd2NWxvc3E3cTFSbXFweEpnc2VlRFZNM3hPeDByUF9VWGFxV2VJVUxLSzQ3VUgxZzZIV0ZNYlJn?oc=5",
-      "publishedAt": "2026-01-23",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiVkFVX3lxTE9HV1VrZjN1TU9iSHB0ckU3X1hOcW5nMWd2NWxvc3E3cTFSbXFweEpnc2VlRFZNM3hPeDByUF9VWGFxV2VJVUxLSzQ3VUgxZzZIV0ZNYlJn?oc=5\" target=\"_blank\">美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">EBRUN.com</font>",
-      "source": "EBRUN.com",
       "platform": "美团",
       "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
       "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "美团·规则中心 - rules-center.meituan.com",
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1mNk1UcVNfd3hLN1BmQ3hxS3VISjI5OGg2ZzFDT3JCMkItcHVMeUhEV2JsdzZqT3J0SkQwLXNMVnA3RUR1cXdTR3RJZUY5Nk94dDE4cy1ya001SFNFT3k3aWM0VQ?oc=5",
-      "publishedAt": "2026-01-22",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiY0FVX3lxTE1mNk1UcVNfd3hLN1BmQ3hxS3VISjI5OGg2ZzFDT3JCMkItcHVMeUhEV2JsdzZqT3J0SkQwLXNMVnA3RUR1cXdTR3RJZUY5Nk94dDE4cy1ya001SFNFT3k3aWM0VQ?oc=5\" target=\"_blank\">美团·规则中心</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">rules-center.meituan.com</font>",
-      "source": "rules-center.meituan.com",
-      "platform": "美团",
-      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
-    },
-    {
-      "title": "2026AI入口争夺战打响第一枪 互联网大厂火拼两大核心维度 - 证券时报网",
-      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9IWjA1X003dWloNUxwY25fZklKQjZnMy1nQm1DemRTRTR6UnAtVW1zWC1vNjVWeWZrb1JpQlh2NDV1aXRxQlNhM2c2RzM0WkQ0d1hFZlVXaw?oc=5",
-      "publishedAt": "2026-01-19",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiV0FVX3lxTE9IWjA1X003dWloNUxwY25fZklKQjZnMy1nQm1DemRTRTR6UnAtVW1zWC1vNjVWeWZrb1JpQlh2NDV1aXRxQlNhM2c2RzM0WkQ0d1hFZlVXaw?oc=5\" target=\"_blank\">2026AI入口争夺战打响第一枪 互联网大厂火拼两大核心维度</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">证券时报网</font>",
-      "source": "证券时报网",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
       "sourceType": "公开检索候选",
       "status": "自动发现·待核验"
     },
@@ -1846,18 +946,6 @@
       ],
       "url": "https://www.alibabagroup.com/en-US/document-1948497434959151104",
       "status": "已由官方发布确认"
-    },
-    {
-      "title": "阿里甩出王炸，千问打通电商外卖，流量格局要变天？ - 36kr.com",
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBfOEVTdTdEVGJjRXlwRUh0Ymo2YzhTYU1OYTBqNGNidnljZkUzZVg0UWJMdVo4Q0VSa2lZcW1OVmdfZkpuSU9SRmg2eGd5Zw?oc=5",
-      "publishedAt": "2026-01-15",
-      "summary": "<a href=\"https://news.google.com/rss/articles/CBMiTkFVX3lxTFBfOEVTdTdEVGJjRXlwRUh0Ymo2YzhTYU1OYTBqNGNidnljZkUzZVg0UWJMdVo4Q0VSa2lZcW1OVmdfZkpuSU9SRmg2eGd5Zw?oc=5\" target=\"_blank\">阿里甩出王炸，千问打通电商外卖，流量格局要变天？</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">36kr.com</font>",
-      "source": "36kr.com",
-      "platform": "美团",
-      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
-      "actionType": "AI导购/购物助手",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验"
     },
     {
       "title": "美团·闪购商家规则中心 - rules-center.meituan.com",
