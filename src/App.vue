@@ -24,7 +24,8 @@ const detail = ref(null)
 const selectedCase = ref(null)
 
 const sections = [
-  { id:'home', label:'零售情报 · 店铺首页', icon:'⌂', group:'首页' },
+  { id:'home', label:'店铺首页', icon:'⌂', group:'内容' },
+  { id:'retail-news', label:'零售情报', icon:'◌', group:'内容' },
   { id:'outcomes', label:'经营结果', icon:'◎', group:'内容' },
   { id:'tools', label:'AI 工具', icon:'⌘', group:'内容' },
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
@@ -75,7 +76,7 @@ function openBundle(item) {
   window.scrollTo({top:0,behavior:'auto'})
 }
 function openNews(item) {
-  activeSection.value = 'home'
+  activeSection.value = 'retail-news'
   selectedNews.value = item
   detail.value = null
   window.scrollTo({top:0,behavior:'auto'})
@@ -110,12 +111,9 @@ onMounted(() => {
   <div class="site">
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
-      <template v-if="activeSection === 'home'">
-        <div class="home-intelligence-stack">
-          <RetailNewsShelf :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews.slice(0,12)" :syncLabel="syncLabel" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
-          <StoreHero :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
-        </div>
-      </template>
+      <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
+
+      <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :syncLabel="syncLabel" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
