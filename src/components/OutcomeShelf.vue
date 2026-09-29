@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { outcomeCategories, retailCases } from '../data/retailCases'
 
+const props = defineProps({ onOpenCase: { type: Function, required: true } })
 const active = ref('all')
 const selected = ref(retailCases[0])
 const filtered = computed(() => active.value === 'all' ? retailCases : retailCases.filter(item => item.outcome === active.value))
@@ -61,7 +62,7 @@ function select(item){ selected.value=item }
           <strong>{{ selected.next }}</strong>
         </div>
 
-        <button class="track-entry" @click="selected = selected">查看完整证据链 <span>→</span></button>
+        <button class="track-entry" @click="props.onOpenCase(selected)">查看完整证据链 <span>→</span></button>
       </article>
     </div>
   </section>
