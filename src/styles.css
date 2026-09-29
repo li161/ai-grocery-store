@@ -39,12 +39,16 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d8ae
   position:absolute;
   inset:0;
   z-index:-5;
-  background-image:url("/ai-grocery-store/store-bg.webp");
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-position:center center;
-  background-color:#17100b;
-  filter:none; image-rendering:auto;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  background:#17100b;
+  filter:none;
+  image-rendering:auto;
+  transform:translateZ(0);
+  backface-visibility:hidden;
 }
 
 .store-backdrop::after{
