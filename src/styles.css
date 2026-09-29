@@ -372,7 +372,7 @@ footer{padding:30px 6vw;background:#171614;color:#8e8780;display:flex;align-item
 html[data-theme="dark"]{--app-bg:#111617;--app-panel:#171d1e;--app-text:#e8efed;--app-muted:#9eaaa8;--app-line:#2d3939;--app-accent:#69b9b5}
 body{background:var(--app-bg);color:var(--app-text)}
 .site{min-height:100vh;background:var(--app-bg);color:var(--app-text)}
-.store-sidebar{position:fixed;z-index:120;left:0;top:0;bottom:0;width:220px;padding:24px 12px 15px;background:rgba(250,251,fa,.96);border-right:1px solid #e2e7e5;display:flex;flex-direction:column;box-shadow:8px 0 25px #17211d0b;backdrop-filter:blur(14px)}
+.store-sidebar{position:fixed;z-index:120;left:0;top:0;bottom:0;width:220px;padding:24px 12px 15px;background:rgba(250,251,250,.96);border-right:1px solid #e2e7e5;display:flex;flex-direction:column;box-shadow:8px 0 25px #17211d0b;backdrop-filter:blur(14px)}
 .sidebar-brand{border:0;background:transparent;display:flex;align-items:center;gap:11px;text-align:left;padding:3px 10px 28px;color:#243038}
 .brand-mark{width:38px;height:38px;border:2px solid #1c6f72;border-radius:50%;display:grid;place-items:center;font-weight:900;letter-spacing:-.08em;color:#1c6f72}
 .sidebar-brand strong{display:block;font-size:17px;letter-spacing:.03em}.sidebar-brand small{display:block;margin-top:3px;color:#99a39f;font-size:7px;letter-spacing:.16em}
