@@ -7,35 +7,37 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans SC
 button,input{font:inherit}button{cursor:pointer}.site{overflow:hidden}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d8ae6e;outline-offset:3px}
 
-/* --- storefront navigation: wooden hanging signs instead of a flat app navbar --- */
-.store-nav{position:fixed;z-index:50;top:0;left:0;right:0;height:104px;display:flex;align-items:flex-start;padding:0 4vw;pointer-events:none}
+/* --- compact dark storefront header --- */
+.store-nav{position:fixed;z-index:50;top:0;left:0;right:0;height:88px;display:flex;align-items:center;padding:0 4.2vw;background:#211e1bdd;border-bottom:1px solid #8c704c44;box-shadow:0 5px 18px #0007;backdrop-filter:blur(8px);pointer-events:none}
 .store-nav>*{pointer-events:auto}
-.store-sign{position:relative;min-width:300px;padding:17px 28px 14px;background:linear-gradient(#b78650,#85552e);color:#20150d;border:0;border-radius:0 0 7px 7px;box-shadow:0 10px 24px #1c100b66, inset 0 1px #d7ae79;transform:perspective(500px) rotateX(-1deg)}
-.store-sign:before,.store-sign:after{content:"";position:absolute;top:-17px;width:2px;height:20px;background:#21160f}.store-sign:before{left:35px}.store-sign:after{right:35px}
-.sign-title{display:block;font-family:"Playfair Display","Noto Sans SC",serif;font-size:29px;font-weight:800;letter-spacing:.08em}.sign-subtitle{display:block;margin-top:2px;font-size:11px;font-weight:700;letter-spacing:.08em}
-.hanging-nav{display:flex;gap:12px;margin:7px auto 0}
-.hanging-nav button{position:relative;min-width:116px;padding:12px 15px 13px;border:1px solid #855b34;border-radius:6px;background:linear-gradient(#c89a5d,#9a6837);color:#27190e;box-shadow:0 8px 16px #1b100b66;transform:rotate(-1deg);font-weight:800;font-size:13px}
-.hanging-nav button:nth-child(2){transform:rotate(1deg)}.hanging-nav button:nth-child(3){transform:rotate(-.5deg)}.hanging-nav button:nth-child(4){transform:rotate(1.5deg)}
-.hanging-nav button:before{content:"";position:absolute;top:-9px;left:50%;width:1px;height:10px;background:#23170f}.hanging-nav span{margin-right:6px}
-.nav-search-trigger{margin:13px 0 0 auto;padding:10px 15px;border:1px solid #b18c5d;border-radius:22px;background:#211913cc;color:#eee5d8;font-size:12px;backdrop-filter:blur(6px)}
+.store-sign{position:relative;min-width:245px;padding:0 0 0 43px;background:none;color:#f4e9d8;border:0;text-align:left;box-shadow:none}
+.store-sign:before{content:"AI";position:absolute;left:0;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid #d5ae6d;border-radius:50%;display:grid;place-items:center;color:#e0bd7d;font-weight:800;font-size:15px}
+.store-sign:after{display:none}
+.sign-title{display:block;font-family:"Noto Sans SC",sans-serif;font-size:17px;font-weight:800;letter-spacing:.04em}.sign-subtitle{display:block;margin-top:3px;font-size:9px;color:#a99d90;letter-spacing:.02em}
+.hanging-nav{display:flex;gap:38px;margin:0 auto;height:100%;align-items:center}
+.hanging-nav button{position:relative;min-width:0;padding:8px 0;border:0;background:none;color:#d9d0c5;box-shadow:none;transform:none!important;font-weight:600;font-size:13px}
+.hanging-nav button:before{display:none}.hanging-nav span{display:none}
+.hanging-nav button:hover{color:#e2bc7b}
+.nav-search-trigger{margin:0 0 0 auto;padding:10px 17px;border:1px solid #8f7658;border-radius:22px;background:#29251f;color:#bdb3a7;font-size:12px;backdrop-filter:none}
 
-/* --- hero is a store scene, not a text block --- */
-.store-hero{height:calc(100svh - 0px);min-height:780px;max-height:1060px;position:relative;isolation:isolate;overflow:hidden;color:#fff}
+/* --- immersive hero: one background, four spatial zones --- */
+
+.store-hero{height:100svh;min-height:760px;max-height:none;position:relative;isolation:isolate;overflow:hidden;color:#fff}
 .store-backdrop{position:absolute;inset:0;z-index:-5;background:url("https://ibloeven.de/media/pages/projekte/zurheide-feine-kost-crown-dusseldorf/4ac3c2f653-1671619641/3-1000x.jpg") center/cover no-repeat;filter:saturate(.92) contrast(1.05)}
 .store-backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#140e0bd0 0%,#1b110ab0 28%,#1d140d55 55%,#100d0a38 100%),linear-gradient(0deg,#120c08e8 0%,transparent 32%,#0f0b0866 100%)}
 .scene-light{position:absolute;inset:0;z-index:-4;background:radial-gradient(ellipse at 50% 35%,#ffdca32b,transparent 42%);mix-blend-mode:screen}
-.hero-sign{position:absolute;z-index:5;left:5.7%;top:18%;width:505px;padding:30px 40px 28px;background:#f4e8d3f2;color:#23180f;border:8px solid #3c291b;box-shadow:0 18px 30px #09060388,inset 0 0 0 1px #8b7255}
+.hero-sign{position:absolute;z-index:5;left:6.5%;top:22%;width:500px;padding:30px 40px 28px;background:#f4e8d3f2;color:#23180f;border:8px solid #3c291b;box-shadow:0 18px 30px #09060388,inset 0 0 0 1px #8b7255}
 .hero-sign:after{content:"";position:absolute;inset:8px;border:1px solid #a68b68;pointer-events:none}
 .sign-kicker{display:block;position:relative;z-index:1;font-size:11px;letter-spacing:.28em;font-weight:800;color:#745635}.hero-sign h1{position:relative;z-index:1;margin:13px 0 4px;font-family:"Playfair Display","Noto Sans SC",serif;font-size:76px;line-height:.95;letter-spacing:-.08em}.hero-sign p{position:relative;z-index:1;margin:12px 0 0;font-size:13px;font-weight:700}
-.scene-note{position:absolute;z-index:10;left:5.7%;top:54%;width:19%;min-width:270px;display:flex;align-items:center;gap:8px;padding:11px 14px;background:#17110de8;border-left:3px solid #d3aa68;box-shadow:0 10px 22px #0007;font-size:12px}.scene-note strong{color:#e1bd7f}.scene-note>span:first-child{color:#d9b16e}
+.scene-note{position:absolute;z-index:10;left:6.5%;top:45.5%;width:365px;min-width:0;display:flex;align-items:center;gap:8px;padding:11px 14px;background:#17110de8;border-left:3px solid #d3aa68;box-shadow:0 10px 22px #0007;font-size:12px}.scene-note strong{color:#e1bd7f}.scene-note>span:first-child{color:#d9b16e}
 
-.back-lab{position:absolute;z-index:2;left:45%;top:23%;width:37%;min-width:390px;max-width:610px;background:#27211ce8;border:1px solid #b58c59aa;padding:16px 18px 18px;box-shadow:0 16px 30px #0007}
+.back-lab{position:absolute;z-index:2;left:47%;top:24%;width:31%;min-width:440px;max-width:620px;background:#27211ce8;border:1px solid #b58c59aa;padding:16px 18px 18px;box-shadow:0 16px 30px #0007}
 .back-lab-title{font-size:15px;font-weight:800;color:#eee5d8}.back-lab-title small{display:block;color:#a99b89;font-size:9px;margin:4px 0 12px 23px}.lab-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.lab-grid span{min-height:76px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(#504942,#332f2a);border:1px solid #71675d;color:#eee6db;font-size:12px}.lab-grid small{display:block;color:#aaa096;font-size:8px;margin-top:6px}
 
-.tool-island{position:absolute;z-index:7;left:27%;bottom:7%;width:min(44%,780px);padding:15px 18px 0;background:#1c1510ee;border:1px solid #a57d4caa;box-shadow:0 22px 40px #0009}
+.tool-island{position:absolute;z-index:7;left:19%;bottom:0;width:38%;min-width:650px;max-width:780px;padding:15px 18px 0;background:#1c1510ee;border:1px solid #a57d4caa;box-shadow:0 22px 40px #0009}
 .island-header{display:flex;align-items:end;gap:12px;padding-bottom:10px;border-bottom:1px solid #b68b5b55}.island-header strong{font-size:15px}.island-header small{font-size:9px;color:#b0a092}.hero-products{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px 0 12px}.hero-product{min-height:137px;border:0;background:#f4ecdf;color:#211912;padding:11px 9px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;box-shadow:0 8px 13px #0005;transition:.22s}.hero-product:hover{transform:translateY(-6px)}.hero-pack{width:48px;height:56px;display:grid;place-items:center;border-radius:4px;font-size:23px;font-weight:800;box-shadow:inset 0 -7px #00000012}.hero-product strong{margin-top:auto;font-size:12px}.hero-product small{margin-top:4px;font-size:8px;color:#7c7065}.wood-shelf{height:14px;margin:0 -22px;background:linear-gradient(#9a6b3d,#4f321c);box-shadow:0 10px 20px #000b}
 
-.industry-island{position:absolute;z-index:6;right:3.5%;bottom:7%;width:24%;min-width:290px;padding:15px 14px 0;background:#1f1710ed;box-shadow:0 22px 38px #0009;border:1px solid #b68b5b88}.industry-island-title{font-size:15px;color:#eee4d6;border-bottom:1px solid #b68b5b55;padding-bottom:10px}.industry-island-title small{display:block;margin:4px 0 0 25px;font-size:8px;color:#a99a87}.industry-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:13px 0}.industry-mini-grid button{height:78px;border:1px solid #5c5146;background:#eee5d7;color:#3a3027;font-weight:800;font-size:10px;box-shadow:0 4px 8px #0004}.industry-mini-grid span{display:block;font-size:17px;margin-bottom:6px;color:#5f5b53}.industry-beam{height:11px;margin:0 -14px;background:linear-gradient(#9c6c3d,#50331d);box-shadow:0 7px 14px #0009}
+.industry-island{position:absolute;z-index:6;right:3.5%;bottom:0;width:23%;min-width:300px;padding:15px 14px 0;background:#1f1710ed;box-shadow:0 22px 38px #0009;border:1px solid #b68b5b88}.industry-island-title{font-size:15px;color:#eee4d6;border-bottom:1px solid #b68b5b55;padding-bottom:10px}.industry-island-title small{display:block;margin:4px 0 0 25px;font-size:8px;color:#a99a87}.industry-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:13px 0}.industry-mini-grid button{height:78px;border:1px solid #5c5146;background:#eee5d7;color:#3a3027;font-weight:800;font-size:10px;box-shadow:0 4px 8px #0004}.industry-mini-grid span{display:block;font-size:17px;margin-bottom:6px;color:#5f5b53}.industry-beam{height:11px;margin:0 -14px;background:linear-gradient(#9c6c3d,#50331d);box-shadow:0 7px 14px #0009}
 
 .hero-cta{position:absolute;z-index:15;left:5.7%;bottom:7%;display:flex;gap:10px}.hero-cta button{height:48px;padding:0 22px;border-radius:3px;font-size:13px;font-weight:800}.cta-primary{border:1px solid #e0b56c;background:#dfb66f;color:#28190c;box-shadow:0 8px 18px #0006}.cta-secondary{border:1px solid #f4e7d3aa;background:#17110dcc;color:#fff}
 
@@ -62,3 +64,8 @@ footer{padding:30px 6vw;background:#171614;color:#8e8780;display:flex;align-item
 @media(max-width:440px){
   .hero-sign h1{font-size:48px}.hero-products{gap:4px}.hero-product{min-height:96px}.hero-product small{display:none}.hero-counter{display:none}.hero-cta{bottom:4%}.hero-cta button{font-size:9px}.product-row{grid-template-columns:1fr}.product{min-height:220px}.drawer{padding:72px 26px}
 }
+
+.bundle-island{position:absolute;z-index:8;right:12%;bottom:0;width:25%;min-width:360px;background:#211811ed;border:1px solid #a77e4e88;box-shadow:0 18px 36px #0008;cursor:pointer;color:#eee4d7}
+.bundle-island-head{display:flex;gap:12px;align-items:center;padding:17px 20px 13px;border-bottom:1px solid #b68b5b55}.bundle-island-head>span{font-size:26px}.bundle-island-head strong{display:block;font-size:18px}.bundle-island-head small{display:block;color:#a99a8a;font-size:9px;margin-top:3px}
+.bundle-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.bundle-boxes i{height:82px;background:linear-gradient(145deg,#b86c58,#7d3e35);display:flex;align-items:flex-end;padding:9px;color:#f9e9dc;font-size:9px;font-style:normal;font-weight:700;box-shadow:0 8px 12px #0005}.bundle-boxes i:nth-child(2){background:linear-gradient(145deg,#65789c,#394b6b)}.bundle-boxes i:nth-child(3){background:linear-gradient(145deg,#4f817a,#2f5f59)}
+.hero-counter{position:absolute;z-index:15;right:3.5%;bottom:0;display:flex;background:#17110de0;border:1px solid #c5a06a44}.hero-counter div{padding:14px 19px;border-right:1px solid #fff1;min-width:82px}.hero-counter div:last-child{border:0}.hero-counter strong{display:block;color:#e6c58d;font-size:25px}.hero-counter strong span{font-size:14px}.hero-counter small{font-size:8px;color:#b8ab9e}
