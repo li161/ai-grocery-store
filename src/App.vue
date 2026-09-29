@@ -6,6 +6,7 @@ import ToolShelf from './components/ToolShelf.vue'
 import OutcomeShelf from './components/OutcomeShelf.vue'
 import CaseTracker from './components/CaseTracker.vue'
 import RetailNewsShelf from './components/RetailNewsShelf.vue'
+import PlatformActionsShelf from './components/PlatformActionsShelf.vue'
 import HotRank from './components/HotRank.vue'
 import ContentDetail from './components/ContentDetail.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
@@ -13,7 +14,7 @@ import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
 
 const { activeCategory, keyword, filteredTools } = useCatalog()
-const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, eventHistory, syncLabel, dailyDigest } = useRetailNews()
+const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, eventHistory, syncLabel, dailyDigest, annualPlatformNews, platformArchiveMeta } = useRetailNews()
 
 const activeSection = ref('home')
 const drawerTool = ref(null)
@@ -120,7 +121,9 @@ onMounted(() => {
     <main class="app-main">
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
-      <RetailNewsShelf v-else-if="['retail-news','retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
+      <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
+
+      <PlatformActionsShelf v-else-if="['retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :platform="({'retail-taobao':'淘宝','retail-jd':'京东','retail-meituan':'美团','retail-pdd':'拼多多'})[activeSection]" :items="annualPlatformNews" :meta="platformArchiveMeta" />
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
