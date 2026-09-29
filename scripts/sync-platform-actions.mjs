@@ -35,7 +35,13 @@ const queries = [
   { platform:'美团', actionType:'商家经营工具', sourceType:'官方检索', query:'site:meituan.com/news CatPaw 智能掌柜 袋鼠管家 商家 AI 2026' },
   { platform:'美团', actionType:'平台规则/费用', sourceType:'官方检索', query:'site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026' },
   { platform:'拼多多', actionType:'AI导购/购物助手', sourceType:'公开检索', query:'拼多多 AI搜索 自然语言搜索 灰度测试 上线 2026' },
-  { platform:'拼多多', actionType:'商家经营工具', sourceType:'官方检索', query:'site:open.pinduoduo.com/application/document/announcement 拼多多 商家 开放平台 公告 接口 2026' }
+  { platform:'拼多多', actionType:'商家经营工具', sourceType:'官方检索', query:'site:open.pinduoduo.com/application/document/announcement 拼多多 商家 开放平台 公告 接口 2026' },
+  // WeChat public-account articles: use public search indexing as a discovery layer,
+  // not as proof that an article is official or that its contents have been verified.
+  { platform:'淘宝', actionType:'商家经营工具', sourceType:'微信公众号文章检索', query:'site:mp.weixin.qq.com 淘宝 天猫 商家 规则 AI 导购 (亿邦动力 OR 电商报 OR 天下网商 OR 派代)' },
+  { platform:'京东', actionType:'商家经营工具', sourceType:'微信公众号文章检索', query:'site:mp.weixin.qq.com 京东 京麦 商家 AI 经营 规则 (亿邦动力 OR 电商报 OR 派代 OR 天下网商)' },
+  { platform:'美团', actionType:'商家经营工具', sourceType:'微信公众号文章检索', query:'site:mp.weixin.qq.com 美团 商家 即时零售 规则 AI 经营 (亿邦动力 OR 电商报 OR 零售商业财经 OR 窄播)' },
+  { platform:'拼多多', actionType:'商家经营工具', sourceType:'微信公众号文章检索', query:'site:mp.weixin.qq.com 拼多多 商家 规则 流量 AI 经营 (亿邦动力 OR 电商报 OR 派代 OR 天下网商)' }
 ]
 
 function decode(s='') {
@@ -59,7 +65,7 @@ function parseFeed(xml, query) {
     const date = new Date(publishedAt)
     const summary = tag(block, 'description')
     const source = tag(block, 'source') || 'Google News RSS'
-    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, platform: query.platform, query: query.query, actionType: classifyAction(title + ' ' + summary), sourceType: '公开检索候选', status: '自动发现·待核验' }
+    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, platform: query.platform, query: query.query, actionType: classifyAction(title + ' ' + summary), sourceType: query.sourceType || '公开检索候选', status: '自动发现·待核验' }
   }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
 }
 function classifyAction(text = '') {
@@ -88,7 +94,8 @@ function relevance(item) {
   if (!title || obviousNoise.test(title)) return false
   // Never use the search query itself as evidence that a result is relevant.
   // Require the result content itself to mention the platform and retail/e-commerce context.
-  return aliases[item.platform].test(title) && retailContext.test(text) && action.test(title)
+  const platformSignal = item.sourceType === '微信公众号文章检索' ? aliases[item.platform].test(text) : aliases[item.platform].test(title)
+  return platformSignal && retailContext.test(text) && action.test(title)
 }
 async function mapLimit(items, limit, fn) {
   const output = new Array(items.length)
@@ -247,8 +254,27 @@ const health = {
 const archive = {
   generatedAt,
   year: YEAR,
-  coverageNote: '独立平台动作雷达：按季度检索 App/产品迭代、AI导购、商家经营工具、流量营销、平台规则、履约供应链和治理动态。自动发现记录标记为“待核验”；官方公告与 App 版本记录的已核验条目保留状态。公开搜索有索引与结果条数限制，不能保证覆盖仅在商家后台、私域或灰度发布的全部动作。',
-  sourceDirectory: [{"platform":"淘宝","name":"阿里巴巴官方新闻","url":"https://www.alibabagroup.com/"},{"platform":"淘宝","name":"淘宝开放平台","url":"https://open.taobao.com/"},{"platform":"淘宝","name":"天猫规则中心","url":"https://rule.tmall.com/"},{"platform":"淘宝","name":"淘宝 App 版本记录","url":"https://apps.apple.com/cn/app/%E6%B7%98%E5%AE%9D/id387682726"},{"platform":"京东","name":"京东秒送开放平台公告","url":"https://opendj.jd.com/api/notice.htm"},{"platform":"京东","name":"京东开放平台","url":"https://open.jd.com/"},{"platform":"京东","name":"京东 App 版本记录","url":"https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413"},{"platform":"京东","name":"京东 AI 购版本记录","url":"https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090"},{"platform":"美团","name":"美团商家生态新闻","url":"https://www.meituan.com/news?category=merchants-ecology"},{"platform":"美团","name":"美团规则中心","url":"https://rules-center.meituan.com/"},{"platform":"美团","name":"美团 App 版本记录","url":"https://apps.apple.com/cn/app/%E7%BE%8E%E5%9B%A2/id423084029"},{"platform":"拼多多","name":"拼多多商家版 App 版本记录","url":"https://apps.apple.com/mo/app/pinduoduo-seller-center/id1229469444"},{"platform":"拼多多","name":"拼多多开放平台","url":"https://open.pinduoduo.com/"},{"platform":"拼多多","name":"拼多多商家帮助中心","url":"https://mms.pinduoduo.com/"}],
+  coverageNote: '平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。',
+  sourceDirectory: [
+    { platform:'淘宝', name:'阿里巴巴官方新闻', url:'https://www.alibabagroup.com/' },
+    { platform:'淘宝', name:'淘宝开放平台', url:'https://open.taobao.com/' },
+    { platform:'淘宝', name:'天猫规则中心', url:'https://rule.tmall.com/' },
+    { platform:'淘宝', name:'淘宝 App 版本记录', url:'https://apps.apple.com/cn/app/%E6%B7%98%E5%AE%9D/id387682726' },
+    { platform:'京东', name:'京东秒送开放平台公告', url:'https://opendj.jd.com/api/notice.htm' },
+    { platform:'京东', name:'京东开放平台', url:'https://open.jd.com/' },
+    { platform:'京东', name:'京东 App 版本记录', url:'https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413' },
+    { platform:'京东', name:'京东 AI 购版本记录', url:'https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090' },
+    { platform:'美团', name:'美团商家生态新闻', url:'https://www.meituan.com/news?category=merchants-ecology' },
+    { platform:'美团', name:'美团规则中心', url:'https://rules-center.meituan.com/' },
+    { platform:'美团', name:'美团 App 版本记录', url:'https://apps.apple.com/cn/app/%E7%BE%8E%E5%9B%A2/id423084029' },
+    { platform:'拼多多', name:'拼多多商家版 App 版本记录', url:'https://apps.apple.com/mo/app/pinduoduo-seller-center/id1229469444' },
+    { platform:'拼多多', name:'拼多多开放平台', url:'https://open.pinduoduo.com/' },
+    { platform:'拼多多', name:'拼多多商家帮助中心', url:'https://mms.pinduoduo.com/' },
+    { platform:'淘宝', name:'公众号文章检索（微信文章公开索引）', url:'https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E6%B7%98%E5%AE%9D%20%E5%A4%A9%E7%8C%AB%20%E5%95%86%E5%AE%B6' },
+    { platform:'京东', name:'公众号文章检索（微信文章公开索引）', url:'https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E4%BA%AC%E4%B8%9C%20%E4%BA%AC%E9%BA%A6%20%E5%95%86%E5%AE%B6' },
+    { platform:'美团', name:'公众号文章检索（微信文章公开索引）', url:'https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E7%BE%8E%E5%9B%A2%20%E5%95%86%E5%AE%B6%20%E5%8D%B3%E6%97%B6%E9%9B%B6%E5%94%AE' },
+    { platform:'拼多多', name:'公众号文章检索（微信文章公开索引）', url:'https://news.google.com/search?q=site%3Amp.weixin.qq.com%20%E6%8B%BC%E5%A4%9A%E5%A4%9A%20%E5%95%86%E5%AE%B6%20%E8%A7%84%E5%88%99' }
+  ],
   sourceHealth: health,
   items
 }
