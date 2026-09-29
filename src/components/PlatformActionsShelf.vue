@@ -8,6 +8,8 @@ const props = defineProps({
 const keyword = ref('')
 const activePlatform = ref('全部')
 const activeType = ref('全部')
+const activeWindow = ref('7天')
+const windows = ['7天', '30天', '全部归档']
 const platforms = ['全部', '淘宝', '京东', '美团', '拼多多']
 const types = ['全部','App/产品功能','AI导购/购物助手','商家经营工具','流量/营销/补贴','平台规则/费用','履约/供应链','治理/算法']
 function category(item) {
@@ -26,10 +28,19 @@ const counts = computed(() => Object.fromEntries(platforms.map(p => [p, p === '�
 const typeCounts = computed(() => Object.fromEntries(types.map(t => [t, t === '全部' ? filteredPlatform.value.length : filteredPlatform.value.filter(x => x.displayType === t).length])))
 const filteredPlatform = computed(() => normalized.value.filter(x => activePlatform.value === '全部' || x.displayPlatform === activePlatform.value))
 const shown = computed(() => filteredPlatform.value
+  .filter(x => {
+    if (activeWindow.value === '全部归档') return true
+    const days = activeWindow.value === '7天' ? 7 : 30
+    const stamp = Date.parse(String(x.publishedAt || x.date || ''))
+    return Number.isFinite(stamp) && stamp >= Date.now() - days * 86400000 && stamp <= Date.now() + 86400000
+  })
   .filter(x => activeType.value === '全部' || x.displayType === activeType.value)
   .filter(x => !keyword.value || [x.title,x.summary,x.impact,x.action,x.source,x.displayPlatform,...(x.tags||[])].join(' ').toLowerCase().includes(keyword.value.toLowerCase()))
   .sort((a,b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || ''))))
 const verifiedCount = computed(() => normalized.value.filter(x => /官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(x.status || '')).length)
+const recentCount = computed(() => normalized.value.filter(x => { const d = Date.parse(String(x.publishedAt || x.date || '')); return Number.isFinite(d) && d >= Date.now() - 7 * 86400000 && d <= Date.now() + 86400000 }).length)
+const unresolvedLinkCount = computed(() => normalized.value.filter(x => /news\.google\.com/i.test(x.url || '')).length)
+function isGoogleRedirect(item) { return /news\.google\.com/i.test(item.url || '') }
 function formatDate(item) {
   const date = String(item.publishedAt || item.date || '')
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '日期待核验'
@@ -46,14 +57,21 @@ function formatDateTime(value) {
 
 <template>
   <section class="platform-actions-module section">
-    <div class="module-kicker"><span>04</span> PLATFORM RADAR <small>平台动作追踪</small></div>
+    <div class="module-kicker"><span>04</span> DAILY INTELLIGENCE <small>每日平台情报</small></div>
     <header class="platform-heading section-head compact">
       <div>
-        <h1>{{ meta.year || 2026 }} 平台动作</h1>
-        <p>集中追踪淘宝、京东、美团、拼多多的产品迭代、AI 导购、商家工具、规则和经营机制变化，并检索行业微信公众号文章。</p>
+        <h1>今日情报</h1>
+        <p>优先查看最近发布的平台公告、商家规则与经营工具变化。每条信息保留来源状态；检索索引不等于原文，未核验内容不会伪装成官方结论。</p>
       </div>
-      <div class="platform-summary"><strong>{{ normalized.length }}</strong><span>条归档线索</span><small>{{ verifiedCount }} 条有明确来源状态</small></div>
+      <div class="platform-summary"><strong>{{ recentCount }}</strong><span>近 7 天线索</span><small>{{ verifiedCount }} 条有明确来源状态</small></div>
     </header>
+
+    <div class="daily-brief-strip">
+      <div><span class="brief-eyebrow">DAILY BRIEF</span><strong>先看近期变化，再回查原文</strong><small>近 7 天 {{ recentCount }} 条 · {{ unresolvedLinkCount }} 条仍使用 Google News 跳转链接</small></div>
+      <div class="brief-window" aria-label="情报时间范围">
+        <button v-for="window in windows" :key="window" :class="{active:activeWindow===window}" @click="activeWindow=window">{{ window }}</button>
+      </div>
+    </div>
 
     <div class="platform-tabs" role="tablist" aria-label="选择平台">
       <button v-for="p in platforms" :key="p" role="tab" :aria-selected="activePlatform===p" :class="{active:activePlatform===p}" @click="activePlatform=p;activeType='全部'">
@@ -87,21 +105,21 @@ function formatDateTime(value) {
       <article v-for="item in shown" :key="item.id || item.url || item.title" class="platform-action-card">
         <div class="action-date"><strong>{{ formatDate(item) }}</strong><span>{{ item.displayPlatform }}</span></div>
         <div class="action-content">
-          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ item.sourceType === '微信公众号文章检索' ? '公众号索引 · ' + (item.source || '微信文章公开索引') : (item.source || '公开信源') }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
+          <div class="action-meta"><b>{{ item.displayType }}</b><span>{{ isGoogleRedirect(item) ? 'Google News 索引 · ' + (item.source || '原文地址待确认') : (item.sourceType === '微信公众号文章检索' ? '公众号索引 · ' + (item.source || '微信文章公开索引') : (item.source || '公开信源')) }}</span><small :class="{verified:/官方.*确认|官方公告|官方发布确认|已由应用版本记录确认/.test(item.status || '')}">{{ item.status || '来源状态待核验' }}</small></div>
           <h2>{{ item.title }}</h2>
           <p class="action-summary">{{ item.summary || '已发现相关平台动态，需进一步核对原文内容。' }}</p>
           <div v-if="item.impact || item.action" class="action-interpretation">
             <div v-if="item.impact"><strong>潜在经营影响 · 分析推断</strong><p>{{ item.impact }}</p></div>
             <div v-if="item.action"><strong>建议核查</strong><p>{{ item.action }}</p></div>
           </div>
-          <div class="action-foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join('　') }}</span><a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">查看原始来源 ↗</a></div>
+          <div class="action-foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join('　') }}</span><a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">{{ isGoogleRedirect(item) ? '打开检索结果（非原文） ↗' : '查看来源原文 ↗' }}</a></div>
         </div>
       </article>
     </div>
     <div v-else class="platform-empty">
       <strong>{{ keyword || activeType !== '全部' ? '没有匹配的记录' : '该筛选下暂时没有可展示记录' }}</strong>
-      <p>不会用其他平台的数据填充空缺。后续采集到新线索后，将按平台、发布时间和来源状态归档。</p>
-      <button @click="keyword='';activeType='全部';activePlatform='全部'">重置筛选</button>
+      <p>不会用其他平台的数据填充空缺。可以切换时间范围，或清除平台、类型和关键词筛选。</p>
+      <button @click="keyword='';activeType='全部';activePlatform='全部';activeWindow='7天'">重置筛选</button>
     </div>
 
     <footer class="platform-footer">
@@ -124,6 +142,14 @@ function formatDateTime(value) {
   max-width:1240px;margin:0 auto;min-width:0;color:var(--app-text,#261d16);
 }
 .platform-actions-module .module-kicker{margin-bottom:18px}
+.platform-actions-module .daily-brief-strip{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin:0 0 18px;padding:16px 18px;border:1px solid var(--app-line,#d2c0a8);background:var(--app-panel,#fbf4e8)}
+.platform-actions-module .brief-eyebrow{display:block;margin-bottom:5px;color:var(--app-accent,#9a7040);font-size:9px;letter-spacing:.14em}
+.platform-actions-module .daily-brief-strip>div:first-child{display:grid;gap:4px}
+.platform-actions-module .daily-brief-strip strong{font-size:13px}
+.platform-actions-module .daily-brief-strip small{font-size:10px;color:var(--app-muted,#75685b)}
+.platform-actions-module .brief-window{display:flex;gap:5px;flex-wrap:wrap}
+.platform-actions-module .brief-window button{padding:7px 10px;border:1px solid var(--app-line,#d2c0a8);background:transparent;color:var(--app-muted,#75685b);font-size:10px;cursor:pointer}
+.platform-actions-module .brief-window button.active{background:var(--app-accent,#9a7040);border-color:var(--app-accent,#9a7040);color:white}
 .platform-actions-module .platform-heading{margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--app-line,#d2c0a8)}
 .platform-actions-module .platform-heading h1{color:var(--app-text,#261d16);font-size:clamp(28px,3vw,36px);letter-spacing:-.045em}
 .platform-actions-module .platform-heading p{color:var(--app-muted,#75685b);font-size:12px;max-width:680px}
