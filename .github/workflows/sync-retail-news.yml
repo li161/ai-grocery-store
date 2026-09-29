@@ -25,17 +25,21 @@ jobs:
           node-version: 20
 
       - name: Sync public retail feeds
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL }}
         run: npm run sync:retail
 
       - name: Commit changed intelligence
         run: |
           git config user.name "ai-grocery-store-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- src/data/retailNews.generated.js public/retail-news.json; then
+          if git diff --quiet -- src/data/retailNews.generated.js public/retail-news.json public/retail-daily.json; then
             echo "No retail intelligence changes."
             exit 0
           fi
-          git add src/data/retailNews.generated.js public/retail-news.json
+          git add src/data/retailNews.generated.js public/retail-news.json public/retail-daily.json
           git commit -m "chore: sync retail intelligence"
           # Scheduled runs are near-real-time; GitHub may delay scheduled jobs under load.
           git push
