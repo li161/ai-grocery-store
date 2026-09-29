@@ -1,26 +1,115 @@
 <script setup>
+import { ref } from 'vue'
+
 defineProps({
   lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true},
   news:{type:Array,required:true}, syncLabel:{type:String,required:true}, selected:{type:Object,default:null},
   onOpen:{type:Function,required:true}
 })
+
 const emit=defineEmits(['update:activeLane','update:keyword','closeDetail'])
+const detailTab=ref('overview')
 </script>
 
 <template>
   <section class="news-module">
-    <div v-if="selected" class="news-detail-view">
-      <button class="back-to-news" @click="emit('closeDetail')">← 返回零售情报</button>
-      <div class="news-detail-topline"><span>{{ selected.lane }}</span><time>{{ selected.date }}</time><em>{{ selected.source }}</em></div>
-      <h1>{{ selected.title }}</h1>
-      <p class="news-detail-lead">{{ selected.summary }}</p>
-      <div class="news-detail-grid">
-        <article><span>发生了什么</span><h3>事件摘要</h3><p>{{ selected.summary }}</p></article>
-        <article><span>为什么值得看</span><h3>对零售意味着什么</h3><p>{{ selected.impact }}</p></article>
-        <article><span>接下来关注</span><h3>导购 / 商品 / 运营动作</h3><p>{{ selected.action }}</p></article>
+    <div v-if="selected" class="event-detail-page">
+      <nav class="event-breadcrumb" aria-label="当前位置">
+        <button @click="emit('closeDetail')">←</button>
+        <button @click="emit('closeDetail')">热点榜</button>
+        <span>/</span>
+        <span>事件详情</span>
+      </nav>
+
+      <header class="event-detail-header">
+        <div class="event-eyebrow">
+          <span>{{ selected.lane }}</span>
+          <b>持续更新</b>
+        </div>
+
+        <h1>{{ selected.title }}</h1>
+
+        <div class="event-meta">
+          <span>▤ <strong>1</strong> 篇报道</span>
+          <span>♧ <strong>1</strong> 个报道来源</span>
+          <span>◷ {{ selected.date }} 更新</span>
+        </div>
+
+        <div class="event-tabs" role="tablist">
+          <button :class="{active:detailTab==='overview'}" @click="detailTab='overview'">事件概览</button>
+          <button :class="{active:detailTab==='timeline'}" @click="detailTab='timeline'">报道时间线 <b>1</b></button>
+          <button :class="{active:detailTab==='heat'}" @click="detailTab='heat'">热度走势</button>
+        </div>
+      </header>
+
+      <div v-if="detailTab==='overview'" class="event-layout">
+        <main class="event-main-card">
+          <div class="event-card-head">
+            <h2>先了解这件事</h2>
+            <span>AI 综合</span>
+          </div>
+
+          <p class="event-summary">{{ selected.summary }}</p>
+
+          <div class="event-generated">
+            AI 根据报道生成 · {{ selected.date }}
+          </div>
+
+          <div class="event-progress">
+            <div class="event-progress-head">
+              <strong>最新进展</strong>
+              <time>{{ selected.date }}</time>
+            </div>
+            <p>{{ selected.action }}</p>
+            <span>›</span>
+          </div>
+        </main>
+
+        <aside class="event-side">
+          <section class="event-side-card">
+            <div class="event-side-head"><h2>为什么热</h2></div>
+            <p>{{ selected.impact }}</p>
+            <small>当前情报 · {{ selected.lane }}</small>
+          </section>
+
+          <section class="event-side-card">
+            <div class="event-side-head"><h2>官方一手</h2><span>1 篇</span></div>
+            <p class="side-caption">直接了解当事方的说法</p>
+            <a :href="selected.url" target="_blank" rel="noopener" class="source-story">
+              <small>{{ selected.source }}</small>
+              <strong>{{ selected.title }} <i>›</i></strong>
+            </a>
+          </section>
+
+          <section class="event-side-card event-tags-card">
+            <div class="event-side-head"><h2>关键词</h2></div>
+            <div class="event-tags">
+              <span v-for="tag in selected.tags" :key="tag">#{{ tag }}</span>
+            </div>
+          </section>
+        </aside>
       </div>
-      <div class="news-detail-tags"><b v-for="tag in selected.tags" :key="tag">#{{ tag }}</b></div>
-      <div class="news-source-panel"><div><span>原始报道</span><strong>{{ selected.source }}</strong><small>{{ selected.date }} · 这是可追溯的原始来源</small></div><a :href="selected.url" target="_blank" rel="noopener">打开原文 ↗</a></div>
+
+      <div v-else-if="detailTab==='timeline'" class="event-tab-panel">
+        <div class="timeline-event">
+          <time>{{ selected.date }}</time>
+          <i></i>
+          <article>
+            <span>{{ selected.source }}</span>
+            <h2>{{ selected.title }}</h2>
+            <p>{{ selected.summary }}</p>
+            <a :href="selected.url" target="_blank" rel="noopener">查看原始报道 ↗</a>
+          </article>
+        </div>
+      </div>
+
+      <div v-else class="event-tab-panel event-heat-panel">
+        <div class="empty-metric">
+          <span>热度走势</span>
+          <strong>暂无独立历史热度数据</strong>
+          <p>当前页面保留事件事实与来源，不用缺少数据时人为制造趋势。</p>
+        </div>
+      </div>
     </div>
 
     <template v-else>
@@ -35,7 +124,7 @@ const emit=defineEmits(['update:activeLane','update:keyword','closeDetail'])
       <div class="timeline-toolbar"><label>⌕ <input :value="keyword" placeholder="搜索平台、导购、支付、库存..." @input="emit('update:keyword',$event.target.value)"></label><span>{{ news.length }} 条情报</span></div>
 
       <div class="news-timeline">
-        <div v-for="(item,index) in news" :key="item.id" class="timeline-row">
+        <div v-for="item in news" :key="item.id" class="timeline-row">
           <time>{{ item.date }}</time>
           <div class="timeline-pin"><i></i></div>
           <button class="timeline-story" @click="onOpen(item)">
