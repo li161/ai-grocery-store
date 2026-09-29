@@ -24,13 +24,12 @@ const detail = ref(null)
 const selectedCase = ref(null)
 
 const sections = [
-  { id:'home', label:'店铺首页', icon:'⌂', group:'内容' },
+  { id:'home', label:'零售情报 · 店铺首页', icon:'⌂', group:'首页' },
   { id:'outcomes', label:'经营结果', icon:'◎', group:'内容' },
   { id:'tools', label:'AI 工具', icon:'⌘', group:'内容' },
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
-  { id:'retail-news', label:'零售情报', icon:'◌', group:'情报' },
-  { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
+    { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
   { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
 ]
 
@@ -76,7 +75,7 @@ function openBundle(item) {
   window.scrollTo({top:0,behavior:'auto'})
 }
 function openNews(item) {
-  activeSection.value = 'retail-news'
+  activeSection.value = 'home'
   selectedNews.value = item
   detail.value = null
   window.scrollTo({top:0,behavior:'auto'})
@@ -141,8 +140,6 @@ onMounted(() => {
           </button>
         </div>
       </section>
-
-      <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :syncLabel="syncLabel" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
       <HotRank v-else-if="activeSection === 'hot-rank'" :news="filteredNews" :onOpen="openNews" />
 
