@@ -23,6 +23,7 @@ function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 function openTool(tool) { drawerTool.value = tool }
+function openToolByName(name) { const tool = tools.find(item => item.name === name); if (tool) openTool(tool) }
 function goSearch() { showSearch.value = true }
 </script>
 
@@ -135,7 +136,7 @@ function goSearch() { showSearch.value = true }
             <aside class="detail-side">
               <div v-if="detail.tools" class="detail-block">
                 <span class="detail-label">推荐工具</span>
-                <div class="tool-chips"><span v-for="tool in detail.tools" :key="tool">{{ tool }}</span></div>
+                <div class="tool-chips"><button v-for="tool in detail.tools" :key="tool" @click="openToolByName(tool)">{{ tool }} ↗</button></div>
               </div>
               <div v-if="detail.tags" class="detail-block">
                 <span class="detail-label">情报标签</span>
