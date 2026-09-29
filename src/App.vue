@@ -9,6 +9,11 @@ import { useCatalog } from './composables/useCatalog'
 const { activeCategory, keyword, filteredTools } = useCatalog()
 const drawerTool = ref(null)
 const showSearch = ref(false)
+const detail = ref(null)
+
+function openIndustry(item) { detail.value = { type: 'industry', ...item } }
+function openBundle(item) { detail.value = { type: 'bundle', ...item } }
+function closeDetail() { detail.value = null }
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -43,7 +48,7 @@ function goSearch() {
           <p>不讲“AI 是什么”，直接摆出来：在你的工作里，它能拿来干什么。</p>
         </div>
         <div class="industry-store">
-          <article v-for="item in industries" :key="item.name" class="industry-card">
+          <button v-for="item in industries" :key="item.name" class="industry-card" @click="openIndustry(item)">
             <div class="industry-shelf-label">{{ item.name }}</div>
             <div class="industry-body"><span class="industry-icon">{{ item.icon }}</span><div><strong>{{ item.name }}</strong><small>{{ item.text }}</small></div><span class="industry-arrow">↗</span></div>
             <div class="industry-beam"></div>
@@ -57,7 +62,7 @@ function goSearch() {
           <p>不想一件件挑？按一件事情，把需要的工具直接装进购物篮。</p>
         </div>
         <div class="bundle-grid">
-          <article v-for="bundle in bundles" :key="bundle.title" class="bundle-card" :class="bundle.tone">
+          <button v-for="bundle in bundles" :key="bundle.title" class="bundle-card" :class="bundle.tone" @click="openBundle(bundle)">
             <div class="bundle-head"><span>{{ bundle.label }}</span><span>READY</span></div>
             <div class="bundle-body"><div class="bundle-bag">AI</div><div><h3>{{ bundle.title }}</h3><p>{{ bundle.flow }}</p></div></div>
             <div class="bundle-foot">打开套装 <span>→</span></div>
@@ -86,6 +91,60 @@ function goSearch() {
           <div class="drawer-meta"><span>AI TOOL</span><span>OFFICIAL</span></div>
           <a :href="drawerTool.url" target="_blank" rel="noopener" class="drawer-cta">去官网看看 <span>↗</span></a>
         </aside>
+      </div>
+    </transition>
+
+
+    <transition name="fade">
+      <div v-if="detail" class="detail-mask" @click.self="closeDetail">
+        <article class="detail-page">
+          <button class="detail-close" @click="closeDetail">×</button>
+
+          <header class="detail-hero">
+            <span class="eyebrow">{{ detail.type === 'industry' ? 'INDUSTRY INTELLIGENCE' : 'READY-MADE AI KIT' }}</span>
+            <div class="detail-title-row">
+              <span class="detail-icon">{{ detail.icon || 'AI' }}</span>
+              <div>
+                <h2>{{ detail.name || detail.title }}</h2>
+                <p>{{ detail.text || detail.flow }}</p>
+              </div>
+            </div>
+            <p class="detail-headline">{{ detail.headline || detail.trigger }}</p>
+          </header>
+
+          <div class="detail-grid">
+            <section class="detail-main">
+              <div class="detail-block">
+                <span class="detail-label">为什么现在值得看</span>
+                <p>{{ detail.summary || detail.trigger }}</p>
+              </div>
+
+              <div class="detail-block">
+                <span class="detail-label">{{ detail.type === 'industry' ? '可以直接拿来做什么' : '执行流程' }}</span>
+                <div class="action-list">
+                  <div v-for="(item,index) in (detail.actions || detail.steps)" :key="item">
+                    <b>0{{ index + 1 }}</b><span>{{ item }}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <aside class="detail-side">
+              <div class="detail-block">
+                <span class="detail-label">推荐工具</span>
+                <div class="tool-chips"><span v-for="tool in detail.tools" :key="tool">{{ tool }}</span></div>
+              </div>
+
+              <div class="detail-block">
+                <span class="detail-label">最新资讯依据</span>
+                <a v-for="source in detail.sources" :key="source.url" class="source-item" :href="source.url" target="_blank" rel="noopener">
+                  <strong>{{ source.title }}</strong>
+                  <small>{{ source.name }} · {{ source.date }} ↗</small>
+                </a>
+              </div>
+            </aside>
+          </div>
+        </article>
       </div>
     </transition>
 
