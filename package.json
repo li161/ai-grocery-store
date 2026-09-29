@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "sync:retail": "node scripts/sync-retail-news.mjs"
+    "sync:retail": "node scripts/sync-retail-news.mjs",
+    "sync:platform": "node scripts/sync-platform-actions.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
