@@ -88,14 +88,19 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
       </div>
 
       <div v-else-if="detailTab==='timeline'" class="event-tab-panel">
-        <div class="timeline-event">
-          <time>{{ selected.date }}</time>
-          <i></i>
+        <div class="event-timeline-intro">
+          <span>EVENT TIMELINE</span>
+          <strong>同一事件的公开进展</strong>
+          <p>按时间把不同信源串起来，同一事件不会被拆成孤立新闻。</p>
+        </div>
+        <div v-for="(report,index) in eventReports" :key="report.id || report.title" class="timeline-event">
+          <time>{{ report.date }}</time>
+          <i :class="{latest:index===eventReports.length-1}"></i>
           <article>
-            <span>{{ selected.source }}</span>
-            <h2>{{ selected.title }}</h2>
-            <p>{{ selected.summary }}</p>
-            <a :href="selected.url" target="_blank" rel="noopener">查看原始报道 ↗</a>
+            <div class="timeline-event-meta"><span>{{ report.source }}</span><b>{{ report.sourceType || '信源' }}</b></div>
+            <h2>{{ report.title }}</h2>
+            <p>{{ report.eventSummary || report.summary }}</p>
+            <a :href="report.url" target="_blank" rel="noopener">查看原始报道 ↗</a>
           </article>
         </div>
       </div>
