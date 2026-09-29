@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: platform-actions-sync
+  group: retail-intelligence-sync
   cancel-in-progress: false
 
 jobs:
