@@ -13,7 +13,7 @@ const detailTab=ref('overview')
 
 <template>
   <section class="news-module">
-    <div v-if="selected" class="event-detail-page">
+    <div v-if="selected" class="event-detail-page intelligence-detail">
       <nav class="event-breadcrumb" aria-label="当前位置">
         <button @click="emit('closeDetail')">←</button>
         <button @click="emit('closeDetail')">热点榜</button>
@@ -36,9 +36,9 @@ const detailTab=ref('overview')
         </div>
 
         <div class="event-tabs" role="tablist">
-          <button :class="{active:detailTab==='overview'}" @click="detailTab='overview'">事件概览</button>
-          <button :class="{active:detailTab==='timeline'}" @click="detailTab='timeline'">报道时间线 <b>1</b></button>
-          <button :class="{active:detailTab==='heat'}" @click="detailTab='heat'">热度走势</button>
+          <button role="tab" :aria-selected="detailTab==='overview'" :class="{active:detailTab==='overview'}" @click="detailTab='overview'">事件概览</button>
+          <button role="tab" :aria-selected="detailTab==='timeline'" :class="{active:detailTab==='timeline'}" @click="detailTab='timeline'">报道时间线 <b>1</b></button>
+          <button role="tab" :aria-selected="detailTab==='heat'" :class="{active:detailTab==='heat'}" @click="detailTab='heat'">热度走势</button>
         </div>
       </header>
 
