@@ -130,7 +130,10 @@ async function fetchJdOfficialNotices() {
 
 let previous = { items: [] }
 try { previous = JSON.parse(await readFile(archiveFile, 'utf8')) } catch {}
-const tasks = quarterWindows().flatMap(window => queries.map(query => ({ query, window })))
+const windows = (!previous.sourceHealth || now.getUTCDay() === 0)
+  ? quarterWindows()
+  : [{ after: iso(new Date(now.getTime() - 35 * 86400000)), before: iso(tomorrow) }]
+const tasks = windows.flatMap(window => queries.map(query => ({ query, window })))
 const results = await mapLimit(tasks, 8, task => fetchQuery(task.query, task.window))
 const jdOfficialResult = await fetchJdOfficialNotices()
 const jdOfficialItems = Array.isArray(jdOfficialResult) ? jdOfficialResult : jdOfficialResult.items
