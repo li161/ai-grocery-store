@@ -10,7 +10,7 @@ defineProps({ onNavigate: { type: Function, required: true }, onSearch: { type: 
     </button>
     <nav class="hanging-nav" aria-label="主导航">
       <button @click="onNavigate('tools')"><span>⚒</span>工具</button>
-      <button @click="onNavigate('industry')"><span>▦</span>行业</button>
+      <button @click="onNavigate('industry')"><span>▦</span>行业</button><button @click="onNavigate('retail-news')"><span>◌</span>情报</button>
       <button @click="onNavigate('bundles')"><span>◈</span>套装</button>
       <button @click="onNavigate('lab')"><span>⚗</span>后院实验室</button>
     </nav>
