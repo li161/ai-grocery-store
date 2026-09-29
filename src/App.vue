@@ -12,9 +12,11 @@ import ContentDetail from './components/ContentDetail.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
+import { usePlatformActions } from './composables/usePlatformActions'
 
 const { activeCategory, keyword, filteredTools } = useCatalog()
-const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, eventHistory, syncLabel, dailyDigest, annualPlatformNews, platformArchiveMeta } = useRetailNews()
+const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, eventHistory, syncLabel, dailyDigest } = useRetailNews()
+const { items: platformActionItems, meta: platformArchiveMeta } = usePlatformActions()
 
 const activeSection = ref('home')
 const drawerTool = ref(null)
@@ -123,7 +125,7 @@ onMounted(() => {
 
       <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
-      <PlatformActionsShelf v-else-if="['retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :platform="({'retail-taobao':'淘宝','retail-jd':'京东','retail-meituan':'美团','retail-pdd':'拼多多'})[activeSection]" :items="annualPlatformNews" :meta="platformArchiveMeta" />
+      <PlatformActionsShelf v-else-if="['retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :platform="({'retail-taobao':'淘宝','retail-jd':'京东','retail-meituan':'美团','retail-pdd':'拼多多'})[activeSection]" :items="platformActionItems" :meta="platformArchiveMeta" />
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
