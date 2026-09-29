@@ -1,14 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-defineProps({
-  lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true},
-  news:{type:Array,required:true}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null},
-  onOpen:{type:Function,required:true}
-})
+const props=defineProps({ lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true}, news:{type:Array,required:true}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null}, onOpen:{type:Function,required:true} })
 
 const emit=defineEmits(['update:activeLane','update:keyword','closeDetail'])
 const detailTab=ref('overview')
+const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.selected.eventId ? item.eventId===props.selected.eventId : item.id===props.selected.id).sort((a,b)=>String(a.date).localeCompare(String(b.date))) : [])
 </script>
 
 <template>
@@ -30,14 +27,14 @@ const detailTab=ref('overview')
         <h1>{{ selected.title }}</h1>
 
         <div class="event-meta">
-          <span>▤ <strong>1</strong> 篇报道</span>
-          <span>♧ <strong>1</strong> 个原始信源</span>
+          <span>▤ <strong>{{ eventReports.length || 1 }}</strong> 篇报道</span>
+          <span>♧ <strong>{{ selected.eventSourceCount || 1 }}</strong> 个独立信源</span>
           <span>◷ {{ selected.date }} 更新</span>
         </div>
 
         <div class="event-tabs" role="tablist">
           <button role="tab" :aria-selected="detailTab==='overview'" :class="{active:detailTab==='overview'}" @click="detailTab='overview'">事件概览</button>
-          <button role="tab" :aria-selected="detailTab==='timeline'" :class="{active:detailTab==='timeline'}" @click="detailTab='timeline'">报道时间线 <b>1</b></button>
+          <button role="tab" :aria-selected="detailTab==='timeline'" :class="{active:detailTab==='timeline'}" @click="detailTab='timeline'">事件时间线 <b>{{ eventReports.length || 1 }}</b></button>
           <button role="tab" :aria-selected="detailTab==='heat'" :class="{active:detailTab==='heat'}" @click="detailTab='heat'">热度走势</button>
         </div>
       </header>
