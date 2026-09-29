@@ -133,6 +133,9 @@ async function fetchJdOfficialNotices() {
       const date = parseDate(row.noticeTime || row.createTime)
       const content = decode(row.noticeContent || row.content || '').slice(0, 420)
       const id = row.id || row.noticeId || title
+      const rawUrl = row.noticeUrl || row.url || row.detailUrl || ''
+      let noticeUrl = ''
+      try { noticeUrl = rawUrl ? new URL(rawUrl, 'https://opendj.jd.com/').href : '' } catch {}
       const text = title + ' ' + content
       let actionType = '平台规则/费用'
       if (/AI|导购|购物助手|推荐/.test(text)) actionType = 'AI导购/购物助手'
@@ -145,7 +148,7 @@ async function fetchJdOfficialNotices() {
         date, publishedAt: date, source: row.noticeSignature || '京东秒送开放平台',
         sourceType: '官方公告', status: '已由官方公告确认',
         title, summary: content || '京东开放平台发布公告，详情请查看原文。',
-        url: row.noticeUrl || ('https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=' + encodeURIComponent(id)),
+        url: noticeUrl,
         tags: ['京东开放平台', actionType], official: true
       }
     }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
