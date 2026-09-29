@@ -34,10 +34,7 @@ const sections = [
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
     { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
-  { id:'retail-taobao', label:'淘宝平台动作', icon:'▣', group:'平台动作' },
-  { id:'retail-jd', label:'京东平台动作', icon:'▣', group:'平台动作' },
-  { id:'retail-meituan', label:'美团平台动作', icon:'▣', group:'平台动作' },
-  { id:'retail-pdd', label:'拼多多平台动作', icon:'▣', group:'平台动作' },
+  { id:'retail-platform-actions', label:'平台动作', icon:'↗', group:'情报' },
   { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
 ]
 
@@ -123,7 +120,7 @@ onMounted(() => {
 
       <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
-      <PlatformActionsShelf v-else-if="['retail-taobao','retail-jd','retail-meituan','retail-pdd'].includes(activeSection)" :platform="({'retail-taobao':'淘宝','retail-jd':'京东','retail-meituan':'美团','retail-pdd':'拼多多'})[activeSection]" :items="platformActionItems" :meta="platformArchiveMeta" />
+      <PlatformActionsShelf v-else-if="activeSection === 'retail-platform-actions'" :items="platformActionItems" :meta="platformArchiveMeta" />
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
