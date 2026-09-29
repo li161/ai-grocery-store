@@ -30,7 +30,7 @@ function goSearch() { showSearch.value = true }
   <div class="site">
     <StoreNav :onNavigate="scrollTo" :onSearch="goSearch" />
     <main>
-      <StoreHero :onNavigate="scrollTo" />
+      <StoreHero :onNavigate="scrollTo" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
       <ToolShelf
         :categories="categories"
