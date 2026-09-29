@@ -49,7 +49,11 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
           <p class="event-summary">{{ selected.eventSummary || selected.summary }}</p>
 
           <div class="event-generated">
-            信息状态 · {{ selected.source }} · {{ selected.date }} · 原文直达
+            信息状态 · {{ selected.source }} · {{ selected.date }} · {{ selected.evidence?.label || '原文可追溯' }}
+          </div>
+          <div v-if="selected.businessDimensions?.length" class="event-business-dimensions">
+            <span>经营影响</span>
+            <b v-for="dimension in selected.businessDimensions" :key="dimension">{{ dimension }}</b>
           </div>
 
           <div class="event-progress">
@@ -70,8 +74,8 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
           </section>
 
           <section class="event-side-card">
-            <div class="event-side-head"><h2>原始信源</h2><span>{{ selected.eventSourceCount || 1 }} 个</span></div>
-            <p class="side-caption">不把二次转述当成事实，直接打开原文核对。</p>
+            <div class="event-side-head"><h2>证据链</h2><span>{{ selected.eventSourceCount || 1 }} 个信源</span></div>
+            <p class="side-caption">信源等级：{{ selected.evidence?.level || 'B' }} · {{ selected.evidence?.label || '可追溯' }}。不把二次转述当成事实，直接打开原文核对。</p>
             <a :href="selected.url" target="_blank" rel="noopener" class="source-story">
               <small>{{ selected.source }}</small>
               <strong>{{ selected.title }} <i>›</i></strong>
@@ -135,10 +139,10 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
           <time>{{ item.date }}</time>
           <div class="timeline-pin"><i></i></div>
           <button class="timeline-story" @click="onOpen(item)">
-            <div class="story-meta"><span>{{ item.lane }}</span><b>{{ item.source }}</b><small>原文可追溯</small></div>
+            <div class="story-meta"><span>{{ item.lane }}</span><b>{{ item.source }}</b><small>{{ item.evidence?.label || '原文可追溯' }}</small></div>
             <h2>{{ item.title }}</h2>
             <p>{{ item.summary }}</p>
-            <div class="story-foot"><span v-for="tag in item.tags?.slice(0,3)" :key="tag">#{{ tag }}</span><strong>查看完整情报 →</strong></div>
+            <div class="story-foot"><span v-for="tag in item.tags?.slice(0,3)" :key="tag">#{{ tag }}</span><span v-for="dimension in item.businessDimensions?.slice(0,2)" :key="dimension" class="business-chip">{{ dimension }}</span><strong>查看完整情报 →</strong></div>
           </button>
         </div>
       </div>
