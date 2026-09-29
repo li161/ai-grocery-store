@@ -7,7 +7,6 @@
     "dev": "vite",
     "predev": "node scripts/prepare-background.mjs",
     "build": "vite build",
-    "prebuild": "node scripts/prepare-background.mjs",
     "preview": "vite preview",
     "sync:retail": "node scripts/sync-retail-news.mjs"
   },
