@@ -51,7 +51,7 @@ function parseFeed(xml, query) {
     const date = new Date(publishedAt)
     const summary = tag(block, 'description')
     const source = tag(block, 'source') || 'Google News RSS'
-    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, sourceType: '公开检索候选', status: '自动发现·待核验', ...query }
+    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, ...query, sourceType: '公开检索候选', status: '自动发现·待核验' }
   }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
 }
 function relevance(item) {
