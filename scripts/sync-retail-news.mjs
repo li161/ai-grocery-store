@@ -2,6 +2,9 @@ import { mkdir, writeFile, readFile } from 'node:fs/promises'
 
 const FEED_DEFS = [
   {name:'AI Shopping',query:'AI shopping assistant retail agentic commerce',lane:'AI 导购',sourceType:'行业媒体'},
+  {name:'OpenAI News RSS',url:'https://openai.com/news/rss.xml',lane:'AI 导购',sourceType:'官方',direct:true},
+  {name:'Google AI RSS',url:'https://blog.google/innovation-and-ai/technology/ai/rss/',lane:'Agentic Commerce',sourceType:'官方',direct:true},
+  {name:'Target Corporate RSS',url:'https://corporate.target.com/feeds/news',lane:'零售运营',sourceType:'官方',direct:true},
   {name:'Retail AI',query:'retail AI agent inventory shopping',lane:'零售运营',sourceType:'行业媒体'},
   {name:'China Retail AI',query:'China retail AI shopping Qwen Taobao JD',lane:'中国零售',sourceType:'行业媒体'},
   {name:'Agentic Commerce',query:'"agentic commerce" shopping retail',lane:'Agentic Commerce',sourceType:'行业媒体'},
@@ -28,7 +31,8 @@ function buildFeeds(){
     const before=isoDay(addDays(today,-offset))
     const after=isoDay(addDays(today,-offset-3))
     for(const def of FEED_DEFS){
-      feeds.push({...def,name:def.name+' · '+after+'~'+before,url:googleUrl(def.query,after,before)})
+      if(def.direct) { if(offset===0) feeds.push({...def,name:def.name+' · direct'}) }
+      else feeds.push({...def,name:def.name+' · '+after+'~'+before,url:googleUrl(def.query,after,before)})
     }
   }
   return feeds
