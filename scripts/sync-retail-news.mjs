@@ -50,7 +50,26 @@ function sim(a,b){const A=tokens(a),B=tokens(b),U=new Set([...A,...B]);return U.
 function hash(s=''){let h=2166136261;for(const ch of s.toLowerCase()){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
 function tags(t=''){const rules=[['AI 导购',/shopping assistant|shopping agent|导购|购物助手/i],['Agent',/agentic|agent/i],['支付',/checkout|payment|支付/i],['库存',/inventory|stock|supply chain|库存|供应链/i],['推荐',/recommend|recommendation|推荐/i],['门店',/store|shop|门店/i],['履约',/delivery|fulfillment|履约/i],['定价',/pricing|price|定价|价格/i]];return rules.filter(x=>x[1].test(t)).map(x=>x[0])}
 const sourceHealth=[]
-async function fetchFeed(feed){try{const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/3.0'}});if(!r.ok)throw Error('HTTP '+r.status);const xml=await r.text();const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,40).map((m,i)=>{const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source');if(!title||!url)return null;const d=Date.parse(pd);return {id:'feed-'+hash(title+url),source:source||feed.name,sourceType:feed.sourceType,date:isNaN(d)?new Date().toISOString().slice(0,10):new Date(d).toISOString().slice(0,10),publishedAt:isNaN(d)?null:new Date(d).toISOString(),discoveredAt:new Date().toISOString(),lane:feed.lane,title,summary:'信源原文自动同步；事实以原始报道为准。',impact:'等待 AI 零售影响判断。',action:'打开原文核对事件，再观察后续经营结果。',tags:[feed.lane,...tags(title)].slice(0,5),url}}).filter(Boolean)}catch(e){console.warn('[retail-radar] '+feed.name+': '+e.message);return []}}
+async function fetchFeed(feed){
+  const checkedAt=new Date().toISOString()
+  try{
+    const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/4.0'}})
+    if(!r.ok)throw Error('HTTP '+r.status)
+    const xml=await r.text()
+    const items=[...xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)].slice(0,40).map(m=>{
+      const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source')
+      if(!title||!url)return null
+      const d=Date.parse(pd)
+      return {id:'feed-'+hash(title+url),source:source||feed.name,sourceType:feed.sourceType,date:isNaN(d)?new Date().toISOString().slice(0,10):new Date(d).toISOString().slice(0,10),publishedAt:isNaN(d)?null:new Date(d).toISOString(),discoveredAt:checkedAt,lane:feed.lane,title,summary:'信源原文自动同步；事实以原始报道为准。',impact:'等待 AI 零售影响判断。',action:'打开原文核对事件，再观察后续经营结果。',tags:[feed.lane,...tags(title)].slice(0,5),url}
+    }).filter(Boolean)
+    sourceHealth.push({name:feed.name,lane:feed.lane,sourceType:feed.sourceType,status:'ok',items:items.length,checkedAt})
+    return items
+  }catch(e){
+    sourceHealth.push({name:feed.name,lane:feed.lane,sourceType:feed.sourceType,status:'error',items:0,error:e.message,checkedAt})
+    console.warn('[retail-radar] '+feed.name+': '+e.message)
+    return []
+  }
+}
 function heuristic(x){const t=x.title;let r=30,i=30,e=x.sourceType==='官方'?90:x.sourceType==='行业媒体'?72:55;if(/retail|shopping|commerce|store|grocery|零售|购物|电商|门店/i.test(t))r+=28;if(/agent|AI|人工智能|assistant|智能/i.test(t))r+=20;if(/inventory|pricing|checkout|payment|recommend|forecast|库存|定价|支付|推荐|预测|履约/i.test(t))i+=22;if(/revenue|sales|labor|cost|conversion|margin|收入|销售|人效|成本|转化|利润/i.test(t))i+=18;return {relevanceScore:Math.min(100,r),impactScore:Math.min(100,i),evidenceScore:e}}
 async function llm(system,data){const key=process.env.OPENAI_API_KEY;if(!key)return null;const base=process.env.OPENAI_BASE_URL||'https://api.openai.com/v1',model=process.env.RETAIL_LLM_MODEL||'gpt-5-mini';try{const r=await fetch(base.replace(/\/$/,'')+'/chat/completions',{method:'POST',headers:{authorization:'Bearer '+key,'content-type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(data)}],temperature:.1})});if(!r.ok)throw Error('LLM HTTP '+r.status);const j=await r.json(),c=j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content||'',m=c.match(/```(?:json)?\s*([\s\S]*?)\s*```/)||c.match(/\[[\s\S]*\]/)||c.match(/\{[\s\S]*\}/);return m?JSON.parse(m[1]||m[0]):null}catch(e){console.warn('[retail-radar] LLM fallback: '+e.message);return null}}
 async function score(items){const data=items.map((x,i)=>({index:i,title:x.title,source:x.source,lane:x.lane,date:x.date}));const r=await llm('你是AI零售情报筛选器。relevance=与AI零售直接相关程度；impact=对导购、转化、客单、库存、履约、人效、损耗、门店运营、支付、平台格局的影响；novelty=新颖程度；evidence=证据可信度。均0-100。keep仅在relevance>=60且impact>=45时为true。不要编造事实。输出JSON数组。',data);return Array.isArray(r)?r:[]}
