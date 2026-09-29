@@ -227,7 +227,15 @@ const meituanRulesResult = await fetchMeituanRuleDirectory()
 const meituanRuleItems = meituanRulesResult.items
 const found = [...results.flatMap(result => result.items), ...jdOfficialItems, ...meituanRuleItems].filter(relevance)
 const merged = new Map()
-for (const item of [...(previous.items || []).filter(relevance), ...found]) {
+for (const rawItem of [...(previous.items || []).filter(relevance), ...found]) {
+  // Clean legacy HTML descriptions and label Google News redirect URLs honestly.
+  const item = {
+    ...rawItem,
+    summary: decode(String(rawItem.summary || '')).replace(/\s+/g, ' ').trim(),
+    status: /news\.google\.com\/rss\/articles/i.test(rawItem.url || '')
+      ? '自动发现·待核验（Google News 跳转链接，非原文直链）'
+      : rawItem.status
+  }
   const key = String(item.platform || item.lane || 'unknown') + ':' + String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
   if (!key) continue
   const existing = merged.get(key)
@@ -254,7 +262,7 @@ const health = {
 const archive = {
   generatedAt,
   year: YEAR,
-  coverageNote: '平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。',
+  coverageNote: '平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。',
   sourceDirectory: [
     { platform:'淘宝', name:'阿里巴巴官方新闻', url:'https://www.alibabagroup.com/' },
     { platform:'淘宝', name:'淘宝开放平台', url:'https://open.taobao.com/' },
