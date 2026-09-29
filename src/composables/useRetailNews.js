@@ -10,7 +10,11 @@ const REFRESH_MS = 30 * 1000
 export function useRetailNews() {
   const activeLane = ref('全部')
   const keyword = ref('')
-  const liveNews = ref(seedNews)
+  const LIVE_DAYS = 14
+  const cutoff = () => Date.now() - LIVE_DAYS * 86400000
+  const inLiveWindow = item => { const t = Date.parse(item.publishedAt || item.date); return Number.isFinite(t) && t >= cutoff() }
+  const fallbackNews = seedNews.filter(inLiveWindow)
+  const liveNews = ref(fallbackNews)
   const eventHistory = ref([])
   const lastSyncedAt = ref(seedSyncedAt)
   const liveState = ref('fallback')
@@ -32,10 +36,11 @@ export function useRetailNews() {
       if (!newsResponse.ok) throw new Error('HTTP ' + newsResponse.status)
       const payload = await newsResponse.json()
       if (!Array.isArray(payload.items)) throw new Error('invalid payload')
-      if (payload.items.length) {
-        liveNews.value = payload.items
+      const validItems = payload.items.filter(inLiveWindow)
+      if (validItems.length) {
+        liveNews.value = validItems
         lastSyncedAt.value = payload.generatedAt || seedSyncedAt
-        liveState.value = 'live'
+        liveState.value = validItems.length === payload.items.length ? 'live' : 'stale-filtered'
       }
     } catch {
       liveState.value = 'fallback'
@@ -52,7 +57,7 @@ export function useRetailNews() {
   const syncLabel = computed(() => {
     const date = new Date(lastSyncedAt.value)
     const stamp = Number.isNaN(date.getTime()) ? '等待首次同步' : '最近信源同步 ' + date.toLocaleString('zh-CN', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' })
-    return liveState.value === 'live' ? stamp + ' · 近实时雷达' : stamp + ' · 本地快照'
+    return liveState.value === 'live' ? stamp + ' · 近实时雷达' : liveState.value === 'stale-filtered' ? stamp + ' · 已过滤过期信号' : stamp + ' · 本地快照'
   })
 
   onMounted(() => { refresh(); timer = window.setInterval(refresh, REFRESH_MS) })
