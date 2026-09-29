@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const source = resolve(root, 'public/store-bg.b64')
+const source = resolve(root, 'scripts/assets/store-bg.b64')
 const target = resolve(root, 'public/store-bg.webp')
 
 const encoded = (await readFile(source, 'utf8')).trim()
