@@ -4,7 +4,14 @@ const FEEDS = [
   {name:'Google News · AI Shopping',url:'https://news.google.com/rss/search?q=AI+shopping+assistant+retail+agentic+commerce+when%3A7d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购'},
   {name:'Google News · Retail AI',url:'https://news.google.com/rss/search?q=retail+AI+agent+inventory+shopping+when%3A7d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营'},
   {name:'Google News · China Retail AI',url:'https://news.google.com/rss/search?q=China+retail+AI+shopping+Qwen+Taobao+JD+when%3A14d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售'},
-  {name:'Google News · Agentic Commerce',url:'https://news.google.com/rss/search?q=%22agentic+commerce%22+shopping+retail+when%3A14d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce'}
+  {name:'Google News · Agentic Commerce',url:'https://news.google.com/rss/search?q=%22agentic+commerce%22+shopping+retail+when%3A14d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce'},
+  {name:'Google News · Amazon AI Shopping',url:'https://news.google.com/rss/search?q=site%3Aaboutamazon.com+AI+shopping+Rufus+Alexa+retail+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购'},
+  {name:'Google News · Google Shopping',url:'https://news.google.com/rss/search?q=site%3Ablog.google+shopping+Gemini+agentic+commerce+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'Agentic Commerce'},
+  {name:'Google News · OpenAI Shopping',url:'https://news.google.com/rss/search?q=site%3Aopenai.com+shopping+commerce+product+discovery+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购'},
+  {name:'Google News · Claude Commerce',url:'https://news.google.com/rss/search?q=site%3Aclaude.com+commerce+agent+shopping+when%3A30d&hl=en-US&gl=US&ceid=US:en',lane:'AI 导购'},
+  {name:'Google News · Alibaba Qwen',url:'https://news.google.com/rss/search?q=site%3Aalibabagroup.com+Qwen+Taobao+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售'},
+  {name:'Google News · Walmart AI Retail',url:'https://news.google.com/rss/search?q=site%3Acorporate.walmart.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'零售运营'},
+  {name:'Google News · JD AI Retail',url:'https://news.google.com/rss/search?q=site%3Ajdcorporateblog.com+AI+retail+shopping+when%3A60d&hl=en-US&gl=US&ceid=US:en',lane:'中国零售'}
 ]
 
 const seedFile = new URL('../src/data/retailNews.generated.js', import.meta.url)
