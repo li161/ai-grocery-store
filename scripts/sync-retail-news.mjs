@@ -44,7 +44,7 @@ const healthFile = new URL('../public/retail-source-health.json', import.meta.ur
 const historyDir = new URL('../public/retail-history/', import.meta.url)
 
 function decode(v=''){return v.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>')}
-function tag(xml,name){const r=new RegExp('<'+name+'(?:\\s[^>]*)?>([\\s\\S]*?)</'+name+'>','i');return decode((xml.match(r)||[])[1]||'')}
+function tag(xml,name){const r=new RegExp('<'+name+'(?:\\s[^>]*)?>([\s\S]*?)</'+name+'>','i');return decode((xml.match(r)||[])[1]||'')}
 function tokens(s=''){return new Set((s.toLowerCase().match(/[a-z0-9]+|[\u4e00-\u9fff]{2,4}/g)||[]).filter(x=>x.length>1))}
 function sim(a,b){const A=tokens(a),B=tokens(b),U=new Set([...A,...B]);return U.size?[...A].filter(x=>B.has(x)).length/U.size:0}
 function hash(s=''){let h=2166136261;for(const ch of s.toLowerCase()){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
@@ -56,7 +56,7 @@ async function fetchFeed(feed){
     const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/4.0'}})
     if(!r.ok)throw Error('HTTP '+r.status)
     const xml=await r.text()
-    const items=[...xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)].slice(0,40).map(m=>{
+    const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,40).map(m=>{
       const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source')
       if(!title||!url)return null
       const d=Date.parse(pd)
