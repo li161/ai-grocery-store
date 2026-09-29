@@ -958,3 +958,5 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
   .outcome-module,.case-tracker{width:calc(100% - 30px)!important}
   .outcome-head{display:block}.outcome-rule{margin-top:15px;width:max-content}.outcome-head h1{font-size:32px}.outcome-tabs{overflow:auto}.outcome-tabs button{white-space:nowrap;padding:10px 13px}.outcome-grid{grid-template-columns:1fr}.outcome-preview{min-height:0}.evidence-strip{grid-template-columns:1fr}.evidence-strip div{border-right:0;border-bottom:1px solid var(--app-line)}.evidence-strip div:last-child{border-bottom:0}.tracker-layout{grid-template-columns:1fr}.tracker-head h1{font-size:30px}.evidence-row{grid-template-columns:70px 18px 1fr;padding:18px 15px}.evidence-head{padding:20px 15px}.evidence-source{display:block}.evidence-source b{display:inline-block;margin-top:6px}
 }
+
+.story-meta small{margin-left:auto;font-size:7px;color:var(--app-muted);font-weight:500}.event-eyebrow small{font-size:10px;color:var(--app-muted);font-weight:500}.news-module + .news-module{border-top:1px solid var(--app-line)}
