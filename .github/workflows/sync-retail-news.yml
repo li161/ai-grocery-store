@@ -1,0 +1,40 @@
+name: Sync Retail Intelligence
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: retail-intelligence-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync public retail feeds
+        run: npm run sync:retail
+
+      - name: Commit changed intelligence
+        run: |
+          git config user.name "ai-grocery-store-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- src/data/retailNews.generated.js; then
+            echo "No retail intelligence changes."
+            exit 0
+          fi
+          git add src/data/retailNews.generated.js
+          git commit -m "chore: sync retail intelligence"
+          git push
