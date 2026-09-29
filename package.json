@@ -1,7 +1,7 @@
 {
   "name": "ai-grocery-store",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,11 +9,14 @@
     "preview": "vite preview",
     "sync:retail": "node scripts/sync-retail-news.mjs"
   },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "dependencies": {
     "vue": "^3.5.21"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.1",
-    "vite": "^7.1.7"
+    "@vitejs/plugin-vue": "^6.0.9",
+    "vite": "^8.3.0"
   }
 }
