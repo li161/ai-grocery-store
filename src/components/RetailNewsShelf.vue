@@ -24,14 +24,14 @@ const detailTab=ref('overview')
       <header class="event-detail-header">
         <div class="event-eyebrow">
           <span>{{ selected.lane }}</span>
-          <b>持续更新</b>
+          <b>持续更新</b><small>原文可追溯</small>
         </div>
 
         <h1>{{ selected.title }}</h1>
 
         <div class="event-meta">
           <span>▤ <strong>1</strong> 篇报道</span>
-          <span>♧ <strong>1</strong> 个报道来源</span>
+          <span>♧ <strong>1</strong> 个原始信源</span>
           <span>◷ {{ selected.date }} 更新</span>
         </div>
 
@@ -52,7 +52,7 @@ const detailTab=ref('overview')
           <p class="event-summary">{{ selected.summary }}</p>
 
           <div class="event-generated">
-            AI 根据报道生成 · {{ selected.date }}
+            信息状态 · {{ selected.source }} · {{ selected.date }} · 原文直达
           </div>
 
           <div class="event-progress">
@@ -73,8 +73,8 @@ const detailTab=ref('overview')
           </section>
 
           <section class="event-side-card">
-            <div class="event-side-head"><h2>官方一手</h2><span>1 篇</span></div>
-            <p class="side-caption">直接了解当事方的说法</p>
+            <div class="event-side-head"><h2>原始信源</h2><span>1 篇</span></div>
+            <p class="side-caption">不把二次转述当成事实，直接打开原文核对。</p>
             <a :href="selected.url" target="_blank" rel="noopener" class="source-story">
               <small>{{ selected.source }}</small>
               <strong>{{ selected.title }} <i>›</i></strong>
@@ -128,7 +128,7 @@ const detailTab=ref('overview')
           <time>{{ item.date }}</time>
           <div class="timeline-pin"><i></i></div>
           <button class="timeline-story" @click="onOpen(item)">
-            <div class="story-meta"><span>{{ item.lane }}</span><b>{{ item.source }}</b></div>
+            <div class="story-meta"><span>{{ item.lane }}</span><b>{{ item.source }}</b><small>原文可追溯</small></div>
             <h2>{{ item.title }}</h2>
             <p>{{ item.summary }}</p>
             <div class="story-foot"><span v-for="tag in item.tags?.slice(0,3)" :key="tag">#{{ tag }}</span><strong>查看完整情报 →</strong></div>
