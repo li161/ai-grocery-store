@@ -72,15 +72,23 @@ function classifyAction(text = '') {
   return '平台规则/费用'
 }
 function relevance(item) {
-  const text = item.title + ' ' + item.summary + ' ' + item.source
+  const title = String(item.title || '')
+  const summary = String(item.summary || '')
+  const text = title + ' ' + summary
   const aliases = {
     '淘宝': /淘宝|天猫|千问|阿里巴巴|淘天|淘宝闪购/i,
-    '京东': /京东|京麦|东东|京ME|京东AI购/i,
+    '京东': /京东|京麦|京ME|京东AI购|京东秒送/i,
     '美团': /美团|CatPaw|智能掌柜|袋鼠管家|小团|美团闪购|大众点评/i,
     '拼多多': /拼多多|多多买菜|多多果园|拼多多商家版/i
   }
-  const action = /发布|上线|推出|更新|升级|调整|新增|开放|测试|规则|公告|政策|收费|佣金|补贴|流量|搜索|推荐|导购|购物助手|App|版本|工具|接口|配送|履约|AI|隐私|商品|商家|商户|卖家|经营|营销|活动|供应链|售后/i.test(text)
-  return action && (aliases[item.platform]?.test(text) || aliases[item.platform]?.test(item.query || ''))
+  const retailContext = /电商|零售|购物|商品|商家|商户|卖家|店铺|经营|平台规则|佣金|流量|促销|营销|补贴|订单|售后|物流|配送|履约|供应链|即时零售|开放平台|商家版|经营工具|导购|购物助手|搜索|推荐|广告投放|商品发布|AI购|千问|智能掌柜|袋鼠管家|多多买菜|京麦|淘宝闪购|美团闪购|京东秒送/i
+  const action = /发布|上线|推出|更新|升级|调整|新增|开放|测试|规则|公告|政策|收费|佣金|补贴|流量|搜索|推荐|导购|购物助手|App|版本|工具|接口|配送|履约|AI|隐私|商品|商家|商户|卖家|经营|营销|活动|供应链|售后/i
+  const obviousNoise = /游戏玩家|声卡驱动|驱动问题|官方入口安装|棋牌|博彩|娱乐城|成人用品|招聘信息|天气预报|足球比分/i
+  if (!item.platform || !aliases[item.platform]) return false
+  if (!title || obviousNoise.test(title)) return false
+  // Never use the search query itself as evidence that a result is relevant.
+  // Require the result content itself to mention the platform and retail/e-commerce context.
+  return aliases[item.platform].test(title) && retailContext.test(text) && action.test(title)
 }
 async function mapLimit(items, limit, fn) {
   const output = new Array(items.length)
@@ -212,7 +220,7 @@ const meituanRulesResult = await fetchMeituanRuleDirectory()
 const meituanRuleItems = meituanRulesResult.items
 const found = [...results.flatMap(result => result.items), ...jdOfficialItems, ...meituanRuleItems].filter(relevance)
 const merged = new Map()
-for (const item of [...(previous.items || []), ...found]) {
+for (const item of [...(previous.items || []).filter(relevance), ...found]) {
   const key = String(item.platform || item.lane || 'unknown') + ':' + String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
   if (!key) continue
   const existing = merged.get(key)
