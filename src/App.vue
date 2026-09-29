@@ -3,27 +3,27 @@ import { ref } from 'vue'
 import StoreNav from './components/StoreNav.vue'
 import StoreHero from './components/StoreHero.vue'
 import ToolShelf from './components/ToolShelf.vue'
+import RetailNewsShelf from './components/RetailNewsShelf.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
+import { useRetailNews } from './composables/useRetailNews'
 
 const { activeCategory, keyword, filteredTools } = useCatalog()
+const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, syncLabel } = useRetailNews()
 const drawerTool = ref(null)
 const showSearch = ref(false)
 const detail = ref(null)
 
 function openIndustry(item) { detail.value = { type: 'industry', ...item } }
 function openBundle(item) { detail.value = { type: 'bundle', ...item } }
+function openNews(item) { detail.value = { type: 'news', ...item } }
 function closeDetail() { detail.value = null }
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
-function openTool(tool) {
-  drawerTool.value = tool
-}
-function goSearch() {
-  showSearch.value = true
-}
+function openTool(tool) { drawerTool.value = tool }
+function goSearch() { showSearch.value = true }
 </script>
 
 <template>
@@ -52,7 +52,7 @@ function goSearch() {
             <div class="industry-shelf-label">{{ item.name }}</div>
             <div class="industry-body"><span class="industry-icon">{{ item.icon }}</span><div><strong>{{ item.name }}</strong><small>{{ item.text }}</small></div><span class="industry-arrow">↗</span></div>
             <div class="industry-beam"></div>
-          </article>
+          </button>
         </div>
       </section>
 
@@ -66,9 +66,20 @@ function goSearch() {
             <div class="bundle-head"><span>{{ bundle.label }}</span><span>READY</span></div>
             <div class="bundle-body"><div class="bundle-bag">AI</div><div><h3>{{ bundle.title }}</h3><p>{{ bundle.flow }}</p></div></div>
             <div class="bundle-foot">打开套装 <span>→</span></div>
-          </article>
+          </button>
         </div>
       </section>
+
+      <RetailNewsShelf
+        :lanes="newsLanes"
+        :activeLane="activeNewsLane"
+        :keyword="newsKeyword"
+        :news="filteredNews"
+        :syncLabel="syncLabel"
+        :onOpen="openNews"
+        @update:activeLane="activeNewsLane = $event"
+        @update:keyword="newsKeyword = $event"
+      />
 
       <section id="lab" class="lab-section">
         <div class="lab-copy"><span class="eyebrow">BACK ROOM · EXPERIMENTS</span><h2>后院实验室</h2><p>这里不卖单个工具，专门研究怎么把 Prompt、Agent、Workflow 和 MCP 串成真正能工作的东西。</p><button @click="scrollTo('tools')">去看看货架里的工具 <span>→</span></button></div>
@@ -94,53 +105,46 @@ function goSearch() {
       </div>
     </transition>
 
-
     <transition name="fade">
       <div v-if="detail" class="detail-mask" @click.self="closeDetail">
         <article class="detail-page">
           <button class="detail-close" @click="closeDetail">×</button>
-
           <header class="detail-hero">
-            <span class="eyebrow">{{ detail.type === 'industry' ? 'INDUSTRY INTELLIGENCE' : 'READY-MADE AI KIT' }}</span>
+            <span class="eyebrow">{{ detail.type === 'industry' ? 'INDUSTRY INTELLIGENCE' : detail.type === 'bundle' ? 'READY-MADE AI KIT' : 'RETAIL INTELLIGENCE' }}</span>
             <div class="detail-title-row">
               <span class="detail-icon">{{ detail.icon || 'AI' }}</span>
-              <div>
-                <h2>{{ detail.name || detail.title }}</h2>
-                <p>{{ detail.text || detail.flow }}</p>
-              </div>
+              <div><h2>{{ detail.name || detail.title }}</h2><p>{{ detail.text || detail.flow || detail.source }}</p></div>
             </div>
-            <p class="detail-headline">{{ detail.headline || detail.trigger }}</p>
+            <p class="detail-headline">{{ detail.headline || detail.trigger || detail.impact }}</p>
           </header>
 
           <div class="detail-grid">
             <section class="detail-main">
               <div class="detail-block">
                 <span class="detail-label">为什么现在值得看</span>
-                <p>{{ detail.summary || detail.trigger }}</p>
+                <p>{{ detail.summary || detail.trigger || detail.impact }}</p>
               </div>
-
               <div class="detail-block">
-                <span class="detail-label">{{ detail.type === 'industry' ? '可以直接拿来做什么' : '执行流程' }}</span>
+                <span class="detail-label">{{ detail.type === 'industry' ? '可以直接拿来做什么' : detail.type === 'bundle' ? '执行流程' : '下一步可以做什么' }}</span>
                 <div class="action-list">
-                  <div v-for="(item,index) in (detail.actions || detail.steps)" :key="item">
-                    <b>0{{ index + 1 }}</b><span>{{ item }}</span>
-                  </div>
+                  <div v-for="(item,index) in (detail.actions || detail.steps || [detail.impact, detail.action])" :key="item"><b>0{{ index + 1 }}</b><span>{{ item }}</span></div>
                 </div>
               </div>
             </section>
 
             <aside class="detail-side">
-              <div class="detail-block">
+              <div v-if="detail.tools" class="detail-block">
                 <span class="detail-label">推荐工具</span>
                 <div class="tool-chips"><span v-for="tool in detail.tools" :key="tool">{{ tool }}</span></div>
               </div>
-
-              <div class="detail-block">
-                <span class="detail-label">最新资讯依据</span>
-                <a v-for="source in detail.sources" :key="source.url" class="source-item" :href="source.url" target="_blank" rel="noopener">
-                  <strong>{{ source.title }}</strong>
-                  <small>{{ source.name }} · {{ source.date }} ↗</small>
-                </a>
+              <div v-if="detail.tags" class="detail-block">
+                <span class="detail-label">情报标签</span>
+                <div class="tool-chips"><span v-for="tag in detail.tags" :key="tag">{{ tag }}</span></div>
+              </div>
+              <div v-if="detail.sources || detail.url" class="detail-block">
+                <span class="detail-label">{{ detail.type === 'news' ? '原始来源' : '最新资讯依据' }}</span>
+                <a v-if="detail.url" class="source-item" :href="detail.url" target="_blank" rel="noopener"><strong>{{ detail.title }}</strong><small>{{ detail.source }} · {{ detail.date }} ↗</small></a>
+                <a v-for="source in detail.sources" :key="source.url" class="source-item" :href="source.url" target="_blank" rel="noopener"><strong>{{ source.title }}</strong><small>{{ source.name }} · {{ source.date }} ↗</small></a>
               </div>
             </aside>
           </div>
