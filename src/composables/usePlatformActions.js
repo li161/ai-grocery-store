@@ -15,7 +15,7 @@ export function usePlatformActions() {
       if (!response.ok) throw new Error('HTTP ' + response.status)
       const archive = await response.json()
       items.value = Array.isArray(archive.items) ? archive.items : []
-      meta.value = { year: archive.year || new Date().getFullYear(), generatedAt: archive.generatedAt || null, coverageNote: archive.coverageNote || '', sourceHealth: archive.sourceHealth || {} }
+      meta.value = { year: archive.year || new Date().getFullYear(), generatedAt: archive.generatedAt || null, coverageNote: archive.coverageNote || '', sourceHealth: archive.sourceHealth || {}, sourceDirectory: archive.sourceDirectory || [] }
       error.value = ''
     } catch (e) {
       error.value = '年度平台动作数据暂时无法更新，正在保留上次成功读取的数据。'
