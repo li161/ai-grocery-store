@@ -16,7 +16,32 @@ const FEED_DEFS = [
   {name:'JD AI Retail',query:'site:jdcorporateblog.com AI retail shopping',lane:'中国零售',sourceType:'官方'},
   {name:'Retail Dive AI',query:'site:retaildive.com AI retail shopping',lane:'零售运营',sourceType:'行业媒体'},
   {name:'Grocery AI',query:'grocery retail AI store inventory checkout',lane:'零售运营',sourceType:'行业媒体'},
-  {name:'Retail AI China',query:'中国 零售 AI 门店 智能购物车 库存 推荐',lane:'中国零售',sourceType:'行业媒体'}
+  {name:'Retail AI China',query:'中国 零售 AI 门店 智能购物车 库存 推荐',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'Retail Dive Commerce',query:'site:retaildive.com artificial intelligence retail ecommerce',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Modern Retail',query:'site:modernretail.co AI retail ecommerce automation',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Retail Brew',query:'site:retailbrew.com AI retail grocery ecommerce',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Chain Store Age',query:'site:chainstoreage.com AI retail store technology',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'NRF Retail',query:'site:nrf.com AI retail technology stores',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Grocery Dive',query:'site:grocerydive.com AI grocery retail technology',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Supply Chain AI',query:'AI demand forecasting inventory replenishment retail supply chain',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Retail Loss Prevention',query:'AI shrink prevention loss prevention grocery retail',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Retail Pricing',query:'AI dynamic pricing retail grocery pricing optimization',lane:'零售运营',sourceType:'行业媒体'},
+  {name:'Retail Personalization',query:'generative AI personalization ecommerce conversion retail',lane:'AI 导购',sourceType:'行业媒体'},
+  {name:'Agent Checkout',query:'AI agent checkout payments commerce protocol retail',lane:'Agentic Commerce',sourceType:'行业媒体'},
+  {name:'Shopify AI',query:'site:shopify.com/news AI commerce merchant retail',lane:'AI 导购',sourceType:'官方'},
+  {name:'Instacart AI',query:'site:instacart.com/company AI grocery shopping retail',lane:'AI 导购',sourceType:'官方'},
+  {name:'Kroger AI',query:'site:ir.kroger.com AI digital retail grocery',lane:'零售运营',sourceType:'官方'},
+  {name:'Carrefour AI',query:'site:carrefour.com AI retail store digital',lane:'零售运营',sourceType:'官方'},
+  {name:'Tesco AI',query:'site:tescoplc.com AI retail data technology',lane:'零售运营',sourceType:'官方'},
+  {name:'Amazon Marketplace',query:'site:aboutamazon.com/news/retail AI seller marketplace shopping',lane:'AI 导购',sourceType:'官方'},
+  {name:'Alibaba Retail AI',query:'阿里巴巴 AI 电商 淘宝 天猫 经营 智能体',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'JD Retail AI',query:'京东 AI 零售 采销 供应链 门店 智能体',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'Meituan Retail AI',query:'美团 AI 零售 即时零售 配送 经营',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'Pinduoduo AI',query:'拼多多 AI 电商 商家 运营 推荐',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'China Supermarket AI',query:'中国 超市 AI 补货 需求预测 损耗 供应链',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'China Store Tech',query:'中国 商超 数字化 人工智能 智能购物车 自助结账',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'Retail AI Investment',query:'retail AI startup funding shopping agent commerce investment',lane:'平台博弈',sourceType:'行业媒体'},
+  {name:'Retail AI Results',query:'retailer AI pilot results sales conversion labor productivity ROI',lane:'经营结果',sourceType:'行业媒体'}
 ]
 
 function isoDay(d){return d.toISOString().slice(0,10)}
@@ -49,7 +74,7 @@ const changesFile = new URL('../public/retail-changes.json', import.meta.url)
 const historyDir = new URL('../public/retail-history/', import.meta.url)
 
 function decode(v=''){return v.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>')}
-function tag(xml,name){const r=new RegExp('<'+name+'(?:\\s[^>]*)?>([\s\S]*?)</'+name+'>','i');return decode((xml.match(r)||[])[1]||'')}
+function tag(xml,name){const r=new RegExp('<'+name+'(?:\\s[^>]*)?>([\\s\\S]*?)</'+name+'>','i');return decode((xml.match(r)||[])[1]||'')}
 function tokens(s=''){return new Set((s.toLowerCase().match(/[a-z0-9]+|[\u4e00-\u9fff]{2,4}/g)||[]).filter(x=>x.length>1))}
 function sim(a,b){const A=tokens(a),B=tokens(b),U=new Set([...A,...B]);return U.size?[...A].filter(x=>B.has(x)).length/U.size:0}
 function hash(s=''){let h=2166136261;for(const ch of s.toLowerCase()){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
@@ -61,7 +86,7 @@ async function fetchFeed(feed){
     const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/4.0'}})
     if(!r.ok)throw Error('HTTP '+r.status)
     const xml=await r.text()
-    const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,40).map(m=>{
+    const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,60).map(m=>{
       const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source')
       if(!title||!url)return null
       const d=Date.parse(pd)
@@ -93,7 +118,7 @@ const liveCutoff=todayMs-LIVE_DAYS*86400000
 const unique=raw.filter(x=>{const k=x.title.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).filter(x=>{const p=Date.parse(x.publishedAt||x.date),discovered=Date.parse(x.discoveredAt||x.publishedAt||x.date);const timeline=(Number.isFinite(p)&&Number.isFinite(discovered)&&discovered-p>72*3600000)?p:discovered;return Number.isFinite(timeline)&&timeline>=liveCutoff})
 const previousLive=previous.filter(x=>{const p=Date.parse(x.publishedAt||x.date),discovered=Date.parse(x.discoveredAt||x.publishedAt||x.date);const timeline=(Number.isFinite(p)&&Number.isFinite(discovered)&&discovered-p>72*3600000)?p:discovered;return Number.isFinite(timeline)&&timeline>=liveCutoff})
 const previousByTitle=new Map(previousLive.map(x=>[x.title.toLowerCase().trim(),x]))
-const fresh=unique.filter(x=>!previousByTitle.has(x.title.toLowerCase().trim())).slice(0,120)
+const fresh=unique.filter(x=>!previousByTitle.has(x.title.toLowerCase().trim())).slice(0,240)
 const scores=await score(fresh),scoreMap=new Map(scores.map(x=>[Number(x.index),x]))
 const scored=fresh.map((x,i)=>{const h=heuristic(x),s=scoreMap.get(i);return {...x,...h,...(s?{relevanceScore:Number(s.relevance||0),impactScore:Number(s.impact||0),noveltyScore:Number(s.novelty||0),evidenceScore:Number(s.evidence||0),keep:Boolean(s.keep),llmReason:String(s.reason||'')}:{}),scoredBy:s?'llm+heuristic':'heuristic'}}).filter(x=>(x.keep??true)&&(x.relevanceScore||0)>=45)
 const existing=unique.filter(x=>previousByTitle.has(x.title.toLowerCase().trim())).map(x=>({...x,...previousByTitle.get(x.title.toLowerCase().trim())}))
