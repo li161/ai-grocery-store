@@ -23,6 +23,7 @@ export function useRetailNews() {
       if (!response.ok) throw new Error('HTTP ' + response.status)
       const payload = await response.json()
       if (!Array.isArray(payload.items)) throw new Error('invalid payload')
+      if (!payload.items.length) return
       liveNews.value = payload.items
       lastSyncedAt.value = payload.generatedAt || seedSyncedAt
       liveState.value = 'live'
