@@ -34,6 +34,14 @@ function formatDate(item) {
   const date = String(item.publishedAt || item.date || '')
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '日期待核验'
 }
+function formatDateTime(value) {
+  if (!value) return '尚无成功同步记录'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return String(value)
+  const parts = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(date)
+  const part = type => parts.find(item => item.type === type)?.value || ''
+  return part('year') + '-' + part('month') + '-' + part('day') + ' ' + part('hour') + ':' + part('minute') + '（北京时间）'
+}
 </script>
 
 <template>
@@ -97,9 +105,9 @@ function formatDate(item) {
     </div>
 
     <footer class="platform-footer">
-      <div><strong>采集边界</strong><p>{{ meta.coverageNote || '持续监测平台公开公告、产品发布、App 版本和商家经营规则。' }}</p></div>
-      <small>状态说明：官方确认表示有可追溯的官方来源；自动发现·待核验表示搜索候选，需回查原文后才能作为事实使用。公开数据无法覆盖仅对特定商家开放的后台通知、灰度功能或私域通知。</small>
-      <span>最近归档：{{ meta.generatedAt || '尚无成功同步记录' }}</span>
+      <div class="coverage-note"><strong>采集范围与限制</strong><p>{{ meta.coverageNote || '持续监测平台公开公告、产品发布、App 版本和商家经营规则。' }}</p></div>
+      <small class="status-note"><strong>状态说明：</strong>「官方确认」表示有可追溯的官方来源；「自动发现·待核验」表示搜索候选，须回查原文后才能作为事实使用。公开数据无法覆盖仅对特定商家开放的后台通知、灰度功能或私域通知。</small>
+      <span class="archive-time"><strong>最近归档</strong><time :datetime="meta.generatedAt || undefined">{{ formatDateTime(meta.generatedAt) }}</time></span>
     </footer>
   </section>
 </template>
@@ -130,6 +138,10 @@ function formatDate(item) {
 .platform-actions-module .action-interpretation>div{border-left:2px solid color-mix(in srgb,var(--app-accent,#9a7040) 45%,transparent);border-radius:2px}
 .platform-actions-module .platform-empty{border-radius:4px}
 .platform-actions-module .platform-footer{border-color:var(--app-line,#d2c0a8)}
+.platform-actions-module .platform-footer .coverage-note,.platform-actions-module .platform-footer .status-note{max-width:100%;min-width:0;overflow-wrap:anywhere}
+.platform-actions-module .platform-footer .archive-time{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;padding-top:9px;border-top:1px solid var(--line,#d2c0a8);font-variant-numeric:tabular-nums}
+.platform-actions-module .platform-footer .archive-time strong{white-space:nowrap}
+.platform-actions-module .platform-footer .archive-time time{color:var(--text-secondary,#75685b)}
 .platform-heading{align-items:flex-start!important;gap:24px}
 .platform-heading h1{margin:0 0 10px;font-size:clamp(27px,3.3vw,38px);letter-spacing:-.035em}
 .platform-heading p{max-width:720px;line-height:1.8}
