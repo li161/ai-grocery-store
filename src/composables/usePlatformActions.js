@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-const ARCHIVE_URL = 'platform-actions-2026.json'
+const ARCHIVE_URL = 'platform-actions-' + new Date().getFullYear() + '.json'
 const REFRESH_MS = 5 * 60 * 1000
 const SOURCE_DIRECTORY = [{"platform":"淘宝","name":"阿里巴巴官方新闻","url":"https://www.alibabagroup.com/"},{"platform":"淘宝","name":"淘宝开放平台","url":"https://open.taobao.com/"},{"platform":"淘宝","name":"天猫规则中心","url":"https://rule.tmall.com/"},{"platform":"淘宝","name":"淘宝 App 版本记录","url":"https://apps.apple.com/cn/app/%E6%B7%98%E5%AE%9D/id387682726"},{"platform":"京东","name":"京东秒送开放平台公告","url":"https://opendj.jd.com/api/notice.htm"},{"platform":"京东","name":"京东开放平台","url":"https://open.jd.com/"},{"platform":"京东","name":"京东 App 版本记录","url":"https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413"},{"platform":"京东","name":"京东 AI 购版本记录","url":"https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090"},{"platform":"美团","name":"美团商家生态新闻","url":"https://www.meituan.com/news?category=merchants-ecology"},{"platform":"美团","name":"美团规则中心","url":"https://rules-center.meituan.com/"},{"platform":"美团","name":"美团 App 版本记录","url":"https://apps.apple.com/cn/app/%E7%BE%8E%E5%9B%A2/id423084029"},{"platform":"拼多多","name":"拼多多商家版 App 版本记录","url":"https://apps.apple.com/mo/app/pinduoduo-seller-center/id1229469444"},{"platform":"拼多多","name":"拼多多开放平台","url":"https://open.pinduoduo.com/"},{"platform":"拼多多","name":"拼多多商家帮助中心","url":"https://mms.pinduoduo.com/"}]
 
