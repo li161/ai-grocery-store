@@ -27,7 +27,15 @@ const queries = [
   { platform:'拼多多', actionType:'AI导购/购物助手', sourceType:'公开检索', query:'拼多多 AI 导购 商品推荐 购物助手 新功能 2026' },
   { platform:'拼多多', actionType:'商家经营工具', sourceType:'官方检索', query:'site:open.pinduoduo.com 拼多多 商家工具 ERP 接口 数据传输 公告 2026' },
   { platform:'拼多多', actionType:'平台规则/费用', sourceType:'官方检索', query:'site:pinduoduo.com OR site:yangkeduo.com 拼多多 商家 规则 政策 公告 费用 2026' },
-  { platform:'拼多多', actionType:'流量/营销/补贴', sourceType:'公开检索', query:'拼多多商家版 免费流量 活动报名 补贴 营销工具 2026' }
+  { platform:'拼多多', actionType:'流量/营销/补贴', sourceType:'公开检索', query:'拼多多商家版 免费流量 活动报名 补贴 营销工具 2026' },
+  { platform:'淘宝', actionType:'AI导购/购物助手', sourceType:'公开检索', query:'淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026' },
+  { platform:'淘宝', actionType:'App/产品功能', sourceType:'公开检索', query:'天猫 AI空间站 Token充值中心 数字商品 上线 2026' },
+  { platform:'京东', actionType:'商家经营工具', sourceType:'公开检索', query:'京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026' },
+  { platform:'京东', actionType:'AI导购/购物助手', sourceType:'公开检索', query:'京东 App 东东 AI购物助手 视频搜同款 3D商品 语音导购 2026' },
+  { platform:'美团', actionType:'商家经营工具', sourceType:'官方检索', query:'site:meituan.com/news CatPaw 智能掌柜 袋鼠管家 商家 AI 2026' },
+  { platform:'美团', actionType:'平台规则/费用', sourceType:'官方检索', query:'site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026' },
+  { platform:'拼多多', actionType:'AI导购/购物助手', sourceType:'公开检索', query:'拼多多 AI搜索 自然语言搜索 灰度测试 上线 2026' },
+  { platform:'拼多多', actionType:'商家经营工具', sourceType:'官方检索', query:'site:open.pinduoduo.com/application/document/announcement 拼多多 商家 开放平台 公告 接口 2026' }
 ]
 
 function decode(s='') {
@@ -55,7 +63,15 @@ function parseFeed(xml, query) {
   }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
 }
 function relevance(item) {
-  return /淘宝|天猫|京东|美团|拼多多|商家|商户|卖家|导购|购物|商品|App|应用|平台|AI|规则|流量|营销|补贴|配送|履约|经营|版本|新功能|上线|发布|佣金|广告|搜索|推荐|订单|库存|供应链/i.test(item.title + ' ' + item.summary)
+  const text = item.title + ' ' + item.summary + ' ' + item.source
+  const aliases = {
+    '淘宝': /淘宝|天猫|千问|阿里巴巴|淘天|淘宝闪购/i,
+    '京东': /京东|京麦|东东|京ME|京东AI购/i,
+    '美团': /美团|CatPaw|智能掌柜|袋鼠管家|小团|美团闪购|大众点评/i,
+    '拼多多': /拼多多|多多买菜|多多果园|拼多多商家版/i
+  }
+  const action = /发布|上线|推出|更新|升级|调整|新增|开放|测试|规则|公告|政策|收费|佣金|补贴|流量|搜索|推荐|导购|购物助手|App|版本|工具|接口|配送|履约|AI|隐私|商品|商家|商户|卖家|经营|营销|活动|供应链|售后/i.test(text)
+  return action && (aliases[item.platform]?.test(text) || aliases[item.platform]?.test(item.query || ''))
 }
 async function mapLimit(items, limit, fn) {
   const output = new Array(items.length)
