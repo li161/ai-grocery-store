@@ -111,7 +111,10 @@ onMounted(() => {
   <div class="site">
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
-      <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
+      <template v-if="activeSection === 'home'">
+        <StoreHero :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
+        <RetailNewsShelf :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews.slice(0,12)" :syncLabel="syncLabel" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
+      </template>
 
       <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
