@@ -13,3 +13,5 @@
 
 线上地址：
 https://li161.github.io/ai-grocery-store/
+
+Deployment trigger: GitHub Pages workflow.
