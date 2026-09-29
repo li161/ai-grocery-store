@@ -27,6 +27,49 @@
       "status": "已由应用版本记录确认"
     },
     {
+      "id": "jd-merchant-ai-center-upgrade-2026-09-23",
+      "platform": "京东",
+      "lane": "京东",
+      "actionType": "商家经营工具",
+      "date": "2026-09-23",
+      "publishedAt": "2026-09-23",
+      "source": "新华网",
+      "sourceType": "媒体报道·引用平台发布",
+      "status": "媒体报道已查，需继续核对京东原始公告",
+      "title": "京东升级京麦 AI 经营中心并发布首批 AI 专家团",
+      "summary": "报道显示，京麦 AI 经营中心整合超级助手、AI 专家、全链路诊断、第三方工具市场和商家自建工具，覆盖选品、发品、营销、履约、售后等环节。报道还提到商品信息分与 AI 商品经营中心升级。",
+      "impact": "商家经营工具从单点生成扩展到流程级诊断和批量操作；商品信息完整度可能直接影响 AI 发布、曝光和转化效果。",
+      "action": "核对京麦后台的开放范围、商品信息分规则、授权执行边界和第三方工具接入要求。",
+      "tags": [
+        "京麦AI经营中心",
+        "AI专家团",
+        "商品信息分",
+        "商家工具"
+      ],
+      "url": "https://www.xinhuanet.com/tech/20260923/68acc114e0474050af0bd1e5f49be536/c.html"
+    },
+    {
+      "id": "meituan-rules-fulfillment-2026-09-21",
+      "platform": "美团",
+      "lane": "美团",
+      "actionType": "平台规则/费用",
+      "date": "2026-09-21",
+      "publishedAt": "2026-09-21",
+      "source": "美团规则中心",
+      "sourceType": "官方规则目录",
+      "status": "官方目录可查·规则正文需逐条核验",
+      "title": "美团到店餐饮商户履约保障管理办法更新",
+      "summary": "美团规则中心近期公告目录列出到店餐饮商户履约保障管理办法，涉及商户履约管理。适用对象、具体义务和处罚条款须以规则正文为准。",
+      "impact": "商家应留意履约标准、取消/退款处理、证据留存和规则生效时间，避免仅凭标题推断具体责任。",
+      "action": "打开规则正文核对生效日期、适用范围、履约指标及违规处理条款。",
+      "tags": [
+        "美团规则中心",
+        "履约保障",
+        "到店餐饮"
+      ],
+      "url": "https://rules-center.meituan.com/"
+    },
+    {
       "id": "meituan-flash-flower-image-2026-09-18",
       "lane": "美团",
       "date": "2026-09-18",
@@ -47,6 +90,29 @@
       "actionType": "平台规则/费用"
     },
     {
+      "id": "meituan-flash-category-rules-sept-2026",
+      "platform": "美团",
+      "lane": "美团",
+      "actionType": "平台规则/费用",
+      "date": "2026-09-18",
+      "publishedAt": "2026-09-18",
+      "source": "美团规则中心",
+      "sourceType": "官方规则目录",
+      "status": "官方目录可查·规则正文需逐条核验",
+      "title": "美团闪购更新花束类商品图文不符及大闸蟹商品管理规则",
+      "summary": "美团规则中心近期公告目录列出花束类商品花图不符违规处理规则、大闸蟹商品品质及违规处理规则，以及大闸蟹实拍发货管理规则。各规则发布日期和具体要求应逐条以原文确认。",
+      "impact": "生鲜与鲜花商家需要重点核查实物、图片、规格、品质证明和实际发货的一致性。",
+      "action": "按 SKU 检查实拍图、品质/产地证明、规格描述、发货记录与售后凭证，并记录规则生效时间。",
+      "tags": [
+        "美团闪购",
+        "生鲜规则",
+        "花束",
+        "大闸蟹",
+        "实拍发货"
+      ],
+      "url": "https://rules-center.meituan.com/"
+    },
+    {
       "id": "meituan-flash-crab-quality-2026-09-17",
       "lane": "美团",
       "date": "2026-09-17",
@@ -65,6 +131,27 @@
       "url": "https://rules-center.meituan.com/?commonType=25",
       "platform": "美团",
       "actionType": "平台规则/费用"
+    },
+    {
+      "id": "pdd-ai-search-shopping-2026-09-15",
+      "platform": "拼多多",
+      "lane": "拼多多",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-09-15",
+      "publishedAt": "2026-09-15",
+      "source": "新京报·贝壳财经（转载）",
+      "sourceType": "媒体报道·发布时间为报道日期",
+      "status": "媒体报道线索·上线日期与覆盖范围待核实",
+      "title": "媒体报道拼多多上线自然语言 AI 搜索，支持复杂需求筛选",
+      "summary": "媒体报道提到，拼多多于 2026 年启动 AI 搜索灰度测试并在年内上线，用户可用自然语言描述复杂需求，由系统理解并筛选商品版本、规格和价格区间。此记录采用报道发布日期，非功能首次上线日期。",
+      "impact": "商品标题、规格属性、价格区间和关键限制条件的结构化程度可能影响自然语言搜索的匹配结果。",
+      "action": "检查 SKU 属性完整性、规格命名一致性和价格/库存同步；后续核实商家端是否提供专门优化工具。",
+      "tags": [
+        "拼多多AI搜索",
+        "自然语言搜索",
+        "商品属性"
+      ],
+      "url": "https://finance.eastmoney.com/a/202609153874654649.html"
     },
     {
       "id": "meituan-service-retail-fulfillment-2026-09-11",
@@ -106,6 +193,51 @@
       "actionType": "平台规则/费用"
     },
     {
+      "id": "jd-app-dongdong-shopping-agent-2026-09-09",
+      "platform": "京东",
+      "lane": "京东",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-09-09",
+      "publishedAt": "2026-09-09",
+      "source": "新京报·贝壳财经（转载）",
+      "sourceType": "媒体报道",
+      "status": "媒体报道线索·功能开放范围待核实",
+      "title": "京东新版 App 推出原生购物 AI Agent“东东”",
+      "summary": "报道提到新版京东 App 推出东东购物助手，支持文字和语音找货、视频搜同款、3D 商品实景预览，并集成 AI 省钱和售后助手等入口。具体功能覆盖范围需以 App 实际版本为准。",
+      "impact": "商品视频、型号规格、可视化素材和优惠信息可能成为 AI 导购检索与推荐的重要输入。",
+      "action": "补齐商品型号、参数、场景化视频和优惠说明；实际测试东东入口对商品的呈现结果。",
+      "tags": [
+        "东东",
+        "AI导购",
+        "视频搜同款",
+        "3D预览"
+      ],
+      "url": "https://finance.eastmoney.com/a/202609153874654649.html"
+    },
+    {
+      "id": "meituan-ai-merchant-consumer-apps-2026-09-09",
+      "platform": "美团",
+      "lane": "美团",
+      "actionType": "商家经营工具",
+      "date": "2026-09-09",
+      "publishedAt": "2026-09-09",
+      "source": "新华网",
+      "sourceType": "媒体报道·引用美团发布",
+      "status": "媒体报道已查，部分指标为平台披露",
+      "title": "美团集中展示 CatPaw、智能掌柜、袋鼠管家与“小团”等 AI 应用",
+      "summary": "服贸会相关报道介绍美团 AI 经营工作台 CatPaw，以及面向商家的智能掌柜、袋鼠管家和面向消费者的本地生活 AI Agent“小团”。报道指出工具覆盖评价分析、经营诊断、门店巡检、菜单优化和消费决策等场景。",
+      "impact": "商家侧 AI 工具逐步覆盖经营诊断与日常工作流；消费者侧 AI 助手也可能改变本地生活搜索、比较和下单入口。",
+      "action": "分别验证堂食、外卖和即时零售业务的适用工具，确认接入条件、数据授权与自动执行范围。",
+      "tags": [
+        "CatPaw",
+        "智能掌柜",
+        "袋鼠管家",
+        "小团",
+        "AI经营"
+      ],
+      "url": "https://www2.xinhuanet.com/tech/20260909/79161147f2414bc79664a28d32802f8e/c.html"
+    },
+    {
       "id": "jd-main-app-ai-shopping-2026-09-07",
       "lane": "京东",
       "platform": "京东",
@@ -126,6 +258,28 @@
       ],
       "url": "https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413",
       "status": "版本记录可查，实际开放范围待跟踪"
+    },
+    {
+      "id": "tmall-ai-space-station-2026-09-03",
+      "platform": "淘宝",
+      "lane": "淘宝",
+      "actionType": "App/产品功能",
+      "date": "2026-09-03",
+      "publishedAt": "2026-09-03",
+      "source": "新京报·贝壳财经（转载）",
+      "sourceType": "媒体报道",
+      "status": "媒体报道线索·具体招商及结算规则待核实",
+      "title": "天猫上线 AI 空间站，将多家大模型订阅产品集中展示销售",
+      "summary": "媒体报道天猫上线 AI 空间站（Token 充值中心），集中展示阿里云、智谱、Kimi、MiniMax、DeepSeek 等模型订阅产品，并支持卡密或直充交付。报道还提及 AI Token 类商品的成交变化，相关数字属于报道引用的平台披露。",
+      "impact": "平台商品供给从传统实物扩展到模型额度和数字化服务，数字商品类目、交付、售后及资质规则值得关注。",
+      "action": "核对平台招商入口、数字商品资质、充值交付、退款限制和售后规则。",
+      "tags": [
+        "天猫AI空间站",
+        "Token充值",
+        "数字商品",
+        "大模型订阅"
+      ],
+      "url": "https://finance.eastmoney.com/a/202609153874654649.html"
     },
     {
       "id": "jd-ai-gou-shopping-guide-2026-07-31",
