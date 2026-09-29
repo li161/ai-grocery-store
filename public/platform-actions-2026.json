@@ -1,8 +1,31 @@
 {
   "generatedAt": "2026-09-29T06:04:20.294Z",
   "year": 2026,
-  "coverageNote": "年度公开情报初始清单。按可核验的官方规则中心/开放平台公告整理，并由定时任务继续补充。平台公开页面和新闻 RSS 的检索结果存在索引与条数限制，因此不能将当前清单视为平台全部公告；每条均保留可追溯原文入口。",
+  "coverageNote": "独立平台动作归档：涵盖 App/产品版本、AI导购/购物助手、商家经营工具、流量/营销/补贴、规则/费用、履约/供应链、治理/算法。来源包括官方公告/新闻、App Store版本记录、开放平台文档与行业线索；“待核验”记录不会当作已确认公告。公开搜索不保证覆盖所有商家后台和灰度功能。",
   "items": [
+    {
+      "id": "pdd-seller-app-campaign-updates-2026-09-26",
+      "lane": "拼多多",
+      "platform": "拼多多",
+      "actionType": "流量/营销/补贴",
+      "date": "2026-09-26",
+      "publishedAt": "2026-09-26",
+      "source": "拼多多商家版 App Store 版本记录",
+      "sourceType": "应用商店版本记录",
+      "title": "拼多多商家版连续更新活动报名与免费流量/补贴运营入口",
+      "summary": "商家版版本记录在 2026 年多次围绕免费流量、换季大促、开学季及 618 活动更新版本文案；最近记录包括 7.5.2（9 月下旬）、7.5.1（9 月 13 日）和 7.5.0（9 月 7 日）。这反映 App 更新持续突出活动报名与流量激励入口，不代表所有商家均可获得补贴。",
+      "impact": "商家需要及时查看活动报名资格、类目门槛、资源位、补贴条件和活动周期，避免将版本宣传理解为无条件流量承诺。",
+      "action": "定期检查商家版活动中心、报名资格、费用承担、优惠叠加规则和活动数据。",
+      "tags": [
+        "拼多多商家版",
+        "App更新",
+        "活动报名",
+        "免费流量",
+        "补贴"
+      ],
+      "url": "https://apps.apple.com/mo/app/pinduoduo-seller-center/id1229469444",
+      "status": "已由应用版本记录确认"
+    },
     {
       "id": "meituan-flash-flower-image-2026-09-18",
       "lane": "美团",
@@ -19,7 +42,9 @@
         "品质合规",
         "鲜花"
       ],
-      "url": "https://rules-center.meituan.com/?commonType=25"
+      "url": "https://rules-center.meituan.com/?commonType=25",
+      "platform": "美团",
+      "actionType": "平台规则/费用"
     },
     {
       "id": "meituan-flash-crab-quality-2026-09-17",
@@ -37,7 +62,9 @@
         "商品品质",
         "违规处理"
       ],
-      "url": "https://rules-center.meituan.com/?commonType=25"
+      "url": "https://rules-center.meituan.com/?commonType=25",
+      "platform": "美团",
+      "actionType": "平台规则/费用"
     },
     {
       "id": "meituan-service-retail-fulfillment-2026-09-11",
@@ -55,7 +82,9 @@
         "服务零售",
         "商家规则"
       ],
-      "url": "https://rules-center.meituan.com/?commonType=3"
+      "url": "https://rules-center.meituan.com/?commonType=3",
+      "platform": "美团",
+      "actionType": "履约/供应链"
     },
     {
       "id": "meituan-service-retail-violation-2026-09-11",
@@ -72,7 +101,77 @@
         "违规处理",
         "商家合规"
       ],
-      "url": "https://rules-center.meituan.com/?commonType=3"
+      "url": "https://rules-center.meituan.com/?commonType=3",
+      "platform": "美团",
+      "actionType": "平台规则/费用"
+    },
+    {
+      "id": "jd-main-app-ai-shopping-2026-09-07",
+      "lane": "京东",
+      "platform": "京东",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-09-07",
+      "publishedAt": "2026-09-07",
+      "source": "京东 App Store 版本记录",
+      "sourceType": "应用商店版本记录",
+      "title": "京东主 App 版本记录新增东东 AI 购物助手及视频通话购物相关功能",
+      "summary": "京东 App 版本记录提及东东 AI 购物助手、视频通话购物、AI 问答卡、AI 智能订单管家和商品优惠问答等能力。具体功能的用户覆盖范围需以 App 内实际开放情况为准。",
+      "impact": "平台导购可能同时覆盖问答、视频沟通、订单服务和优惠决策，商品内容与客服响应质量的重要性可能提升。",
+      "action": "关注 App 实际入口、功能灰度范围及商品视频/参数/优惠信息的可读性。",
+      "tags": [
+        "东东AI购物助手",
+        "视频通话购物",
+        "AI问答卡",
+        "订单管家"
+      ],
+      "url": "https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413",
+      "status": "版本记录可查，实际开放范围待跟踪"
+    },
+    {
+      "id": "jd-ai-gou-shopping-guide-2026-07-31",
+      "lane": "京东",
+      "platform": "京东",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-07-31",
+      "publishedAt": "2026-07-31",
+      "source": "京东 AI 购 App Store 版本记录",
+      "sourceType": "应用商店版本记录",
+      "title": "京东 AI 购升级“金牌导购”：边看视频边问、找同款与 AI 省钱",
+      "summary": "京东 AI 购应用版本记录披露，“金牌导购”新增边看视频边问、找同款和推荐；AI 省钱支持对话问答、优惠方案、价格关注列表等能力。",
+      "impact": "视频内容、商品讲解、同款匹配与优惠信息可能成为新的导购和转化触点。",
+      "action": "检查商品视频、主图、型号规格、优惠规则和同款关联信息是否准确。",
+      "tags": [
+        "京东AI购",
+        "金牌导购",
+        "视频导购",
+        "找同款",
+        "AI省钱"
+      ],
+      "url": "https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090",
+      "status": "已由应用版本记录确认"
+    },
+    {
+      "id": "meituan-catpaw-agent-platform-2026-07-28",
+      "lane": "美团",
+      "platform": "美团",
+      "actionType": "商家经营工具",
+      "date": "2026-07-28",
+      "publishedAt": "2026-07-28",
+      "source": "美团技术团队官方博客",
+      "sourceType": "官方",
+      "title": "美团发布 CatPaw 全场景 AI Agent 平台，覆盖经营分析与营销物料等技能",
+      "summary": "美团技术团队介绍 CatPaw AI Agent 平台及企业托管能力，并披露本地生活领域技能覆盖门店评价诊断、商品文案、营销物料、活动策划和经营数据分析等场景。",
+      "impact": "商家可能获得可组合的 AI 经营技能，需关注是否面向外部商家开放、数据接入和操作权限边界。",
+      "action": "跟踪商家版专家/技能的开放计划、适配业态和与现有商家系统的集成方式。",
+      "tags": [
+        "CatPaw",
+        "AI Agent",
+        "营销物料",
+        "经营分析",
+        "数字员工"
+      ],
+      "url": "https://tech.meituan.com/2026/07/28/CatPaw-LongCat.html",
+      "status": "已由官方技术博客确认"
     },
     {
       "id": "jd-delivery-track-2026-07-16",
@@ -90,7 +189,9 @@
         "履约",
         "接口对接"
       ],
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=409"
+      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=409",
+      "platform": "京东",
+      "actionType": "商家经营工具"
     },
     {
       "id": "jd-pickup-address-2026-07-06",
@@ -108,7 +209,9 @@
         "外卖履约",
         "地址配置"
       ],
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=408"
+      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=408",
+      "platform": "京东",
+      "actionType": "履约/供应链"
     },
     {
       "id": "jd-service-provider-migration-2026",
@@ -126,7 +229,120 @@
         "API",
         "服务商"
       ],
-      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=407"
+      "url": "https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=407",
+      "platform": "京东",
+      "actionType": "平台规则/费用"
+    },
+    {
+      "id": "meituan-ai-merchant-guard-2026-06-24",
+      "lane": "美团",
+      "platform": "美团",
+      "actionType": "商家经营工具",
+      "date": "2026-06-24",
+      "publishedAt": "2026-06-24",
+      "source": "美团商家生态官方新闻",
+      "sourceType": "官方",
+      "title": "美团上线“商家 AI 守护”系列工具，治理恶意索赔与退款",
+      "summary": "美团商家生态频道披露上线商家 AI 守护工具，针对恶意索赔、恶意退款等经营风险提供治理能力。官方报道提及已有大量商家启用相关限制功能。",
+      "impact": "平台为商家增加风险识别与处置工具，可能改变异常订单、退款争议和证据留存的处理流程。",
+      "action": "了解工具启用条件、限制策略与申诉机制，规范订单凭证和售后处理记录。",
+      "tags": [
+        "商家AI守护",
+        "恶意退款",
+        "风险治理",
+        "售后"
+      ],
+      "url": "https://www.meituan.com/news?category=merchants-ecology",
+      "status": "已由官方频道披露"
+    },
+    {
+      "id": "pdd-seller-privacy-policy-2026-05-14",
+      "lane": "拼多多",
+      "platform": "拼多多",
+      "actionType": "治理/算法",
+      "date": "2026-05-14",
+      "publishedAt": "2026-05-14",
+      "source": "拼多多商家版隐私政策",
+      "sourceType": "官方政策文本存档",
+      "title": "拼多多商家版隐私政策更新至 V4.2",
+      "summary": "公开政策版本记录显示，拼多多商家版隐私政策 V4.2 于 2026 年 5 月 14 日发布，涉及商家版 App、网页后台和 Windows 客户端等服务场景。",
+      "impact": "商家运营工具中的账号、店铺、日志和个性化推荐等数据处理规则值得关注；不应仅凭版本号推断实际新增权限。",
+      "action": "阅读官方现行隐私政策，检查账号权限、推荐设置和第三方工具的数据使用边界。",
+      "tags": [
+        "商家版App",
+        "隐私政策",
+        "数据合规"
+      ],
+      "url": "https://mstatic.pinduoduo.com/kael-static/6fbfe440-2fc6-4f28-8f6e-adb6183bdad3/index.html",
+      "status": "发布日期由政策版本存档支持"
+    },
+    {
+      "id": "taobao-wukong-merchant-agent-2026-05-13",
+      "lane": "淘宝",
+      "platform": "淘宝",
+      "actionType": "商家经营工具",
+      "date": "2026-05-13",
+      "publishedAt": "2026-05-13",
+      "source": "阿里巴巴集团季度业绩披露",
+      "sourceType": "官方披露",
+      "title": "阿里披露面向商家运营的 AI 原生企业智能体“悟空”",
+      "summary": "阿里巴巴季度业绩材料提到，商家侧推出 Wukong（悟空）AI 原生企业智能体，将智能体能力融入工作流，服务商家运营效率。具体可用范围和接入方式以官方后续说明为准。",
+      "impact": "商家工作流可能逐步从单点 AI 工具转向商品上架、店铺管理、营销与客服等多环节自动化。",
+      "action": "关注官方商家端开放范围、接入门槛、可执行操作与人工确认机制。",
+      "tags": [
+        "悟空",
+        "商家Agent",
+        "店铺管理",
+        "营销",
+        "客服"
+      ],
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0513/2026051300653.pdf",
+      "status": "已披露，具体商用范围待跟踪"
+    },
+    {
+      "id": "taobao-qwen-shopping-assistant-2026-05-11",
+      "lane": "淘宝",
+      "platform": "淘宝",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-05-11",
+      "publishedAt": "2026-05-11",
+      "source": "阿里巴巴集团官方新闻",
+      "sourceType": "官方",
+      "title": "淘宝 App 上线千问 AI 购物助手，覆盖商品发现到售后",
+      "summary": "阿里巴巴宣布千问 App 与淘宝商品库全面互通，并在淘宝 App 内上线千问 AI 购物助手。用户可通过自然语言发现商品、比较选择、下单并管理售后；还披露 AI 虚拟试穿、优惠组合建议和目标价追踪等能力。",
+      "impact": "导购入口可能从关键词搜索扩展到对话式需求表达；商家需要关注商品属性、图文内容、评价信息是否足以支持 AI 理解与比较。",
+      "action": "检查标题、属性、规格、商品图、问大家/评价及价格优惠信息的完整性；持续观察 AI 助手带来的流量入口和转化变化。",
+      "tags": [
+        "千问",
+        "AI导购",
+        "购物助手",
+        "商品发现",
+        "淘宝App"
+      ],
+      "url": "https://www.alibabagroup.com/en-US/document-1991231293551017984",
+      "status": "已由官方发布确认"
+    },
+    {
+      "id": "jd-ai-gou-task-commerce-2026-04-27",
+      "lane": "京东",
+      "platform": "京东",
+      "actionType": "App/产品功能",
+      "date": "2026-04-27",
+      "publishedAt": "2026-04-27",
+      "source": "京东 AI 购 App Store 版本记录",
+      "sourceType": "应用商店版本记录",
+      "title": "京东 AI 购增加 AI 任务中心与自动复购/优惠盯梢任务",
+      "summary": "版本记录显示，京东 AI 购新增任务中心，并支持创建定期自动复购、盯梢优惠和关注新品的 AI 任务。",
+      "impact": "平台尝试把一次性导购延伸到持续购物任务，可能影响复购、价格敏感用户触达与新品发现。",
+      "action": "关注商品价格变化、库存、优惠有效期和复购场景下的商品信息一致性。",
+      "tags": [
+        "AI任务",
+        "自动复购",
+        "优惠监控",
+        "新品发现"
+      ],
+      "url": "https://apps.apple.com/us/app/%E4%BA%AC%E4%B8%9Cai%E8%B4%AD/id6748010090",
+      "status": "已由应用版本记录确认"
     },
     {
       "id": "meituan-flash-product-info-2026-03-31",
@@ -144,7 +360,9 @@
         "搜索推荐",
         "商品质量分"
       ],
-      "url": "https://rules-center.meituan.com/m/detail/guize/681"
+      "url": "https://rules-center.meituan.com/m/detail/guize/681",
+      "platform": "美团",
+      "actionType": "平台规则/费用"
     },
     {
       "id": "meituan-price-behavior-2026-03-30",
@@ -162,7 +380,31 @@
         "收费",
         "促销补贴"
       ],
-      "url": "https://rules-center.meituan.com/m/detail/guize/406004?activeRule=1"
+      "url": "https://rules-center.meituan.com/m/detail/guize/406004?activeRule=1",
+      "platform": "美团",
+      "actionType": "平台规则/费用"
+    },
+    {
+      "id": "meituan-smart-manager-2026-03-26",
+      "lane": "美团",
+      "platform": "美团",
+      "actionType": "商家经营工具",
+      "date": "2026-03-26",
+      "publishedAt": "2026-03-26",
+      "source": "美团商家生态官方新闻",
+      "sourceType": "官方",
+      "title": "美团智能掌柜升级品牌顾问，面向连锁餐饮提供 AI 经营助理",
+      "summary": "美团发布智能掌柜·品牌顾问，覆盖评价分析、经营报表、选址洞察和顾客理解等场景。官方披露已有 50 多家连锁品牌试用。",
+      "impact": "连锁商家总部可以更系统地汇总门店评价和经营问题，门店运营管理可能从人工巡检转向数据驱动。",
+      "action": "关注评价按菜品/服务/环境的归因能力、门店对比口径及报表接入条件。",
+      "tags": [
+        "智能掌柜",
+        "品牌顾问",
+        "AI经营",
+        "连锁餐饮"
+      ],
+      "url": "https://www.meituan.com/news/NN260327175004721",
+      "status": "已由官方发布确认"
     },
     {
       "id": "pdd-service-agreement-opinion-2026-01-30",
@@ -180,7 +422,31 @@
         "意见征集",
         "平台治理"
       ],
-      "url": "https://www.yangkeduo.com/home/advice/"
+      "url": "https://www.yangkeduo.com/home/advice/",
+      "platform": "拼多多",
+      "actionType": "平台规则/费用"
+    },
+    {
+      "id": "taobao-qwen-ecosystem-2026-01-15",
+      "lane": "淘宝",
+      "platform": "淘宝",
+      "actionType": "AI导购/购物助手",
+      "date": "2026-01-15",
+      "publishedAt": "2026-01-15",
+      "source": "阿里巴巴集团官方新闻",
+      "sourceType": "官方",
+      "title": "千问 App 接入淘宝、淘宝闪购等生态服务并开放测试",
+      "summary": "千问 App 升级并接入淘宝、淘宝闪购、支付宝、飞猪和高德等生态服务，支持通过语音或文字请求完成点外卖、支付、旅行规划等多步骤任务，相关能力在中国开启公开测试。",
+      "impact": "购物意图可能从单一商品搜索扩展到跨场景任务，平台入口和消费决策链路可能发生变化。",
+      "action": "观察淘宝/淘宝闪购入口、商品供给与活动参与在对话式购物场景中的呈现。",
+      "tags": [
+        "千问App",
+        "Agentic Commerce",
+        "淘宝闪购",
+        "跨应用服务"
+      ],
+      "url": "https://www.alibabagroup.com/en-US/document-1948497434959151104",
+      "status": "已由官方发布确认"
     },
     {
       "id": "jd-new-merchant-incentive-2026",
@@ -198,7 +464,32 @@
         "补贴",
         "返佣"
       ],
-      "url": "https://mtt.m.jd.com/serviceno/homepage?servicenoId=470"
+      "url": "https://mtt.m.jd.com/serviceno/homepage?servicenoId=470",
+      "platform": "京东",
+      "actionType": "流量/营销/补贴"
+    },
+    {
+      "id": "pdd-ark-erp-api-2026",
+      "lane": "拼多多",
+      "platform": "拼多多",
+      "actionType": "商家经营工具",
+      "date": "2026",
+      "publishedAt": "2026",
+      "source": "拼多多开放平台公告（第三方文档引用）",
+      "sourceType": "开放平台线索",
+      "title": "拼多多方舟 ERP 自研数据传输场景及配套接口",
+      "summary": "开放平台相关文档提及拼多多上线方舟 ERP 自研数据传输场景及配套接口，用于库存、对账等业务场景下商家自研系统的数据互通；原始公告日期仍需从官方公告详情核实。",
+      "impact": "使用自研 ERP 的商家需要确认申请身份、数据权限、接口范围与服务商/自研系统的合规边界。",
+      "action": "以拼多多开放平台公告及商家后台申请页面为准，确认发布时间、适用范围和接入要求。",
+      "tags": [
+        "方舟ERP",
+        "商家自研",
+        "库存",
+        "对账",
+        "API"
+      ],
+      "url": "https://open.pinduoduo.com/application/document/announcement?id=350",
+      "status": "线索已发现，公告日期待核验"
     }
   ]
 }
