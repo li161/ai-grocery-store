@@ -1,11 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-const props=defineProps({ lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true}, news:{type:Array,required:true}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null}, onOpen:{type:Function,required:true} })
+const props=defineProps({ lanes:{type:Array,required:true}, activeLane:{type:String,required:true}, keyword:{type:String,required:true}, news:{type:Array,required:true}, events:{type:Array,default:()=>[]}, syncLabel:{type:String,required:true}, dailyDigest:{type:Object,default:()=>({})}, selected:{type:Object,default:null}, onOpen:{type:Function,required:true} })
 
 const emit=defineEmits(['update:activeLane','update:keyword','closeDetail'])
 const detailTab=ref('overview')
-const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.selected.eventId ? item.eventId===props.selected.eventId : item.id===props.selected.id).sort((a,b)=>String(a.date).localeCompare(String(b.date))) : [])
+const selectedEvent=computed(()=>props.selected?.eventId ? props.events.find(event=>event.id===props.selected.eventId) : null)
+const eventReports=computed(()=>selectedEvent.value?.reports?.length ? selectedEvent.value.reports.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))) : props.selected ? props.news.filter(item=>props.selected.eventId ? item.eventId===props.selected.eventId : item.id===props.selected.id).sort((a,b)=>String(a.date).localeCompare(String(b.date))) : [])
 </script>
 
 <template>
@@ -28,7 +29,8 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
 
         <div class="event-meta">
           <span>▤ <strong>{{ eventReports.length || 1 }}</strong> 篇报道</span>
-          <span>♧ <strong>{{ selected.eventSourceCount || 1 }}</strong> 个独立信源</span>
+          <span>♧ <strong>{{ selectedEvent?.sourceCount || selected.eventSourceCount || 1 }}</strong> 个独立信源</span>
+          <span v-if="selectedEvent?.verification">⌁ <strong>{{ selectedEvent.verification.status==='verified' ? '已交叉支持' : selectedEvent.verification.status==='partially_verified' ? '部分支持' : '待核验' }}</strong></span>
           <span>◷ {{ selected.date }} 更新</span>
         </div>
 
@@ -49,7 +51,7 @@ const eventReports=computed(()=>props.selected ? props.news.filter(item=>props.s
           <p class="event-summary">{{ selected.eventSummary || selected.summary }}</p>
 
           <div class="event-generated">
-            信息状态 · {{ selected.source }} · {{ selected.date }} · {{ selected.evidence?.label || '原文可追溯' }}
+            信息状态 · {{ selected.source }} · {{ selected.date }} · {{ selected.evidence?.label || '原文可追溯' }} · {{ selectedEvent?.verification?.status==='verified' ? '多源支持' : selectedEvent?.verification?.status==='partially_verified' ? '部分支持' : '待核验' }}
           </div>
           <div v-if="selected.businessDimensions?.length" class="event-business-dimensions">
             <span>经营影响</span>
