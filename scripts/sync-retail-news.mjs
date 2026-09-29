@@ -113,6 +113,4 @@ await writeFile(publicFile,JSON.stringify({generatedAt,items:rankedItems},null,2
 await writeFile(eventsFile,JSON.stringify({generatedAt,events:rankedEvents.map(e=>{const copy={...e};delete copy.items;return copy})},null,2),'utf8')
 await writeFile(dailyFile,JSON.stringify(report,null,2),'utf8')
 await writeFile(healthFile,JSON.stringify({generatedAt,window:'7d',summary:{feeds:sourceHealth.length,healthy:sourceHealth.filter(x=>x.status==='ok').length,failed:sourceHealth.filter(x=>x.status==='error').length,rawCandidates:unique.length,accepted:rankedItems.length},sources:sourceHealth},null,2),'utf8')
-const historyFile = new URL(new Date().toISOString().slice(0,10)+'.json',historyDir)
-try { await readFile(historyFile,'utf8') } catch { await writeFile(historyFile,JSON.stringify({date:new Date().toISOString().slice(0,10),generatedAt,window:'7d',items:rankedItems,events:rankedEvents.map(e=>({...e,reports:undefined}))},null,2),'utf8') }
 console.log('[retail-radar] fetched='+unique.length+' fresh='+fresh.length+' scored='+scores.length+' events='+rankedEvents.length)
