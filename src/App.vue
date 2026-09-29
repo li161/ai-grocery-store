@@ -1,30 +1,72 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import StoreNav from './components/StoreNav.vue'
 import StoreHero from './components/StoreHero.vue'
 import ToolShelf from './components/ToolShelf.vue'
 import RetailNewsShelf from './components/RetailNewsShelf.vue'
+import HotRank from './components/HotRank.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
 
 const { activeCategory, keyword, filteredTools } = useCatalog()
 const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filteredNews, syncLabel } = useRetailNews()
+
+const activeSection = ref('home')
 const drawerTool = ref(null)
+const selectedNews = ref(null)
 const showSearch = ref(false)
+const darkMode = ref(false)
 const detail = ref(null)
 
-function openIndustry(item) { detail.value = { type: 'industry', ...item } }
-function openBundle(item) { detail.value = { type: 'bundle', ...item } }
-function openNews(item) { detail.value = { type: 'news', ...item } }
-function closeDetail() { detail.value = null }
+const sections = [
+  { id:'home', label:'店铺首页', icon:'⌂', group:'内容' },
+  { id:'tools', label:'AI 工具', icon:'⌘', group:'内容' },
+  { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
+  { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
+  { id:'retail-news', label:'零售情报', icon:'◌', group:'情报' },
+  { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
+  { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
+]
 
-function scrollTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+function navigate(id) {
+  activeSection.value = id
+  selectedNews.value = null
+  detail.value = null
+  window.scrollTo({ top:0, behavior:'instant' })
 }
 function openTool(tool) { drawerTool.value = tool }
-function openToolByName(name) { const tool = tools.find(item => item.name === name); if (tool) openTool(tool) }
+function openToolByName(name) {
+  const tool = tools.find(item => item.name === name)
+  if (tool) openTool(tool)
+}
+function openIndustry(item) {
+  activeSection.value = 'industry'
+  detail.value = { type:'industry', ...item }
+  window.scrollTo({top:0,behavior:'instant'})
+}
+function openBundle(item) {
+  activeSection.value = 'bundles'
+  detail.value = { type:'bundle', ...item }
+  window.scrollTo({top:0,behavior:'instant'})
+}
+function openNews(item) {
+  activeSection.value = 'retail-news'
+  selectedNews.value = item
+  detail.value = null
+  window.scrollTo({top:0,behavior:'instant'})
+}
+function closeDetail() { detail.value = null }
 function goSearch() { showSearch.value = true }
+function toggleTheme() {
+  darkMode.value = !darkMode.value
+  document.documentElement.dataset.theme = darkMode.value ? 'dark' : 'light'
+  localStorage.setItem('ai-grocery-theme', darkMode.value ? 'dark' : 'light')
+}
+onMounted(() => {
+  darkMode.value = localStorage.getItem('ai-grocery-theme') === 'dark'
+  document.documentElement.dataset.theme = darkMode.value ? 'dark' : 'light'
+})
 </script>
 
 <template>
