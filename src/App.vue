@@ -33,7 +33,7 @@ function navigate(id) {
   activeSection.value = id
   selectedNews.value = null
   detail.value = null
-  window.scrollTo({ top:0, behavior:'instant' })
+  window.scrollTo({ top:0, behavior:'auto' })
 }
 function openTool(tool) { drawerTool.value = tool }
 function openToolByName(name) {
@@ -43,18 +43,18 @@ function openToolByName(name) {
 function openIndustry(item) {
   activeSection.value = 'industry'
   detail.value = { type:'industry', ...item }
-  window.scrollTo({top:0,behavior:'instant'})
+  window.scrollTo({top:0,behavior:'auto'})
 }
 function openBundle(item) {
   activeSection.value = 'bundles'
   detail.value = { type:'bundle', ...item }
-  window.scrollTo({top:0,behavior:'instant'})
+  window.scrollTo({top:0,behavior:'auto'})
 }
 function openNews(item) {
   activeSection.value = 'retail-news'
   selectedNews.value = item
   detail.value = null
-  window.scrollTo({top:0,behavior:'instant'})
+  window.scrollTo({top:0,behavior:'auto'})
 }
 function closeDetail() { detail.value = null }
 function goSearch() { showSearch.value = true }
