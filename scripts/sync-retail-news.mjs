@@ -135,7 +135,7 @@ const seen=new Set()
 const unique=results.filter(item=>{const key=item.title.toLowerCase().replace(/\\s+/g,' ');if(seen.has(key))return false;seen.add(key);return true})
 const scoredInput=unique.filter(item=>!previousByTitle.has(item.title.toLowerCase().trim())).slice(0,30)
 const llmScores=await scoreWithLLM(scoredInput)
-const llmByIndex=new Map(llmScores.map(x=>[Number(x.index),x]))
+const llmByIndex=new Map(llmScores.map(x=>[Number(x.index),{relevanceScore:Number(x.relevance||0),impactScore:Number(x.impact||0),noveltyScore:Number(x.novelty||0),evidenceScore:Number(x.evidence||0),keep:Boolean(x.keep),llmReason:String(x.reason||'')}]))
 const fresh=unique.map(item=>{
   const old=previousByTitle.get(item.title.toLowerCase().trim()), heuristic=heuristicScore(item)
   const llm=old?.scoredBy ? old : llmByIndex.get(scoredInput.findIndex(x=>x.title===item.title))
