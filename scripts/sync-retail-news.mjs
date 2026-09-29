@@ -161,7 +161,13 @@ async function mapLimit(items,limit,fn){
 }
 const raw=(await mapLimit(FEEDS,8,fetchFeed)).flat(),seen=new Set()
 const archiveYear = new Date().getUTCFullYear()
-const platformArchive = [...new Map(raw.filter(x => ['淘宝','京东','美团','拼多多'].includes(x.lane) && String(x.date).startsWith(String(archiveYear))).map(x => [x.title.toLowerCase().trim(),x])).values()].sort((a,b)=>String(b.date).localeCompare(String(a.date)))
+let priorPlatformArchive = []
+try {
+  const priorArchive = JSON.parse(await readFile(platformArchiveFile, 'utf8'))
+  if (Number(priorArchive.year) === archiveYear && Array.isArray(priorArchive.items)) priorPlatformArchive = priorArchive.items
+} catch {}
+const discoveredPlatformArchive = raw.filter(x => ['淘宝','京东','美团','拼多多'].includes(x.lane) && String(x.date).startsWith(String(archiveYear)))
+const platformArchive = [...new Map([...priorPlatformArchive, ...discoveredPlatformArchive].map(x => [String(x.title||'').toLowerCase().trim(),x])).values()].sort((a,b)=>String(b.date).localeCompare(String(a.date)))
 const todayMs=Date.now()
 const LIVE_DAYS=7
 const liveCutoff=todayMs-LIVE_DAYS*86400000
