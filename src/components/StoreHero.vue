@@ -11,21 +11,18 @@ defineProps({
     <div class="store-backdrop"></div>
     <div class="scene-light"></div>
 
-    <!-- 1. 左前景：店铺主招牌 -->
     <div class="hero-sign">
       <span class="sign-kicker">WELCOME TO</span>
       <h1>AI 杂货铺</h1>
       <p>工具有人卖，玩法有人教，行业里也能用。</p>
     </div>
 
-    <!-- 2. 左侧留白：店老板提示，不与货架抢空间 -->
     <div class="scene-note">
       <span>✦</span>
       <strong>老板说：</strong>
-      <span>今天刚进了一批 AI。</span>
+      <span>“今天刚进了一批 AI，要不要看看？”</span>
     </div>
 
-    <!-- 3. 中后景：实验室，保持在货架后方 -->
     <div class="back-lab">
       <div class="back-lab-title">⚗ 后院实验室 <small>换来更多可能</small></div>
       <div class="lab-grid">
@@ -36,7 +33,6 @@ defineProps({
       </div>
     </div>
 
-    <!-- 4. 中前景：主货架 -->
     <div class="tool-island">
       <div class="island-header">
         <strong>🛒 AI 工具</strong>
@@ -52,7 +48,6 @@ defineProps({
       <div class="wood-shelf"></div>
     </div>
 
-    <!-- 5. 右前景：行业货架 -->
     <aside class="industry-island">
       <div class="industry-island-title">▦ <strong>AI × 行业</strong><small>让 AI 走进你的行业</small></div>
       <div class="industry-mini-grid">
@@ -63,10 +58,20 @@ defineProps({
       <div class="industry-beam"></div>
     </aside>
 
-    <!-- 6. 左下角操作区，独立于货架 -->
+    <aside class="bundle-island" @click="onNavigate('bundles')">
+      <div class="bundle-island-head"><span>🎁</span><div><strong>AI 套装</strong><small>精选组合，开箱即用</small></div></div>
+      <div class="bundle-boxes"><i>小红书开店套装</i><i>程序员效率包</i><i>论文研究包</i></div>
+    </aside>
+
     <div class="hero-cta">
       <button class="cta-primary" @click="onNavigate('tools')">逛工具货架 →</button>
       <button class="cta-secondary" @click="onNavigate('industry')">看看 AI 能干什么</button>
+    </div>
+
+    <div class="hero-counter">
+      <div><strong>80<span>+</span></strong><small>工具货物</small></div>
+      <div><strong>12</strong><small>行业货架</small></div>
+      <div><strong>24</strong><small>现成套装</small></div>
     </div>
   </section>
 </template>
