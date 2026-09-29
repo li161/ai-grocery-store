@@ -3,6 +3,8 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import StoreNav from './components/StoreNav.vue'
 import StoreHero from './components/StoreHero.vue'
 import ToolShelf from './components/ToolShelf.vue'
+import OutcomeShelf from './components/OutcomeShelf.vue'
+import CaseTracker from './components/CaseTracker.vue'
 import RetailNewsShelf from './components/RetailNewsShelf.vue'
 import HotRank from './components/HotRank.vue'
 import ContentDetail from './components/ContentDetail.vue'
@@ -19,9 +21,11 @@ const selectedNews = ref(null)
 const showSearch = ref(false)
 const darkMode = ref(false)
 const detail = ref(null)
+const selectedCase = ref(null)
 
 const sections = [
   { id:'home', label:'店铺首页', icon:'⌂', group:'内容' },
+  { id:'outcomes', label:'经营结果', icon:'◎', group:'内容' },
   { id:'tools', label:'AI 工具', icon:'⌘', group:'内容' },
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
@@ -34,6 +38,7 @@ function navigate(id, { syncHash = true } = {}) {
   activeSection.value = id
   selectedNews.value = null
   detail.value = null
+  selectedCase.value = null
   if (syncHash) history.replaceState(null, '', '#' + id)
   window.scrollTo({ top: 0, behavior: 'auto' })
 }
@@ -76,6 +81,15 @@ function openNews(item) {
   window.scrollTo({top:0,behavior:'auto'})
 }
 function closeDetail() { detail.value = null }
+function openCase(item) {
+  selectedCase.value = item
+  activeSection.value = 'case-tracker'
+  window.scrollTo({top:0,behavior:'auto'})
+}
+function closeCase() {
+  selectedCase.value = null
+  navigate('outcomes')
+}
 function goSearch() { showSearch.value = true }
 function toggleTheme() {
   darkMode.value = !darkMode.value
@@ -97,6 +111,8 @@ onMounted(() => {
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
+
+      <OutcomeShelf v-else-if="activeSection === 'outcomes'" :onOpenCase="openCase" />
 
       <ToolShelf v-else-if="activeSection === 'tools'" :categories="categories" :activeCategory="activeCategory" :keyword="keyword" :tools="filteredTools" :onOpenTool="openTool" @update:activeCategory="activeCategory = $event" @update:keyword="keyword = $event" />
 
@@ -123,6 +139,8 @@ onMounted(() => {
       <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :syncLabel="syncLabel" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
 
       <HotRank v-else-if="activeSection === 'hot-rank'" :news="filteredNews" :onOpen="openNews" />
+
+      <CaseTracker v-else-if="activeSection === 'case-tracker'" :caseData="selectedCase" @back="closeCase" />
 
       <section v-else-if="activeSection === 'lab'" class="lab-section module-section">
         <div class="lab-copy"><span class="eyebrow">BACK ROOM · EXPERIMENTS</span><h2>后院实验室</h2><p>这里不卖单个工具，专门研究 Prompt、Agent、Workflow 和 MCP 怎么串成真正能工作的东西。</p><button @click="navigate('tools')">去工具货架 <span>→</span></button></div>
