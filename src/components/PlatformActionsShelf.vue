@@ -42,7 +42,7 @@ function formatDate(item) {
     <header class="platform-heading section-head compact">
       <div>
         <h1>{{ meta.year || 2026 }} 平台动作</h1>
-        <p>集中追踪淘宝、京东、美团、拼多多的产品迭代、AI 导购、商家工具、规则和经营机制变化。</p>
+        <p>集中追踪淘宝、京东、美团、拼多多的产品迭代、AI 导购、商家工具、规则和经营机制变化，并检索行业微信公众号文章。</p>
       </div>
       <div class="platform-summary"><strong>{{ normalized.length }}</strong><span>条归档线索</span><small>{{ verifiedCount }} 条有明确来源状态</small></div>
     </header>
@@ -54,7 +54,7 @@ function formatDate(item) {
     </div>
 
     <div class="platform-source-strip">
-      <div><strong>信源覆盖</strong><span>官方公告 / 规则中心 / App 版本 / 开放平台 / 官方新闻 / 行业报道</span></div>
+      <div><strong>信源覆盖</strong><span>官方公告 / 规则中心 / App 版本 / 开放平台 / 行业报道 / 微信公众号文章索引</span></div>
       <div v-if="meta.sourceHealth?.queries" class="source-health">
         <b>{{ meta.sourceHealth.healthy }}/{{ meta.sourceHealth.queries }}</b> 检索成功
         <span v-if="meta.sourceHealth.failed">· {{ meta.sourceHealth.failed }} 失败</span>
@@ -63,7 +63,7 @@ function formatDate(item) {
     </div>
 
     <div v-if="meta.sourceDirectory?.length" class="source-directory">
-      <span>官方入口</span>
+      <span>平台入口 / 公众号检索</span>
       <a v-for="source in meta.sourceDirectory.filter(x => activePlatform === '全部' || x.platform === activePlatform)" :key="source.platform + source.url" :href="source.url" target="_blank" rel="noopener noreferrer"><b>{{ source.platform }}</b>{{ source.name }} ↗</a>
     </div>
 
