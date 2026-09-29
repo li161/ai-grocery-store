@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-29T07:19:39.723Z",
+  "generatedAt": "2026-09-29T07:23:53.838Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -98,17 +98,17 @@
     "queries": 32,
     "healthy": 32,
     "failed": 0,
-    "newlyFound": 8,
-    "archivedItems": 53,
+    "newlyFound": 7,
+    "archivedItems": 49,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 8,
-      "京东": 14,
-      "美团": 19,
-      "拼多多": 12
+      "淘宝": 6,
+      "京东": 15,
+      "美团": 18,
+      "拼多多": 10
     }
   },
   "items": [
@@ -158,6 +158,18 @@
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "AI能力赋能、四大升级举措加持 商家在京东里的增长新机会来了 - EBRUN.com",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE02aGFhb0l5enVCdEZtSmVGTnd6S1BxR3dXU214QjJuS0N2WDJHcFdoaTRrUzlWTGxaM1JnNjdoMEE2NV85VmZzM0R1OXplRHJ6V1Y2MVd3?oc=5",
+      "publishedAt": "2026-09-28",
+      "summary": "AI能力赋能、四大升级举措加持 商家在京东里的增长新机会来了 &nbsp;&nbsp; EBRUN.com",
+      "source": "EBRUN.com",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
@@ -532,18 +544,6 @@
       "url": "https://rules-center.meituan.com/"
     },
     {
-      "title": "美团电话会：三季度外卖UE预计同比明显改善，Keeta盈利加速，AI迈向商家端 - 华尔街见闻",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5RMkx4MjR6dnJMVTlEWjRFMjFmUkdfeTdMQVVib3lITTFYUXR2QXdOWnFnb25fRXp3MzhtX2VEY0FUcmZXT2tjNzd3RnZOWVQxZU53?oc=5",
-      "publishedAt": "2026-08-28",
-      "summary": "美团电话会：三季度外卖UE预计同比明显改善，Keeta盈利加速，AI迈向商家端 华尔街见闻",
-      "source": "华尔街见闻",
-      "platform": "美团",
-      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
-      "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
-    },
-    {
       "id": "jd-ai-gou-shopping-guide-2026-07-31",
       "lane": "京东",
       "platform": "京东",
@@ -590,18 +590,6 @@
       "status": "已由官方技术博客确认"
     },
     {
-      "title": "2026拼多多流量规则升级，专业化代运营成中小商家长效增长抓手 - 中华网",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5EUWZqTkF5b19MbUhJbUZvMUsxR0lDTGVKUzVXN092QnhoZFUwbENKek9hS21DQnlQWU1oallOdGxGT3ltbkpLOFZ4SWtPcjRoa1ZKRm9vaXhwOUFlZlQ3UUV2ZGdzZw?oc=5",
-      "publishedAt": "2026-07-06",
-      "summary": "2026拼多多流量规则升级，专业化代运营成中小商家长效增长抓手 中华网",
-      "source": "中华网",
-      "platform": "拼多多",
-      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
-      "actionType": "流量/营销/补贴",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
-    },
-    {
       "id": "jd-service-provider-migration-2026",
       "lane": "京东",
       "date": "2026-07",
@@ -642,42 +630,6 @@
       ],
       "url": "https://www.meituan.com/news?category=merchants-ecology",
       "status": "已由官方频道披露"
-    },
-    {
-      "title": "拼多多开放平台 - 拼多多开放平台",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNalFLTzkwWmk4N3Voc091RW4wNkdtcHNueEtGVWlCbkNaUFlDM3R3M0s4UjBEZ1ZUVkhZWFZRTFpFV0w3TndIRFNkOXJfSkVOWkJGTWxKZ1YyY0lmcDg5ZGQ4M3JFUFZGbXNIVUtjcVpWbTJja1JmMFlxTldGNGtjZHhPaw?oc=5",
-      "publishedAt": "2026-06-24",
-      "summary": "拼多多开放平台 拼多多开放平台",
-      "source": "拼多多开放平台",
-      "platform": "拼多多",
-      "query": "site:open.pinduoduo.com 拼多多 商家工具 ERP 接口 数据传输 公告 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
-    },
-    {
-      "title": "618攻略：全新推荐2026年6月17晚8点618淘宝京东天猫红包领取口令全更新汇总 - 潮新闻客户端",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBxQUVndEJIeHNyekFsZE91QjlRbmFnd3MyeWtGOW1rb1JBV1hZc1JqcmlCWnNJUTgwM2R6SzI3R1p2WDQzdTRJMnJ5UDVJMld0VHdJMlRybTM5Q25rZ3ZoTTFSdWppc2dNRDkxOHg3cjdUTVE?oc=5",
-      "publishedAt": "2026-06-16",
-      "summary": "618攻略：全新推荐2026年6月17晚8点618淘宝京东天猫红包领取口令全更新汇总 潮新闻客户端",
-      "source": "潮新闻客户端",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "App/产品功能",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
-    },
-    {
-      "title": "全新推荐2026年淘宝京东天猫618红包领取口令每日可领最后一波618淘宝京东天猫红包口令实测有效可用618红包口令最新汇总领取步骤全攻略 - news.tom.com",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE8yQ1VwSFZPUlR0UElGemJsX0RfQ01mLVVqcER2RFZSR3k2ZUxMVE1jVUZlWl9xYy1tc0cyTGRZZlY1VWdNUGVJSnhUNXBvSGRUYjZIOFpn?oc=5",
-      "publishedAt": "2026-06-04",
-      "summary": "全新推荐2026年淘宝京东天猫618红包领取口令每日可领最后一波618淘宝京东天猫红包口令实测有效可用618红包口令最新汇总领取步骤全攻略 news.tom.com",
-      "source": "news.tom.com",
-      "platform": "淘宝",
-      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
-      "actionType": "平台规则/费用",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "title": "美团·医药健康商家规则中心 - rules-center.meituan.com",
