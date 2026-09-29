@@ -90,11 +90,51 @@ async function fetchQuery(query, window) {
   }
 }
 
+async function fetchJdOfficialNotices() {
+  try {
+    const response = await fetch('https://opendj.jd.com/api/notice.htm', { headers: { 'user-agent': 'Mozilla/5.0 (compatible; RetailPlatformRadar/1.0)', accept: 'application/json' }, signal: AbortSignal.timeout(18000) })
+    if (!response.ok) throw new Error('HTTP ' + response.status)
+    const payload = await response.json()
+    const rows = Array.isArray(payload) ? payload : (payload.data || payload.list || payload.rows || [])
+    const parseDate = value => {
+      const match = String(value || '').match(/(\\d{4})年(\\d{1,2})月(\\d{1,2})日/)
+      if (match) return match[1] + '-' + match[2].padStart(2,'0') + '-' + match[3].padStart(2,'0')
+      const date = new Date(value)
+      return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0,10)
+    }
+    return rows.map(row => {
+      const title = row.noticeTitle || row.title || ''
+      const date = parseDate(row.noticeTime || row.createTime)
+      const content = decode(row.noticeContent || row.content || '').slice(0, 420)
+      const id = row.id || row.noticeId || title
+      const text = title + ' ' + content
+      let actionType = '平台规则/费用'
+      if (/AI|导购|购物助手|推荐/.test(text)) actionType = 'AI导购/购物助手'
+      else if (/工具|商家|开放平台|接口|ERP|应用|产品/.test(text)) actionType = '商家经营工具'
+      else if (/流量|营销|补贴|活动|优惠/.test(text)) actionType = '流量/营销/补贴'
+      else if (/配送|履约|物流|取餐|仓储/.test(text)) actionType = '履约/供应链'
+      return {
+        id: 'jd-official-' + String(id),
+        platform: '京东', lane: '京东', actionType,
+        date, publishedAt: date, source: row.noticeSignature || '京东秒送开放平台',
+        sourceType: '官方公告', status: '已由官方公告确认',
+        title, summary: content || '京东开放平台发布公告，详情请查看原文。',
+        url: row.noticeUrl || ('https://opendj.jd.com/staticnew/widgets/noticeDetail.html?id=' + encodeURIComponent(id)),
+        tags: ['京东开放平台', actionType], official: true
+      }
+    }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
+  } catch (error) {
+    return { error: String(error.message || error), items: [] }
+  }
+}
+
 let previous = { items: [] }
 try { previous = JSON.parse(await readFile(archiveFile, 'utf8')) } catch {}
 const tasks = quarterWindows().flatMap(window => queries.map(query => ({ query, window })))
 const results = await mapLimit(tasks, 8, task => fetchQuery(task.query, task.window))
-const found = results.flatMap(result => result.items).filter(relevance)
+const jdOfficialResult = await fetchJdOfficialNotices()
+const jdOfficialItems = Array.isArray(jdOfficialResult) ? jdOfficialResult : jdOfficialResult.items
+const found = [...results.flatMap(result => result.items), ...jdOfficialItems].filter(relevance)
 const merged = new Map()
 for (const item of [...(previous.items || []), ...found]) {
   const key = String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
@@ -114,6 +154,8 @@ const health = {
   failed: results.filter(x => x.status === 'error').length,
   newlyFound: found.length,
   archivedItems: items.length,
+  jdOfficialNotices: jdOfficialItems.length,
+  jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',
   byPlatform: Object.fromEntries(['淘宝','京东','美团','拼多多'].map(p => [p, items.filter(x => (x.platform || x.lane) === p).length]))
 }
 const archive = {
