@@ -1,7 +1,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { retailNews as seedNews, retailNewsLastSyncedAt as seedSyncedAt } from '../data/retailNews.generated'
 
-const lanes = ['全部', 'AI 导购', 'Agentic Commerce', '零售运营', '中国零售', '平台博弈', '风险与治理', '零售治理']
+const lanes = ['全部', 'AI 导购', 'Agentic Commerce', '零售运营', '中国零售', '平台动作', '平台博弈', '风险与治理', '零售治理']
 const DATA_URL = 'retail-news.json'
 const EVENTS_URL = 'retail-events.json'
 const DIGEST_URL = 'retail-daily.json'
