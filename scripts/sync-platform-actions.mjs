@@ -89,9 +89,9 @@ function relevance(item) {
   }
   const retailContext = /电商|零售|购物|商品|商家|商户|卖家|店铺|经营|平台规则|佣金|流量|促销|营销|补贴|订单|售后|物流|配送|履约|供应链|即时零售|开放平台|商家版|经营工具|导购|购物助手|搜索|推荐|广告投放|商品发布|AI购|千问|智能掌柜|袋鼠管家|多多买菜|京麦|淘宝闪购|美团闪购|京东秒送/i
   const action = /发布|上线|推出|更新|升级|调整|新增|开放|测试|规则|公告|政策|收费|佣金|补贴|流量|搜索|推荐|导购|购物助手|App|版本|工具|接口|配送|履约|AI|隐私|商品|商家|商户|卖家|经营|营销|活动|供应链|售后/i
-  const obviousNoise = /游戏玩家|声卡驱动|驱动问题|官方入口安装|棋牌|博彩|娱乐城|成人用品|招聘信息|天气预报|足球比分/i
+  const obviousNoise = /游戏玩家|声卡驱动|驱动问题|官方入口安装|棋牌|博彩|娱乐城|成人用品|招聘信息|天气预报|足球比分|红包领取|红包口令|618攻略|优惠口令|全新推荐|代运营成中小商家|电话会|盈利加速|拼多多开放平台$/i
   if (!item.platform || !aliases[item.platform]) return false
-  if (!title || obviousNoise.test(title)) return false
+  if (!title || obviousNoise.test(title) || /^(拼多多开放平台|美团·?(医药健康|闪购)商家规则中心|美团规则中心)$/i.test(title.trim())) return false
   // Never use the search query itself as evidence that a result is relevant.
   // Require the result content itself to mention the platform and retail/e-commerce context.
   const platformSignal = item.sourceType === '微信公众号文章检索' ? aliases[item.platform].test(text) : aliases[item.platform].test(title)
@@ -209,7 +209,7 @@ async function fetchMeituanRuleDirectory() {
       if (!publishedAt.startsWith(String(YEAR))) continue
       let url
       try { url = new URL(match[1], 'https://rules-center.meituan.com/').href } catch { continue }
-      if (!/^https:\/\/rules-center\.meituan\.com\//i.test(url)) continue
+      if (!/^https:\/\/rules-center\.meituan\.com\/m\/detail\/guize\//i.test(url)) continue
       let actionType = '平台规则/费用'
       if (/履约|配送|库存|供应链/.test(title)) actionType = '履约/供应链'
       else if (/流量|营销|补贴|活动|优惠/.test(title)) actionType = '流量/营销/补贴'
