@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-29T07:23:53.838Z",
+  "generatedAt": "2026-09-29T07:24:04.475Z",
   "year": 2026,
-  "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
+  "coverageNote": "每日情报聚合淘宝、京东、美团、拼多多的公开公告、开放平台、规则中心、App 版本与行业报道。仅保留能对应到具体事件的候选；泛入口页、跨平台红包营销和无法定位原文的目录记录不作为独立情报展示。自动发现内容仍需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引无法覆盖所有商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
     {
       "platform": "淘宝",
@@ -266,27 +266,6 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
-      "id": "meituan-rules-fulfillment-2026-09-21",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "平台规则/费用",
-      "date": "2026-09-21",
-      "publishedAt": "2026-09-21",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·规则正文需逐条核验",
-      "title": "美团到店餐饮商户履约保障管理办法更新",
-      "summary": "美团规则中心近期公告目录列出到店餐饮商户履约保障管理办法，涉及商户履约管理。适用对象、具体义务和处罚条款须以规则正文为准。",
-      "impact": "商家应留意履约标准、取消/退款处理、证据留存和规则生效时间，避免仅凭标题推断具体责任。",
-      "action": "打开规则正文核对生效日期、适用范围、履约指标及违规处理条款。",
-      "tags": [
-        "美团规则中心",
-        "履约保障",
-        "到店餐饮"
-      ],
-      "url": "https://rules-center.meituan.com/"
-    },
-    {
       "id": "meituan-flash-flower-image-2026-09-18",
       "lane": "美团",
       "date": "2026-09-18",
@@ -305,29 +284,6 @@
       "url": "https://rules-center.meituan.com/?commonType=25",
       "platform": "美团",
       "actionType": "平台规则/费用"
-    },
-    {
-      "id": "meituan-flash-category-rules-sept-2026",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "平台规则/费用",
-      "date": "2026-09-18",
-      "publishedAt": "2026-09-18",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·规则正文需逐条核验",
-      "title": "美团闪购更新花束类商品图文不符及大闸蟹商品管理规则",
-      "summary": "美团规则中心近期公告目录列出花束类商品花图不符违规处理规则、大闸蟹商品品质及违规处理规则，以及大闸蟹实拍发货管理规则。各规则发布日期和具体要求应逐条以原文确认。",
-      "impact": "生鲜与鲜花商家需要重点核查实物、图片、规格、品质证明和实际发货的一致性。",
-      "action": "按 SKU 检查实拍图、品质/产地证明、规格描述、发货记录与售后凭证，并记录规则生效时间。",
-      "tags": [
-        "美团闪购",
-        "生鲜规则",
-        "花束",
-        "大闸蟹",
-        "实拍发货"
-      ],
-      "url": "https://rules-center.meituan.com/"
     },
     {
       "id": "meituan-flash-crab-quality-2026-09-17",
@@ -350,27 +306,6 @@
       "actionType": "平台规则/费用"
     },
     {
-      "id": "meituan-live-prohibited-goods-2026-09-17",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "治理/算法",
-      "date": "2026-09-17",
-      "publishedAt": "2026-09-17",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·正文待核验",
-      "title": "美团更新直播禁限售商品管理规范",
-      "summary": "美团规则中心公告目录列出直播禁限售商品管理规范。具体禁售品类、直播经营主体和处理措施以正式规则为准。",
-      "impact": "通过直播经营的商家需要同步检查商品准入、宣传内容、资质材料和直播间管理要求。",
-      "action": "核对禁限售清单、资质要求、平台处置规则与生效日期。",
-      "tags": [
-        "直播",
-        "禁限售商品",
-        "平台治理"
-      ],
-      "url": "https://rules-center.meituan.com/"
-    },
-    {
       "id": "pdd-ai-search-shopping-2026-09-15",
       "platform": "拼多多",
       "lane": "拼多多",
@@ -390,27 +325,6 @@
         "商品属性"
       ],
       "url": "https://finance.eastmoney.com/a/202609153874654649.html"
-    },
-    {
-      "id": "meituan-service-retail-violations-2026-09-11",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "治理/算法",
-      "date": "2026-09-11",
-      "publishedAt": "2026-09-11",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·正文待核验",
-      "title": "美团发布服务零售业务商户违规处理规范",
-      "summary": "美团规则中心公告目录列出服务零售业务商户违规处理规范。违规类型、处理梯度及申诉机制以正式规则正文为准。",
-      "impact": "商家需了解哪些履约、商品或服务行为会触发平台处置，并保留订单和沟通凭证。",
-      "action": "逐条核对违规场景、处置措施、整改时限及申诉入口。",
-      "tags": [
-        "服务零售",
-        "违规处理",
-        "申诉"
-      ],
-      "url": "https://rules-center.meituan.com/"
     },
     {
       "id": "jd-app-dongdong-shopping-agent-2026-09-09",
@@ -484,8 +398,8 @@
       "platform": "淘宝",
       "lane": "淘宝",
       "actionType": "App/产品功能",
-      "date": "2026-09-03",
-      "publishedAt": "2026-09-03",
+      "date": "2026-09-15",
+      "publishedAt": "2026-09-15",
       "source": "新京报·贝壳财经（转载）",
       "sourceType": "媒体报道",
       "status": "媒体报道线索·具体招商及结算规则待核实",
@@ -500,48 +414,6 @@
         "大模型订阅"
       ],
       "url": "https://finance.eastmoney.com/a/202609153874654649.html"
-    },
-    {
-      "id": "meituan-dine-food-safety-2026-09-03",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "治理/算法",
-      "date": "2026-09-03",
-      "publishedAt": "2026-09-03",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·正文待核验",
-      "title": "美团更新到店餐饮商户食品安全问题处理规则",
-      "summary": "美团规则中心公告目录列出到店餐饮商户食品安全问题处理规则。具体问题分类、证据要求和处理方式需以原文为准。",
-      "impact": "餐饮商家应加强食品安全记录、原料与操作流程留痕，并关注平台对投诉和抽检问题的处置要求。",
-      "action": "核对规则覆盖的食品安全事件、整改期限、凭证要求和申诉流程。",
-      "tags": [
-        "到店餐饮",
-        "食品安全",
-        "规则更新"
-      ],
-      "url": "https://rules-center.meituan.com/"
-    },
-    {
-      "id": "meituan-traceability-label-2026-08-31",
-      "platform": "美团",
-      "lane": "美团",
-      "actionType": "平台规则/费用",
-      "date": "2026-08-31",
-      "publishedAt": "2026-08-31",
-      "source": "美团规则中心",
-      "sourceType": "官方规则目录",
-      "status": "官方目录可查·正文待核验",
-      "title": "美团闪购发布“正品溯源”服务标签说明",
-      "summary": "美团规则中心公告目录列出美团闪购“正品溯源”服务标签说明。标签的申请条件、材料标准和展示方式需查看正式说明。",
-      "impact": "适用品类商家可能需要补充品牌授权、采购来源或商品真实性证明，标签也可能影响用户信任和商品筛选。",
-      "action": "核对标签适用范围、资质文件、审核流程和违规撤标条件。",
-      "tags": [
-        "美团闪购",
-        "正品溯源",
-        "服务标签"
-      ],
-      "url": "https://rules-center.meituan.com/"
     },
     {
       "id": "jd-ai-gou-shopping-guide-2026-07-31",
@@ -630,18 +502,6 @@
       ],
       "url": "https://www.meituan.com/news?category=merchants-ecology",
       "status": "已由官方频道披露"
-    },
-    {
-      "title": "美团·医药健康商家规则中心 - rules-center.meituan.com",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1LT3o1RzhUT05nT0dyaXJMbnk3bFNYcVZaS1p6ZzFxYzJucXd4VG1tNFFIdTJOOUpjS2J6OVl6OWpNQWF3Y28zMzlJZFA4R014T2x5bC1PUV9FV3lmQmpNZTg5c2NOMUFCVHJXWVh1aHd0QQ?oc=5",
-      "publishedAt": "2026-05-28",
-      "summary": "美团·医药健康商家规则中心 rules-center.meituan.com",
-      "source": "rules-center.meituan.com",
-      "platform": "美团",
-      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
-      "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "title": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 - 新浪财经",
@@ -910,18 +770,6 @@
       ],
       "url": "https://www.alibabagroup.com/en-US/document-1948497434959151104",
       "status": "已由官方发布确认"
-    },
-    {
-      "title": "美团·闪购商家规则中心 - rules-center.meituan.com",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5xX0c5MXRPbTVhTUlkLVR0SDVVQzRKY1V0RkMxNXdfUDNraWhrTDhWYzE3ajIzZE95eWdJZ2VyeGpKRm5PUndBYWNaUHpxaUd4eVJVNTVUSDRuUHhTZ2xIZ0t5OXF3enlqZVRWRVZMQjY?oc=5",
-      "publishedAt": "2026-01-05",
-      "summary": "美团·闪购商家规则中心 rules-center.meituan.com",
-      "source": "rules-center.meituan.com",
-      "platform": "美团",
-      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
-      "actionType": "商家经营工具",
-      "sourceType": "公开检索候选",
-      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "id": "jd-new-merchant-incentive-2026",
