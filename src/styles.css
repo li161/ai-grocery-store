@@ -69,3 +69,104 @@ footer{padding:30px 6vw;background:#171614;color:#8e8780;display:flex;align-item
 .bundle-island-head{display:flex;gap:12px;align-items:center;padding:17px 20px 13px;border-bottom:1px solid #b68b5b55}.bundle-island-head>span{font-size:26px}.bundle-island-head strong{display:block;font-size:18px}.bundle-island-head small{display:block;color:#a99a8a;font-size:9px;margin-top:3px}
 .bundle-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.bundle-boxes i{height:82px;background:linear-gradient(145deg,#b86c58,#7d3e35);display:flex;align-items:flex-end;padding:9px;color:#f9e9dc;font-size:9px;font-style:normal;font-weight:700;box-shadow:0 8px 12px #0005}.bundle-boxes i:nth-child(2){background:linear-gradient(145deg,#65789c,#394b6b)}.bundle-boxes i:nth-child(3){background:linear-gradient(145deg,#4f817a,#2f5f59)}
 .hero-counter{position:absolute;z-index:15;right:3.5%;bottom:0;display:flex;background:#17110de0;border:1px solid #c5a06a44}.hero-counter div{padding:14px 19px;border-right:1px solid #fff1;min-width:82px}.hero-counter div:last-child{border:0}.hero-counter strong{display:block;color:#e6c58d;font-size:25px}.hero-counter strong span{font-size:14px}.hero-counter small{font-size:8px;color:#b8ab9e}
+
+
+/* =========================================================
+   REFERENCE HERO LOCK
+   Desktop composition follows the approved storefront mockup.
+   Keep these spatial relationships stable when adding content.
+   ========================================================= */
+@media (min-width: 1051px){
+  .store-hero{
+    min-height: 760px;
+    height: 100svh;
+  }
+
+  /* left visual anchor */
+  .hero-sign{
+    left: 6.1%;
+    top: 21.5%;
+    width: 500px;
+  }
+
+  .scene-note{
+    left: 6.1%;
+    top: 45.2%;
+    width: 370px;
+  }
+
+  /* back room stays visually behind the shelves */
+  .back-lab{
+    left: 46.8%;
+    top: 22.8%;
+    width: 31.5%;
+    min-width: 0;
+    max-width: 620px;
+  }
+
+  /* central foreground shelf = primary content anchor */
+  .tool-island{
+    left: 18.2%;
+    bottom: 0;
+    width: min(46vw, 770px);
+    min-width: 650px;
+    max-width: 770px;
+  }
+
+  /* right shelf is independent and vertically aligned with tool shelf */
+  .industry-island{
+    right: 3.4%;
+    bottom: 0;
+    width: 23.5%;
+    min-width: 300px;
+  }
+
+  /* bundle sits behind the industry shelf, not on top of it */
+  .bundle-island{
+    z-index: 5;
+    right: 7%;
+    bottom: 0;
+    width: 27%;
+    min-width: 380px;
+    max-width: 480px;
+  }
+
+  .hero-counter{
+    z-index: 9;
+    right: 3.4%;
+    bottom: 0;
+  }
+
+  .hero-cta{
+    left: 5.8%;
+    bottom: 7%;
+  }
+}
+
+/* prevent the bundle from becoming a giant floating block */
+.bundle-island{
+  max-height: 270px;
+  overflow: hidden;
+}
+.bundle-island-head{
+  padding: 14px 18px 11px;
+}
+.bundle-boxes{
+  padding: 10px;
+}
+.bundle-boxes i{
+  height: 88px;
+}
+
+/* At tablet width the desktop spatial composition is intentionally simplified. */
+@media (max-width: 1050px) and (min-width: 701px){
+  .bundle-island,
+  .hero-counter{
+    display:none;
+  }
+  .tool-island{
+    left: 7%;
+    width: 58%;
+    min-width: 0;
+  }
+}
