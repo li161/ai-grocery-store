@@ -119,7 +119,12 @@ const previousModule=await import(seedFile.href+'?t='+Date.now())
 const previous=previousModule.retailNews||[]
 let oldEvents=[]
 try{const r=await fetch(eventsFile);if(r.ok)oldEvents=(await r.json()).events||[]}catch{}
-const raw=(await Promise.all(FEEDS.map(fetchFeed))).flat(),seen=new Set()
+async function mapLimit(items,limit,fn){
+  const out=new Array(items.length);let cursor=0
+  async function worker(){while(true){const i=cursor++;if(i>=items.length)return;out[i]=await fn(items[i])}}
+  await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));return out
+}
+const raw=(await mapLimit(FEEDS,8,fetchFeed)).flat(),seen=new Set()
 const todayMs=Date.now()
 const LIVE_DAYS=7
 const liveCutoff=todayMs-LIVE_DAYS*86400000
