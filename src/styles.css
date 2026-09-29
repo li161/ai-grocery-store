@@ -840,3 +840,65 @@ html[data-theme="dark"] .store-sidebar{background:#151a1b;border-color:#293433}h
   .drawer{width:min(520px,calc(100vw - 12px))}
   .search-overlay{padding:92px 14px 14px}
 }
+
+/* ===== hot ranking: keep rank + score visually inside the editorial frame ===== */
+.hot-list>button{
+  grid-template-columns:48px minmax(0,1fr) 46px;
+  gap:12px;
+  min-width:0;
+  padding:15px 4px;
+  box-sizing:border-box;
+}
+.hot-list>button:hover{
+  padding-left:4px;
+  padding-right:4px;
+}
+.hot-list>button>b{
+  display:block;
+  width:48px;
+  box-sizing:border-box;
+  font-size:14px;
+  line-height:1;
+  letter-spacing:.04em;
+  color:#8a8177;
+  font-variant-numeric:tabular-nums;
+}
+.hot-list>button div{
+  min-width:0;
+}
+.hot-list>button div strong{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  line-height:1.5;
+}
+.hot-list>button p{
+  max-width:100%;
+  margin:4px 0 0;
+  line-height:1.4;
+}
+.hot-list>button>span{
+  display:block;
+  width:46px;
+  box-sizing:border-box;
+  text-align:right;
+  font-size:17px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.03em;
+  color:#5d554d;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:700px){
+  .hot-list>button{
+    grid-template-columns:40px minmax(0,1fr) 38px;
+    gap:9px;
+    padding:13px 2px;
+  }
+  .hot-list>button>b{width:40px;font-size:12px}
+  .hot-list>button>span{width:38px;font-size:15px}
+  .hot-list>button div strong{font-size:11px}
+  .hot-list>button p{font-size:8px}
+}
