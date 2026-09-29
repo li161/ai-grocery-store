@@ -32,7 +32,7 @@ defineProps({
     <div class="spatial-store" aria-label="首页空间货架">
       <div class="spatial-header">
         <div><span>AI RETAIL FLOOR</span><strong>今日上架</strong></div>
-        <button @click="onNavigate('retail-news')">查看全部情报 ↗</button>
+        <button @click="onNavigate('retail-platform-actions')">查看今日情报 ↗</button>
       </div>
 
       <div class="spatial-shelves">
