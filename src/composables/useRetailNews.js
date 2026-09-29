@@ -4,6 +4,7 @@ import { retailNews as seedNews, retailNewsLastSyncedAt as seedSyncedAt } from '
 const lanes = ['全部', 'AI 导购', 'Agentic Commerce', '零售运营', '中国零售', '平台博弈', '风险与治理', '零售治理']
 
 const DATA_URL = 'retail-news.json'
+const DIGEST_URL = 'retail-daily.json'
 const REFRESH_MS = 5 * 60 * 1000
 
 export function useRetailNews() {
@@ -12,9 +13,15 @@ export function useRetailNews() {
   const liveNews = ref(seedNews)
   const lastSyncedAt = ref(seedSyncedAt)
   const liveState = ref('fallback')
+  const dailyDigest = ref({ title:'AI 零售日报', lead:'等待首次雷达同步', bullets:[], method:'信源抓取 → AI 零售影响评分 → 事件聚簇 → 热度排序 → 日报' })
   let timer
 
   async function refresh() {
+    try {
+      const digestResponse = await fetch(import.meta.env.BASE_URL + DIGEST_URL + '?t=' + Date.now(), { cache:'no-store', headers:{accept:'application/json'} })
+      if (digestResponse.ok) dailyDigest.value = await digestResponse.json()
+    } catch {}
+
     try {
       const response = await fetch(import.meta.env.BASE_URL + DATA_URL + '?t=' + Date.now(), {
         cache: 'no-store',
@@ -56,5 +63,5 @@ export function useRetailNews() {
 
   onBeforeUnmount(() => window.clearInterval(timer))
 
-  return { lanes, activeLane, keyword, filteredNews, syncLabel, refresh }
+  return { lanes, activeLane, keyword, filteredNews, syncLabel, dailyDigest, refresh }
 }
