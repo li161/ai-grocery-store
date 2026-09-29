@@ -51,7 +51,7 @@ function parseFeed(xml, query) {
     const date = new Date(publishedAt)
     const summary = tag(block, 'description')
     const source = tag(block, 'source') || 'Google News RSS'
-    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, ...query }
+    return { title, url, publishedAt: Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10), summary, source, sourceType: '公开检索候选', status: '自动发现·待核验', ...query }
   }).filter(item => item.title && item.url && item.publishedAt.startsWith(String(YEAR)))
 }
 function relevance(item) {
@@ -100,7 +100,8 @@ for (const item of [...(previous.items || []), ...found]) {
   const key = String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
   if (!key) continue
   const existing = merged.get(key)
-  if (!existing || (item.status === '已由官方发布确认') || (!existing.url && item.url)) merged.set(key, { ...existing, ...item, platform: item.platform || item.lane })
+  if (!existing) merged.set(key, { ...item, platform: item.platform || item.lane })
+  else merged.set(key, { ...item, ...existing, platform: existing.platform || item.platform || item.lane })
 }
 const items = [...merged.values()].filter(item => {
   const date = String(item.publishedAt || item.date || '')
