@@ -110,7 +110,7 @@ async function mapLimit(items, limit, fn) {
 }
 
 async function resolveGoogleRedirect(item) {
-  if (!/news\\.google\\.com\\/rss\\/articles/i.test(item.url || '')) return item
+  if (!String(item.url || '').includes('news.google.com/rss/articles')) return item
   try {
     const response = await fetch(item.url, {
       redirect: 'follow',
