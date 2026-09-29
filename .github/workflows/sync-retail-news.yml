@@ -32,16 +32,17 @@ jobs:
           RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL || 'deepseek-v4-flash' }}
         run: |
             npm run sync:retail
+            node scripts/persist-retail-intelligence.mjs
             node scripts/enrich-retail-data.mjs
 
       - name: Commit changed intelligence
         run: |
           git config user.name "ai-grocery-store-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json; then
+          if git diff --quiet -- src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json public/retail-source-health.json; then
             echo "No retail intelligence changes."
             exit 0
           fi
-          git add src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json
+          git add src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json public/retail-source-health.json public/retail-history
           git commit -m "chore: sync retail intelligence"
           git push
