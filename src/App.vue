@@ -25,7 +25,7 @@ function goSearch() {
   <div class="site">
     <StoreNav :onNavigate="scrollTo" :onSearch="goSearch" />
     <main>
-      <StoreHero :tools="tools" :onNavigate="scrollTo" :onOpenTool="openTool" />
+      <StoreHero :onNavigate="scrollTo" />
 
       <ToolShelf
         :categories="categories"
