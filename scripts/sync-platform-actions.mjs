@@ -221,7 +221,7 @@ const health = {
   jdOfficialNotices: jdOfficialItems.length,
   jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',
   meituanRuleNotices: meituanRuleItems.length,
-  meituanRulesStatus: meituanRulesResult.status,\n  meituanRuleNotices: meituanRuleItems.length,\n  meituanRulesStatus: meituanRulesResult.status,
+  meituanRulesStatus: meituanRulesResult.status,
   byPlatform: Object.fromEntries(['淘宝','京东','美团','拼多多'].map(p => [p, items.filter(x => (x.platform || x.lane) === p).length]))
 }
 const archive = {
