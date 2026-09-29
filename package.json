@@ -3,7 +3,17 @@
   "private": true,
   "version": "0.2.0",
   "type": "module",
-  "scripts": {"dev":"vite","build":"vite build","preview":"vite preview"},
-  "dependencies": {"vue":"^3.5.21"},
-  "devDependencies": {"@vitejs/plugin-vue":"^6.0.1","vite":"^7.1.7"}
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "sync:retail": "node scripts/sync-retail-news.mjs"
+  },
+  "dependencies": {
+    "vue": "^3.5.21"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^7.1.7"
+  }
 }
