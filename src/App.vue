@@ -34,7 +34,7 @@ const sections = [
   { id:'industry', label:'AI × 行业', icon:'▦', group:'内容' },
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
     { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
-  { id:'retail-platform-actions', label:'平台动作', icon:'↗', group:'情报' },
+  { id:'retail-platform-actions', label:'今日情报', icon:'↗', group:'情报' },
   { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
 ]
 
