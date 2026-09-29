@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Collect platform action candidates
         run: npm run sync:platform
       - name: Commit annual platform archive
