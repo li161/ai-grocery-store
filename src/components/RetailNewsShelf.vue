@@ -182,3 +182,47 @@ const eventReports=computed(()=>selectedEvent.value?.reports?.length ? selectedE
     </template>
   </section>
 </template>
+
+<style scoped>
+.merchant-strategy-card {
+  margin: 18px 0;
+  padding: 18px 20px;
+  border: 1px solid rgba(37, 99, 235, .22);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, .055), rgba(16, 185, 129, .035));
+}
+.merchant-strategy-card .event-side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.merchant-strategy-card .event-side-head h2 {
+  margin: 0;
+  font-size: 16px;
+}
+.merchant-strategy-card .event-side-head span {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, .09);
+  color: #2563eb;
+  font-size: 11px;
+}
+.merchant-strategy-card p {
+  margin: 12px 0 8px;
+  line-height: 1.75;
+}
+.merchant-strategy-card small {
+  color: var(--text-secondary, #737373);
+  line-height: 1.6;
+}
+.merchant-strategy-card ul {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+.merchant-strategy-card li {
+  line-height: 1.6;
+}
+</style>
