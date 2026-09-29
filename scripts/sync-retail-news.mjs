@@ -40,13 +40,23 @@ const FEED_DEFS = [
   {name:'Pinduoduo AI',query:'拼多多 AI 电商 商家 运营 推荐',lane:'中国零售',sourceType:'行业媒体'},
   {name:'China Supermarket AI',query:'中国 超市 AI 补货 需求预测 损耗 供应链',lane:'中国零售',sourceType:'行业媒体'},
   {name:'China Store Tech',query:'中国 商超 数字化 人工智能 智能购物车 自助结账',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'京东官方 AI 零售',query:'site:jd.com OR site:jdcorporateblog.com 京东 AI 京言 京小智 京点点 智能导购 商家助手',lane:'中国零售',sourceType:'官方'},
+  {name:'京东物流与供应链 AI',query:'京东物流 AI 大模型 供应链 需求预测 智能仓储 履约',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'淘宝天猫 AI 经营',query:'淘宝 天猫 AI 万相 商家经营 智能客服 商品发布 营销',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'阿里千问淘宝购物',query:'site:alibabagroup.com OR site:alibaba.com 千问 淘宝 AI 购物助手 电商',lane:'中国零售',sourceType:'官方'},
+  {name:'拼多多官方与商家技术',query:'site:pinduoduo.com OR site:investor.pddholdings.com 拼多多 AI 商家 电商 技术',lane:'中国零售',sourceType:'官方'},
+  {name:'拼多多商家运营与推荐',query:'拼多多 AI 推荐算法 商家运营 百亿补贴 农产品供应链',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'中国电商平台公告',query:'京东 淘宝 天猫 拼多多 电商 平台公告 技术 产品发布',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'中国即时零售 AI',query:'淘宝闪购 京东秒送 美团 即时零售 AI 调度 配送 预测',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'中国电商 AI 媒体',query:'电商 AI 智能体 导购 数字人 客服 商家工具 36氪 亿邦动力',lane:'中国零售',sourceType:'行业媒体'},
+  {name:'中国零售科技媒体',query:'零售科技 AI 商超 数字化 供应链 联商网 亿邦动力',lane:'中国零售',sourceType:'行业媒体'},
   {name:'Retail AI Investment',query:'retail AI startup funding shopping agent commerce investment',lane:'平台博弈',sourceType:'行业媒体'},
   {name:'Retail AI Results',query:'retailer AI pilot results sales conversion labor productivity ROI',lane:'经营结果',sourceType:'行业媒体'}
 ]
 
 function isoDay(d){return d.toISOString().slice(0,10)}
 function addDays(d,n){const x=new Date(d);x.setUTCDate(x.getUTCDate()+n);return x}
-function googleUrl(query,after,before){return 'https://news.google.com/rss/search?q='+encodeURIComponent(query+' after:'+after+' before:'+before)+'&hl=en-US&gl=US&ceid=US:en'}
+function googleUrl(query,after,before){const china=/[\u4e00-\u9fff]/.test(query);const locale=china?'&hl=zh-CN&gl=CN&ceid=CN:zh-Hans':'&hl=en-US&gl=US&ceid=US:en';return 'https://news.google.com/rss/search?q='+encodeURIComponent(query+' after:'+after+' before:'+before)+locale}
 function buildFeeds(){
   const today=new Date()
   const feeds=[]
@@ -86,8 +96,14 @@ async function fetchFeed(feed){
     const r=await fetch(feed.url,{headers:{'user-agent':'ai-grocery-store-retail-radar/4.0'}})
     if(!r.ok)throw Error('HTTP '+r.status)
     const xml=await r.text()
-    const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0,60).map(m=>{
-      const raw=m[1],title=tag(raw,'title'),url=tag(raw,'link'),pd=tag(raw,'pubDate'),source=tag(raw,'source')
+    const rssEntries=[...xml.matchAll(/<item>([\\s\\S]*?)<\\/item>/gi)].map(m=>({raw:m[1],atom:false}))
+    const atomEntries=rssEntries.length?[]:[...xml.matchAll(/<entry(?:\\s[^>]*)?>([\\s\\S]*?)<\\/entry>/gi)].map(m=>({raw:m[1],atom:true}))
+    const items=[...rssEntries,...atomEntries].slice(0,60).map(entry=>{
+      const raw=entry.raw,title=tag(raw,'title')
+      const linkTag=(raw.match(/<link\\b[^>]*>/i)||[])[0]||''
+      const atomHref=(linkTag.match(/\\bhref=["']([^"']+)["']/i)||[])[1]
+      const url=entry.atom?(atomHref||tag(raw,'id')):tag(raw,'link')
+      const pd=tag(raw,'pubDate')||tag(raw,'published')||tag(raw,'updated'),source=tag(raw,'source')||tag(raw,'name')
       if(!title||!url)return null
       const d=Date.parse(pd)
       return {id:'feed-'+hash(title+url),source:source||feed.name,sourceType:feed.sourceType,date:isNaN(d)?new Date().toISOString().slice(0,10):new Date(d).toISOString().slice(0,10),publishedAt:isNaN(d)?null:new Date(d).toISOString(),discoveredAt:checkedAt,lane:feed.lane,title,summary:'信源原文自动同步；事实以原始报道为准。',impact:'等待 AI 零售影响判断。',action:'打开原文核对事件，再观察后续经营结果。',tags:[feed.lane,...tags(title)].slice(0,5),url}
