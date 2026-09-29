@@ -43,9 +43,7 @@ const sections = [
 
 function navigate(id, { syncHash = true } = {}) {
   activeSection.value = id
-  const platformLane = ({ 'retail-taobao':'淘宝', 'retail-jd':'京东', 'retail-meituan':'美团', 'retail-pdd':'拼多多' })[id]
-  if (platformLane) activeNewsLane.value = platformLane
-  else if (id === 'retail-news') activeNewsLane.value = '全部'
+  if (id === 'retail-news') activeNewsLane.value = '全部'
   selectedNews.value = null
   detail.value = null
   selectedCase.value = null
