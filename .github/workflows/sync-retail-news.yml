@@ -27,7 +27,7 @@ jobs:
       - name: Sync public retail feeds
         env:
           OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY || secrets.OPENAI_API_KEY }}
-          RETAIL_LLM_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || secrets.OPENAI_BASE_URL }}
+          OPENAI_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || secrets.OPENAI_BASE_URL }}
           RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL }}
         run: npm run sync:retail
 
