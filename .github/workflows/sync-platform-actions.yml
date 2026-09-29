@@ -29,10 +29,11 @@ jobs:
         run: |
           git config user.name "ai-grocery-store-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- public/platform-actions-2026.json; then
+          ARCHIVE_FILE="public/platform-actions-$(date -u +%Y).json"
+          if git diff --quiet -- "$ARCHIVE_FILE"; then
             echo "No platform action changes."
             exit 0
           fi
-          git add public/platform-actions-2026.json
+          git add "$ARCHIVE_FILE"
           git commit -m "chore: sync annual platform actions"
           git push
