@@ -154,18 +154,18 @@ async function fetchMeituanRuleDirectory() {
     if (!response.ok) throw new Error('HTTP ' + response.status)
     const html = await response.text()
     const rows = []
-    const anchors = [...html.matchAll(/<a\\b[^>]*href=["']([^"']+)["'][^>]*>([\\s\\S]*?)<\\/a>/gi)]
+    const anchors = [...html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
     for (const match of anchors) {
-      const title = decode(match[2]).replace(/\\s+/g, ' ').trim()
+      const title = decode(match[2]).replace(/\s+/g, ' ').trim()
       if (!title || title.length < 6 || !/商户|商家|美团闪购|到店餐饮|服务零售|商品|履约|品质|违规|规则|公告|食品安全|大闸蟹|花束|隐私|配送/.test(title)) continue
       const vicinity = html.slice(Math.max(0, match.index - 180), Math.min(html.length, match.index + match[0].length + 260))
-      const dateMatch = vicinity.match(/(20\\d{2})[\\/.年-](\\d{1,2})[\\/.月-](\\d{1,2})日?/)
+      const dateMatch = vicinity.match(/(20\d{2})[\/.年-](\d{1,2})[\/.月-](\d{1,2})日?/)
       if (!dateMatch) continue
       const publishedAt = dateMatch[1] + '-' + dateMatch[2].padStart(2, '0') + '-' + dateMatch[3].padStart(2, '0')
       if (!publishedAt.startsWith(String(YEAR))) continue
       let url
       try { url = new URL(match[1], 'https://rules-center.meituan.com/').href } catch { continue }
-      if (!/^https:\\/\\/rules-center\\.meituan\\.com\\//i.test(url)) continue
+      if (!/^https:\/\/rules-center\.meituan\.com\//i.test(url)) continue
       let actionType = '平台规则/费用'
       if (/履约|配送|库存|供应链/.test(title)) actionType = '履约/供应链'
       else if (/流量|营销|补贴|活动|优惠/.test(title)) actionType = '流量/营销/补贴'
@@ -196,7 +196,9 @@ const tasks = windows.flatMap(window => queries.map(query => ({ query, window })
 const results = await mapLimit(tasks, 8, task => fetchQuery(task.query, task.window))
 const jdOfficialResult = await fetchJdOfficialNotices()
 const jdOfficialItems = Array.isArray(jdOfficialResult) ? jdOfficialResult : jdOfficialResult.items
-const found = [...results.flatMap(result => result.items), ...jdOfficialItems].filter(relevance)
+const meituanRulesResult = await fetchMeituanRuleDirectory()
+const meituanRuleItems = meituanRulesResult.items
+const found = [...results.flatMap(result => result.items), ...jdOfficialItems, ...meituanRuleItems].filter(relevance)
 const merged = new Map()
 for (const item of [...(previous.items || []), ...found]) {
   const key = String(item.title || '').toLowerCase().replace(/\s+/g, ' ').trim()
@@ -217,7 +219,9 @@ const health = {
   newlyFound: found.length,
   archivedItems: items.length,
   jdOfficialNotices: jdOfficialItems.length,
-  jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',\n  meituanRuleNotices: meituanRuleItems.length,\n  meituanRulesStatus: meituanRulesResult.status,
+  jdOfficialStatus: Array.isArray(jdOfficialResult) ? 'ok' : 'error',
+  meituanRuleNotices: meituanRuleItems.length,
+  meituanRulesStatus: meituanRulesResult.status,\n  meituanRuleNotices: meituanRuleItems.length,\n  meituanRulesStatus: meituanRulesResult.status,
   byPlatform: Object.fromEntries(['淘宝','京东','美团','拼多多'].map(p => [p, items.filter(x => (x.platform || x.lane) === p).length]))
 }
 const archive = {
