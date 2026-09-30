@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-29T07:24:04.475Z",
+  "generatedAt": "2026-09-30T08:39:04.914Z",
   "year": 2026,
-  "coverageNote": "每日情报聚合淘宝、京东、美团、拼多多的公开公告、开放平台、规则中心、App 版本与行业报道。仅保留能对应到具体事件的候选；泛入口页、跨平台红包营销和无法定位原文的目录记录不作为独立情报展示。自动发现内容仍需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引无法覆盖所有商家后台、私域或灰度发布内容。",
+  "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
     {
       "platform": "淘宝",
@@ -98,16 +98,16 @@
     "queries": 32,
     "healthy": 32,
     "failed": 0,
-    "newlyFound": 7,
-    "archivedItems": 49,
+    "newlyFound": 5,
+    "archivedItems": 43,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 6,
-      "京东": 15,
-      "美团": 18,
+      "京东": 17,
+      "美团": 10,
       "拼多多": 10
     }
   },
@@ -166,6 +166,18 @@
       "publishedAt": "2026-09-28",
       "summary": "AI能力赋能、四大升级举措加持 商家在京东里的增长新机会来了 &nbsp;&nbsp; EBRUN.com",
       "source": "EBRUN.com",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "京东的AI经营布局：自研+三方，能否让商家增长更确定？ - 搜狐网",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBvZFJpcU1UN3dzVlk0SGlqWW10RGQzb216RzAyUDRsNDdJM1U3TFhraERKbW94RHZ6d3dTWjVWN05PVFRuV2tJNGVoNzc5Mk5jbXpQQXJwYVVXYTl1OW42Rg?oc=5",
+      "publishedAt": "2026-09-28",
+      "summary": "京东的AI经营布局：自研+三方，能否让商家增长更确定？ &nbsp;&nbsp; 搜狐网",
+      "source": "搜狐网",
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
@@ -266,6 +278,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "AI开始懂经营京东正在重做商家的生意系统- 零售 - ebrun.com",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9fU0x3QmZESW1WRDIwZEt5SUpUQ0J0MkE2Z2pyUVhqcE5IZzBtdF92MWlWNTFpb0MxUUdUX1ZoQmVCTk1DUGRiU3RQQ0ZmS3g4UEdwc0l3?oc=5",
+      "publishedAt": "2026-09-23",
+      "summary": "AI开始懂经营京东正在重做商家的生意系统- 零售 &nbsp;&nbsp; ebrun.com",
+      "source": "ebrun.com",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "meituan-flash-flower-image-2026-09-18",
       "lane": "美团",
       "date": "2026-09-18",
@@ -323,6 +347,28 @@
         "拼多多AI搜索",
         "自然语言搜索",
         "商品属性"
+      ],
+      "url": "https://finance.eastmoney.com/a/202609153874654649.html"
+    },
+    {
+      "id": "tmall-ai-space-station-2026-09-03",
+      "platform": "淘宝",
+      "lane": "淘宝",
+      "actionType": "App/产品功能",
+      "date": "2026-09-15",
+      "publishedAt": "2026-09-15",
+      "source": "新京报·贝壳财经（转载）",
+      "sourceType": "媒体报道",
+      "status": "媒体报道线索·具体招商及结算规则待核实",
+      "title": "天猫上线 AI 空间站，将多家大模型订阅产品集中展示销售",
+      "summary": "媒体报道天猫上线 AI 空间站（Token 充值中心），集中展示阿里云、智谱、Kimi、MiniMax、DeepSeek 等模型订阅产品，并支持卡密或直充交付。报道还提及 AI Token 类商品的成交变化，相关数字属于报道引用的平台披露。",
+      "impact": "平台商品供给从传统实物扩展到模型额度和数字化服务，数字商品类目、交付、售后及资质规则值得关注。",
+      "action": "核对平台招商入口、数字商品资质、充值交付、退款限制和售后规则。",
+      "tags": [
+        "天猫AI空间站",
+        "Token充值",
+        "数字商品",
+        "大模型订阅"
       ],
       "url": "https://finance.eastmoney.com/a/202609153874654649.html"
     },
@@ -392,28 +438,6 @@
       ],
       "url": "https://apps.apple.com/vn/app/%E4%BA%AC%E4%B8%9C-%E5%8F%88%E5%A5%BD%E5%8F%88%E4%BE%BF%E5%AE%9C/id414245413",
       "status": "版本记录可查，实际开放范围待跟踪"
-    },
-    {
-      "id": "tmall-ai-space-station-2026-09-03",
-      "platform": "淘宝",
-      "lane": "淘宝",
-      "actionType": "App/产品功能",
-      "date": "2026-09-15",
-      "publishedAt": "2026-09-15",
-      "source": "新京报·贝壳财经（转载）",
-      "sourceType": "媒体报道",
-      "status": "媒体报道线索·具体招商及结算规则待核实",
-      "title": "天猫上线 AI 空间站，将多家大模型订阅产品集中展示销售",
-      "summary": "媒体报道天猫上线 AI 空间站（Token 充值中心），集中展示阿里云、智谱、Kimi、MiniMax、DeepSeek 等模型订阅产品，并支持卡密或直充交付。报道还提及 AI Token 类商品的成交变化，相关数字属于报道引用的平台披露。",
-      "impact": "平台商品供给从传统实物扩展到模型额度和数字化服务，数字商品类目、交付、售后及资质规则值得关注。",
-      "action": "核对平台招商入口、数字商品资质、充值交付、退款限制和售后规则。",
-      "tags": [
-        "天猫AI空间站",
-        "Token充值",
-        "数字商品",
-        "大模型订阅"
-      ],
-      "url": "https://finance.eastmoney.com/a/202609153874654649.html"
     },
     {
       "id": "jd-ai-gou-shopping-guide-2026-07-31",
