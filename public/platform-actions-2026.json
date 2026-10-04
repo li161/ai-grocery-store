@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T08:13:05.688Z",
+  "generatedAt": "2026-10-04T08:30:56.351Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,20 +95,20 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 4,
-    "archivedItems": 48,
+    "newlyFound": 12,
+    "archivedItems": 55,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 7,
-      "京东": 20,
-      "美团": 10,
-      "拼多多": 11
+      "淘宝": 8,
+      "京东": 21,
+      "美团": 12,
+      "拼多多": 14
     }
   },
   "items": [
@@ -169,6 +169,18 @@
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "沙巴体育在线app下载拼多多上线自动比价功能，中小商家集体抗议称利润被彻底榨干 - Pchome电脑之家",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9mX3NtVVA4QjZBdUo0aUVleWxyTjI0THQ0NTQtMlc3Yk5EYUNsNUtpb3h5Mjd4T0JtLThmRHR1bkZyV2R1UHRxQkVBV093SUNxaFQ4QU1aVFE?oc=5",
+      "publishedAt": "2026-09-29",
+      "summary": "沙巴体育在线app下载拼多多上线自动比价功能，中小商家集体抗议称利润被彻底榨干 &nbsp;&nbsp; Pchome电脑之家",
+      "source": "Pchome电脑之家",
+      "platform": "拼多多",
+      "query": "拼多多商家版 App 版本更新 新功能 2026",
+      "actionType": "App/产品功能",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
@@ -343,6 +355,18 @@
       "publishedAt": "2026-09-23",
       "summary": "京东发布首批京麦AI专家团，招募三方好工具共建AI经营新范式 &nbsp;&nbsp; finance.sina.com.cn",
       "source": "finance.sina.com.cn",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "京东发布首批京麦AI专家团，招募三方好工具共建AI经营新范式 - 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE92WnZDcnQ1MUlRaWdYZ3BlZU9oOVBXQzV5M1VSdF9iRkVhd2Z5bG5SOUgwZS1BbEQ4SVVnMTBYcHhza2NGTmtEQWxqX241d3B4VExkN2tQMTJCSWNQNG1PN0pKUm03Uld1amZmNThDT21yWDItU3JONw?oc=5",
+      "publishedAt": "2026-09-23",
+      "summary": "京东发布首批京麦AI专家团，招募三方好工具共建AI经营新范式 &nbsp;&nbsp; 新浪财经",
+      "source": "新浪财经",
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
@@ -633,6 +657,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "实测从“千问”逛“淘宝”，AI购物从导购走向履约 - 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5oeTVsVGJyOXNJbWJFUFlBbUM2M0p1RF9oTjFKcmhvc1lxcWdPYWdlenR3YV9aN2h1X1poUGMwTGRfbGdVZlQyazRVNlUzSE90VVkxZkNIbGQ1OFJqTzhuREFfdFgyc3BINV9TMEVNYzZBdjNoOXc?oc=5",
+      "publishedAt": "2026-05-14",
+      "summary": "实测从“千问”逛“淘宝”，AI购物从导购走向履约 &nbsp;&nbsp; 新浪财经",
+      "source": "新浪财经",
+      "platform": "淘宝",
+      "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "taobao-qwen-shopping-assistant-2026-05-11",
       "lane": "淘宝",
       "platform": "淘宝",
@@ -680,6 +716,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE95MFh5Z1RIVUxUcTl0Tl9JMGQ5ZTFOX2NFeHlOT3kySUU1WXpvRFd4OElOeWJRZGRvakFPS05kcGhUUW5xNXVBT0FHdWEtZW1kc0Z4bnV3?oc=5",
+      "publishedAt": "2026-05-11",
+      "summary": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "千问与淘宝深度整合 阿里巴巴推AI对话式购物 - e南洋",
       "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBxTHZla19iLWpIYVVxUjA0ZmxvTVBKNU54NzQzZ1hHSW84eTczRnB1X3M0cjhjQXBtb252VXBhNEJ1b0drVXV4QnFhY29wSGVsWmdyUnFEcGRkLTFjNjlabUVlWQ?oc=5",
       "publishedAt": "2026-05-09",
@@ -701,6 +749,18 @@
       "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
       "actionType": "流量/营销/补贴",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE0yUldVZEVKQmRfY0M5cmR0WEk2Qm5LWU9QTkJ2N0RxNkRST1ZUUGk1Q0N0RTlqRGpXUl84M2I5WV9rekVHTVFvUEkwVUEzVGdSMWRiWjN3?oc=5",
+      "publishedAt": "2026-04-01",
+      "summary": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
@@ -822,6 +882,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9HV1VrZjN1TU9iSHB0ckU3X1hOcW5nMWd2NWxvc3E3cTFSbXFweEpnc2VlRFZNM3hPeDByUF9VWGFxV2VJVUxLSzQ3VUgxZzZIV0ZNYlJn?oc=5",
+      "publishedAt": "2026-01-23",
+      "summary": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
+      "platform": "美团",
+      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "拼多多“千亿扶持”加码“2026年货节”，百亿补贴推出三大重磅补贴 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5CVVJWWjNoRld6Unk2R1FLdlRfZVFmaTliOW5JU0F0RUhjcmJmaWVyQmJXNENQalZZaE1Gbk1pNlctSGdWb1VpN0FjY0RWY2k2aGFSeG9RY2x0RjFOM1BYdkNBbWhhZjZ0SUFmRXp6Y2V3MUhBYnZvWVRBYUYxdGM?oc=5",
       "publishedAt": "2026-01-19",
@@ -854,6 +926,18 @@
       ],
       "url": "https://www.alibabagroup.com/en-US/document-1948497434959151104",
       "status": "已由官方发布确认"
+    },
+    {
+      "title": "美团·闪购商家规则中心 - 美团规则中心",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5xX0c5MXRPbTVhTUlkLVR0SDVVQzRKY1V0RkMxNXdfUDNraWhrTDhWYzE3ajIzZE95eWdJZ2VyeGpKRm5PUndBYWNaUHpxaUd4eVJVNTVUSDRuUHhTZ2xIZ0t5OXF3enlqZVRWRVZMQjY?oc=5",
+      "publishedAt": "2026-01-05",
+      "summary": "美团·闪购商家规则中心 &nbsp;&nbsp; 美团规则中心",
+      "source": "美团规则中心",
+      "platform": "美团",
+      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "官方检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "id": "jd-new-merchant-incentive-2026",
