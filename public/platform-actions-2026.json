@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T09:11:02.542Z",
+  "generatedAt": "2026-10-06T09:03:38.493Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -98,15 +98,15 @@
     "queries": 32,
     "healthy": 32,
     "failed": 0,
-    "newlyFound": 3,
-    "archivedItems": 55,
+    "newlyFound": 5,
+    "archivedItems": 57,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 8,
-      "京东": 21,
+      "京东": 23,
       "美团": 12,
       "拼多多": 14
     }
@@ -181,6 +181,18 @@
       "platform": "拼多多",
       "query": "拼多多商家版 App 版本更新 新功能 2026",
       "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "发布AI专家团，开放第三方生态，京东让电商AI真正“懂”生意 - 风闻",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFAyZE1OZ2otbDBTV05KdERhR0pKUm5URmFkREtZenZzZE9GUllocDNDeHlQYm43bzFoUlZkLVdqVmRKT2hqdERVSk0zLXNLemhrbzRZZlYzcE9CN0UzaHplZE0xX2JfWjU3aW00ak5R?oc=5",
+      "publishedAt": "2026-09-29",
+      "summary": "发布AI专家团，开放第三方生态，京东让电商AI真正“懂”生意 &nbsp;&nbsp; 风闻",
+      "source": "风闻",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
@@ -277,6 +289,18 @@
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "首批京麦AI专家团发布，京东持续招募商家三方好工具 - 搜狐网",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBjZ2MwQ1EtTEhLc1gwekZSY2M5OExIaURyendxU3lSbnZpQWZhMDF2eWcybmVRRk9xLVNOUGpES3FEVDZsNTJpQTFTR2FsUktU?oc=5",
+      "publishedAt": "2026-09-24",
+      "summary": "首批京麦AI专家团发布，京东持续招募商家三方好工具 &nbsp;&nbsp; 搜狐网",
+      "source": "搜狐网",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
