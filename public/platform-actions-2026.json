@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T08:45:56.154Z",
+  "generatedAt": "2026-10-08T09:04:20.066Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -98,15 +98,15 @@
     "queries": 32,
     "healthy": 32,
     "failed": 0,
-    "newlyFound": 6,
-    "archivedItems": 58,
+    "newlyFound": 7,
+    "archivedItems": 59,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 8,
-      "京东": 23,
+      "京东": 24,
       "美团": 12,
       "拼多多": 15
     }
@@ -205,6 +205,18 @@
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "大促底层逻辑剧变：AI话语权超广告，重塑双11商家竞争格局|抖音|快手|京东|AI文本生成|电商 - 新浪新闻",
+      "url": "https://news.google.com/rss/articles/CBMi1gJBVV95cUxOd05RR3dMUXVhbURSeWhTNWZrdU1nYTl6U0lXTnV5UjhFOS1HdkRNTVNyNkpmUHVsdWxuWEdyMXRxTEFORmU4ak9vSjhMWHZ6YmVHMG5xdzdNdnY4QjdOeFJsdDV1RXVVcHpqa2IyNVVXbXptYVlPN3JiUWZDdTFTLU5yc2hlODRXM3NRQUJSU29iYU1WRTdVaGMyczF6aTBfR0RCa0lGSURmSU4tT2dSbnpUcFNSbm1nbVpTUml6eFVVR3NyQkFGOFVxaGUxSVBKdV9YUlZQOEoxZGxnVFBjWG1ybG50bFVGMnp0OFNuQ2lOOFFPX0RHaFcwSy03YXhzNFJtOFQ1aW9Xb0NWNk91M3F4NHBSUGgya2FBWU5PZEhvYmxzcVRPcUZwenM2cWt1R245VjJ1Q1hZaW1LN1B2YmVvQkxEY2lIdm5KZFF5SmMwM29xYnc?oc=5",
+      "publishedAt": "2026-09-29",
+      "summary": "大促底层逻辑剧变：AI话语权超广告，重塑双11商家竞争格局|抖音|快手|京东|AI文本生成|电商 &nbsp;&nbsp; 新浪新闻",
+      "source": "新浪新闻",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "流量/营销/补贴",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
