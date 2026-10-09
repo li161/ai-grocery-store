@@ -1,6 +1,11 @@
 name: Sync Retail Intelligence
 
 on:
+  push:
+    paths:
+      - 'scripts/sync-retail-news.mjs'
+      - 'scripts/persist-retail-intelligence.mjs'
+      - '.github/workflows/sync-retail-news.yml'
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
@@ -23,7 +28,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Sync public retail feeds
         env:
