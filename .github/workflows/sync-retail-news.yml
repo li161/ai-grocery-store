@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/sync-retail-news.mjs'
       - 'scripts/persist-retail-intelligence.mjs'
+      - 'scripts/enrich-retail-data.mjs'
       - '.github/workflows/sync-retail-news.yml'
   schedule:
     - cron: '*/5 * * * *'
