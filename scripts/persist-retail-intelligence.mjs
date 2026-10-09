@@ -19,8 +19,8 @@ async function fetchArticle(url) {
     if(!r.ok) throw Error('HTTP '+r.status)
     const html = await r.text(); const finalUrl = r.url || url
     const meta = name => {
-      const a = new RegExp('<meta[^>]+(?:name|property)=["\\']'+name+'["\\'][^>]+content=["\\']([\\s\\S]*?)["\\'][^>]*>','i')
-      const b = new RegExp('<meta[^>]+content=["\\']([\\s\\S]*?)["\\'][^>]+(?:name|property)=["\\']'+name+'["\\'][^>]*>','i')
+      const a = new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([\\s\\S]*?)["'][^>]*>`,'i')
+      const b = new RegExp(`<meta[^>]+content=["']([\\s\\S]*?)["'][^>]+(?:name|property)=["']${name}["'][^>]*>`,'i')
       return decode((html.match(a)||html.match(b)||[])[1]||'')
     }
     const canonical = (html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)||[])[1] || finalUrl
