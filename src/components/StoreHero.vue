@@ -1,4 +1,16 @@
 <script setup>
+import { computed, ref } from 'vue'
+const orbitIndex = ref(0)
+const orbitItems = [
+  { label: 'AI 工具', icon: '✳', note: '工具与能力', target: 'tools' },
+  { label: '零售情报', icon: '◉', note: '实时行业信号', target: 'retail-news' },
+  { label: '经营结果', icon: '↗', note: '可验证的业务价值', target: 'outcomes' },
+  { label: 'AI × 行业', icon: '▦', note: '落地场景', target: 'industry' }
+]
+const activeOrbit = computed(() => orbitItems[orbitIndex.value])
+function rotateOrbit(step) {
+  orbitIndex.value = (orbitIndex.value + step + orbitItems.length) % orbitItems.length
+}
 const baseUrl = import.meta.env.BASE_URL
 defineProps({
   onNavigate: { type: Function, required: true },
@@ -27,6 +39,26 @@ defineProps({
       <span>✦</span>
       <strong>老板说：</strong>
       <span>“今天刚进了一批 AI，要不要看看？”</span>
+    </div>
+
+    <div class="supply-orbit" aria-label="可交互的 3D 供给星环">
+      <div class="orbit-caption"><span class="orbit-live"></span> SUPPLY NETWORK <small>互动式 3D 导览</small></div>
+      <div class="orbit-stage" :class="'orbit-focus-' + orbitIndex">
+        <div class="orbit-ring orbit-ring-a"></div>
+        <div class="orbit-ring orbit-ring-b"></div>
+        <div class="orbit-ring orbit-ring-c"></div>
+        <button class="orbit-core" @click="onNavigate(activeOrbit.target)" :aria-label="'打开' + activeOrbit.label">
+          <span class="core-glow"></span><strong>{{ activeOrbit.icon }}</strong><small>{{ activeOrbit.label }}</small>
+        </button>
+        <button v-for="(item, index) in orbitItems" :key="item.label" class="orbit-node" :class="'orbit-node-' + index" :aria-pressed="orbitIndex === index" @click="orbitIndex = index; onNavigate(item.target)">
+          <span>{{ item.icon }}</span><small>{{ item.label }}</small>
+        </button>
+      </div>
+      <div class="orbit-controls">
+        <button aria-label="上一个供给节点" @click="rotateOrbit(-1)">↶</button>
+        <div><strong>{{ activeOrbit.label }}</strong><small>{{ activeOrbit.note }}</small></div>
+        <button aria-label="下一个供给节点" @click="rotateOrbit(1)">↷</button>
+      </div>
     </div>
 
     <div class="spatial-store" aria-label="首页空间货架">
