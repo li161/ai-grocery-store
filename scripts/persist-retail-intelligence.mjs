@@ -8,9 +8,9 @@ const historyDir = new URL('../public/retail-history/', import.meta.url)
 
 const readJson = async (file, fallback) => { try { return JSON.parse(await readFile(file,'utf8')) } catch { return fallback } }
 const writeJson = (file, value) => writeFile(file, JSON.stringify(value,null,2),'utf8')
-const domain = url => { try { return new URL(url).hostname.replace(/^www\\./,'') } catch { return '' } }
-const decode = v => (v||'').replace(/<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>/g,'$1').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-const clean = v => decode(v).replace(/<script[\\s\\S]*?<\\/script>/gi,' ').replace(/<style[\\s\\S]*?<\\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/\\s+/g,' ').trim()
+const domain = url => { try { return new URL(url).hostname.replace(/^www\./,'') } catch { return '' } }
+const decode = v => (v||'').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+const clean = v => decode(v).replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
 
 async function fetchArticle(url) {
   const controller = new AbortController(); const timer = setTimeout(()=>controller.abort(), TIMEOUT)
@@ -23,8 +23,8 @@ async function fetchArticle(url) {
       const b = new RegExp('<meta[^>]+content=["\\']([\\s\\S]*?)["\\'][^>]+(?:name|property)=["\\']'+name+'["\\'][^>]*>','i')
       return decode((html.match(a)||html.match(b)||[])[1]||'')
     }
-    const canonical = (html.match(/<link[^>]+rel=["\\']canonical["\\'][^>]+href=["\\']([^"\\']+)["\\']/i)||[])[1] || finalUrl
-    const blocks = [...html.matchAll(/<(article|main)\\b[^>]*>([\\s\\S]*?)<\\/\\1>/gi)].map(x=>clean(x[2])).sort((a,b)=>b.length-a.length)
+    const canonical = (html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)||[])[1] || finalUrl
+    const blocks = [...html.matchAll(/<(article|main)\b[^>]*>([\s\S]*?)<\/\1>/gi)].map(x=>clean(x[2])).sort((a,b)=>b.length-a.length)
     const excerpt = (blocks[0] || meta('description') || meta('og:description') || clean(html)).slice(0,1800)
     return {canonicalUrl:canonical,sourceDomain:domain(canonical),articleExcerpt:excerpt,retrievedAt:new Date().toISOString(),fetchError:null}
   } catch(e) { return {canonicalUrl:url,sourceDomain:domain(url),articleExcerpt:'',retrievedAt:new Date().toISOString(),fetchError:e.message} }
@@ -39,13 +39,13 @@ async function mapLimit(items, limit, fn) {
 
 async function llm(system,data) {
   const key=process.env.OPENAI_API_KEY; if(!key)return null
-  const base=(process.env.OPENAI_BASE_URL||'https://api.openai.com/v1').replace(/\\/$/,'')
+  const base=(process.env.OPENAI_BASE_URL||'https://api.openai.com/v1').replace(/\/$/,'')
   const model=process.env.RETAIL_LLM_MODEL||'deepseek-v4-flash'
   try {
     const r=await fetch(base+'/chat/completions',{method:'POST',headers:{authorization:'Bearer '+key,'content-type':'application/json'},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(data)}],temperature:.1})})
     if(!r.ok)throw Error('LLM HTTP '+r.status)
     const j=await r.json(), c=j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content || ''
-    const m=c.match(/```(?:json)?\\s*([\\s\\S]*?)\\s*```/)||c.match(/\\[[\\s\\S]*\\]/)||c.match(/\\{[\\s\\S]*\\}/)
+    const m=c.match(/```(?:json)?\s*([\s\S]*?)\s*```/)||c.match(/\[[\s\S]*\]/)||c.match(/\{[\s\S]*\}/)
     return m?JSON.parse(m[1]||m[0]):null
   } catch(e){ console.warn('[retail-radar] verification fallback: '+e.message); return null }
 }
