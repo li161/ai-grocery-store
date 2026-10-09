@@ -1,8 +1,37 @@
 {
-  "generatedAt": null,
-  "date": null,
+  "date": "2026-10-09",
+  "generatedAt": "2026-10-09T10:21:13.501Z",
   "title": "AI 零售日报",
-  "lead": "等待首次雷达同步",
-  "bullets": [],
-  "method": "信源抓取 → AI 零售影响评分 → 事件聚簇 → 热度排序 → 日报"
+  "lead": "等待今日情报聚合完成",
+  "sections": [
+    {
+      "title": "LegalOn halves Codex costs while maintaining development speed",
+      "eventId": "event-gp9l09"
+    },
+    {
+      "title": "Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
+      "eventId": "event-zgz0nz"
+    },
+    {
+      "title": "Pollo AI turns creative ideas into campaigns with OpenAI",
+      "eventId": "event-1v7d7c1"
+    },
+    {
+      "title": "Disrupting AI-enabled “false front” operations",
+      "eventId": "event-1s7gf4r"
+    },
+    {
+      "title": "AI shopping has outrun its plumbing, says payments expert - InternetRetailing",
+      "eventId": "event-4kie08"
+    }
+  ],
+  "watchlist": [
+    "继续观察后续披露",
+    "继续观察后续披露",
+    "继续观察后续披露",
+    "继续观察后续披露",
+    "继续观察后续披露"
+  ],
+  "method": "多源采集 → 规则初筛 → LLM 相关性/影响力判断 → 事件聚类 → 证据分级 → 事件热度 → 日报",
+  "factBoundary": "日报为情报摘要，不替代原始公告、财报或企业正式披露。"
 }
