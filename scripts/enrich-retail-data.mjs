@@ -14,7 +14,7 @@ const sourceRules = [
 function evidence(item) {
   const rule = sourceRules.find(x => x.test.test(item.sourceType || ''))
   const official = rule?.trust === 'A'
-  const hasUrl = /^https?:\\/\\//i.test(item.url || '')
+  const hasUrl = /^https?:\/\//i.test(item.url || '')
   return {
     level: hasUrl ? (official ? 'A' : rule?.trust || 'C') : 'D',
     label: hasUrl ? (official ? '可核验' : '可追溯') : '缺少原文',
