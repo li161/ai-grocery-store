@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T08:34:55.246Z",
+  "generatedAt": "2026-10-11T08:59:20.655Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,23 +95,35 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 8,
-    "archivedItems": 60,
+    "newlyFound": 17,
+    "archivedItems": 66,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 8,
-      "京东": 24,
-      "美团": 12,
-      "拼多多": 16
+      "淘宝": 10,
+      "京东": 26,
+      "美团": 13,
+      "拼多多": 17
     }
   },
   "items": [
+    {
+      "title": "数云×京东联合打造「数云会员专家」，构建经营诊断到营销执行全链路闭环 - 凤凰网科技",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFA0SDQ3cEhUTkVsb09oVTg1dkdYX3RpSlhHVEFvZXR6Z3lDQTZLMjJqdGpEVFZQbzRndHlsYjNfNE85SzI4LTBPR0M1N28?oc=5",
+      "publishedAt": "2026-10-10",
+      "summary": "数云×京东联合打造「数云会员专家」，构建经营诊断到营销执行全链路闭环 &nbsp;&nbsp; 凤凰网科技",
+      "source": "凤凰网科技",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
     {
       "title": "波音电子平台公司·社区团购大战再起：美团优选推出次日达，拼多多跟进补贴 - Pchome电脑之家",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1VeWo4cG05cHlHNTNNS25WRE9xTzhhLXI5N1hYWFB4bFFSaFBmZ2NOZE1xa1R5T2ZhaFFOSWZPdm1vOFJ4ZkcyUHVJSFIwOEdrbWZ4TjVfV2h2WjA4M3JfVA?oc=5",
@@ -672,6 +684,18 @@
       "status": "已由官方频道披露"
     },
     {
+      "title": "支付宝推出AI版“阿宝” 京东618下单用户数创新高| 邦小白零售周报- 零售 - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1DRXpuYzMxLTJWTlVGaUdzZU5JMndTUmVKUjFfMWZGWjZuUFlBLUlja1E3by1xRnF4YkUybENRQlhMMUFjUWVDcGVQSGtFLWNyc3NnNmlB?oc=5",
+      "publishedAt": "2026-06-22",
+      "summary": "支付宝推出AI版“阿宝” 京东618下单用户数创新高| 邦小白零售周报- 零售 &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
+      "platform": "京东",
+      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBHTHFoOFpYel9ETGJRelZ2ZVRoMTlaQXlxNjZnUmR0SHhYTlNyOElkbkc2V3ExWV9oSHZuaFFybkdEVkdSRVZWTjBzUjczelBHMXNzYlZsOUlMTzVCcnQ2OWZ5MVRuOHZlTXRxZEtERTNjWW5yT05nMEkwRk04LXM?oc=5",
       "publishedAt": "2026-05-27",
@@ -724,6 +748,30 @@
       "source": "新浪财经",
       "platform": "淘宝",
       "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "拼多多商家版隐私政策 - 拼多多",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNcGV4ZXM4LTJNeWtoMVZ2S24zMFF0N0w4bTRDOEwtVm13bmE0TVJMN2FKRHdfV0FQM0tnS0x4TkI3d3ZsRWtpTUxpQ1A1V1UzaXhnM2VtRG40MEdfbEFmNXFqb0lCdHZYdG0yRG5IbEtmZGJ0bk5tNllZeGxzRTdIOHU4VHliQXJwNFVacS1Iek9jbUk?oc=5",
+      "publishedAt": "2026-05-14",
+      "summary": "拼多多商家版隐私政策 &nbsp;&nbsp; 拼多多",
+      "source": "拼多多",
+      "platform": "拼多多",
+      "query": "site:pinduoduo.com OR site:yangkeduo.com 拼多多 商家 规则 政策 公告 费用 2026",
+      "actionType": "治理/算法",
+      "sourceType": "官方检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "实测千问×淘宝：AI购物，更隐蔽的“竞价排名”？ - 36Kr",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB3QmM4NVFDNEYySk9KY1pENWtCSU1xeWRVcVVuUUFKY1JWYUdPQlJySnZTcjdETUtuMWlSSWhjWlNBVEt2MnhoRm5idkI4Zw?oc=5",
+      "publishedAt": "2026-05-13",
+      "summary": "实测千问×淘宝：AI购物，更隐蔽的“竞价排名”？ &nbsp;&nbsp; 36Kr",
+      "source": "36Kr",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
       "actionType": "AI导购/购物助手",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
@@ -954,6 +1002,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI - 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE4tMkZNQWVDZlVoemJrNS1NelN4MjBLZ2V3c3pnMVZmVzQwR1F2bHFXS0JzOHE3RXJqR1c5NE5SS3VpbkVCNkJCTWh6ZDdRRnRsZGVNcjlReThQSWV2NlZlcndCSDh3c3ozdEZfYmZsOUF4MU10ZkNzaUxhVGVZNW8?oc=5",
+      "publishedAt": "2026-01-23",
+      "summary": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI &nbsp;&nbsp; 新浪财经",
+      "source": "新浪财经",
+      "platform": "美团",
+      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "拼多多“千亿扶持”加码“2026年货节”，百亿补贴推出三大重磅补贴 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5CVVJWWjNoRld6Unk2R1FLdlRfZVFmaTliOW5JU0F0RUhjcmJmaWVyQmJXNENQalZZaE1Gbk1pNlctSGdWb1VpN0FjY0RWY2k2aGFSeG9RY2x0RjFOM1BYdkNBbWhhZjZ0SUFmRXp6Y2V3MUhBYnZvWVRBYUYxdGM?oc=5",
       "publishedAt": "2026-01-19",
@@ -986,6 +1046,18 @@
       ],
       "url": "https://www.alibabagroup.com/en-US/document-1948497434959151104",
       "status": "已由官方发布确认"
+    },
+    {
+      "title": "进入“AI办事时代”！千问App接入淘宝、闪购、支付宝 - 中国科技网",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9XdHJqZGpYUHZfUjJINGlsU0JjSUxfbnlYY2h1Y2UtTW10Sk1ZWVpCMmFCV1FYOFhyOUduejZnQVJnc0VBLWFZcGFmdHNxXzNKSlIzTmw3dUVrRXpoSDhXV1FpRWdNRHZ1WDhrUG00TDg?oc=5",
+      "publishedAt": "2026-01-15",
+      "summary": "进入“AI办事时代”！千问App接入淘宝、闪购、支付宝 &nbsp;&nbsp; 中国科技网",
+      "source": "中国科技网",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "title": "美团·闪购商家规则中心 - 美团规则中心",
