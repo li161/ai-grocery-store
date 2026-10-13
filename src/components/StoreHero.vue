@@ -9,7 +9,7 @@ const orbitItems = [
   { label: 'AI × 行业', icon: '▦', note: '真实落地场景', target: 'industry' }
 ]
 const activeOrbit = computed(() => orbitItems[orbitIndex.value])
-const sceneStyle = computed(() => ({ '--tilt-x': sceneTilt.value.x + 'deg', '--tilt-y': sceneTilt.value.y + 'deg' }))
+const sceneStyle = computed(() => ({ '--tilt-x': sceneTilt.value.x + 'deg', '--tilt-y': sceneTilt.value.y + 'deg', '--tilt-x-soft': (sceneTilt.value.x * 0.1) + 'deg', '--tilt-y-soft': (sceneTilt.value.y * -0.12) + 'deg', '--tilt-x-orbit': (sceneTilt.value.x * 0.12) + 'deg', '--tilt-y-orbit': (sceneTilt.value.y * 0.16) + 'deg', '--tilt-x-floor': (sceneTilt.value.x * -0.04) + 'deg', '--tilt-y-floor': (sceneTilt.value.y * 0.07) + 'deg' }))
 function rotateOrbit(step) { orbitIndex.value = (orbitIndex.value + step + orbitItems.length) % orbitItems.length }
 function handleSceneMove(event) {
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
