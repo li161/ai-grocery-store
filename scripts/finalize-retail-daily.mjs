@@ -33,7 +33,7 @@ const sections = top.slice(0, 6).map(item => {
     title,
     summary: summary && !summary.includes('等待今日') && !summary.includes('等待 AI')
       ? summary.slice(0, 220)
-      : '自动采集到该公开信号。请打开原文核验发布时间、具体动作、适用对象及经营影响；当前摘要不将标题推断为已确认事实。',
+      : '自动采集到该公开信号。请打开原文核验发布时间、具体动作、适用对象及经营影响；当前不将标题推断为已确认事实。',
     eventId: item.eventId || null,
     date: clean(item.date || item.publishedAt || today).slice(0, 10),
     source: clean(item.source || item.sourceDomain || '公开信源'),
@@ -41,7 +41,7 @@ const sections = top.slice(0, 6).map(item => {
     evidence: item.evidence?.label || (item.sourceType === '官方' ? '官方来源，内容待核验' : '公开报道，待核验')
   }
 })
-const sourceCount = new Set(top.map(item => item.sourceDomain || item.source).filter(Boolean)).size
+const sourceCount = new Set(top.map(item => item.source || item.sourceDomain).filter(Boolean)).size
 const lead = sections.length
   ? `日报于 ${today} 自动重建：近 7 日发现 ${recent.length} 条有日期和原文链接的信号，筛出 ${sections.length} 个优先事件（来源标识 ${sourceCount} 个）。请以原文核验事实与经营影响。`
   : `日报于 ${today} 已执行检查，但近 7 日没有通过日期和链接校验的有效信号。为避免把旧新闻显示为最新内容，本次不沿用过期条目；请检查采集工作流与信源健康状态。`
