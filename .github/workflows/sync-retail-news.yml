@@ -6,9 +6,10 @@ on:
       - 'scripts/sync-retail-news.mjs'
       - 'scripts/persist-retail-intelligence.mjs'
       - 'scripts/enrich-retail-data.mjs'
+      - 'scripts/finalize-retail-daily.mjs'
       - '.github/workflows/sync-retail-news.yml'
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -21,26 +22,24 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - name: Sync public retail feeds
         env:
           OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY || secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || secrets.OPENAI_BASE_URL }}
           RETAIL_LLM_MODEL: ${{ secrets.RETAIL_LLM_MODEL || 'deepseek-v4-flash' }}
         run: |
-            npm run sync:retail
-            node scripts/persist-retail-intelligence.mjs
-            node scripts/enrich-retail-data.mjs
-
+          npm run sync:retail
+          node scripts/persist-retail-intelligence.mjs
+          node scripts/enrich-retail-data.mjs
+          node scripts/finalize-retail-daily.mjs
       - name: Commit changed intelligence
         run: |
           git config user.name "ai-grocery-store-bot"
@@ -50,5 +49,5 @@ jobs:
             exit 0
           fi
           git add src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json public/retail-source-health.json public/retail-changes.json public/retail-history
-          git commit -m "chore: sync retail intelligence"
+          git commit -m "chore: refresh retail intelligence and daily digest"
           git push
