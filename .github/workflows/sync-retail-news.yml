@@ -50,4 +50,15 @@ jobs:
           fi
           git add src/data/retailNews.generated.js public/retail-news.json public/retail-events.json public/retail-daily.json public/retail-source-health.json public/retail-changes.json public/retail-history
           git commit -m "chore: refresh retail intelligence and daily digest"
-          git push
+          # Other workflows or direct commits may update main during collection.
+          # Rebase the generated snapshot onto the newest main before pushing.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Unable to push retail snapshot after three retries." >&2
+          exit 1
