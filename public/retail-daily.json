@@ -1,6 +1,6 @@
 {
   "date": "2026-10-16",
-  "generatedAt": "2026-10-16T04:30:46.539Z",
+  "generatedAt": "2026-10-16T11:21:55.513Z",
   "title": "AI 零售日报",
   "lead": "日报于 2026-10-16 自动重建：近 7 日发现 160 条有日期和原文链接的信号，筛出 6 个优先事件（来源标识 8 个）。请以原文核验事实与经营影响。",
   "sections": [
@@ -11,6 +11,15 @@
       "date": "2026-10-15",
       "source": "Grocery Trade News",
       "sourceUrl": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9CdC02T2hJT3p0TEhXd051bUJhT2lIRlRtcDVOb0d5YmFVenFiUno0eGFDV2NlVHdNZWFOU0VRZjhaalVLWlExZ01UVnhDYm5ReGZwZDlnTzdaX2lTdXFZS0pkM3ppekRKaXc",
+      "evidence": "可追溯"
+    },
+    {
+      "title": "Vision AI: How Morrisons is improving the checkout experience and loss recovery with Everseen - Retail Week",
+      "summary": "信源原文自动同步；事实以原始报道为准。",
+      "eventId": "event-t5pxld",
+      "date": "2026-10-16",
+      "source": "Retail Week",
+      "sourceUrl": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNUk5NeXFIZWRHSG9SQkFfdmx5dUJNbjB3dDdXekZ0QXI5cDF2MDd0MUk4S004MEV6bUwxeDNodlZhVEI0NlctWUw1ZVBtcUQzRmFzV3lob2YyQkNQQmpYZjhxR29LUHJCS0FtRFM0RXRHMFlSUFhiTXo1V2dWckswMUNjTVh6V0lLMzBsbXVDVFBSYXF1QWtMUlQtTGFQVDA5bF8wNjZoTVFMMnVBVDhFajZ6UDFDczREMTFidGRqOVdGYmhPTkNqdUt1Z1N4SllfRkc2bmcwWmp6cko0UXFodg",
       "evidence": "可追溯"
     },
     {
@@ -48,23 +57,14 @@
       "source": "https://newswire.co.nz/",
       "sourceUrl": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPODdRWGRxMC1pNjEwbzR5bUYxOW5Lb3pxeF8wQmhLOUg4dm5XZTVXWmJGdC1lOW9SbDFwWU5RcS1UcmtlbDZ4bjBIblhxSmUxSzdEaTJ2MzBDMWJtODZxLVM1TUJfTFU4SXExNzBTejE0RFgzZmdTUjUtZnZOWk1JQ2hyZw",
       "evidence": "可追溯"
-    },
-    {
-      "title": "Google’s Universal Cart Launches, but Pricing and Data Use Go Unsaid - The Eastern Herald",
-      "summary": "信源原文自动同步；事实以原始报道为准。",
-      "eventId": "event-4k7051",
-      "date": "2026-10-15",
-      "source": "The Eastern Herald",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPdGJ1RXBnZlFQRllxQjRGclRaN3Q0dV9aNVFrOHVpSXE0ZTJqZHl6UW5JNG1rNmxuR2tUUE9uZDRtVDFFSVNrbkxCUmdtM2h4TGtHanhjWmR0Z05udWVjc0VBWllVR000VjE0QnZ6R29QX0Yyek5JSzZENURFLVd4SA",
-      "evidence": "可追溯"
     }
   ],
   "watchlist": [
     "核验「Nedap RFID Self-Checkout Expands as Q3 Sales Ris」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
+    "核验「Vision AI: How Morrisons is improving the checko」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「京东物流护航双11 全场景履约方案搭配AI新装备全面启用- 快递圈 - 亿豹网」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Personal Shopping Platform Glance Adds PayPal Na」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「Shopify Opens Its Catalog and Checkout to Any AI」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「Shopify now lets AI agents complete the checkout」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
+    "核验「Shopify Opens Its Catalog and Checkout to Any AI」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
   ],
   "method": "多源采集 → 日期与原文链接校验 → 事件去重 → 来源追溯 → 日报重建",
   "factBoundary": "日报是公开信号导航，不等同于事实确认；关键结论需核对原始公告、报道正文或财报。",
