@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T07:15:52.243Z",
+  "generatedAt": "2026-10-17T07:00:44.772Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -99,14 +99,14 @@
     "healthy": 32,
     "failed": 0,
     "newlyFound": 4,
-    "archivedItems": 68,
+    "archivedItems": 70,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 11,
-      "京东": 27,
+      "京东": 29,
       "美团": 13,
       "拼多多": 17
     }
@@ -121,6 +121,18 @@
       "platform": "淘宝",
       "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
       "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "京东11.11金融服务加码：首批落地国家贴息新政、超百亿专项提额及出海保险护航超1000万商家 - 电商派",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1GT1MtMm12c2pza25IYjNJVmJBTE5abU5jMzB4NkRzRmxUQWZZcnFWSjdFVHZueVIzTk5uRFpDbU5MTUtDOE0zTVk4R3VYaUY2RVR4STYxUVlZMGp2djZ6Ug?oc=5",
+      "publishedAt": "2026-10-15",
+      "summary": "京东11.11金融服务加码：首批落地国家贴息新政、超百亿专项提额及出海保险护航超1000万商家 &nbsp;&nbsp; 电商派",
+      "source": "电商派",
+      "platform": "京东",
+      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
+      "actionType": "商家经营工具",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
@@ -463,6 +475,18 @@
       "publishedAt": "2026-09-23",
       "summary": "首批京麦AI专家团发布，京东持续招募商家三方好工具 &nbsp;&nbsp; 品玩",
       "source": "品玩",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "AI开始懂经营京东正在重做商家的生意系统- 零售 - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9fU0x3QmZESW1WRDIwZEt5SUpUQ0J0MkE2Z2pyUVhqcE5IZzBtdF92MWlWNTFpb0MxUUdUX1ZoQmVCTk1DUGRiU3RQQ0ZmS3g4UEdwc0l3?oc=5",
+      "publishedAt": "2026-09-23",
+      "summary": "AI开始懂经营京东正在重做商家的生意系统- 零售 &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
       "platform": "京东",
       "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
       "actionType": "商家经营工具",
