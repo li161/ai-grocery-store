@@ -58,7 +58,7 @@ async function send(){
    let data
    const requestKey=globalThis.crypto?.randomUUID?.()||('chat-'+Date.now()+'-'+Math.random().toString(36).slice(2))
    try{
-    response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat',{
+    response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat?async=1',{
      method:'POST',signal:controller.signal,
      headers:{'content-type':'application/json','idempotency-key':requestKey},
      body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(0, -1).slice(-12).map(m=>({role:m.role,text:m.text}))})
@@ -69,8 +69,42 @@ async function send(){
     throw error
    }finally{clearTimeout(requestTimer)}
    if(!response.ok)throw new Error(data.error||'Agent API 请求失败（HTTP '+response.status+'）')
-   for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
-   if(!data.replies?.length)throw new Error('服务没有返回回复')
+   if(data.started && data.taskId){
+    const taskId=data.taskId
+    const shown=new Set()
+    const deadline=Date.now()+90000
+    let terminal=false
+    while(Date.now()<deadline){
+     const pollController=new AbortController()
+     const pollTimer=setTimeout(()=>pollController.abort(),6000)
+     let pollResponse, pollData
+     try{
+      pollResponse=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/tasks/'+encodeURIComponent(taskId),{signal:pollController.signal})
+      pollData=await pollResponse.json().catch(()=>({}))
+     }finally{clearTimeout(pollTimer)}
+     if(!pollResponse.ok)throw new Error(pollData.error||'任务状态查询失败（HTTP '+pollResponse.status+'）')
+     const task=pollData.task
+     if(!task)throw new Error('任务状态响应缺少 task')
+     data.task=task
+     for(const item of task.tasks||[]){
+      if(item.status==='succeeded'&&!shown.has('ok:'+item.agentId)){
+       messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.result||'任务已完成，但没有返回文本。',time:now()})
+       shown.add('ok:'+item.agentId)
+      }else if(['failed','skipped','interrupted'].includes(item.status)&&!shown.has('err:'+item.agentId)){
+       messages.value.push({id:Date.now()+Math.random(),role:'system',text:(item.agentName||item.agentId)+'：'+(item.error||'任务未完成'),time:now()})
+       shown.add('err:'+item.agentId)
+      }
+     }
+     terminal=['completed','partial_failed','failed','interrupted'].includes(task.status)
+     if(terminal)break
+     status.value='任务 '+taskId.slice(0,8)+' · '+(task.tasks||[]).filter(t=>t.status==='succeeded').length+'/'+(task.tasks||[]).length+' 个岗位完成'
+     await new Promise(resolve=>setTimeout(resolve,900))
+    }
+    if(!terminal)throw new Error('等待超过 90 秒，任务仍可能在后台执行。任务 ID：'+taskId+'；请稍后重试查询，不要重复提交。')
+    data.failed=data.task.status!=='completed'
+   }
+   if(!data.started)for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
+   if(!data.started&&!data.replies?.length)throw new Error('服务没有返回回复')
    const runId=data.taskId||data.traceId
    if(data.failed)status.value='部分 Agent 失败 · 任务 '+(runId||'已记录').toString().slice(0,8)
    else status.value='全部回复完成 · 任务 '+(runId||'已记录').toString().slice(0,8)
