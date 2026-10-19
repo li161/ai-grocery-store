@@ -1,0 +1,24 @@
+name: Agent API validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/agent-chat/**'
+      - '.github/workflows/agent-api-check.yml'
+  pull_request:
+    paths:
+      - 'services/agent-chat/**'
+      - '.github/workflows/agent-api-check.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate package manifest
+        run: node -e "JSON.parse(require('node:fs').readFileSync('services/agent-chat/package.json','utf8'))"
+      - name: Check Node.js syntax
+        working-directory: services/agent-chat
+        run: npm test
