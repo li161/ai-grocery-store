@@ -5,7 +5,6 @@ const port = Number(process.env.PORT || 8787)
 const deepseekApiKey = process.env.DEEPSEEK_API_KEY
 const deepseekBaseUrl = (process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com').replace(/\/$/, '')
 const deepseekModel = process.env.DEEPSEEK_MODEL || 'deepseek-flash'
-const apiAccessToken = process.env.API_ACCESS_TOKEN
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://airetail.store,https://www.airetail.store,http://localhost:5173,http://localhost:4173')
   .split(',').map(value => value.trim()).filter(Boolean)
 const timeoutMs = Number(process.env.AGENT_TIMEOUT_MS || 60000)
@@ -27,7 +26,7 @@ function setCors(req, res) {
     res.setHeader('vary', 'Origin')
   }
   res.setHeader('access-control-allow-methods', 'GET, POST, OPTIONS')
-  res.setHeader('access-control-allow-headers', 'content-type, x-api-token')
+  res.setHeader('access-control-allow-headers', 'content-type')
   return true
 }
 function rateLimited(ip) {
@@ -114,8 +113,6 @@ const server = http.createServer(async (req, res) => {
   }
   if (req.method !== 'POST' || url.pathname !== '/api/chat') return send(res, 404, { error: 'Not found', traceId })
   if (!deepseekApiKey) return send(res, 503, { error: 'Server missing DEEPSEEK_API_KEY', traceId })
-  if (!apiAccessToken) return send(res, 503, { error: 'Server missing API_ACCESS_TOKEN; model access is disabled', traceId })
-  if (req.headers['x-api-token'] !== apiAccessToken) return send(res, 401, { error: 'Missing or invalid API token', traceId })
   const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim()
   if (rateLimited(ip)) return send(res, 429, { error: 'Rate limit exceeded; retry later', traceId })
   let input
