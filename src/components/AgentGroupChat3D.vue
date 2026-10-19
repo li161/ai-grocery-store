@@ -134,13 +134,15 @@ function createAgent(a){
 function initScene(){
  if(!canvasHost.value)return
  scene=new THREE.Scene();scene.background=new THREE.Color(0xe8dfcf);scene.fog=new THREE.FogExp2(0xe8dfcf,.006)
- camera=new THREE.PerspectiveCamera(42,1,.1,100);camera.position.set(0,7.6,15.8)
+ camera=new THREE.PerspectiveCamera(38,1,.1,120);camera.position.set(0,7.1,16.8)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  canvasHost.value.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xfff5df,0x75604a,2.1));scene.add(new THREE.AmbientLight(0xffffff,.72))
  const key=new THREE.DirectionalLight(0xffe6bd,3.1);key.position.set(-4,9,5);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.camera.left=-12;key.shadow.camera.right=12;key.shadow.camera.top=10;key.shadow.camera.bottom=-10;key.shadow.bias=-0.00025;scene.add(key)
  const fill=new THREE.DirectionalLight(0xffffff,1.0);fill.position.set(5,6,2);scene.add(fill)
  const warmLamp=new THREE.PointLight(0xffc875,75,22);warmLamp.position.set(0,5,-1);scene.add(warmLamp)
+ const daylight=new THREE.DirectionalLight(0xc6e4ff,2.0);daylight.position.set(8,6,1);scene.add(daylight)
+ const bounce=new THREE.PointLight(0xffd8a2,18,13);bounce.position.set(-5,3,0);scene.add(bounce)
  const room=new THREE.Group();scene.add(room)
  const box=(w,h,d,x,y,z,mat,group=room)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;group.add(m);return m}
  // Procedural canvas textures give timber a visible grain instead of flat, toy-like color blocks.
@@ -192,10 +194,47 @@ function initScene(){
  // Tall arched-style window bays on the right wall, with mullions and warm afternoon light.
  const glass=new THREE.MeshStandardMaterial({color:0x9fc5d0,roughness:.22,metalness:.08,emissive:0x6c9cac,emissiveIntensity:.18})
  for(let z=-4.6;z<=1.6;z+=3.1){
-  box(.06,3.2,2.2,9.64,3.15,z,trim)
-  box(.07,2.95,1.94,9.58,3.18,z,glass)
-  box(.1,3.05,.09,9.5,3.15,z,wood)
-  box(.1,.09,2,9.5,3.15,z,wood)
+  // Tall glass lower bay with a segmented semicircular arch above it.
+  box(.06,2.45,2.2,9.64,2.75,z,trim)
+  box(.07,2.28,1.94,9.58,2.78,z,glass)
+  box(.1,2.35,.09,9.5,2.75,z,wood)
+  box(.1,.09,2,9.5,2.75,z,wood)
+  const archR=.98
+  for(let i=0;i<=12;i++){
+   const a=Math.PI*i/12
+   const zz=z+Math.cos(a)*archR, yy=4.0+Math.sin(a)*archR
+   const mullion=new THREE.Mesh(new THREE.BoxGeometry(.08,.08,.08),trim);mullion.position.set(9.5,yy,zz);room.add(mullion)
+   if(i<12){const a2=Math.PI*(i+1)/12;const p1=new THREE.Vector3(9.5,yy,zz),p2=new THREE.Vector3(9.5,4+Math.sin(a2)*archR,z+Math.cos(a2)*archR);const d=new THREE.Vector3().subVectors(p2,p1);const seg=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,d.length(),8),wood);seg.position.copy(p1).add(p2).multiplyScalar(.5);seg.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());room.add(seg)}
+  }
+  for(let i=1;i<6;i++){const a=Math.PI*i/6;box(.09,1.95,.055,9.49,2.78,z+Math.cos(a)*archR,wood)}
+ }
+ // Upper mezzanine and gallery railing: this is the strongest missing spatial cue in the reference.
+ const balconyMat=new THREE.MeshStandardMaterial({color:0x493225,roughness:.58,metalness:.08})
+ box(8.8,.22,2.35,0,4.18,-5.45,wood)
+ box(8.95,.12,2.42,0,4.31,-5.45,trim)
+ // Balustrade faces the room; repeated fine balusters read as a real upper floor, not a flat wall.
+ box(8.8,.12,.12,0,4.9,-4.25,darkWood)
+ box(8.8,.12,.12,0,4.45,-4.25,trim)
+ for(let x=-4.25;x<=4.25;x+=.28){box(.035,.42,.035,x,4.68,-4.25,balconyMat)}
+ // A curved stair flight descends from the mezzanine at the right side of the room.
+ // Tapered wedge-like treads are rotated around a shared center to create a continuous spiral.
+ const stairCenter=new THREE.Vector3(5.55,0,-2.0)
+ for(let i=0;i<17;i++){
+  const angle=-Math.PI*.82+i*.105
+  const radius=1.8-i*.018
+  const step=new THREE.Mesh(new THREE.BoxGeometry(.78,.13,.5),i%3===0?wood:darkWood)
+  step.position.set(stairCenter.x+Math.cos(angle)*radius,4.0-i*.205,stairCenter.z+Math.sin(angle)*radius)
+  step.rotation.y=-angle;step.castShadow=true;step.receiveShadow=true;room.add(step)
+  const railPost=new THREE.Mesh(new THREE.CylinderGeometry(.025,.03,.52,8),brass)
+  railPost.position.set(stairCenter.x+Math.cos(angle)*(radius+.35),4.31-i*.205,stairCenter.z+Math.sin(angle)*(radius+.35));room.add(railPost)
+ }
+ // A dark curved handrail follows the stair's outer edge in short joined segments.
+ for(let i=0;i<16;i++){
+  const a1=-Math.PI*.82+i*.105,a2=a1+.105, r=2.15
+  const p1=new THREE.Vector3(stairCenter.x+Math.cos(a1)*r,4.56-i*.205,stairCenter.z+Math.sin(a1)*r)
+  const p2=new THREE.Vector3(stairCenter.x+Math.cos(a2)*r,4.56-(i+1)*.205,stairCenter.z+Math.sin(a2)*r)
+  const d=new THREE.Vector3().subVectors(p2,p1);const rail=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,d.length(),8),balconyMat)
+  rail.position.copy(p1).add(p2).multiplyScalar(.5);rail.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());room.add(rail)
  }
  // A substantial walnut service bar separates staff behind it from visitors in front.
  box(7.8,.92,.95,0,.48,-.05,wood)
