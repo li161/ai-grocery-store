@@ -9,6 +9,7 @@ import RetailNewsShelf from './components/RetailNewsShelf.vue'
 import PlatformActionsShelf from './components/PlatformActionsShelf.vue'
 import HotRank from './components/HotRank.vue'
 import ContentDetail from './components/ContentDetail.vue'
+import AgentGroupChat from './components/AgentGroupChat.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
@@ -19,6 +20,7 @@ const { lanes: newsLanes, activeLane: activeNewsLane, keyword: newsKeyword, filt
 const { items: platformActionItems, meta: platformArchiveMeta } = usePlatformActions()
 
 const activeSection = ref('home')
+const returnFromChat = () => navigate('home')
 const drawerTool = ref(null)
 const selectedNews = ref(null)
 const showSearch = ref(false)
@@ -35,7 +37,8 @@ const sections = [
   { id:'bundles', label:'AI 套装', icon:'◈', group:'内容' },
     { id:'hot-rank', label:'热点榜', icon:'↗', group:'情报' },
   { id:'retail-platform-actions', label:'今日情报', icon:'↗', group:'情报' },
-  { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' }
+  { id:'lab', label:'后院实验室', icon:'⚗', group:'实验' },
+  { id:'agent-chat', label:'数字人群聊', icon:'◉', group:'实验' }
 ]
 
 function navigate(id, { syncHash = true } = {}) {
@@ -116,6 +119,7 @@ onMounted(() => {
   <div class="site">
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
+      <AgentGroupChat v-if="activeSection === 'agent-chat'" :onBack="returnFromChat" />
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
       <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
