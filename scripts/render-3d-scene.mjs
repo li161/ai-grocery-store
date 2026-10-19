@@ -65,7 +65,12 @@ try {
     const canvas = document.querySelector('.scene-shell .three-canvas canvas')
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200 && canvas.clientWidth > 300)
   }, null, { timeout: 20000 })
-  await page.waitForTimeout(1800)
+  // The real GLB assets are required for acceptance: don't screenshot the procedural fallback by mistake.
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('.three-canvas')
+    return canvas?.dataset.roomReady === 'true' && canvas?.dataset.cafeReady === 'true'
+  }, null, { timeout: 60000 })
+  await page.waitForTimeout(1200)
   // Freeze the app's perpetual RAF loop after several real frames so software Chromium can take a stable capture.
   await page.evaluate(() => { window.requestAnimationFrame = () => 0 })
   await page.waitForTimeout(120)
