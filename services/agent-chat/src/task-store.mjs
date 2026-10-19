@@ -112,17 +112,32 @@ export class TaskStore {
       this.refreshRunStatus(run)
       return structuredClone(run)
     }
-    const { rows } = await this.pool.query('SELECT * FROM harness_runs WHERE id=$1', [runId])
-    if (!rows.length) return null
-    const run = this.fromRow(rows[0])
-    const tasks = run.tasks.map(task => task.agentId === agentId ? { ...task, ...patch } : task)
-    const status = this.calculateStatus(tasks)
-    const completedAt = ['completed','partial_failed','failed'].includes(status) ? new Date() : null
-    const updated = await this.pool.query(
-      'UPDATE harness_runs SET tasks=$2::jsonb,status=$3,updated_at=NOW(),completed_at=COALESCE($4,completed_at) WHERE id=$1 RETURNING *',
-      [runId, JSON.stringify(tasks), status, completedAt]
-    )
-    return this.fromRow(updated.rows[0])
+    // Serialize concurrent Agent updates for the same run. Without a row lock,
+    // two parallel updates can read the same JSON snapshot and overwrite each other.
+    const client = await this.pool.connect()
+    try {
+      await client.query('BEGIN')
+      const { rows } = await client.query('SELECT * FROM harness_runs WHERE id=$1 FOR UPDATE', [runId])
+      if (!rows.length) {
+        await client.query('COMMIT')
+        return null
+      }
+      const run = this.fromRow(rows[0])
+      const tasks = run.tasks.map(task => task.agentId === agentId ? { ...task, ...patch } : task)
+      const status = this.calculateStatus(tasks)
+      const completedAt = ['completed','partial_failed','failed'].includes(status) ? new Date() : null
+      const updated = await client.query(
+        'UPDATE harness_runs SET tasks=$2::jsonb,status=$3,updated_at=NOW(),completed_at=COALESCE($4,completed_at) WHERE id=$1 RETURNING *',
+        [runId, JSON.stringify(tasks), status, completedAt]
+      )
+      await client.query('COMMIT')
+      return this.fromRow(updated.rows[0])
+    } catch (error) {
+      await client.query('ROLLBACK').catch(() => {})
+      throw error
+    } finally {
+      client.release()
+    }
   }
 
   refreshRunStatus(run) {
@@ -145,6 +160,13 @@ export class TaskStore {
     if (!this.pool) return structuredClone(this.memory.get(id) || null)
     const { rows } = await this.pool.query('SELECT * FROM harness_runs WHERE id=$1', [id])
     return rows[0] ? this.fromRow(rows[0]) : null
+  }
+
+  async checkConnection() {
+    await this.ready
+    if (!this.pool) return { storage: 'memory', connected: false }
+    await this.pool.query('SELECT 1')
+    return { storage: 'postgres', connected: true }
   }
 
   async close() {
