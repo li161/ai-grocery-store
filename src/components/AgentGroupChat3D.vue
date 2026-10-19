@@ -34,6 +34,7 @@ const sceneShell=ref(null)
 const canvasHost=ref(null)
 const roomRenderStatus=ref('正在加载高细节场景…')
 const highDetailRoomLoaded=ref(false)
+const highDetailCafeLoaded=ref(false)
 const messageList=ref(null)
 const focusAgent=ref('manager')
 const labelPositions=ref({})
@@ -416,7 +417,7 @@ function loadHighDetailRoom(){
   scene.add(result.root)
   if(roomRoot)roomRoot.visible=false
   highDetailRoomLoaded.value=true
-  roomRenderStatus.value='高细节图书馆已载入 · PBR'
+  roomRenderStatus.value='高细节图书馆已载入 · 正在装载咖啡吧'
   // Add a separate cafe GLB so that the environment has real coffee-service equipment and materials.
   loader.load(COFFEE_BAR_URL,cafe=>{
    const built=normalizeAsset(cafe.scene,5.2)
@@ -425,6 +426,8 @@ function loadHighDetailRoom(){
    built.root.position.z-=1.75
    built.root.traverse(object=>{if(object.isMesh){object.castShadow=false;object.receiveShadow=true}})
    scene.add(built.root)
+   highDetailCafeLoaded.value=true
+   roomRenderStatus.value='高细节图书馆 + 咖啡吧 · PBR'
   },undefined,()=>{
    roomRenderStatus.value='高细节图书馆已载入 · 咖啡吧备用模型'
   })
@@ -530,7 +533,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <main class="space-layout">
   <section class="stage-column">
    <div ref="sceneShell" class="scene-shell">
-    <div ref="canvasHost" class="three-canvas"></div>
+    <div ref="canvasHost" class="three-canvas" :data-room-ready="highDetailRoomLoaded ? 'true' : 'false'" :data-cafe-ready="highDetailCafeLoaded ? 'true' : 'false'"></div>
     <div class="scene-vignette"></div>
     <div class="left-glass glass-panel">
      <div class="panel-overline">SHARED CONTEXT / ROOM 001</div>
