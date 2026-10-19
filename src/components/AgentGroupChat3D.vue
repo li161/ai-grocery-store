@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
@@ -30,7 +31,7 @@ const motion=ref('idle')
 const zoom=ref(1)
 const quickPrompts=['制定今天的门店经营计划','@盘点员 设计今日库存核查方案','@采购 列出补货决策所需数据','@店长 汇总各岗位风险与待办']
 const now=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
-let renderer=null, scene=null, camera=null, resizeObserver=null, raf=0, raycaster=null, pointerDown=null, sceneListeners=[]
+let renderer=null, scene=null, camera=null, resizeObserver=null, raf=0, raycaster=null, pointerDown=null, sceneListeners=[], environmentTarget=null
 let orbitAngle=0, orbitTilt=.12, targetZoom=1
 const characterGroups=new Map(), characterHitMeshes=[]
 const sceneClock=new THREE.Clock()
@@ -367,6 +368,7 @@ function initScene(){
  camera.position.set(0,5.1,18);camera.lookAt(0,2.5,-.4)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
+ const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
  host.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xffedd6,0x514237,2.0));scene.add(new THREE.AmbientLight(0xffffff,.38))
  const sun=new THREE.DirectionalLight(0xffd8a4,3.2);sun.position.set(-7,10,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;sun.shadow.bias=-.00022;scene.add(sun)
@@ -391,7 +393,7 @@ function initScene(){
 function zoomBy(delta){zoom.value=Math.max(.7,Math.min(1.35,zoom.value+delta))}
 function resetView(){orbitAngle=0;orbitTilt=.12;zoom.value=1;focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
-onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
+onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}environmentTarget?.dispose();environmentTarget=null;scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
 </script>
 
@@ -400,7 +402,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <header class="space-top">
   <button class="back" @click="props.onBack" aria-label="返回杂货铺">‹</button>
   <div class="brand"><span class="brand-orb"><span>AI</span></span><span><b>门店经营协作室</b><small>6 个岗位数字人 · 共享群聊</small></span></div>
-  <div class="top-agents"><button v-for="a in agents" :key="a.id" class="top-agent" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" @click="focusAgent=a.id;motion='wave';toggleAgent(a.id)" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}"><span class="top-agent-avatar">{{a.emoji}}</span><span><b>{{a.name}}</b><small>{{a.role}}</small></span></button></div>
+  <div class="top-agents"><button v-for="a in agents" :key="a.id" class="top-agent" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" @click="focusAgent=a.id;motion='wave';toggleAgent(a.id)" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}"><span class="top-agent-avatar">{{a.emoji}}</span><span><b>{{a.name}}</b><small>{{a.character}}</small></span></button></div>
   <div class="top-state"><i></i><span>协作空间在线</span><small>角色可用 · 等待调度</small></div>
   <button class="mode-btn" @click="mode=mode==='demo'?'deepseek':'demo'">{{mode==='demo'?'演示模式':'DeepSeek Runtime'}}</button>
  </header>
