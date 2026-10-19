@@ -74,6 +74,9 @@ async function callDeepSeek({ message, agent, history, traceId, dependencyResult
   const context = history.length
     ? '\n\n最近群聊上下文（仅供参考，可能包含其他岗位的回复）：\n' + history.map(item => `[${item.role}] ${item.text}`).join('\n')
     : ''
+  const dependencyContext = Object.keys(dependencyResults).length
+    ? '\\n\\n已完成的依赖任务结果（请基于这些结果继续工作，不要把推断当成事实）：\\n' + Object.entries(dependencyResults).map(([id, result]) => `[依赖 Agent ${id}] ${result?.text || ''}`).join('\\n')
+    : ''
   try {
     const response = await fetch(`${deepseekBaseUrl}/chat/completions`, {
       method: 'POST',
@@ -89,7 +92,7 @@ async function callDeepSeek({ message, agent, history, traceId, dependencyResult
             '请用中文回复，先给结论，再列出可执行步骤；明确区分已知事实、推断和待确认事项。',
             '涉及退款、采购、支付、改库存等高影响操作，只能提出建议并要求人工授权。你是一个独立岗位 Agent，不要假装自己是其他岗位。'
           ].join('\n') },
-          { role: 'user', content: `${context}\n\n本轮用户消息：\n${message}` }
+          { role: 'user', content: `${context}${dependencyContext}\n\n本轮用户消息：\n${message}` }
         ]
       })
     })
