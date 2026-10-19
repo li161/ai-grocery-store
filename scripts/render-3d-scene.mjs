@@ -66,6 +66,9 @@ try {
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200 && canvas.clientWidth > 300)
   }, null, { timeout: 20000 })
   await page.waitForTimeout(1800)
+  // Freeze the app's perpetual RAF loop after several real frames so software Chromium can take a stable capture.
+  await page.evaluate(() => { window.requestAnimationFrame = () => 0 })
+  await page.waitForTimeout(120)
 
   const webgl = await page.locator('.scene-shell .three-canvas canvas').evaluate(canvas => {
     const gl = canvas.getContext('webgl2')
