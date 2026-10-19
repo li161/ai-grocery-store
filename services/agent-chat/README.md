@@ -4,12 +4,13 @@
 
 ## 已实现
 
-- `src/harness/runtime.mjs`：并行 fan-out、单 Agent 异常隔离、任务状态事件日志。
+- `src/harness/runtime.mjs`：依赖 DAG 校验与调度；无依赖任务并行运行，依赖任务等待前置任务成功后执行，前置失败时下游任务标记为 `skipped`；单 Agent 异常隔离、任务状态事件日志。
 - `src/task-store.mjs`：统一任务存储接口；支持 PostgreSQL 持久化与本地内存开发模式。
 - `POST /api/chat`：保留原接口，新增 `taskId`、`task`，支持可选 `Idempotency-Key` 请求幂等键。
 - `GET /api/tasks/:id`：读取任务/各 Agent 子任务状态与结果。
 - PostgreSQL 初始化建表；进程重启时把仍处于运行态的任务标记为 `interrupted`，不会假装自动恢复执行。
-- 单测覆盖并行结果、单 Agent 失败隔离和任务状态更新。
+- Agent 请求可为每个岗位传入可选 `dependsOn: ["inventory"]`，服务端会校验未知依赖与循环依赖，并把已完成依赖的结果注入下游 Agent 上下文。
+- 单测覆盖并行结果、依赖顺序、依赖失败跳过、循环依赖校验、幂等与任务状态更新。
 
 ## 运行与验证
 
@@ -54,7 +55,7 @@ npm start
 
 ## 当前边界
 
-- 已有的 Agent 执行是并行 fan-out；本次没有实现由 LLM 自动规划的依赖 DAG、SSE token 流式输出或自动重放中断任务。
+- 依赖 DAG 目前由请求显式提供 `dependsOn`，尚未接入 LLM 自动规划；SSE token 流式输出与自动重放中断任务尚未实现。
 - 重启时对运行中任务做可见的 `interrupted` 标记，避免无声挂起；不自动重放是为了避免模型调用重复计费。
 - CORS 不是身份认证；内存限流器仍非跨实例共享。
 - 不连接 POS、库存、订单或支付系统；模型输出不是实际执行凭证。

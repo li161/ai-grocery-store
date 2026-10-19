@@ -1,7 +1,7 @@
 import http from 'node:http'
 import { randomUUID } from 'node:crypto'
 import { taskStore } from './src/task-store.mjs'
-import { executeAgentRun } from './src/harness/runtime.mjs'
+import { executeAgentRun, validateTaskGraph } from './src/harness/runtime.mjs'
 
 const port = Number(process.env.PORT || 8787)
 const deepseekApiKey = process.env.DEEPSEEK_API_KEY
@@ -68,11 +68,14 @@ function normalizeHistory(history) {
     text: String(item?.text || '').slice(0, 1800)
   })).filter(item => item.text)
 }
-async function callDeepSeek({ message, agent, history, traceId }) {
+async function callDeepSeek({ message, agent, history, traceId, dependencyResults = {} }) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   const context = history.length
     ? '\n\n最近群聊上下文（仅供参考，可能包含其他岗位的回复）：\n' + history.map(item => `[${item.role}] ${item.text}`).join('\n')
+    : ''
+  const dependencyContext = Object.keys(dependencyResults).length
+    ? '\\n\\n已完成的依赖任务结果（请基于这些结果继续工作，不要把推断当成事实）：\\n' + Object.entries(dependencyResults).map(([id, result]) => `[依赖 Agent ${id}] ${result?.text || ''}`).join('\\n')
     : ''
   try {
     const response = await fetch(`${deepseekBaseUrl}/chat/completions`, {
@@ -89,7 +92,7 @@ async function callDeepSeek({ message, agent, history, traceId }) {
             '请用中文回复，先给结论，再列出可执行步骤；明确区分已知事实、推断和待确认事项。',
             '涉及退款、采购、支付、改库存等高影响操作，只能提出建议并要求人工授权。你是一个独立岗位 Agent，不要假装自己是其他岗位。'
           ].join('\n') },
-          { role: 'user', content: `${context}\n\n本轮用户消息：\n${message}` }
+          { role: 'user', content: `${context}${dependencyContext}\n\n本轮用户消息：\n${message}` }
         ]
       })
     })
@@ -138,11 +141,11 @@ const server = http.createServer(async (req, res) => {
       id: String(raw.id || 'agent').slice(0, 40),
       name: String(raw.name || raw.id || '数字员工').slice(0, 80),
       role: String(raw.role || '协作岗位').slice(0, 100),
-      instructions: String(raw.instructions || '').slice(0, 1200)
+      instructions: String(raw.instructions || '').slice(0, 1200),
+      dependsOn: Array.isArray(raw.dependsOn) ? raw.dependsOn.slice(0, maxAgents).map(value => String(value).slice(0, 40)) : []
     }))
-    if (new Set(agents.map(agent => agent.id)).size !== agents.length) {
-      return send(res, 400, { error: 'Agent ids must be unique within a run', traceId })
-    }
+    try { validateTaskGraph(agents) }
+    catch (error) { return send(res, 400, { error: String(error?.message || 'Invalid task graph').slice(0, 250), traceId }) }
     const history = normalizeHistory(input.history)
     const key = String(req.headers['idempotency-key'] || '').trim().slice(0, 200) || null
     const { run, created } = await taskStore.createRun({
@@ -155,7 +158,7 @@ const server = http.createServer(async (req, res) => {
     }
     const result = await executeAgentRun({
       run, agents, taskStore,
-      executeAgent: agent => callDeepSeek({ message, agent, history, traceId }),
+      executeAgent: (agent, dependencyResults) => callDeepSeek({ message, agent, history, traceId, dependencyResults }),
       onEvent: event => console.log(JSON.stringify({ traceId, ...event }))
     })
     console.log(JSON.stringify({ traceId, requested: agents.length, succeeded: result.replies.length, failed: result.errors.length }))

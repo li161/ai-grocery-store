@@ -57,7 +57,7 @@ export class TaskStore {
     await this.ready
     const tasks = agents.map(agent => ({
       taskId: randomUUID(), agentId: agent.id, agentName: agent.name,
-      status: 'queued', createdAt: new Date().toISOString(),
+      dependsOn: Array.isArray(agent.dependsOn) ? agent.dependsOn : [], status: 'queued', createdAt: new Date().toISOString(),
       startedAt: null, completedAt: null, result: null, error: null
     }))
     const run = {
