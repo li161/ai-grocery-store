@@ -1,7 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
@@ -35,6 +34,7 @@ const avatarMeshes=new Map()
 const clickableMeshes=[]
 const clock=new THREE.Clock()
 let root, orbitAngle=0, orbitTilt=0.18, targetZoom=1, centralCore, orbitLines=[], beamMaterials=[]
+let parallaxX=0, parallaxY=0, parallaxTargetX=0, parallaxTargetY=0
 function toggleAgent(id){ if(busy.value)return; selected.value=selected.value.includes(id)?selected.value.filter(x=>x!==id):[...selected.value,id]; focusAgent.value=id; motion.value='wave' }
 function addPrompt(p){draft.value=p}
 function resolveTargets(text){
@@ -286,67 +286,25 @@ function initScene(){
  centralCore=new THREE.Group()
  const sign=new THREE.Mesh(new THREE.BoxGeometry(1.8,.5,.08),new THREE.MeshStandardMaterial({color:0x5c3d2a,roughness:.55}))
  sign.position.set(0,2.25,-.72);centralCore.add(sign);centralCore.position.set(0,0,0);scene.add(centralCore)
- // Load a licensed, textured GLB asset pack as the primary environment when available.
- // The procedural room remains a resilient fallback if the remote asset cannot be reached.
- const environmentLoader = new GLTFLoader()
- let environmentRoot = null
- environmentLoader.load(
-  'https://cdn.3dassets.dev/assets/22245/v1/model.glb',
-  (gltf) => {
-   if (!scene || !renderer) return
-   environmentRoot = gltf.scene
-   environmentRoot.name = 'RealisticCafeAssetPack'
-   environmentRoot.traverse((node) => {
-    if (node.isMesh) {
-     node.castShadow = true
-     node.receiveShadow = true
-     if (node.material) {
-      const materials = Array.isArray(node.material) ? node.material : [node.material]
-      materials.forEach((material) => {
-       if ('envMapIntensity' in material) material.envMapIntensity = 1.15
-      })
-     }
-    }
-   })
-   const bounds = new THREE.Box3().setFromObject(environmentRoot)
-   const size = bounds.getSize(new THREE.Vector3())
-   const center = bounds.getCenter(new THREE.Vector3())
-   const maxDimension = Math.max(size.x, size.y, size.z) || 1
-   // Normalize pack scale to the existing room's real-world scale.
-   environmentRoot.scale.setScalar(14 / maxDimension)
-   environmentRoot.position.x = -center.x * environmentRoot.scale.x
-   environmentRoot.position.z = -center.z * environmentRoot.scale.z
-   environmentRoot.position.y = -bounds.min.y * environmentRoot.scale.y - 0.08
-   scene.add(environmentRoot)
-   // The downloaded pack has authored PBR meshes and textures; keep the architecture
-   // shell as a backdrop, but suppress the hand-built counter and loose furniture layer.
-   room.children.forEach((node) => {
-    if (node.userData?.proceduralFurniture) node.visible = false
-   })
-   status.value = '高精度咖啡资产已加载 · 场景就绪'
-  },
-  undefined,
-  (error) => {
-   console.warn('Realistic cafe GLB unavailable; using procedural fallback.', error)
-  }
- )
+ // Use the hand-authored room as the single source of truth. A remote cafe pack
+ // was previously layered over this room and caused duplicated furniture / incorrect scale.
  for(const a of agents)createAgent(a)
  raycaster=new THREE.Raycaster()
  const resize=()=>{if(!canvasHost.value||!renderer)return;const w=canvasHost.value.clientWidth,h=canvasHost.value.clientHeight;camera.aspect=w/Math.max(h,1);camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
  resizeObserver=new ResizeObserver(resize);resizeObserver.observe(canvasHost.value);resize()
- const pointerMove=e=>{if(pointerDown){orbitAngle+=(e.clientX-pointerDown.x)*.006;orbitTilt=Math.max(-.2,Math.min(.65,orbitTilt+(e.clientY-pointerDown.y)*.003));pointerDown={...pointerDown,x:e.clientX,y:e.clientY};return}}
+ const pointerMove=e=>{if(pointerDown){orbitAngle+=(e.clientX-pointerDown.x)*.006;orbitTilt=Math.max(-.2,Math.min(.65,orbitTilt+(e.clientY-pointerDown.y)*.003));pointerDown={...pointerDown,x:e.clientX,y:e.clientY};return}const rect=renderer.domElement.getBoundingClientRect();parallaxTargetX=((e.clientX-rect.left)/Math.max(rect.width,1)-.5)*2;parallaxTargetY=((e.clientY-rect.top)/Math.max(rect.height,1)-.5)*2;}
  const pointerUp=e=>{if(!pointerDown)return;const moved=Math.abs(e.clientX-pointerDown.startX)+Math.abs(e.clientY-pointerDown.startY);if(moved<8){const rect=renderer.domElement.getBoundingClientRect();const p=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);raycaster.setFromCamera(p,camera);const hit=raycaster.intersectObjects(clickableMeshes,false)[0];if(hit){focusAgent.value=hit.object.userData.agentId;motion.value='wave';}}
  pointerDown=null}
  const down=e=>{pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY};renderer.domElement.setPointerCapture?.(e.pointerId)}
  renderer.domElement.addEventListener('pointerdown',down);renderer.domElement.addEventListener('pointermove',pointerMove);renderer.domElement.addEventListener('pointerup',pointerUp)
  renderer.domElement.addEventListener('wheel',e=>{zoom.value=Math.max(.72,Math.min(1.45,zoom.value+(e.deltaY>0?-.06:.06)));targetZoom=zoom.value},{passive:true})
- const animate=()=>{raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();centralCore.rotation.y=Math.sin(t*.25)*.025
+ const animate=()=>{raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();parallaxX+=(parallaxTargetX-parallaxX)*.045;parallaxY+=(parallaxTargetY-parallaxY)*.045;centralCore.rotation.y=Math.sin(t*.25)*.025
   for(const [id,g] of avatarMeshes){const a=agents.find(x=>x.id===id);const active=selected.value.includes(id);const focus=focusAgent.value===id;g.position.y=a.pos[1]+Math.sin(t*1.5+agents.indexOf(a))*.06+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.35:0);g.rotation.y=Math.sin(t*.4+agents.indexOf(a))*.12;g.scale.setScalar((focus?1.13:1)*(active?1:.78));g.userData.ring.material.opacity=active?.9:.18;g.userData.halo.rotation.z=t*.65;g.userData.material.emissiveIntensity=focus ? 1.0 : 0.22}
-  const radius=16/zoom.value;camera.position.x=Math.sin(orbitAngle)*radius;camera.position.z=Math.cos(orbitAngle)*radius;camera.position.y=5.4+orbitTilt*8;camera.lookAt(0,1.25,-.25);camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z),.1);renderer.render(scene,camera)}
+  const radius=16/zoom.value;const desiredCamera=new THREE.Vector3(Math.sin(orbitAngle)*radius+parallaxX*.72,5.4+orbitTilt*8-parallaxY*.42,Math.cos(orbitAngle)*radius);camera.position.lerp(desiredCamera,.085);const lookTarget=new THREE.Vector3(parallaxX*.22,1.25-parallaxY*.12,-.25);camera.lookAt(lookTarget);renderer.render(scene,camera)}
  animate()
 }
 function zoomBy(delta){zoom.value=Math.max(.72,Math.min(1.45,zoom.value+delta));targetZoom=zoom.value}
-function resetView(){orbitAngle=0;orbitTilt=.18;zoom.value=1;targetZoom=1;focusAgent.value='manager';motion.value='wave'}
+function resetView(){orbitAngle=0;orbitTilt=.18;zoom.value=1;targetZoom=1;parallaxTargetX=0;parallaxTargetY=0;focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
 onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
@@ -358,7 +316,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <div class="space-layout">
   <section class="stage-column">
    <div class="stage-head"><div><span class="eyebrow">THE LIBRARY BAR / 001</span><h1>在书香与咖啡之间，<em>让团队自然协作。</em></h1><p>选择数字人 · 拖动环绕 · 发起任务 · 实时查看协作结果</p></div><div class="scene-actions"><button @click="zoomBy(.12)">＋</button><button @click="zoomBy(-.12)">−</button><button @click="resetView">◎ 复位视角</button></div></div>
-   <div class="scene-shell"><div ref="canvasHost" class="three-canvas"></div><div class="scene-vignette"></div><div class="scene-hud hud-top"><span><i class="pulse"></i> THE LIBRARY BAR</span><span>BOOKS · COFFEE · COLLABORATION</span></div><div class="scene-hud hud-bottom"><span>拖动旋转场景</span><span>滚轮缩放 · 点击数字人聚焦</span></div>
+   <div class="scene-shell"><div ref="canvasHost" class="three-canvas"></div><div class="scene-vignette"></div><div class="scene-hud hud-top"><span><i class="pulse"></i> THE LIBRARY BAR</span><span>BOOKS · COFFEE · COLLABORATION</span></div><div class="scene-hud hud-bottom"><span>拖动旋转 · 移动鼠标触发空间视差</span><span>滚轮缩放 · 点击数字人聚焦</span></div>
     <div class="agent-labels"><button v-for="a in agents" :key="a.id" class="agent-label" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}" @click="focusAgent=a.id;motion='wave'"><i></i><span><b>{{a.name}}</b><small>{{a.role}}</small></span><em>{{selected.includes(a.id)?'在线':'已静音'}}</em></button></div>
     <div class="core-caption"><span class="core-dot"></span><b>协作核心</b><small>{{activeAgents.length}} AGENTS LINKED</small></div>
    </div>
