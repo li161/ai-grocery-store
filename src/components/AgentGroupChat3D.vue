@@ -3,17 +3,17 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
-  { id:'manager', name:'店长', role:'经营负责人', color:0x9a7bff, guide:'统筹经营目标、拆解任务、协调岗位并汇总结果。', pos:[0,0,-1.9] },
-  { id:'cashier', name:'小票', role:'收银员', color:0x42c8ff, guide:'处理订单咨询、支付流程指引与售后分流。', pos:[-2.1,0,-2.0] },
-  { id:'guide', name:'小导', role:'导购顾问', color:0xffbd65, guide:'识别顾客需求、比较商品并提供组合购买建议。', pos:[2.6,0,1.9] },
-  { id:'buyer', name:'采购', role:'采购补货', color:0x50e0bd, guide:'整理缺货信号、供应商报价与补货建议。', pos:[-4.5,0,1.5] },
-  { id:'inventory', name:'盘点员', role:'库存盘点', color:0x65a6ff, guide:'核对库存差异，发现临期和损耗风险。', pos:[4.4,0,1.3] },
-  { id:'pm', name:'林舟', role:'产品经理', color:0xff79c6, guide:'将经营目标拆成流程、验收标准和迭代计划。', pos:[0,0,4.2] }
+  { id:'manager', name:'店长', role:'经营负责人', color:0x9a7bff, guide:'统筹经营目标、拆解任务、协调岗位并汇总结果。',  },
+  { id:'cashier', name:'小票', role:'收银员', color:0x42c8ff, guide:'处理订单咨询、支付流程指引与售后分流。',  },
+  { id:'guide', name:'小导', role:'导购顾问', color:0xffbd65, guide:'识别顾客需求、比较商品并提供组合购买建议。',  },
+  { id:'buyer', name:'采购', role:'采购补货', color:0x50e0bd, guide:'整理缺货信号、供应商报价与补货建议。',  },
+  { id:'inventory', name:'盘点员', role:'库存盘点', color:0x65a6ff, guide:'核对库存差异，发现临期和损耗风险。',  },
+  { id:'pm', name:'林舟', role:'产品经理', color:0xff79c6, guide:'将经营目标拆成流程、验收标准和迭代计划。',  }
 ]
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map(a=>a.id))
 const activeAgents = computed(()=>agents.filter(a=>selected.value.includes(a.id)))
 const messages = ref([
- {id:1,role:'system',text:'协作空间已启动。点击任意数字人可聚焦；拖动场景可环绕查看。',time:'刚刚'},
+ {id:1,role:'system',text:'场景已加载。拖动背景可触发空间视差；点击角色标签可聚焦并发起协作。',time:'刚刚'},
  {id:2,role:'manager',text:'我是店长。告诉我经营目标，我会拆解任务并协调各岗位协作。',time:'刚刚'}
 ])
 const draft=ref('')
@@ -104,7 +104,7 @@ function initScene(){
  sceneImageProbe.src=sceneImageUrl
  const down=e=>{
   if(e.target.closest?.('button,a,textarea,input'))return
-  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
+  pointerDown={x:e.clientX,y:e.clientY}
   el.setPointerCapture?.(e.pointerId)
  }
  const move=e=>{
@@ -146,7 +146,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
   <button class="back" @click="props.onBack" aria-label="返回杂货铺">‹</button>
   <div class="brand"><span class="brand-orb"><span>AI</span></span><span><b>门店经营协作室</b><small>6 个岗位数字人 · 共享群聊</small></span></div>
   <div class="top-agents"><button v-for="a in agents" :key="a.id" class="top-agent" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" @click="focusAgent=a.id;motion='wave';toggleAgent(a.id)" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}"><span class="top-agent-avatar"><i></i></span><span><b>{{a.name}}</b><small>{{a.role}}</small></span></button></div>
-  <div class="top-state"><i></i><span>Router 在线</span><small>规则优先 · 并行调度</small></div>
+  <div class="top-state"><i></i><span>协作空间在线</span><small>角色可用 · 等待调度</small></div>
   <button class="mode-btn" @click="mode=mode==='demo'?'deepseek':'demo'">{{mode==='demo'?'演示模式':'DeepSeek Runtime'}}</button>
  </header>
  <main class="space-layout">
