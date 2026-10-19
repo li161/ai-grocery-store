@@ -406,7 +406,7 @@ function initScene(){
  camera=new THREE.PerspectiveCamera(48,1,.1,120)
  camera.position.set(0,6.0,15.5);camera.lookAt(0,1.8,3.2)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,headlessRender?.85:1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=!headlessRender;renderer.shadowMap.type=THREE.PCFSoftShadowMap
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,headlessRender ? 0.85 : 1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=!headlessRender;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
  host.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xffedd6,0x514237,2.0));scene.add(new THREE.AmbientLight(0xffffff,.38))
