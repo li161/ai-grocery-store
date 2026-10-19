@@ -1,10 +1,13 @@
 <script setup>
 import { computed, ref } from 'vue'
-const props = defineProps({ onBack: { type: Function, required: true } })
+const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
- { id:'pm', name:'林舟', role:'产品经理', icon:'🧭', color:'violet', guide:'从用户价值、需求边界和验收标准分析。' },
- { id:'dev', name:'阿拓', role:'工程师', icon:'🛠️', color:'blue', guide:'从技术实现、架构与开发成本分析。' },
- { id:'critic', name:'Mira', role:'独立评审', icon:'🔎', color:'amber', guide:'寻找风险、反例和未验证假设。' }
+ { id:'manager', name:'店长', role:'经营负责人', icon:'♙', color:'violet', guide:'统筹经营目标、拆解任务、协调其他岗位并汇总结果。' },
+ { id:'cashier', name:'小票', role:'收银员数字人', icon:'▤', color:'blue', guide:'处理订单咨询、支付流程指引、售后分流与服务话术。' },
+ { id:'guide', name:'小导', role:'导购数字人', icon:'✳', color:'amber', guide:'识别顾客需求、比较商品、提供推荐与组合购买建议。' },
+ { id:'buyer', name:'采购', role:'采购补货数字人', icon:'⇄', color:'blue', guide:'整理缺货信号、供应商报价与补货建议，未经确认不得执行采购。' },
+ { id:'inventory', name:'盘点员', role:'库存盘点数字人', icon:'▦', color:'amber', guide:'协助盘点、核对库存差异、发现临期和损耗风险。' },
+ { id:'pm', name:'林舟', role:'产品经理 / 流程负责人', icon:'⌘', color:'violet', guide:'将经营目标拆成流程、需求、验收标准和迭代计划。' }
 ]
 const messages = ref([{id:1,role:'system',text:'群聊已创建。你可以 @指定数字人，也可以发起多 Agent 协作。当前为演示模式。',time:'刚刚'},{id:2,role:'pm',text:'我负责把需求拆清楚。试试输入「@所有人 帮我设计一个二手家居交易 MVP」。',time:'刚刚'}])
 const draft = ref('')
@@ -12,14 +15,17 @@ const mode = ref('demo')
 const busy = ref(false)
 const status = ref('')
 const apiBase = ref(import.meta.env.VITE_AGENT_API || 'http://localhost:8787')
-const selected = ref(['pm','dev','critic'])
+const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map(a => a.id))
 const activeAgents = computed(() => agents.filter(a => selected.value.includes(a.id)))
 const now = () => new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
 function toggleAgent(id){ selected.value = selected.value.includes(id) ? selected.value.filter(x=>x!==id) : [...selected.value,id] }
 function demoReply(a){
- if(a.id==='pm') return '先收敛目标和边界：明确目标用户、核心场景与成功指标。MVP 只保留一条端到端闭环，其他能力先不做。'
- if(a.id==='dev') return '建议拆成群聊 UI、Message Router 和 Agent Adapter。多个 Agent 用 Promise.allSettled 并行调度，分别设置超时与 traceId。'
- return '风险点：不要把演示回复误认为真实模型输出；还需验证幂等、并发冲突、上下文隔离、密钥保护和失败重试。'
+ if(a.id==='manager') return '我先把目标拆成岗位任务：前台由收银员和导购承接，采购与盘点核对履约和库存，最后由我汇总风险与待办。涉及真实交易或库存变更的动作需要人工确认。'
+ if(a.id==='cashier') return '我可以先处理订单状态、支付步骤和售后入口等常见问题；接入真实订单系统前，我只提供流程指引，不会声称已完成退款或交易。'
+ if(a.id==='guide') return '我会先确认顾客的用途、预算和偏好，再对比商品特点与适配场景。接入真实商品目录后，推荐可以引用实际库存和价格。'
+ if(a.id==='buyer') return '我会根据缺货信号整理补货候选、供应商报价和交期，输出待审核建议；未获得授权前不下采购单。'
+ if(a.id==='inventory') return '我可以按商品、库位和账面数量生成盘点清单，并把差异标记为待核验线索；没有接入库存数据前不会虚构盘点结果。'
+ return '我负责把经营目标转成可执行流程：明确输入、责任岗位、验收标准和复盘指标，再与店长确认优先级。'
 }
 async function send(){
  const text=draft.value.trim(); if(!text||busy.value||!selected.value.length)return
@@ -47,7 +53,7 @@ async function send(){
 <section class="gc-wrap">
  <header class="gc-top"><button class="gc-back" @click="props.onBack">← 返回杂货铺</button><div class="gc-brand"><span class="gc-live"></span>AI 杂货铺 <i>/</i> 数字人群聊</div><span class="gc-pill">MVP · {{mode==='demo'?'演示模式':'Pi Runtime'}}</span></header>
  <div class="gc-layout">
-  <aside class="gc-side"><div class="gc-label">协作空间 <span>01</span></div><div class="gc-room"><b>◉　产品共创室</b><small>3 位数字人 · 群聊</small></div><div class="gc-label gc-gap">数字人 / AGENTS <span>{{activeAgents.length}}/3</span></div>
+  <aside class="gc-side"><div class="gc-label">协作空间 <span>01</span></div><div class="gc-room"><b>◉　产品共创室</b><small>6 个岗位数字人 · 共享群聊</small></div><div class="gc-label gc-gap">数字人 / AGENTS <span>{{activeAgents.length}}/6</span></div>
    <button v-for="a in agents" :key="a.id" class="gc-agent" :class="{chosen:selected.includes(a.id)}" @click="toggleAgent(a.id)"><span class="gc-avatar" :class="a.color">{{a.icon}}</span><span><b>{{a.name}}</b><small>{{a.role}}</small></span><i>{{selected.includes(a.id)?'✓':'+'}}</i></button>
    <div class="gc-side-note">✳　<b>Router 在线</b><small>规则优先 · 并行调度</small></div>
   </aside>
@@ -57,9 +63,9 @@ async function send(){
    <div class="gc-messages"><div v-for="m in messages" :key="m.id" class="gc-message" :class="'msg-'+m.role">
     <div v-if="m.role==='user'" class="gc-user">{{m.text}}</div><template v-else><span class="gc-avatar" :class="agents.find(a=>a.id===m.role)?.color||'system'">{{agents.find(a=>a.id===m.role)?.icon||'✳'}}</span><div class="gc-msg-body"><div class="gc-meta"><b>{{agents.find(a=>a.id===m.role)?.name||'系统'}}</b><span>{{agents.find(a=>a.id===m.role)?.role||'通知'}}</span><time>{{m.time}}</time></div><div class="gc-msg-text">{{m.text}}</div></div></template>
    </div><div v-if="busy" class="gc-thinking">● ● ●　{{status}}</div></div>
-   <div class="gc-composer"><div class="gc-hint">@ 林舟 / 阿拓 / Mira / 所有人</div><textarea v-model="draft" :disabled="busy" rows="3" placeholder="发起讨论，或 @某位数字人定向提问…" @keydown.enter.exact.prevent="send"></textarea><div class="gc-send-row"><span>{{status||'Enter 发送 · Shift + Enter 换行'}}</span><button :disabled="busy||!draft.trim()||!selected.length" @click="send">{{busy?'协作中…':'发送消息 ↗'}}</button></div></div>
+   <div class="gc-composer"><div class="gc-hint">@ 店长 / 收银员 / 导购 / 采购 / 盘点员 / 产品经理 / 所有人</div><textarea v-model="draft" :disabled="busy" rows="3" placeholder="发起讨论，或 @某位数字人定向提问…" @keydown.enter.exact.prevent="send"></textarea><div class="gc-send-row"><span>{{status||'Enter 发送 · Shift + Enter 换行'}}</span><button :disabled="busy||!draft.trim()||!selected.length" @click="send">{{busy?'协作中…':'发送消息 ↗'}}</button></div></div>
   </main>
-  <aside class="gc-monitor"><div class="gc-label">运行监控 <span class="gc-live-label">LIVE</span></div><div class="gc-metric"><small>在线数字人</small><strong>{{selected.length}}<i> / 3</i></strong><div class="gc-meter"><span :style="{width:(selected.length/3*100)+'%'}"></span></div></div><div class="gc-metric"><small>本房间消息</small><strong>{{messages.length}}<i> 条</i></strong></div><div class="gc-metric"><small>调度策略</small><b>Rule → Agent</b></div><div class="gc-label gc-gap">消息生命周期</div><div v-for="(s,i) in ['接收消息 · messageId','规则路由 · @ 提及','并行执行 · 独立上下文','回写时间线 · 失败隔离']" :key="s" class="gc-step"><span>{{i+1}}</span>{{s}}</div><div class="gc-safety"><b>安全边界</b><p>模型密钥只放后端环境变量。GitHub Pages 只托管界面，不承载 Pi 进程。</p></div></aside>
+  <aside class="gc-monitor"><div class="gc-label">运行监控 <span class="gc-live-label">LIVE</span></div><div class="gc-metric"><small>在线数字人</small><strong>{{selected.length}}<i> / 6</i></strong><div class="gc-meter"><span :style="{width:(selected.length/6*100)+'%'}"></span></div></div><div class="gc-metric"><small>本房间消息</small><strong>{{messages.length}}<i> 条</i></strong></div><div class="gc-metric"><small>调度策略</small><b>Rule → Agent</b></div><div class="gc-label gc-gap">消息生命周期</div><div v-for="(s,i) in ['接收消息 · messageId','规则路由 · @ 提及','并行执行 · 独立上下文','回写时间线 · 失败隔离']" :key="s" class="gc-step"><span>{{i+1}}</span>{{s}}</div><div class="gc-safety"><b>安全边界</b><p>模型密钥只放后端环境变量。GitHub Pages 只托管界面，不承载 Pi 进程。</p></div></aside>
  </div>
 </section>
 </template>
