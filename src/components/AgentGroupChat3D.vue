@@ -30,7 +30,7 @@ const motion=ref('idle')
 const zoom=ref(1)
 const quickPrompts=['制定今天的门店经营计划','@盘点员 设计今日库存核查方案','@采购 列出补货决策所需数据','@店长 汇总各岗位风险与待办']
 const now=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
-let renderer, scene, camera, raf, resizeObserver, raycaster, pointerDown=null
+let renderer, scene, camera, raf, resizeObserver, raycaster, pointerDown=null, sceneListeners=[]
 const avatarMeshes=new Map()
 const clickableMeshes=[]
 const clock=new THREE.Clock()
@@ -134,199 +134,51 @@ function createAgent(a){
  group.visible=false;scene.add(group);avatarMeshes.set(a.id,group)
 }
 function initScene(){
- if(!canvasHost.value)return
- scene=new THREE.Scene();scene.background=null;scene.fog=null
- camera=new THREE.PerspectiveCamera(38,1,.1,120);camera.position.set(0,7.1,16.8)
- renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setClearColor(0x000000,0);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
- canvasHost.value.appendChild(renderer.domElement)
- scene.add(new THREE.HemisphereLight(0xfff5df,0x75604a,2.1));scene.add(new THREE.AmbientLight(0xffffff,.72))
- const key=new THREE.DirectionalLight(0xffe6bd,3.1);key.position.set(-4,9,5);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.camera.left=-12;key.shadow.camera.right=12;key.shadow.camera.top=10;key.shadow.camera.bottom=-10;key.shadow.bias=-0.00025;scene.add(key)
- const fill=new THREE.DirectionalLight(0xffffff,1.0);fill.position.set(5,6,2);scene.add(fill)
- const warmLamp=new THREE.PointLight(0xffc875,75,22);warmLamp.position.set(0,5,-1);scene.add(warmLamp)
- const daylight=new THREE.DirectionalLight(0xc6e4ff,2.0);daylight.position.set(8,6,1);scene.add(daylight)
- const bounce=new THREE.PointLight(0xffd8a2,18,13);bounce.position.set(-5,3,0);scene.add(bounce)
- const room=new THREE.Group();scene.add(room)
- const box=(w,h,d,x,y,z,mat,group=room)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;group.add(m);return m}
- // Procedural canvas textures give timber a visible grain instead of flat, toy-like color blocks.
- function makeGrainTexture(base, line, seed=1){
-  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle=base;ctx.fillRect(0,0,512,512);let n=seed;
-  const rand=()=>{n=(n*1664525+1013904223)>>>0;return n/4294967296};
-  for(let i=0;i<260;i++){ctx.beginPath();const y=rand()*512;ctx.moveTo(0,y);ctx.bezierCurveTo(120,y+(rand()-.5)*18,350,y+(rand()-.5)*20,512,y+(rand()-.5)*12);ctx.strokeStyle=line;ctx.globalAlpha=.025+rand()*.11;ctx.lineWidth=.4+rand()*2.2;ctx.stroke()}
-  ctx.globalAlpha=1;const tex=new THREE.CanvasTexture(canvas);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;return tex;
+ const el=sceneShell.value
+ if(!el)return
+ const clamp=(v,min,max)=>Math.max(min,Math.min(max,v))
+ const down=e=>{
+  if(e.target.closest?.('button,a,textarea,input'))return
+  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
+  el.setPointerCapture?.(e.pointerId)
  }
- const woodTex=makeGrainTexture('#70472e','#e2b17a',7);woodTex.repeat.set(2,1);
- const darkTex=makeGrainTexture('#38271e','#b1845b',11);darkTex.repeat.set(2,1);
- const wood=new THREE.MeshStandardMaterial({map:woodTex,color:0xffffff,roughness:.76,metalness:.01})
- const darkWood=new THREE.MeshStandardMaterial({map:darkTex,color:0xffffff,roughness:.68})
- const trim=new THREE.MeshStandardMaterial({color:0xb98a54,roughness:.42,metalness:.12})
- const plasterTex=makeGrainTexture('#e8dfcf','#b8a58e',31);plasterTex.repeat.set(3,2);
- const plaster=new THREE.MeshStandardMaterial({map:plasterTex,color:0xffffff,roughness:.96})
- const marbleCanvas=document.createElement('canvas');marbleCanvas.width=512;marbleCanvas.height=512;const mc=marbleCanvas.getContext('2d');mc.fillStyle='#d7c8b2';mc.fillRect(0,0,512,512);let marbleSeed=43;const mr=()=>{marbleSeed=(marbleSeed*1103515245+12345)>>>0;return marbleSeed/4294967296};for(let i=0;i<38;i++){mc.beginPath();let x=mr()*512,y=mr()*512;mc.moveTo(x,y);mc.bezierCurveTo(x+60,y-35,x-60,y+80,x+180,y+150);mc.strokeStyle=i%3?'#ffffff':'#9a8976';mc.globalAlpha=.07+mr()*.16;mc.lineWidth=.6+mr()*2;mc.stroke()}mc.globalAlpha=1;const marbleTex=new THREE.CanvasTexture(marbleCanvas);marbleTex.colorSpace=THREE.SRGBColorSpace;marbleTex.wrapS=marbleTex.wrapT=THREE.RepeatWrapping;marbleTex.repeat.set(2,1);
- const marble=new THREE.MeshStandardMaterial({map:marbleTex,color:0xffffff,roughness:.24,metalness:.04})
- const brass=new THREE.MeshStandardMaterial({color:0xc69a55,metalness:.68,roughness:.28})
- const bookMats=[0x7c342d,0x284c46,0x263e5b,0xb08a54,0x8b6848,0x4c3b58,0xc7b58f,0x536a58].map(color=>new THREE.MeshStandardMaterial({color,roughness:.82}))
- const floorTex=makeGrainTexture('#986b45','#e0b27a',19);floorTex.repeat.set(5,3);
- const floorMat=new THREE.MeshStandardMaterial({map:floorTex,color:0xffffff,roughness:.68})
- box(20,.22,19,0,-.24,0,floorMat)
- // Board seams run lengthwise for a believable timber floor; thin brass lines are removed from the floor itself.
- for(let x=-9.5;x<10;x+=1.25){box(.012,.008,18.8,x,-.122,0,darkWood)}
- for(let z=-8.7;z<9;z+=.82){box(19.9,.009,.012,0,-.122,z,darkWood)}
- // Warm plaster walls and dark walnut ceiling beams frame the room.
- box(20,7,.28,0,3.35,-8.7,plaster);box(.28,7,18, -9.85,3.35,0,plaster);box(.28,7,18,9.85,3.35,0,plaster)
- const beamMat=new THREE.MeshStandardMaterial({color:0x4b3425,roughness:.62})
- for(let x=-9;x<=9;x+=3){box(.2,.34,18,x,6.65,0,beamMat)}
- box(20,.24,.3,0,6.2,-8.5,beamMat)
- // Layered ceiling cornice and recessed warm light channels soften the double-height room.
- box(19.5,.16,.18,0,6.48,-8.48,trim)
- box(.18,.16,17.1,-9.55,6.48,0,trim)
- box(.18,.16,17.1,9.55,6.48,0,trim)
- const coveMat=new THREE.MeshBasicMaterial({color:0xffd89a,transparent:true,opacity:.72})
- for(let x=-8.7;x<=8.7;x+=.42){const glow=new THREE.Mesh(new THREE.BoxGeometry(.28,.018,.035),coveMat);glow.position.set(x,6.37,-8.36);room.add(glow)}
- // Full-height bookcases across the back wall, packed with individually modeled books.
- function bookshelf(x,z,width=3.2,depth=.52){
-  const g=new THREE.Group();g.position.set(x,0,z);room.add(g)
-  box(width,4.9,depth,0,2.45,0,wood,g)
-  box(width+.08,.13,depth+.08,0,4.95,0,trim,g)
-  for(let y=.75;y<4.6;y+=.86){
-   box(width-.12,.075,depth+.04,0,y,0,darkWood,g)
-   let bx=-width/2+.13
-   while(bx<width/2-.16){
-    const bw=.105+Math.random()*.095,bh=.42+Math.random()*.31
-    const book=new THREE.Mesh(new THREE.BoxGeometry(bw,bh,.22),bookMats[Math.floor(Math.random()*bookMats.length)])
-    book.position.set(bx+bw/2,y+bh/2+.035,.02);book.rotation.z=(Math.random()-.5)*.045;book.castShadow=true;g.add(book)
-    box(bw*.48,.025,.012, bx+bw*.5,y+bh*.72,.137,brass,g)
-    bx+=bw+.035
-   }
+ const move=e=>{
+  const rect=el.getBoundingClientRect()
+  if(pointerDown){
+   const dx=e.clientX-pointerDown.x,dy=e.clientY-pointerDown.y
+   parallaxTargetX=clamp(parallaxTargetX+dx*.006,-1,1)
+   parallaxTargetY=clamp(parallaxTargetY+dy*.006,-1,1)
+   pointerDown={...pointerDown,x:e.clientX,y:e.clientY}
+   return
   }
-  for(let px=-width/2+.18;px<width/2;px+=1.05)box(.075,4.9,depth+.08,px,2.45,0,trim,g)
+  parallaxTargetX=((e.clientX-rect.left)/Math.max(rect.width,1)-.5)*2
+  parallaxTargetY=((e.clientY-rect.top)/Math.max(rect.height,1)-.5)*2
  }
- for(let x=-7.5;x<=7.5;x+=3.75)bookshelf(x,-8.25,3.55,.5)
- for(let z=-5.9;z<=3.1;z+=3.1){bookshelf(-9.35,z,2.55,.48);bookshelf(9.35,z,2.55,.48)}
- // Tall arched-style window bays on the right wall, with mullions and warm afternoon light.
- const glass=new THREE.MeshStandardMaterial({color:0x9fc5d0,roughness:.22,metalness:.08,emissive:0x6c9cac,emissiveIntensity:.18})
- for(let z=-4.6;z<=1.6;z+=3.1){
-  // Tall glass lower bay with a segmented semicircular arch above it.
-  box(.06,2.45,2.2,9.64,2.75,z,trim)
-  box(.07,2.28,1.94,9.58,2.78,z,glass)
-  box(.1,2.35,.09,9.5,2.75,z,wood)
-  box(.1,.09,2,9.5,2.75,z,wood)
-  const archR=.98
-  const archRing=new THREE.Mesh(new THREE.TorusGeometry(archR,.075,12,48,Math.PI),wood);archRing.rotation.y=Math.PI/2;archRing.position.set(9.49,4.0,z);archRing.castShadow=true;room.add(archRing)
-  for(let i=0;i<=12;i++){
-   const a=Math.PI*i/12
-   const zz=z+Math.cos(a)*archR, yy=4.0+Math.sin(a)*archR
-   const mullion=new THREE.Mesh(new THREE.BoxGeometry(.08,.08,.08),trim);mullion.position.set(9.5,yy,zz);room.add(mullion)
-   if(i<12){const a2=Math.PI*(i+1)/12;const p1=new THREE.Vector3(9.5,yy,zz),p2=new THREE.Vector3(9.5,4+Math.sin(a2)*archR,z+Math.cos(a2)*archR);const d=new THREE.Vector3().subVectors(p2,p1);const seg=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,d.length(),8),wood);seg.position.copy(p1).add(p2).multiplyScalar(.5);seg.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());room.add(seg)}
-  }
-  for(let i=1;i<6;i++){const a=Math.PI*i/6;box(.09,1.95,.055,9.49,2.78,z+Math.cos(a)*archR,wood)}
- }
- // Brass picture lights create local pools of warm light over the back-wall book spines.
- for(let x=-7.4;x<=7.4;x+=3.7){
-  const arm=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.24,8),brass);arm.position.set(x,5.08,-7.92);arm.rotation.x=Math.PI/2;room.add(arm)
-  const hood=new THREE.Mesh(new THREE.BoxGeometry(.72,.055,.12),brass);hood.position.set(x,4.98,-7.9);room.add(hood)
-  const bookLight=new THREE.PointLight(0xffc982,7,3.8);bookLight.position.set(x,4.82,-7.65);room.add(bookLight)
- }
- // Upper mezzanine and gallery railing: this is the strongest missing spatial cue in the reference.
- const balconyMat=new THREE.MeshStandardMaterial({color:0x493225,roughness:.58,metalness:.08})
- box(8.8,.22,2.35,0,4.18,-5.45,wood)
- box(8.95,.12,2.42,0,4.31,-5.45,trim)
- // Balustrade faces the room; repeated fine balusters read as a real upper floor, not a flat wall.
- box(8.8,.12,.12,0,4.9,-4.25,darkWood)
- box(8.8,.12,.12,0,4.45,-4.25,trim)
- for(let x=-4.25;x<=4.25;x+=.28){box(.035,.42,.035,x,4.68,-4.25,balconyMat)}
- // A curved stair flight descends from the mezzanine at the right side of the room.
- // Tapered wedge-like treads are rotated around a shared center to create a continuous spiral.
- const stairCenter=new THREE.Vector3(5.55,0,-2.0)
- for(let i=0;i<17;i++){
-  const angle=-Math.PI*.82+i*.105
-  const radius=1.8-i*.018
-  const step=new THREE.Mesh(new THREE.BoxGeometry(.78,.13,.5),i%3===0?wood:darkWood)
-  step.position.set(stairCenter.x+Math.cos(angle)*radius,4.0-i*.205,stairCenter.z+Math.sin(angle)*radius)
-  step.rotation.y=-angle;step.castShadow=true;step.receiveShadow=true;room.add(step)
-  const railPost=new THREE.Mesh(new THREE.CylinderGeometry(.025,.03,.52,8),brass)
-  railPost.position.set(stairCenter.x+Math.cos(angle)*(radius+.35),4.31-i*.205,stairCenter.z+Math.sin(angle)*(radius+.35));room.add(railPost)
- }
- // A dark curved handrail follows the stair's outer edge in short joined segments.
- for(let i=0;i<16;i++){
-  const a1=-Math.PI*.82+i*.105,a2=a1+.105, r=2.15
-  const p1=new THREE.Vector3(stairCenter.x+Math.cos(a1)*r,4.56-i*.205,stairCenter.z+Math.sin(a1)*r)
-  const p2=new THREE.Vector3(stairCenter.x+Math.cos(a2)*r,4.56-(i+1)*.205,stairCenter.z+Math.sin(a2)*r)
-  const d=new THREE.Vector3().subVectors(p2,p1);const rail=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,d.length(),8),balconyMat)
-  rail.position.copy(p1).add(p2).multiplyScalar(.5);rail.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());room.add(rail)
- }
- // Landscape layers beyond the glazing add distance cues instead of a flat cyan pane.
- const skyMat=new THREE.MeshBasicMaterial({color:0xb8d5dc})
- for(const z of [-4.6,-1.5,1.6]){
-  box(.025,5.6,2.35,9.83,3.2,z,skyMat)
-  for(let i=0;i<7;i++){
-   const tree=new THREE.Mesh(new THREE.ConeGeometry(.22+((i*7)%3)*.08,1.0+(i%4)*.25,7),new THREE.MeshStandardMaterial({color:[0x6d8870,0x879a7c,0x4c6b5a][i%3],roughness:1}))
-   tree.position.set(9.76,1.0+(i%3)*.12,z-0.82+i*.27);tree.rotation.z=(i%2?-.12:.12);room.add(tree)
+ const up=()=>{pointerDown=null}
+ const leave=()=>{if(!pointerDown){parallaxTargetX=0;parallaxTargetY=0}}
+ const wheel=e=>{e.preventDefault();zoom.value=clamp(zoom.value+(e.deltaY>0?-.055:.055),.78,1.38);targetZoom=zoom.value}
+ const animate=()=>{
+  raf=requestAnimationFrame(animate)
+  parallaxX+=(parallaxTargetX-parallaxX)*.055
+  parallaxY+=(parallaxTargetY-parallaxY)*.055
+  if(sceneShell.value){
+   sceneShell.value.style.backgroundPosition=`${50+parallaxX*7}% ${50+parallaxY*5}%`
+   sceneShell.value.style.backgroundSize=`${112+(zoom.value-1)*18}% auto`
   }
  }
- // A shallow bowed walnut bar front gives the counter a more architectural, custom-built silhouette.
- // Faceted segments keep the curve lightweight while retaining real shadows and material response.
- for(let i=0;i<14;i++){
-  const x=-3.78+i*.58, normalized=x/4
-  const bow=.48*(1-normalized*normalized)
-  const panel=box(.59,.91,.78,x,.48,.02+bow,wood);panel.rotation.y=-normalized*.16
-  const inset=box(.49,.54,.035,x,.51,.425+bow,darkWood);inset.rotation.y=-normalized*.16
-  const inner=box(.4,.42,.018,x,.51,.448+bow,wood);inner.rotation.y=-normalized*.16
-  const pull=box(.11,.025,.025,x,.51,.463+bow,brass);pull.rotation.y=-normalized*.16
- }
- box(7.95,.17,1.02,0,1.02,.12,darkWood)
- box(8.1,.12,1.12,0,1.13,.12,marble)
- // Thin brass toe-kick follows the counter's bowed front.
- for(let i=0;i<14;i++){const x=-3.78+i*.58;box(.57,.045,.025,x,.09,.42+.48*(1-(x/4)*(x/4)),trim)}
- // Coffee machine, cup stack, grinder and book display make the counter read as a real place.
- const steel=new THREE.MeshStandardMaterial({color:0x9aa6a7,metalness:.72,roughness:.27})
- box(.75,.62,.52,-2.8,1.5,-.18,steel);box(.52,.18,.38,-2.8,1.9,-.18,darkWood)
- box(.25,.35,.25,-1.9,1.35,-.1,wood);box(.22,.06,.22,-1.9,1.56,-.1,trim)
- for(let i=0;i<3;i++){const cup=new THREE.Mesh(new THREE.CylinderGeometry(.075,.06,.16,16),new THREE.MeshStandardMaterial({color:0xf5eee0,roughness:.32}));cup.position.set(-1.35+i*.2,1.28,-.1);room.add(cup)}
- box(.62,.12,.38,2.5,1.25,-.08,wood);for(let i=0;i<4;i++)box(.11,.28,.22,2.28+i*.14,1.45,-.08,bookMats[i])
- // Pendant lights and brass fixtures hang over the bar.
- for(const x of [-2.7,0,2.7]){
-  const cord=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,1.2,8),darkWood);cord.position.set(x,5.55,-.15);room.add(cord)
-  const shade=new THREE.Mesh(new THREE.CylinderGeometry(.18,.34,.22,24,1,true),brass);shade.position.set(x,4.95,-.15);room.add(shade)
-  const bulb=new THREE.PointLight(0xffc879,28,7);bulb.position.set(x,4.75,-.15);room.add(bulb)
- }
- // A few reading tables and upholstered chairs in the public side of the room.
- const tableMat=new THREE.MeshStandardMaterial({color:0x65422e,roughness:.55})
- for(const [x,z] of [[-5,3.7],[5,4.2]]){
-  box(1.7,.13,1.05,x,.85,z,tableMat);box(1.58,.025,.93,x,.925,z,trim);for(const dx of [-.68,.68])for(const dz of [-.38,.38])box(.09,.82,.09,x+dx,.4,z+dz,darkWood)
-  for(const dx of [-.9,.9]){box(.55,.12,.5,x+dx,.48,z,wood);box(.55,.48,.08,x+dx,.73,z-.2,darkWood);box(.09,.65,.09,x+dx,.18,z,darkWood)}
- }
- // Leafy potted plants soften the timber-heavy room and add scale cues near the windows.
- const potMat=new THREE.MeshStandardMaterial({color:0xb56e48,roughness:.86});const leafMats=[0x466b42,0x63834c,0x2f593c].map(color=>new THREE.MeshStandardMaterial({color,roughness:.9,side:THREE.DoubleSide}));
- for(const [px,pz] of [[7.9,-6.4],[7.9,2.5],[-7.8,5.7]]){const pot=new THREE.Mesh(new THREE.CylinderGeometry(.2,.15,.35,16),potMat);pot.position.set(px,.06,pz);room.add(pot);for(let i=0;i<9;i++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.11,8,7),leafMats[i%leafMats.length]);const angle=i*2.399;leaf.position.set(px+Math.cos(angle)*(.12+(i%3)*.05),.34+(i%4)*.12,pz+Math.sin(angle)*(.12+(i%3)*.05));leaf.scale.set(.65,1.8,.55);leaf.rotation.z=Math.cos(angle)*.55;room.add(leaf)}}
- // Replace the sci-fi floor grid with a softly lit, continuous timber floor.
- const rug=new THREE.Mesh(new THREE.BoxGeometry(5.2,.025,2.5),new THREE.MeshStandardMaterial({color:0x43534a,roughness:1}));rug.position.set(0,-.105,3.7);room.add(rug)
- // The timber floor, built-in shelves and counter form the physical room.
- // Small brass sign above the service area; no floating sci-fi hologram.
- centralCore=new THREE.Group()
- const sign=new THREE.Mesh(new THREE.BoxGeometry(1.8,.5,.08),new THREE.MeshStandardMaterial({color:0x5c3d2a,roughness:.55}))
- sign.position.set(0,2.25,-.72);centralCore.add(sign);centralCore.position.set(0,0,0);centralCore.visible=false;scene.add(centralCore)
- // Render the actual Three.js room so the architecture, lighting, furniture, and agents share one camera.
- // A flat photo backdrop made the agents appear detached and did not support coherent orbit interaction.
- room.visible=false
- for(const a of agents)createAgent(a)
- raycaster=new THREE.Raycaster()
- const resize=()=>{if(!canvasHost.value||!renderer)return;const w=canvasHost.value.clientWidth,h=canvasHost.value.clientHeight;camera.aspect=w/Math.max(h,1);camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
- resizeObserver=new ResizeObserver(resize);resizeObserver.observe(canvasHost.value);resize()
- const pointerMove=e=>{if(pointerDown){const dx=e.clientX-pointerDown.x,dy=e.clientY-pointerDown.y;orbitAngle+=dx*.006;orbitTilt=Math.max(-.2,Math.min(.65,orbitTilt+dy*.003));parallaxTargetX=Math.max(-1,Math.min(1,parallaxTargetX+dx*.006));parallaxTargetY=Math.max(-1,Math.min(1,parallaxTargetY+dy*.006));pointerDown={...pointerDown,x:e.clientX,y:e.clientY};return}const rect=renderer.domElement.getBoundingClientRect();parallaxTargetX=((e.clientX-rect.left)/Math.max(rect.width,1)-.5)*2;parallaxTargetY=((e.clientY-rect.top)/Math.max(rect.height,1)-.5)*2;}
- const pointerUp=e=>{if(!pointerDown)return;const moved=Math.abs(e.clientX-pointerDown.startX)+Math.abs(e.clientY-pointerDown.startY);if(moved<8){const rect=renderer.domElement.getBoundingClientRect();const p=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);raycaster.setFromCamera(p,camera);const hit=raycaster.intersectObjects(clickableMeshes,false)[0];if(hit){focusAgent.value=hit.object.userData.agentId;motion.value='wave';}}
- pointerDown=null}
- const down=e=>{pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY};renderer.domElement.setPointerCapture?.(e.pointerId)}
- renderer.domElement.addEventListener('pointerdown',down);renderer.domElement.addEventListener('pointermove',pointerMove);renderer.domElement.addEventListener('pointerup',pointerUp)
- renderer.domElement.addEventListener('wheel',e=>{zoom.value=Math.max(.72,Math.min(1.45,zoom.value+(e.deltaY>0?-.06:.06)));targetZoom=zoom.value},{passive:true})
- const animate=()=>{raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();parallaxX+=(parallaxTargetX-parallaxX)*.045;parallaxY+=(parallaxTargetY-parallaxY)*.045;if(sceneShell.value){sceneShell.value.style.backgroundPosition=`${50+parallaxX*7}% ${50+parallaxY*5}%`;sceneShell.value.style.backgroundSize=`${112+(zoom.value-1)*18}% auto`}centralCore.rotation.y=Math.sin(t*.25)*.025
-  for(const [id,g] of avatarMeshes){const a=agents.find(x=>x.id===id);const active=selected.value.includes(id);const focus=focusAgent.value===id;g.position.y=a.pos[1]+Math.sin(t*1.5+agents.indexOf(a))*.06+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.35:0);g.rotation.y=Math.sin(t*.4+agents.indexOf(a))*.12;g.scale.setScalar((focus?1.13:1)*(active?1:.78));g.userData.ring.material.opacity=active?.9:.18;g.userData.halo.rotation.z=t*.65;g.userData.material.emissiveIntensity=focus ? 1.0 : 0.22}
-  const radius=16/zoom.value;const desiredCamera=new THREE.Vector3(Math.sin(orbitAngle)*radius+parallaxX*.72,5.4+orbitTilt*8-parallaxY*.42,Math.cos(orbitAngle)*radius);camera.position.lerp(desiredCamera,.085);const lookTarget=new THREE.Vector3(parallaxX*.22,1.25-parallaxY*.12,-.25);camera.lookAt(lookTarget);renderer.render(scene,camera)}
+ el.addEventListener('pointerdown',down)
+ el.addEventListener('pointermove',move)
+ el.addEventListener('pointerup',up)
+ el.addEventListener('pointercancel',up)
+ el.addEventListener('pointerleave',leave)
+ el.addEventListener('wheel',wheel,{passive:false})
+ sceneListeners=[[el,'pointerdown',down],[el,'pointermove',move],[el,'pointerup',up],[el,'pointercancel',up],[el,'pointerleave',leave],[el,'wheel',wheel]]
  animate()
 }
 function zoomBy(delta){zoom.value=Math.max(.72,Math.min(1.45,zoom.value+delta));targetZoom=zoom.value}
 function resetView(){orbitAngle=0;orbitTilt=.18;zoom.value=1;targetZoom=1;parallaxTargetX=0;parallaxTargetY=0;focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
-onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
+onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
 </script>
 
