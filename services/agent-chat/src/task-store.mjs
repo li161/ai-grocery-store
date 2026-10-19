@@ -47,7 +47,7 @@ export class TaskStore {
           SELECT jsonb_agg(CASE WHEN task->>'status' IN ('queued','running')
             THEN task || jsonb_build_object('status','interrupted',
               'error','服务进程重启，任务未自动重放') ELSE task END)
-          FROM jsonb_array_elements(tasks) AS task
+          FROM jsonb_array_elements(tasks) AS elements(task)
         ), '[]'::jsonb)
       WHERE status = 'running'
     `)
