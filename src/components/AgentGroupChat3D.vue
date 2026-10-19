@@ -34,8 +34,6 @@ let renderer=null, scene=null, camera=null, resizeObserver=null, raf=0, raycaste
 let orbitAngle=0, orbitTilt=.12, targetZoom=1
 const characterGroups=new Map(), characterHitMeshes=[]
 const sceneClock=new THREE.Clock()
-const sceneLoaded=ref(false)
-const sceneLoadError=ref(false)
 function toggleAgent(id){ if(busy.value)return; selected.value=selected.value.includes(id)?selected.value.filter(x=>x!==id):[...selected.value,id]; focusAgent.value=id; motion.value='wave' }
 function addPrompt(p){draft.value=p}
 function resolveTargets(text){
@@ -260,7 +258,7 @@ function createSpongeBob(a){
  const yellow=mat(0xf5cf32,.48),yellowShade=mat(0xd5a922,.65),white=mat(0xfff4df,.52),brown=mat(0x8b4e27,.77),red=mat(0xdf3c34,.48),black=mat(0x292a2d,.42),blue=mat(0x2e8bc7,.3),pink=mat(0xffa2b6,.55),green=mat(0x74a94c,.58),purple=mat(0x7665b8,.5),teal=mat(0x3e9da0,.52)
  const add=(geo,m,p,r=null,s=null)=>mesh(geo,m,p,g,r,s)
  const rounded=(w,h,d,rad,m,p)=>add(new THREE.BoxGeometry(w,h,d,8,8,4),m,p,null,[1,1,1])
- const hit=mesh(new THREE.SphereGeometry(.86,16,12),mat(0xffffff,.8,0,{transparent:true,opacity:0,depthWrite:false}),[0,1,0],g);hit.userData.agentId=a.id;characterHitMeshes.push(hit)
+ const hit=mesh(new THREE.SphereGeometry(.86,16,12),mat(0xffffff,.8,0,{transparent:true,opacity:0,depthWrite:false}),[0,1,0],g);hit.castShadow=false;hit.receiveShadow=false;hit.userData.agentId=a.id;characterHitMeshes.push(hit)
  const smileCurve=(pts,material,r=.018)=>{const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=new THREE.Mesh(new THREE.TubeGeometry(curve,28,r,8,false),material);g.add(m)}
  if(a.id==='manager'){
   add(new THREE.BoxGeometry(.91,.88,.46,12,12,6),yellow,[0,1.45,0])
@@ -391,7 +389,6 @@ function initScene(){
  animate()
 }
 function zoomBy(delta){zoom.value=Math.max(.7,Math.min(1.35,zoom.value+delta))}
-function retryScene(){sceneLoadError.value=false;sceneLoaded.value=true}
 function resetView(){orbitAngle=0;orbitTilt=.12;zoom.value=1;focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
 onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
