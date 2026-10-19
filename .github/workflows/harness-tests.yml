@@ -1,0 +1,29 @@
+name: Harness runtime tests
+
+on:
+  pull_request:
+    paths:
+      - "services/agent-chat/**"
+      - ".github/workflows/harness-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "services/agent-chat/**"
+      - ".github/workflows/harness-tests.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/agent-chat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: services/agent-chat/package.json
+      - run: npm install --no-audit --no-fund
+      - run: npm run check
+      - run: npm test
