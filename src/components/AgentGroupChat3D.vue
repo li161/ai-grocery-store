@@ -91,33 +91,44 @@ async function send(){
 }
 function createAgent(a){
  const group=new THREE.Group();group.position.set(...a.pos);group.userData.agentId=a.id
- const neon=new THREE.MeshStandardMaterial({color:a.color,metalness:.52,roughness:.24,emissive:a.color,emissiveIntensity:.42})
- const obsidian=new THREE.MeshStandardMaterial({color:0x536b91,metalness:.72,roughness:.24,emissive:0x243d68,emissiveIntensity:.32})
- const chrome=new THREE.MeshStandardMaterial({color:0xe0f1ff,metalness:.78,roughness:.16,emissive:0x6c9dce,emissiveIntensity:.22})
- const skin=new THREE.MeshStandardMaterial({color:0xdceaff,metalness:.18,roughness:.3,emissive:a.color,emissiveIntensity:.12})
- // Stylized cyberpunk humanoid: armored silhouette, angular helmet, luminous visor and shoulder plates.
- const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.42,5,10),obsidian);torso.position.y=.93;group.add(torso)
- const chest=new THREE.Mesh(new THREE.BoxGeometry(.52,.36,.18),neon);chest.position.set(0,1.03,.19);chest.rotation.z=-.04;group.add(chest)
- const chestCore=new THREE.Mesh(new THREE.OctahedronGeometry(.105,0),chrome);chestCore.position.set(0,1.03,.31);group.add(chestCore)
- const abdomen=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.12,3,8),chrome);abdomen.position.y=.48;group.add(abdomen)
- // Helmet, cheek guards and luminous panoramic visor instead of a generic spherical head.
- const helmet=new THREE.Mesh(new THREE.SphereGeometry(.31,24,18),obsidian);helmet.scale.set(.9,1.12,.92);helmet.position.y=1.68;group.add(helmet)
- const facePlate=new THREE.Mesh(new THREE.SphereGeometry(.25,20,12,0,Math.PI*2,0,Math.PI*.55),chrome);facePlate.scale.set(1,.48,.4);facePlate.position.set(0,1.69,.26);group.add(facePlate)
- const visor=new THREE.Mesh(new THREE.BoxGeometry(.38,.075,.045),new THREE.MeshBasicMaterial({color:a.color}));visor.position.set(0,1.74,.36);group.add(visor)
- const crest=new THREE.Mesh(new THREE.ConeGeometry(.13,.28,5),chrome);crest.position.set(0,2.08,-.015);crest.rotation.x=-.12;group.add(crest)
+ // Human proportions and fabric/skin materials replace the previous sci-fi robot silhouettes.
+ const skin=new THREE.MeshStandardMaterial({color:0xd7a77f,roughness:.84})
+ const hair=new THREE.MeshStandardMaterial({color:0x3a2a22,roughness:.92})
+ const trousers=new THREE.MeshStandardMaterial({color:0x303b40,roughness:.9})
+ const shoe=new THREE.MeshStandardMaterial({color:0x282321,roughness:.75})
+ const clothColors={manager:0x263d35,cashier:0xeee3d0,guide:0x7b3d2c,buyer:0x34485a,inventory:0x65704c,pm:0x6c5547}
+ const cloth=new THREE.MeshStandardMaterial({color:clothColors[a.id]||0x52616b,roughness:.88})
+ const accent=new THREE.MeshStandardMaterial({color:a.color,roughness:.55,emissive:a.color,emissiveIntensity:.08})
+ const mat=(geometry,material,x,y,z,scale)=>{const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;group.add(m);return m}
+ // Head, neck, torso and layered clothing.
+ mat(new THREE.CylinderGeometry(.075,.09,.14,12),skin,0,1.38,0)
+ mat(new THREE.SphereGeometry(.19,20,16),skin,0,1.62,0,[.84,1.05,.88])
+ mat(new THREE.SphereGeometry(.195,18,12,0,Math.PI*2,0,Math.PI*.56),hair,0,1.69,-.025,[.88,.78,.94])
+ mat(new THREE.BoxGeometry(.23,.055,.09),hair,0,1.75,.12,[1,.8,1])
+ // A subtle nose and eyes help the characters read as people at room scale.
+ mat(new THREE.SphereGeometry(.022,8,8),skin,0,1.59,.17,[.75,1.3,.7])
+ const eyeMat=new THREE.MeshStandardMaterial({color:0x28231f,roughness:.7})
+ for(const side of [-1,1])mat(new THREE.SphereGeometry(.018,8,8),eyeMat,side*.065,1.635,.163)
+ mat(new THREE.CapsuleGeometry(.24,.34,4,10),cloth,0,1.04,0,[1.05,1.05,.72])
+ mat(new THREE.BoxGeometry(.1,.34,.018),accent,0,1.07,.18)
+ mat(new THREE.CylinderGeometry(.19,.22,.12,12),cloth,0,.78,0,[1,1,.78])
  for(const side of [-1,1]){
-  const ear=new THREE.Mesh(new THREE.BoxGeometry(.11,.2,.22),neon);ear.position.set(side*.33,1.68,0);group.add(ear)
-  const shoulder=new THREE.Mesh(new THREE.SphereGeometry(.2,16,12),chrome);shoulder.scale.set(1.15,.72,1);shoulder.position.set(side*.39,1.22,0);group.add(shoulder)
-  const arm=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,.48,6),obsidian);arm.position.set(side*.48,.86,.02);arm.rotation.z=side*.13;group.add(arm)
-  const forearm=new THREE.Mesh(new THREE.CylinderGeometry(.075,.105,.29,6),neon);forearm.position.set(side*.52,.54,.1);forearm.rotation.z=side*-.12;group.add(forearm)
-  const thigh=new THREE.Mesh(new THREE.CylinderGeometry(.11,.15,.36,6),obsidian);thigh.position.set(side*.16,.22,0);group.add(thigh)
-  const boot=new THREE.Mesh(new THREE.BoxGeometry(.2,.12,.32),chrome);boot.position.set(side*.16,.045,.08);group.add(boot)
+  mat(new THREE.SphereGeometry(.115,12,10),cloth,side*.245,1.22,0,[1,.8,1])
+  const upper=mat(new THREE.CylinderGeometry(.075,.09,.32,10),cloth,side*.29,.99,.015);upper.rotation.z=side*-.16
+  const fore=mat(new THREE.CylinderGeometry(.055,.065,.27,10),cloth,side*.32,.73,.065);fore.rotation.z=side*.13
+  mat(new THREE.SphereGeometry(.065,10,8),skin,side*.33,.58,.09)
+  mat(new THREE.CylinderGeometry(.09,.115,.32,10),trousers,side*.105,.49,0)
+  mat(new THREE.BoxGeometry(.14,.1,.27),shoe,side*.105,.08,.045)
  }
- const backRing=new THREE.Mesh(new THREE.TorusGeometry(.46,.025,8,48),neon);backRing.position.set(0,1.55,-.22);backRing.rotation.y=.3;group.add(backRing)
- const ring=new THREE.Mesh(new THREE.TorusGeometry(.61,.024,8,64),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.95}));ring.rotation.x=Math.PI/2;ring.position.y=.07;group.add(ring)
- const halo=new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,48),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.75}));halo.position.y=2.18;halo.rotation.x=Math.PI/2;group.add(halo)
- const hit=new THREE.Mesh(new THREE.SphereGeometry(.78,12,8),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.08;hit.userData.agentId=a.id;group.add(hit);clickableMeshes.push(hit)
- group.userData={...group.userData,ring,halo,torso,head:helmet,material:neon,arms:group.children.filter(o=>o.geometry?.type==='CylinderGeometry')}
+ // Apron and name badge for service-facing roles.
+ if(a.id==='cashier'||a.id==='guide'||a.id==='manager'){
+  mat(new THREE.BoxGeometry(.28,.37,.025),new THREE.MeshStandardMaterial({color:a.id==='cashier'?0x5a4030:0x3f5548,roughness:.9}),0,.96,.145)
+  mat(new THREE.BoxGeometry(.055,.065,.018),accent,.07,1.12,.163)
+ }
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.37,.012,6,40),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.48}));ring.rotation.x=Math.PI/2;ring.position.y=.025;group.add(ring)
+ const halo=new THREE.Mesh(new THREE.TorusGeometry(.23,.009,6,32),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.3}));halo.position.y=1.99;halo.rotation.x=Math.PI/2;group.add(halo)
+ const hit=new THREE.Mesh(new THREE.CapsuleGeometry(.48,.85,4,8),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.05;hit.userData.agentId=a.id;group.add(hit);clickableMeshes.push(hit)
+ group.userData={...group.userData,ring,halo,torso:group.children.find(o=>o.geometry?.type==='CapsuleGeometry'),head:group.children[2],material:accent}
  scene.add(group);avatarMeshes.set(a.id,group)
 }
 function initScene(){
