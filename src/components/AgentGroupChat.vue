@@ -27,7 +27,7 @@ const now = () => new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-di
 function toggleAgent(id){ if (busy.value) return; selected.value = selected.value.includes(id) ? selected.value.filter(x=>x!==id) : [...selected.value,id] }
 function addPrompt(prompt){ if (!busy.value) draft.value = prompt }
 function resolveTargets(text){
- const tokens = [...text.matchAll(/@([\\w\\u4e00-\\u9fa5]+)/g)].map(m=>m[1].toLowerCase())
+ const tokens = [...text.matchAll(/@([\w\u4e00-\u9fa5]+)/g)].map(m=>m[1].toLowerCase())
  if (!tokens.length || tokens.some(n=>['所有人','全体','all'].includes(n))) return activeAgents.value
  const aliases = {'店长':'manager','经营负责人':'manager','小票':'cashier','收银员':'cashier','小导':'guide','导购':'guide','采购':'buyer','采购员':'buyer','盘点员':'inventory','林舟':'pm','产品经理':'pm'}
  const ids = new Set(tokens.map(n=>aliases[n] || agents.find(a=>a.id===n || a.name.toLowerCase()===n || a.role.toLowerCase()===n)?.id).filter(Boolean))
