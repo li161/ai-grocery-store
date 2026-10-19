@@ -9,7 +9,7 @@ const agents = [
  { id:'inventory', name:'盘点员', role:'库存盘点数字人', icon:'▦', color:'amber', guide:'协助盘点、核对库存差异、发现临期和损耗风险。' },
  { id:'pm', name:'林舟', role:'产品经理 / 流程负责人', icon:'⌘', color:'violet', guide:'将经营目标拆成流程、需求、验收标准和迭代计划。' }
 ]
-const messages = ref([{id:1,role:'system',text:'群聊已创建。你可以 @指定数字人，也可以发起多 Agent 协作。当前为演示模式。',time:'刚刚'},{id:2,role:'pm',text:'我负责把需求拆清楚。试试输入「@所有人 帮我设计一个二手家居交易 MVP」。',time:'刚刚'}])
+const messages = ref([{id:1,role:'system',text:'门店经营协作室已创建。店长负责拆解经营目标，收银、导购、采购、盘点与产品经理按岗位协作。当前为演示模式。',time:'刚刚'},{id:2,role:'manager',text:'我是店长 / 经营负责人。告诉我今天的经营目标，我会先拆任务，再协调各岗位数字员工。',time:'刚刚'}])
 const draft = ref('')
 const mode = ref('demo')
 const busy = ref(false)
@@ -53,7 +53,7 @@ async function send(){
 <section class="gc-wrap">
  <header class="gc-top"><button class="gc-back" @click="props.onBack">← 返回杂货铺</button><div class="gc-brand"><span class="gc-live"></span>AI 杂货铺 <i>/</i> 数字人群聊</div><span class="gc-pill">MVP · {{mode==='demo'?'演示模式':'Pi Runtime'}}</span></header>
  <div class="gc-layout">
-  <aside class="gc-side"><div class="gc-label">协作空间 <span>01</span></div><div class="gc-room"><b>◉　产品共创室</b><small>6 个岗位数字人 · 共享群聊</small></div><div class="gc-label gc-gap">数字人 / AGENTS <span>{{activeAgents.length}}/6</span></div>
+  <aside class="gc-side"><div class="gc-label">协作空间 <span>01</span></div><div class="gc-room"><b>◉　门店经营协作室</b><small>6 个岗位数字人 · 共享群聊</small></div><div class="gc-label gc-gap">数字人 / AGENTS <span>{{activeAgents.length}}/6</span></div>
    <button v-for="a in agents" :key="a.id" class="gc-agent" :class="{chosen:selected.includes(a.id)}" @click="toggleAgent(a.id)"><span class="gc-avatar" :class="a.color">{{a.icon}}</span><span><b>{{a.name}}</b><small>{{a.role}}</small></span><i>{{selected.includes(a.id)?'✓':'+'}}</i></button>
    <div class="gc-side-note">✳　<b>Router 在线</b><small>规则优先 · 并行调度</small></div>
   </aside>
