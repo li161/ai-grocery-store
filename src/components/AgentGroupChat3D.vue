@@ -1,6 +1,5 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import * as THREE from 'three'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
@@ -22,7 +21,6 @@ const busy=ref(false)
 const status=ref('空间就绪 · 等待任务')
 const mode=ref('deepseek')
 const apiBase=ref(import.meta.env.VITE_AGENT_API || 'https://ai-grocery-store-agent-api.onrender.com')
-const canvasHost=ref(null)
 const sceneShell=ref(null)
 const messageList=ref(null)
 const focusAgent=ref('manager')
@@ -30,12 +28,12 @@ const motion=ref('idle')
 const zoom=ref(1)
 const quickPrompts=['制定今天的门店经营计划','@盘点员 设计今日库存核查方案','@采购 列出补货决策所需数据','@店长 汇总各岗位风险与待办']
 const now=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
-let renderer, scene, camera, raf, resizeObserver, raycaster, pointerDown=null, sceneListeners=[]
-const avatarMeshes=new Map()
-const clickableMeshes=[]
-const clock=new THREE.Clock()
-let root, orbitAngle=0, orbitTilt=0.18, targetZoom=1, centralCore, orbitLines=[], beamMaterials=[]
-let parallaxX=0, parallaxY=0, parallaxTargetX=0, parallaxTargetY=0
+let pointerDown=null, sceneListeners=[]
+let parallaxTargetX=0, parallaxTargetY=0
+const sceneImageUrl='https://images.unsplash.com/photo-1688411485620-2d2dbea26b1c?auto=format&fit=crop&fm=jpg&q=88&w=3000'
+const sceneLoaded=ref(false)
+const sceneLoadError=ref(false)
+let sceneImageProbe=null
 function toggleAgent(id){ if(busy.value)return; selected.value=selected.value.includes(id)?selected.value.filter(x=>x!==id):[...selected.value,id]; focusAgent.value=id; motion.value='wave' }
 function addPrompt(p){draft.value=p}
 function resolveTargets(text){
@@ -91,52 +89,19 @@ async function send(){
  }catch(e){status.value='调用失败：'+e.message;addMessage('system','Agent 服务调用失败，请检查后端部署状态和服务日志。')}
  finally{busy.value=false;motion.value='idle';await nextTick();if(messageList.value)messageList.value.scrollTop=messageList.value.scrollHeight}
 }
-function createAgent(a){
- const group=new THREE.Group();group.position.set(...a.pos);group.userData.agentId=a.id
- // Human proportions and fabric/skin materials replace the previous sci-fi robot silhouettes.
- const skin=new THREE.MeshStandardMaterial({color:0xd7a77f,roughness:.84})
- const hair=new THREE.MeshStandardMaterial({color:0x3a2a22,roughness:.92})
- const trousers=new THREE.MeshStandardMaterial({color:0x303b40,roughness:.9})
- const shoe=new THREE.MeshStandardMaterial({color:0x282321,roughness:.75})
- const clothColors={manager:0x263d35,cashier:0xeee3d0,guide:0x7b3d2c,buyer:0x34485a,inventory:0x65704c,pm:0x6c5547}
- const cloth=new THREE.MeshStandardMaterial({color:clothColors[a.id]||0x52616b,roughness:.88})
- const accent=new THREE.MeshStandardMaterial({color:a.color,roughness:.55,emissive:a.color,emissiveIntensity:.08})
- const mat=(geometry,material,x,y,z,scale)=>{const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;group.add(m);return m}
- // Head, neck, torso and layered clothing.
- mat(new THREE.CylinderGeometry(.075,.09,.14,12),skin,0,1.38,0)
- mat(new THREE.SphereGeometry(.19,20,16),skin,0,1.62,0,[.84,1.05,.88])
- mat(new THREE.SphereGeometry(.195,18,12,0,Math.PI*2,0,Math.PI*.56),hair,0,1.69,-.025,[.88,.78,.94])
- mat(new THREE.BoxGeometry(.23,.055,.09),hair,0,1.75,.12,[1,.8,1])
- // A subtle nose and eyes help the characters read as people at room scale.
- mat(new THREE.SphereGeometry(.022,8,8),skin,0,1.59,.17,[.75,1.3,.7])
- const eyeMat=new THREE.MeshStandardMaterial({color:0x28231f,roughness:.7})
- for(const side of [-1,1])mat(new THREE.SphereGeometry(.018,8,8),eyeMat,side*.065,1.635,.163)
- mat(new THREE.CapsuleGeometry(.24,.34,4,10),cloth,0,1.04,0,[1.05,1.05,.72])
- mat(new THREE.BoxGeometry(.1,.34,.018),accent,0,1.07,.18)
- mat(new THREE.CylinderGeometry(.19,.22,.12,12),cloth,0,.78,0,[1,1,.78])
- for(const side of [-1,1]){
-  mat(new THREE.SphereGeometry(.115,12,10),cloth,side*.245,1.22,0,[1,.8,1])
-  const upper=mat(new THREE.CylinderGeometry(.075,.09,.32,10),cloth,side*.29,.99,.015);upper.rotation.z=side*-.16
-  const fore=mat(new THREE.CylinderGeometry(.055,.065,.27,10),cloth,side*.32,.73,.065);fore.rotation.z=side*.13
-  mat(new THREE.SphereGeometry(.065,10,8),skin,side*.33,.58,.09)
-  mat(new THREE.CylinderGeometry(.09,.115,.32,10),trousers,side*.105,.49,0)
-  mat(new THREE.BoxGeometry(.14,.1,.27),shoe,side*.105,.08,.045)
- }
- // Apron and name badge for service-facing roles.
- if(a.id==='cashier'||a.id==='guide'||a.id==='manager'){
-  mat(new THREE.BoxGeometry(.28,.37,.025),new THREE.MeshStandardMaterial({color:a.id==='cashier'?0x5a4030:0x3f5548,roughness:.9}),0,.96,.145)
-  mat(new THREE.BoxGeometry(.055,.065,.018),accent,.07,1.12,.163)
- }
- const ring=new THREE.Mesh(new THREE.TorusGeometry(.37,.012,6,40),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.48}));ring.rotation.x=Math.PI/2;ring.position.y=.025;group.add(ring)
- const halo=new THREE.Mesh(new THREE.TorusGeometry(.23,.009,6,32),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.3}));halo.position.y=1.99;halo.rotation.x=Math.PI/2;group.add(halo)
- const hit=new THREE.Mesh(new THREE.CapsuleGeometry(.48,.85,4,8),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.05;hit.userData.agentId=a.id;group.add(hit);clickableMeshes.push(hit)
- group.userData={...group.userData,ring,halo,torso:group.children.find(o=>o.geometry?.type==='CapsuleGeometry'),head:group.children[2],material:accent}
- group.visible=false;scene.add(group);avatarMeshes.set(a.id,group)
+function applySceneTransform(){
+ if(!sceneShell.value)return
+ sceneShell.value.style.backgroundPosition=(50+parallaxTargetX*7)+'% '+(50+parallaxTargetY*5)+'%'
+ sceneShell.value.style.backgroundSize=(112+(zoom.value-1)*18)+'% auto'
 }
 function initScene(){
  const el=sceneShell.value
  if(!el)return
  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v))
+ sceneImageProbe=new Image()
+ sceneImageProbe.onload=()=>{sceneLoaded.value=true;sceneLoadError.value=false}
+ sceneImageProbe.onerror=()=>{sceneLoadError.value=true;sceneLoaded.value=false}
+ sceneImageProbe.src=sceneImageUrl
  const down=e=>{
   if(e.target.closest?.('button,a,textarea,input'))return
   pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
@@ -149,23 +114,15 @@ function initScene(){
    parallaxTargetX=clamp(parallaxTargetX+dx*.006,-1,1)
    parallaxTargetY=clamp(parallaxTargetY+dy*.006,-1,1)
    pointerDown={...pointerDown,x:e.clientX,y:e.clientY}
-   return
+  }else{
+   parallaxTargetX=((e.clientX-rect.left)/Math.max(rect.width,1)-.5)*2
+   parallaxTargetY=((e.clientY-rect.top)/Math.max(rect.height,1)-.5)*2
   }
-  parallaxTargetX=((e.clientX-rect.left)/Math.max(rect.width,1)-.5)*2
-  parallaxTargetY=((e.clientY-rect.top)/Math.max(rect.height,1)-.5)*2
+  applySceneTransform()
  }
  const up=()=>{pointerDown=null}
- const leave=()=>{if(!pointerDown){parallaxTargetX=0;parallaxTargetY=0}}
- const wheel=e=>{e.preventDefault();zoom.value=clamp(zoom.value+(e.deltaY>0?-.055:.055),.78,1.38);targetZoom=zoom.value}
- const animate=()=>{
-  raf=requestAnimationFrame(animate)
-  parallaxX+=(parallaxTargetX-parallaxX)*.055
-  parallaxY+=(parallaxTargetY-parallaxY)*.055
-  if(sceneShell.value){
-   sceneShell.value.style.backgroundPosition=`${50+parallaxX*7}% ${50+parallaxY*5}%`
-   sceneShell.value.style.backgroundSize=`${112+(zoom.value-1)*18}% auto`
-  }
- }
+ const leave=()=>{if(!pointerDown){parallaxTargetX=0;parallaxTargetY=0;applySceneTransform()}}
+ const wheel=e=>{if(e.target.closest?.('button,a,textarea,input'))return;e.preventDefault();zoom.value=clamp(zoom.value+(e.deltaY>0?-.055:.055),.78,1.38);applySceneTransform()}
  el.addEventListener('pointerdown',down)
  el.addEventListener('pointermove',move)
  el.addEventListener('pointerup',up)
@@ -173,12 +130,13 @@ function initScene(){
  el.addEventListener('pointerleave',leave)
  el.addEventListener('wheel',wheel,{passive:false})
  sceneListeners=[[el,'pointerdown',down],[el,'pointermove',move],[el,'pointerup',up],[el,'pointercancel',up],[el,'pointerleave',leave],[el,'wheel',wheel]]
- animate()
+ applySceneTransform()
 }
-function zoomBy(delta){zoom.value=Math.max(.72,Math.min(1.45,zoom.value+delta));targetZoom=zoom.value}
-function resetView(){orbitAngle=0;orbitTilt=.18;zoom.value=1;targetZoom=1;parallaxTargetX=0;parallaxTargetY=0;focusAgent.value='manager';motion.value='wave'}
+function zoomBy(delta){zoom.value=Math.max(.78,Math.min(1.38,zoom.value+delta));applySceneTransform()}
+function retryScene(){if(!sceneImageProbe)return;sceneLoadError.value=false;sceneLoaded.value=false;sceneImageProbe.src=sceneImageUrl+'&retry='+Date.now()}
+function resetView(){zoom.value=1;parallaxTargetX=0;parallaxTargetY=0;applySceneTransform();focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
-onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
+onBeforeUnmount(()=>{for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(sceneImageProbe){sceneImageProbe.onload=null;sceneImageProbe.onerror=null;sceneImageProbe.src='';sceneImageProbe=null}})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
 </script>
 
@@ -194,7 +152,6 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <main class="space-layout">
   <section class="stage-column">
    <div ref="sceneShell" class="scene-shell">
-    <div ref="canvasHost" class="three-canvas"></div>
     <div class="scene-vignette"></div>
     <div class="left-glass glass-panel">
      <div class="panel-overline">SHARED CONTEXT / ROOM 001</div>
@@ -202,6 +159,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
      <div class="task-summary"><span>当前任务</span><b>{{busy?'岗位并行协作':'等待新任务'}}</b></div>
      <div class="summary-bottom"><span><i></i>{{activeAgents.length}} / 6 个岗位在线</span><span class="latency">⏱ 2h</span></div>
     </div>
+    <div class="scene-load-state" v-if="!sceneLoaded"><span class="loader-dot"></span><template v-if="sceneLoadError">场景图片加载失败　<button @click="retryScene">重试加载</button></template><template v-else>正在加载真实场景…</template></div>
     <div class="environment-label">THE LIBRARY BAR <span>·</span> PHOTO ENVIRONMENT</div>
     <div class="agent-labels">
      <button v-for="(a,i) in agents" :key="a.id" class="agent-label" :class="['agent-'+a.id,{focused:focusAgent===a.id,muted:!selected.includes(a.id)}]" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}" @click="focusAgent=a.id;motion='wave';if(!selected.includes(a.id))toggleAgent(a.id)">
@@ -231,8 +189,8 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
 .space3d{position:relative;height:100vh;min-height:690px;overflow:hidden;background:#0b1723;color:#f4f7fa;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .space-top{position:absolute;z-index:30;top:0;left:0;right:0;height:78px;display:flex;align-items:center;gap:14px;padding:0 20px;background:linear-gradient(180deg,#0a1524ee,#0a1524b8);border-bottom:1px solid #b9d8ed30;backdrop-filter:blur(20px)}
 .space-top button{cursor:pointer;color:inherit}.back{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid #8ebad533;border-radius:50%;background:#ffffff0b;font-size:30px;line-height:1;color:#e9f4fc;transition:.2s}.back:hover{background:#2d73a8}.brand{display:flex;align-items:center;gap:11px;flex:0 0 auto;min-width:215px}.brand-orb{width:39px;height:39px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#1a9fe0,#3464bd);box-shadow:0 0 24px #38a9ef45;font-size:14px;font-weight:900}.brand b,.brand small{display:block}.brand b{font-size:15px;letter-spacing:.04em}.brand small{font-size:10px;color:#b8c9d8;margin-top:4px;letter-spacing:.04em}.top-agents{display:flex;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0;overflow:hidden}.top-agent{display:flex;align-items:center;gap:7px;min-width:0;padding:8px 9px;border:1px solid transparent;border-radius:12px;background:transparent;text-align:left;transition:.2s}.top-agent:hover,.top-agent.focused{background:#ffffff10;border-color:#ffffff20}.top-agent.muted{opacity:.48}.top-agent-avatar{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 34% 25%,var(--agent-color),#0e2538 95%);border:1px solid #ffffff36;box-shadow:0 0 14px color-mix(in srgb,var(--agent-color),transparent 76%)}.top-agent-avatar i{width:11px;height:14px;border-radius:50% 50% 42% 42%;background:#f1f3f5;box-shadow:0 8px 0 3px #e6edf4;transform:translateY(-3px)}.top-agent b,.top-agent small{display:block;white-space:nowrap}.top-agent b{font-size:11px}.top-agent small{font-size:9px;color:#b7c9d7;margin-top:3px}.top-state{display:grid;grid-template-columns:8px auto;align-items:center;gap:0 7px;flex:0 0 auto;padding:9px 12px;background:#ffffff0b;border:1px solid #c0d9eb1c;border-radius:11px;font-size:11px;color:#e5f2fa}.top-state i{grid-row:1/3;width:7px;height:7px;border-radius:50%;background:#23e3b1;box-shadow:0 0 12px #23e3b1}.top-state small{grid-column:2;color:#a9bece;font-size:9px;margin-top:4px}.mode-btn{flex:0 0 auto;padding:9px 11px;border:1px solid #8bb4d333;border-radius:10px;background:#ffffff0b;font-size:10px}
-.space-layout{position:absolute;inset:78px 0 0;max-width:none;margin:0;display:block}.stage-column{position:absolute;inset:0;min-width:0}.scene-shell{position:absolute;inset:0;overflow:hidden;background-color:#261b12;background-image:linear-gradient(180deg,#08152112 5%,transparent 22%,transparent 68%,#07111e7a 100%),linear-gradient(90deg,#08152130,transparent 35%,transparent 65%,#08152126),url("https://images.unsplash.com/photo-1688411485620-2d2dbea26b1c?auto=format&fit=crop&fm=jpg&q=88&w=3000");background-size:cover;background-position:center center;background-repeat:no-repeat;transition:background-size .18s ease;isolation:isolate}
-.three-canvas{position:absolute;inset:0;z-index:1;touch-action:none;opacity:0}.three-canvas canvas{display:block;width:100%;height:100%;outline:none}.scene-vignette{position:absolute;z-index:2;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 44%,transparent 42%,#06111b45 100%);box-shadow:inset 0 0 120px #06111b30}
+.space-layout{position:absolute;inset:78px 0 0;max-width:none;margin:0;display:block}.stage-column{position:absolute;inset:0;min-width:0}.scene-shell{position:absolute;inset:0;overflow:hidden;background-color:#261b12;background-image:linear-gradient(180deg,#08152112 5%,transparent 22%,transparent 68%,#07111e7a 100%),linear-gradient(90deg,#08152130,transparent 35%,transparent 65%,#08152126),url("https://images.unsplash.com/photo-1688411485620-2d2dbea26b1c?auto=format&fit=crop&fm=jpg&q=88&w=3000");background-size:cover;background-position:center center;background-repeat:no-repeat;transition:background-position .12s ease-out,background-size .18s ease;isolation:isolate}
+.scene-load-state{position:absolute;z-index:5;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #b8d9ed40;border-radius:12px;background:#071725bb;color:#e6f3fb;font-size:11px;backdrop-filter:blur(12px);pointer-events:auto}.scene-load-state button{border:1px solid #a9d8f044;border-radius:8px;background:#ffffff10;color:#8bdcff;padding:5px 8px;cursor:pointer}.loader-dot{width:7px;height:7px;background:#38e6bc;border-radius:50%;box-shadow:0 0 12px #38e6bc;animation:typing 1s infinite}.scene-vignette{position:absolute;z-index:2;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 44%,transparent 42%,#06111b45 100%);box-shadow:inset 0 0 120px #06111b30}
 .glass-panel{border:1px solid #9bcae74a;background:linear-gradient(135deg,#091a2ad9,#0c2032be);box-shadow:0 14px 44px #0004;backdrop-filter:blur(20px);border-radius:14px}.left-glass{position:absolute;z-index:6;left:20px;top:28px;width:min(385px,33vw);padding:14px 16px;color:#edf6fc}.panel-overline{font-size:9px;letter-spacing:.19em;color:#b2d6ea;margin-bottom:12px}.left-panel-title{display:flex;align-items:center;gap:10px}.status-mark{width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;border-radius:9px;background:linear-gradient(145deg,#1eb2f3,#4454cb);box-shadow:0 0 15px #39b3f64a}.left-panel-title>div{flex:1;min-width:0}.left-panel-title b,.left-panel-title small{display:block}.left-panel-title b{font-size:13px}.left-panel-title small{font-size:10px;color:#afc5d4;margin-top:5px}.live-badge{font-size:9px;padding:5px 7px;border-radius:20px;background:#12d7a718;color:#65f4c8;white-space:nowrap}.live-badge i{display:inline-block;width:6px;height:6px;background:#2ce9b3;border-radius:50%;margin-right:4px}.task-summary{display:flex;justify-content:space-between;gap:10px;padding:13px 0 10px;margin-top:7px;border-top:1px solid #c0def01b;font-size:10px;color:#b1c9d9}.task-summary b{color:#e9f6fc;font-weight:600}.summary-bottom{display:flex;align-items:center;justify-content:space-between;color:#8ce9e0;font-size:10px}.summary-bottom>span:first-child i{display:inline-block;width:6px;height:6px;background:#34e5bb;border-radius:50%;margin-right:6px}.latency{color:#c4d6e4;padding:4px 7px;border-radius:8px;background:#ffffff0d}
 .environment-label{position:absolute;z-index:4;top:19px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.24em;color:#fff9;text-shadow:0 1px 7px #0008;pointer-events:none}.environment-label span{color:#59caff}
 .agent-labels{position:absolute;z-index:8;inset:0;pointer-events:none}.agent-label{position:absolute;display:flex;align-items:center;gap:8px;min-width:112px;padding:7px 10px;text-align:left;border:1px solid #d3e4ee45;border-radius:20px;background:#0a1a2aaf;color:#f8fbff;box-shadow:0 8px 22px #0004;backdrop-filter:blur(14px);cursor:pointer;pointer-events:auto;transition:transform .22s,border-color .22s,background .22s}.agent-label:hover,.agent-label.focused{transform:translateY(-3px) scale(1.035);border-color:var(--agent-color);background:#071725e8;box-shadow:0 0 24px color-mix(in srgb,var(--agent-color),transparent 74%)}.agent-label>i{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--agent-color);box-shadow:0 0 12px var(--agent-color)}.agent-label span{min-width:0;flex:1}.agent-label b,.agent-label small{display:block;white-space:nowrap}.agent-label b{font-size:10px}.agent-label small{font-size:8px;color:#c1d3df;margin-top:3px}.agent-label em{font-style:normal;font-size:8px;color:#8ee5ca}.agent-label.muted{opacity:.55}.agent-manager{left:37%;top:48%}.agent-cashier{left:5%;top:49%}.agent-guide{left:52%;top:49%}.agent-buyer{left:25%;top:54%}.agent-inventory{left:39%;top:55%}.agent-pm{left:62%;top:59%}
