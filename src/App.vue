@@ -10,7 +10,7 @@ import RetailNewsShelf from './components/RetailNewsShelf.vue'
 import PlatformActionsShelf from './components/PlatformActionsShelf.vue'
 import HotRank from './components/HotRank.vue'
 import ContentDetail from './components/ContentDetail.vue'
-import AgentGroupChat from './components/AgentGroupChat.vue'
+import AgentGroupChat3D from './components/AgentGroupChat3D.vue'
 import { categories, tools, industries, bundles } from './data/catalog'
 import { useCatalog } from './composables/useCatalog'
 import { useRetailNews } from './composables/useRetailNews'
@@ -122,7 +122,7 @@ onMounted(() => {
   <div class="site">
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
-      <AgentGroupChat v-if="activeSection === 'agent-chat'" :onBack="returnFromChat" :initialAgent="selectedAgentRole" />
+      <AgentGroupChat3D v-if="activeSection === 'agent-chat'" :onBack="returnFromChat" :initialAgent="selectedAgentRole" />
       <StoreOperations v-if="activeSection === 'home'" :onOpenAgent="openAgentChat" :onOpenModule="navigate" />
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
