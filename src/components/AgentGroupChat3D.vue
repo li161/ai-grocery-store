@@ -157,7 +157,10 @@ function initScene(){
  const wood=new THREE.MeshStandardMaterial({map:woodTex,color:0xffffff,roughness:.76,metalness:.01})
  const darkWood=new THREE.MeshStandardMaterial({map:darkTex,color:0xffffff,roughness:.68})
  const trim=new THREE.MeshStandardMaterial({color:0xb98a54,roughness:.42,metalness:.12})
- const plaster=new THREE.MeshStandardMaterial({color:0xe8dfcf,roughness:.95})
+ const plasterTex=makeGrainTexture('#e8dfcf','#b8a58e',31);plasterTex.repeat.set(3,2);
+ const plaster=new THREE.MeshStandardMaterial({map:plasterTex,color:0xffffff,roughness:.96})
+ const marbleCanvas=document.createElement('canvas');marbleCanvas.width=512;marbleCanvas.height=512;const mc=marbleCanvas.getContext('2d');mc.fillStyle='#d7c8b2';mc.fillRect(0,0,512,512);let marbleSeed=43;const mr=()=>{marbleSeed=(marbleSeed*1103515245+12345)>>>0;return marbleSeed/4294967296};for(let i=0;i<38;i++){mc.beginPath();let x=mr()*512,y=mr()*512;mc.moveTo(x,y);mc.bezierCurveTo(x+60,y-35,x-60,y+80,x+180,y+150);mc.strokeStyle=i%3?'#ffffff':'#9a8976';mc.globalAlpha=.07+mr()*.16;mc.lineWidth=.6+mr()*2;mc.stroke()}mc.globalAlpha=1;const marbleTex=new THREE.CanvasTexture(marbleCanvas);marbleTex.colorSpace=THREE.SRGBColorSpace;marbleTex.wrapS=marbleTex.wrapT=THREE.RepeatWrapping;marbleTex.repeat.set(2,1);
+ const marble=new THREE.MeshStandardMaterial({map:marbleTex,color:0xffffff,roughness:.24,metalness:.04})
  const brass=new THREE.MeshStandardMaterial({color:0xc69a55,metalness:.68,roughness:.28})
  const bookMats=[0x7c342d,0x284c46,0x263e5b,0xb08a54,0x8b6848,0x4c3b58,0xc7b58f,0x536a58].map(color=>new THREE.MeshStandardMaterial({color,roughness:.82}))
  const floorTex=makeGrainTexture('#986b45','#e0b27a',19);floorTex.repeat.set(5,3);
@@ -200,6 +203,7 @@ function initScene(){
   box(.1,2.35,.09,9.5,2.75,z,wood)
   box(.1,.09,2,9.5,2.75,z,wood)
   const archR=.98
+  const archRing=new THREE.Mesh(new THREE.TorusGeometry(archR,.075,12,48,Math.PI),wood);archRing.rotation.y=Math.PI/2;archRing.position.set(9.49,4.0,z);archRing.castShadow=true;room.add(archRing)
   for(let i=0;i<=12;i++){
    const a=Math.PI*i/12
    const zz=z+Math.cos(a)*archR, yy=4.0+Math.sin(a)*archR
@@ -236,10 +240,19 @@ function initScene(){
   const d=new THREE.Vector3().subVectors(p2,p1);const rail=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,d.length(),8),balconyMat)
   rail.position.copy(p1).add(p2).multiplyScalar(.5);rail.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());room.add(rail)
  }
+ // Landscape layers beyond the glazing add distance cues instead of a flat cyan pane.
+ const skyMat=new THREE.MeshBasicMaterial({color:0xb8d5dc})
+ for(const z of [-4.6,-1.5,1.6]){
+  box(.025,5.6,2.35,9.83,3.2,z,skyMat)
+  for(let i=0;i<7;i++){
+   const tree=new THREE.Mesh(new THREE.ConeGeometry(.22+((i*7)%3)*.08,1.0+(i%4)*.25,7),new THREE.MeshStandardMaterial({color:[0x6d8870,0x879a7c,0x4c6b5a][i%3],roughness:1}))
+   tree.position.set(9.76,1.0+(i%3)*.12,z-0.82+i*.27);tree.rotation.z=(i%2?-.12:.12);room.add(tree)
+  }
+ }
  // A substantial walnut service bar separates staff behind it from visitors in front.
  box(7.8,.92,.95,0,.48,-.05,wood)
  box(8.05,.17,1.12,0,1.02,-.05,darkWood)
- box(8.16,.12,1.2,0,1.13,-.05,trim)
+ box(8.16,.12,1.2,0,1.13,-.05,marble)
  box(7.65,.12,.12,0,.36,.45,trim)
  for(let x=-3.5;x<=3.5;x+=.7)box(.025,.7,.015,x,.53,.435,trim)
  // Recessed counter panels and small brass pulls create the crafted joinery of a real café bar.
