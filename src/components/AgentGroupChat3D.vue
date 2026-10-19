@@ -156,7 +156,7 @@ function buildLibraryRoom(){
  brassMat=mat(0xc29859,.34,.58)
  plasterMat=mat(0xe0d2be,.96)
  marbleMat=new THREE.MeshStandardMaterial({map:marbleTex,color:0xffffff,roughness:.28,metalness:.03})
- floorMat=new THREE.MeshStandardMaterial({map:floorTex,color:0xd9b88a,roughness:.62})
+ floorMat=new THREE.MeshStandardMaterial({map:floorTex,color:0xd9b88a,roughness:.48,metalness:.025})
  bookMaterials=[0x6e2f2b,0x29484a,0x283a5b,0x967142,0x5e4030,0x473653,0xb7a17b,0x405543,0x874f37].map(c=>mat(c,.86))
  const box=(w,h,d,x,y,z,m=woodMat,p=roomRoot,rot=null)=>mesh(new THREE.BoxGeometry(w,h,d),m,[x,y,z],p,rot)
  // Full-scale shell and continuous timber flooring.
@@ -298,7 +298,7 @@ function createSpongeBob(a){
   for(const dx of [-.18,.18]){makeLimb(g,pink,[dx,.3,0],[dx,.12,0],.055,.05);add(new THREE.SphereGeometry(.12,16,12),black,[dx,.08,.05],[0,0,0],[1.2,.5,1.6])}
  }else if(a.id==='guide'){
   // Squidward: long aqua head, tapered nose, six expressive tentacle limbs and a polo shirt.
-  const aqua=mat(0x7bc9bd,.6),nose=mat(0x8bd1c5,.62),shirt=mat(0x93674f,.8)
+  const aqua=characterMat(0x7bc9bd,.42),nose=characterMat(0x8bd1c5,.38),shirt=characterMat(0x93674f,.66)
   add(new THREE.SphereGeometry(.37,32,24),aqua,[0,1.65,.02],[0,0,0],[.72,1.35,.8])
   faceEyes(g,.13,1.74,.29,.12,0xe4c86d)
   add(new THREE.CylinderGeometry(.07,.045,.32,18),nose,[0,1.43,.29],[.28,0,0])
@@ -308,7 +308,7 @@ function createSpongeBob(a){
   makeLimb(g,aqua,[-.12,.7,0],[-.15,.12,0],.05,.04);makeLimb(g,aqua,[.12,.7,0],[.15,.12,0],.05,.04)
  }else if(a.id==='buyer'){
   // Mr. Krabs: red shell, eyestalks, blue trousers and oversized claws.
-  const crab=mat(0xe74637,.5),bluePants=mat(0x2a72a4,.7),claw=mat(0xe94a3c,.46)
+  const crab=characterMat(0xe74637,.4),bluePants=characterMat(0x2a72a4,.56),claw=characterMat(0xe94a3c,.36)
   add(new THREE.SphereGeometry(.47,32,24),crab,[0,1.2,0],[0,0,0],[1.18,.82,.76])
   for(const dx of [-.15,.15]){makeLimb(g,crab,[dx,.99,0],[dx,1.55,.02],.045,.04);add(new THREE.SphereGeometry(.13,20,16),white,[dx,1.62,.08],[0,0,0],[.72,1.15,.65]);add(new THREE.SphereGeometry(.045,14,12),blue,[dx,1.62,.15]);add(new THREE.SphereGeometry(.023,10,8),black,[dx,1.62,.19])}
   add(new THREE.BoxGeometry(.49,.32,.31),bluePants,[0,.78,0])
@@ -316,7 +316,7 @@ function createSpongeBob(a){
   for(const dx of [-.12,.12]){makeLimb(g,crab,[dx,.66,0],[dx,.22,0],.05,.04);add(new THREE.SphereGeometry(.11,16,12),black,[dx,.1,.04],[0,0,0],[1.5,.5,1.5])}
  }else if(a.id==='inventory'){
   // Sandy Cheeks: squirrel silhouette, buck teeth and a clear astronaut helmet.
-  const fur=mat(0xc58b58,.78),suit=mat(0xeee4d1,.58),pink=mat(0xe8a1aa,.62)
+  const fur=characterMat(0xc58b58,.63),suit=characterMat(0xeee4d1,.42),pink=characterMat(0xe8a1aa,.48)
   add(new THREE.SphereGeometry(.29,28,20),fur,[0,1.42,0],[0,0,0],[.9,1.12,.82])
   for(const dx of [-.19,.19]){add(new THREE.ConeGeometry(.12,.3,16),fur,[dx,1.68,-.01],[0,0,dx<0?-.22:.22]);add(new THREE.SphereGeometry(.052,12,10),pink,[dx,1.75,.02])}
   faceEyes(g,.105,1.46,.23,.1,0x6c9e62)
@@ -330,7 +330,7 @@ function createSpongeBob(a){
   for(const dx of [-.13,.13]){makeLimb(g,suit,[dx,.52,0],[dx,.17,0],.06,.045);add(new THREE.BoxGeometry(.15,.09,.22),mat(0x514b45,.5),[dx,.08,.04])}
  }else{
   // Plankton: compact green cyclops with two antennae and articulated feet.
-  const plank=mat(0x71bc3d,.52),redMouth=mat(0x551d20,.55)
+  const plank=characterMat(0x71bc3d,.38),redMouth=characterMat(0x551d20,.48)
   add(new THREE.SphereGeometry(.25,32,24),plank,[0,1.02,0],[0,0,0],[.8,1.25,.65])
   add(new THREE.SphereGeometry(.17,24,20),white,[0,1.1,.15],[0,0,0],[1,1,.65])
   add(new THREE.SphereGeometry(.085,20,16),red,[0,1.1,.25])
