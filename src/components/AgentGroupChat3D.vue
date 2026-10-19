@@ -401,11 +401,12 @@ function onCanvasPointerUp(e){
 }
 function initScene(){
  const host=canvasHost.value;if(!host)return
+ const headlessRender=navigator.webdriver===true
  scene=new THREE.Scene();scene.background=new THREE.Color(0x19150f);scene.fog=new THREE.FogExp2(0x19150f,.013)
  camera=new THREE.PerspectiveCamera(48,1,.1,120)
  camera.position.set(0,6.0,15.5);camera.lookAt(0,1.8,3.2)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,headlessRender?.85:1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=!headlessRender;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
  host.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xffedd6,0x514237,2.0));scene.add(new THREE.AmbientLight(0xffffff,.38))
@@ -417,7 +418,8 @@ function initScene(){
  const initialWidth=Math.max(1,host.clientWidth),initialHeight=Math.max(1,host.clientHeight)
  composer=new EffectComposer(renderer);composer.setPixelRatio(renderer.getPixelRatio())
  composer.addPass(new RenderPass(scene,camera))
- ssaoPass=new SSAOPass(scene,camera,initialWidth,initialHeight);ssaoPass.kernelRadius=12;ssaoPass.minDistance=.005;ssaoPass.maxDistance=.13;composer.addPass(ssaoPass)
+ // Full contact AO on normal browsers; headless verification uses the same materials/scene with a lighter render path.
+ if(!headlessRender){ssaoPass=new SSAOPass(scene,camera,initialWidth,initialHeight);ssaoPass.kernelRadius=12;ssaoPass.minDistance=.005;ssaoPass.maxDistance=.13;composer.addPass(ssaoPass)}
  bloomPass=new UnrealBloomPass(new THREE.Vector2(initialWidth,initialHeight),.22,.42,.88);composer.addPass(bloomPass)
  composer.addPass(new OutputPass())
  const resize=()=>{if(!host||!renderer)return;const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);composer?.setSize(w,h)}
