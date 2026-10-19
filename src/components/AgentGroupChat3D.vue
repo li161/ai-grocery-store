@@ -175,6 +175,12 @@ function initScene(){
  const beamMat=new THREE.MeshStandardMaterial({color:0x4b3425,roughness:.62})
  for(let x=-9;x<=9;x+=3){box(.2,.34,18,x,6.65,0,beamMat)}
  box(20,.24,.3,0,6.2,-8.5,beamMat)
+ // Layered ceiling cornice and recessed warm light channels soften the double-height room.
+ box(19.5,.16,.18,0,6.48,-8.48,trim)
+ box(.18,.16,17.1,-9.55,6.48,0,trim)
+ box(.18,.16,17.1,9.55,6.48,0,trim)
+ const coveMat=new THREE.MeshBasicMaterial({color:0xffd89a,transparent:true,opacity:.72})
+ for(let x=-8.7;x<=8.7;x+=.42){const glow=new THREE.Mesh(new THREE.BoxGeometry(.28,.018,.035),coveMat);glow.position.set(x,6.37,-8.36);room.add(glow)}
  // Full-height bookcases across the back wall, packed with individually modeled books.
  function bookshelf(x,z,width=3.2,depth=.52){
   const g=new THREE.Group();g.position.set(x,0,z);room.add(g)
@@ -213,6 +219,12 @@ function initScene(){
   }
   for(let i=1;i<6;i++){const a=Math.PI*i/6;box(.09,1.95,.055,9.49,2.78,z+Math.cos(a)*archR,wood)}
  }
+ // Brass picture lights create local pools of warm light over the back-wall book spines.
+ for(let x=-7.4;x<=7.4;x+=3.7){
+  const arm=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.24,8),brass);arm.position.set(x,5.08,-7.92);arm.rotation.x=Math.PI/2;room.add(arm)
+  const hood=new THREE.Mesh(new THREE.BoxGeometry(.72,.055,.12),brass);hood.position.set(x,4.98,-7.9);room.add(hood)
+  const bookLight=new THREE.PointLight(0xffc982,7,3.8);bookLight.position.set(x,4.82,-7.65);room.add(bookLight)
+ }
  // Upper mezzanine and gallery railing: this is the strongest missing spatial cue in the reference.
  const balconyMat=new THREE.MeshStandardMaterial({color:0x493225,roughness:.58,metalness:.08})
  box(8.8,.22,2.35,0,4.18,-5.45,wood)
@@ -250,14 +262,20 @@ function initScene(){
    tree.position.set(9.76,1.0+(i%3)*.12,z-0.82+i*.27);tree.rotation.z=(i%2?-.12:.12);room.add(tree)
   }
  }
- // A substantial walnut service bar separates staff behind it from visitors in front.
- box(7.8,.92,.95,0,.48,-.05,wood)
- box(8.05,.17,1.12,0,1.02,-.05,darkWood)
- box(8.16,.12,1.2,0,1.13,-.05,marble)
- box(7.65,.12,.12,0,.36,.45,trim)
- for(let x=-3.5;x<=3.5;x+=.7)box(.025,.7,.015,x,.53,.435,trim)
- // Recessed counter panels and small brass pulls create the crafted joinery of a real café bar.
- for(let x=-3.15;x<=3.15;x+=1.05){box(.78,.53,.035,x,.53,.48,darkWood);box(.68,.42,.018,x,.53,.503,wood);box(.12,.025,.025,x,.52,.52,brass)}
+ // A shallow bowed walnut bar front gives the counter a more architectural, custom-built silhouette.
+ // Faceted segments keep the curve lightweight while retaining real shadows and material response.
+ for(let i=0;i<14;i++){
+  const x=-3.78+i*.58, normalized=x/4
+  const bow=.48*(1-normalized*normalized)
+  const panel=box(.59,.91,.78,x,.48,.02+bow,wood);panel.rotation.y=-normalized*.16
+  const inset=box(.49,.54,.035,x,.51,.425+bow,darkWood);inset.rotation.y=-normalized*.16
+  const inner=box(.4,.42,.018,x,.51,.448+bow,wood);inner.rotation.y=-normalized*.16
+  const pull=box(.11,.025,.025,x,.51,.463+bow,brass);pull.rotation.y=-normalized*.16
+ }
+ box(7.95,.17,1.02,0,1.02,.12,darkWood)
+ box(8.1,.12,1.12,0,1.13,.12,marble)
+ // Thin brass toe-kick follows the counter's bowed front.
+ for(let i=0;i<14;i++){const x=-3.78+i*.58;box(.57,.045,.025,x,.09,.42+.48*(1-(x/4)*(x/4)),trim)}
  // Coffee machine, cup stack, grinder and book display make the counter read as a real place.
  const steel=new THREE.MeshStandardMaterial({color:0x9aa6a7,metalness:.72,roughness:.27})
  box(.75,.62,.52,-2.8,1.5,-.18,steel);box(.52,.18,.38,-2.8,1.9,-.18,darkWood)
