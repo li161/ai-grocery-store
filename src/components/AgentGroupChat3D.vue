@@ -382,8 +382,8 @@ function createSpongeBob(a){
  const ring=mesh(new THREE.TorusGeometry(.42,.012,8,44),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.55}),[0,.025,0],g,[Math.PI/2,0,0])
  g.userData.ring=ring;scene.add(g);characterGroups.set(a.id,g);return g
 }
-const agentPositions={manager:[-4.9,0,3.15],cashier:[-2.95,0,4.05],guide:[-1.0,0,3.0],buyer:[1.0,0,4.0],inventory:[2.95,0,3.05],pm:[4.9,0,4.0]}
-function buildCharacter(){for(const a of agents){const character=createSpongeBob(a);character.scale.setScalar(1.25)}}
+const agentPositions={manager:[-5.1,0,3.15],cashier:[-3.4,0,4.05],guide:[-1.7,0,3.0],buyer:[0,0,4.0],inventory:[1.7,0,3.05],pm:[3.4,0,4.0]}
+function buildCharacter(){for(const a of agents){const character=createSpongeBob(a);character.scale.setScalar(a.id==='pm'?1.55:1.25)}}
 function onCanvasPointerDown(e){
  if(!renderer||!camera)return
  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
