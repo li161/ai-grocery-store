@@ -75,7 +75,7 @@ async function callDeepSeek({ message, agent, history, traceId, dependencyResult
     ? '\n\n最近群聊上下文（仅供参考，可能包含其他岗位的回复）：\n' + history.map(item => `[${item.role}] ${item.text}`).join('\n')
     : ''
   const dependencyContext = Object.keys(dependencyResults).length
-    ? '\\n\\n已完成的依赖任务结果（请基于这些结果继续工作，不要把推断当成事实）：\\n' + Object.entries(dependencyResults).map(([id, result]) => `[依赖 Agent ${id}] ${result?.text || ''}`).join('\\n')
+    ? '\n\n已完成的依赖任务结果（请基于这些结果继续工作，不要把推断当成事实）：\n' + Object.entries(dependencyResults).map(([id, result]) => `[依赖 Agent ${id}] ${result?.text || ''}`).join('\n')
     : ''
   try {
     const response = await fetch(`${deepseekBaseUrl}/chat/completions`, {
