@@ -2,6 +2,12 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
@@ -32,7 +38,7 @@ const motion=ref('idle')
 const zoom=ref(1)
 const quickPrompts=['制定今天的门店经营计划','@盘点员 设计今日库存核查方案','@采购 列出补货决策所需数据','@店长 汇总各岗位风险与待办']
 const now=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
-let renderer=null, scene=null, camera=null, resizeObserver=null, raf=0, raycaster=null, pointerDown=null, sceneListeners=[], environmentTarget=null
+let renderer=null, composer=null, ssaoPass=null, bloomPass=null, scene=null, camera=null, resizeObserver=null, raf=0, raycaster=null, pointerDown=null, sceneListeners=[], environmentTarget=null
 let orbitAngle=0, orbitTilt=.12, targetZoom=1
 const characterGroups=new Map(), characterHitMeshes=[]
 const sceneClock=new THREE.Clock()
@@ -93,6 +99,7 @@ async function send(){
 }
 
 const mat=(color,roughness=.72,metalness=0,extra={})=>new THREE.MeshStandardMaterial({color,roughness,metalness,...extra})
+const characterMat=(color,roughness=.48,extra={})=>new THREE.MeshPhysicalMaterial({color,roughness,metalness:0,clearcoat:.16,clearcoatRoughness:.3,...extra})
 function mesh(geometry,material,pos,parent,rot=null,scale=null){
  const m=new THREE.Mesh(geometry,material);m.position.set(pos[0],pos[1],pos[2]);if(rot)m.rotation.set(rot[0],rot[1],rot[2]);if(scale)m.scale.set(scale[0],scale[1],scale[2]);m.castShadow=true;m.receiveShadow=true;(parent||scene).add(m);return m
 }
@@ -257,13 +264,13 @@ function faceEyes(parent,x,y,z,eyeScale=.13,irisColor=0x3d7dbb){
 }
 function createSpongeBob(a){
  const g=new THREE.Group();g.position.set(...agentPositions[a.id]);g.userData.agentId=a.id
- const yellow=mat(0xf5cf32,.48),yellowShade=mat(0xd5a922,.65),white=mat(0xfff4df,.52),brown=mat(0x8b4e27,.77),red=mat(0xdf3c34,.48),black=mat(0x292a2d,.42),blue=mat(0x2e8bc7,.3),pink=mat(0xffa2b6,.55),green=mat(0x74a94c,.58),purple=mat(0x7665b8,.5),teal=mat(0x3e9da0,.52)
+ const yellow=characterMat(0xf5cf32,.48),yellowShade=mat(0xd5a922,.65),white=characterMat(0xfff4df,.42),brown=characterMat(0x8b4e27,.62),red=characterMat(0xdf3c34,.42),black=mat(0x292a2d,.42),blue=characterMat(0x2e8bc7,.3),pink=characterMat(0xffa2b6,.48),green=characterMat(0x74a94c,.5),purple=characterMat(0x7665b8,.44),teal=characterMat(0x3e9da0,.44)
  const add=(geo,m,p,r=null,s=null)=>mesh(geo,m,p,g,r,s)
  const rounded=(w,h,d,rad,m,p)=>add(new THREE.BoxGeometry(w,h,d,8,8,4),m,p,null,[1,1,1])
  const hit=mesh(new THREE.SphereGeometry(.86,16,12),mat(0xffffff,.8,0,{transparent:true,opacity:0,depthWrite:false}),[0,1,0],g);hit.castShadow=false;hit.receiveShadow=false;hit.userData.agentId=a.id;characterHitMeshes.push(hit)
  const smileCurve=(pts,material,r=.018)=>{const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=new THREE.Mesh(new THREE.TubeGeometry(curve,28,r,8,false),material);g.add(m)}
  if(a.id==='manager'){
-  add(new THREE.BoxGeometry(.91,.88,.46,12,12,6),yellow,[0,1.45,0])
+  add(new RoundedBoxGeometry(.91,.88,.46,8,.075),yellow,[0,1.45,0])
   // Spongebob's signature pores and soft specular highlights.
   for(const [x,y,z,r] of [[-.34,1.73,.238,.035],[.3,1.68,.24,.03],[-.38,1.37,.238,.045],[.39,1.32,.238,.038],[-.26,1.12,.238,.025],[.26,1.13,.238,.03],[0,1.82,.23,.02]])add(new THREE.SphereGeometry(r,10,8),yellowShade,[x,y,z])
   faceEyes(g,.2,1.58,.255,.17,0x43a5ec)
@@ -368,7 +375,7 @@ function initScene(){
  camera=new THREE.PerspectiveCamera(48,1,.1,120)
  camera.position.set(0,6.0,15.5);camera.lookAt(0,1.8,3.2)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
  host.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xffedd6,0x514237,2.0));scene.add(new THREE.AmbientLight(0xffffff,.38))
@@ -376,7 +383,14 @@ function initScene(){
  const fill=new THREE.DirectionalLight(0xfff4e7,1.2);fill.position.set(5,7,3);scene.add(fill)
  const warm=new THREE.PointLight(0xffc06e,50,16);warm.position.set(-1,5,0);scene.add(warm)
  buildLibraryRoom();buildCharacter();raycaster=new THREE.Raycaster()
- const resize=()=>{if(!host||!renderer)return;const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/Math.max(1,h);camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
+ // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
+ const initialWidth=Math.max(1,host.clientWidth),initialHeight=Math.max(1,host.clientHeight)
+ composer=new EffectComposer(renderer);composer.setPixelRatio(renderer.getPixelRatio())
+ composer.addPass(new RenderPass(scene,camera))
+ ssaoPass=new SSAOPass(scene,camera,initialWidth,initialHeight);ssaoPass.kernelRadius=12;ssaoPass.minDistance=.005;ssaoPass.maxDistance=.13;composer.addPass(ssaoPass)
+ bloomPass=new UnrealBloomPass(new THREE.Vector2(initialWidth,initialHeight),.22,.42,.88);composer.addPass(bloomPass)
+ composer.addPass(new OutputPass())
+ const resize=()=>{if(!host||!renderer)return;const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);composer?.setSize(w,h)}
  resizeObserver=new ResizeObserver(resize);resizeObserver.observe(host);resize()
  const down=e=>onCanvasPointerDown(e),move=e=>onCanvasPointerMove(e),up=e=>onCanvasPointerUp(e)
  host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',()=>{pointerDown=null})
@@ -399,14 +413,14 @@ function initScene(){
    }
    labelPositions.value=next
   }
-  renderer.render(scene,camera)
+  composer.render()
  }
  animate()
 }
 function zoomBy(delta){zoom.value=Math.max(.7,Math.min(1.35,zoom.value+delta))}
 function resetView(){orbitAngle=0;orbitTilt=.12;zoom.value=1;focusAgent.value='manager';motion.value='wave'}
 onMounted(()=>initScene())
-onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}environmentTarget?.dispose();environmentTarget=null;scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
+onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];composer?.dispose();composer=null;ssaoPass=null;bloomPass=null;if(renderer){renderer.dispose();renderer.domElement.remove()}environmentTarget?.dispose();environmentTarget=null;scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material])){for(const key of ['map','normalMap','roughnessMap','metalnessMap','emissiveMap','aoMap','alphaMap','bumpMap','envMap'])if(m[key])m[key].dispose();m.dispose()}}})})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
 </script>
 
