@@ -1,58 +1,60 @@
-# AI 杂货铺 · DeepSeek 多 Agent 群聊 API
+# AI 杂货铺 · Agent Harness / DeepSeek API
 
-独立 Node.js API 服务，供六个零售岗位数字人并行调用 DeepSeek。服务使用 Node.js 内置 HTTP 与 fetch，无需 Pi CLI 或第三方运行时依赖。
+当前服务仍由 Render 独立部署，代码位于现有仓库的 `services/agent-chat`。本次把任务生命周期和 Agent 执行协调从 HTTP 入口中拆出；没有另建部署服务，也没有改变现有 `POST /api/chat` 的基本响应契约。
 
-## API
+## 已实现
 
-- `GET /health`：健康检查，返回 provider 和模型名称。
-- `POST /api/chat`：并行调用选中的岗位 Agent。模型密钥仅由服务端读取。
+- `src/harness/runtime.mjs`：并行 fan-out、单 Agent 异常隔离、任务状态事件日志。
+- `src/task-store.mjs`：统一任务存储接口；支持 PostgreSQL 持久化与本地内存开发模式。
+- `POST /api/chat`：保留原接口，新增 `taskId`、`task`，支持可选 `Idempotency-Key` 请求幂等键。
+- `GET /api/tasks/:id`：读取任务/各 Agent 子任务状态与结果。
+- PostgreSQL 初始化建表；进程重启时把仍处于运行态的任务标记为 `interrupted`，不会假装自动恢复执行。
+- 单测覆盖并行结果、单 Agent 失败隔离和任务状态更新。
 
-默认 DeepSeek 模型为 `deepseek-flash`，接口地址为 `https://api.deepseek.com/chat/completions`。模型名称可通过 `DEEPSEEK_MODEL` 环境变量调整。
+## 运行与验证
 
-## 本地运行
+需要 Node.js 22+。
 
 ```bash
-cd services/agent-chat
-cp .env.example .env
-# 编辑 .env，只需填写 DEEPSEEK_API_KEY
-set -a; source .env; set +a
+npm install
+npm test
+npm run check
 npm start
 ```
 
-健康检查：`curl http://localhost:8787/health`
+`GET /health` 会返回 `taskStorage: "postgres" | "memory"`，方便确认当前存储模式。
 
-## 部署成独立 API 服务
+## 配置持久化
 
-仓库根目录的 `render.yaml` 已配置 Render Blueprint：
+要在 Render 重启和重新部署后保留任务记录，需要为服务配置 PostgreSQL，并把连接串设为环境变量 `DATABASE_URL`。服务启动时会自动创建 `harness_runs` 表。建议数据库与 API 服务部署在同一地区，并只向后端注入连接串。
 
-1. 在 Render 选择 **New + → Blueprint**，连接本 GitHub 仓库。
-2. Render 会读取 `render.yaml`，并把 `services/agent-chat` 部署成独立 Web Service。
-3. 在服务环境变量中只需填写 `DEEPSEEK_API_KEY`。不要把密钥提交到 GitHub，也不要放入 `VITE_*` 前端变量。
-4. 保证 `ALLOWED_ORIGINS` 包含前端的准确来源（例如 `https://airetail.store`）。
-5. 部署成功后访问 `https://你的服务.onrender.com/health`，应返回 `ok: true`。
-6. 打开数字人群聊即可直接发送消息；前端默认指向 `https://ai-grocery-store-agent-api.onrender.com`。若 Render 实际分配的域名不同，只需在构建时设置 `VITE_AGENT_API`。
+未配置 `DATABASE_URL` 时会使用内存存储：适合本地开发，但重启后任务记录会丢失。仅仅合并代码不会自动创建数据库，也不会自动为 Render 服务设置 `DATABASE_URL`。
 
-Render 的服务与前端是分开的部署单元，但源代码暂时仍位于现有 GitHub 仓库。当前 GitHub 连接没有创建新仓库的权限；若必须独立成另一个 GitHub 仓库，需要先在 GitHub 创建空仓库，再把本目录内容复制到新仓库根目录。
+## API 约定
 
-## 请求格式
+### POST /api/chat
+
+请求体与旧版本兼容：
 
 ```json
 {
-  "message": "帮我梳理今天的门店经营优先级",
-  "agents": [
-    {"id":"manager","name":"店长","role":"经营负责人","instructions":"统筹经营目标并拆分任务"}
-  ],
-  "history": [{"role":"user","text":"我希望降低损耗"}]
+  "message": "检查库存并给出采购建议",
+  "agents": [{"id":"inventory","name":"库存专员","role":"库存管理"}],
+  "history": []
 }
 ```
 
-响应包含 `replies: [{agentId, text, traceId}]` 与 `failed` 标记。所有岗位并行调用；单个失败不会丢弃其他成功回复。
+可选请求头：`Idempotency-Key: <客户端生成的唯一键>`。同一键重复提交不会再次触发模型调用，而是返回现有任务和已完成回复。调用方应为每次新的用户发送生成新键；不要将同一键复用于不同消息。
 
-## 安全与 MVP 边界
+响应新增 `taskId` 和 `task`，原有 `replies`、`failed`、`errors` 字段继续保留。
 
-- DeepSeek 密钥仅存在于后端环境变量。
-- 公开 API 不要求用户再填写访问 Token；通过 CORS 来源白名单、每 IP 限流和请求大小限制降低滥用风险。CORS 不是身份认证，若面向公开高流量使用，应增加验证码、配额或网关认证。
-- 提供 CORS 来源白名单、请求体大小限制、每 IP 限流和模型调用超时。
-- 当前限流器存于内存，进程重启后清零；高流量生产环境应改用共享限流存储/API 网关。
-- 当前不持久化群聊，也未接入真实 POS、支付、商品目录或库存系统。数字人不能宣称这些系统动作已执行。
-- Render 免费实例可能休眠，首次请求可能较慢；真实商业使用需评估服务可用性和 DeepSeek API 费用。
+### GET /api/tasks/:id
+
+返回任务状态，包括每个 Agent 子任务的 `queued/running/succeeded/failed/interrupted` 状态、开始/完成时间以及结果/错误。当前接口没有用户级鉴权；不要将任务 ID 当作访问控制。面向公开生产流量前应增加身份认证、配额和访问隔离。
+
+## 当前边界
+
+- 已有的 Agent 执行是并行 fan-out；本次没有实现由 LLM 自动规划的依赖 DAG、SSE token 流式输出或自动重放中断任务。
+- 重启时对运行中任务做可见的 `interrupted` 标记，避免无声挂起；不自动重放是为了避免模型调用重复计费。
+- CORS 不是身份认证；内存限流器仍非跨实例共享。
+- 不连接 POS、库存、订单或支付系统；模型输出不是实际执行凭证。

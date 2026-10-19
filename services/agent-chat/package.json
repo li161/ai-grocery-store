@@ -4,7 +4,11 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --check server.mjs"
+    "test": "node --test",
+    "check": "node --check server.mjs && node --check src/task-store.mjs && node --check src/harness/runtime.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
   },
   "engines": {
     "node": ">=22"
