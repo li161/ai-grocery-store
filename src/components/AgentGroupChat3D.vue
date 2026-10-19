@@ -334,8 +334,8 @@ function createSpongeBob(a){
  const ring=mesh(new THREE.TorusGeometry(.42,.012,8,44),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.55}),[0,.025,0],g,[Math.PI/2,0,0])
  g.userData.ring=ring;scene.add(g);characterGroups.set(a.id,g);return g
 }
-const agentPositions={manager:[-1.6,0,1.25],cashier:[-4.1,0,1.8],guide:[2.0,0,.8],buyer:[-3.1,0,.3],inventory:[.5,0,1.8],pm:[4.1,0,2.0]}
-function buildCharacter(){for(const a of agents)createSpongeBob(a)}
+const agentPositions={manager:[-4.9,0,3.15],cashier:[-2.95,0,4.05],guide:[-1.0,0,3.0],buyer:[1.0,0,4.0],inventory:[2.95,0,3.05],pm:[4.9,0,4.0]}
+function buildCharacter(){for(const a of agents){const character=createSpongeBob(a);character.scale.setScalar(1.12)}}
 function onCanvasPointerDown(e){
  if(!renderer||!camera)return
  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
@@ -364,8 +364,8 @@ function onCanvasPointerUp(e){
 function initScene(){
  const host=canvasHost.value;if(!host)return
  scene=new THREE.Scene();scene.background=new THREE.Color(0x19150f);scene.fog=new THREE.FogExp2(0x19150f,.013)
- camera=new THREE.PerspectiveCamera(42,1,.1,100)
- camera.position.set(0,5.1,18);camera.lookAt(0,2.5,-.4)
+ camera=new THREE.PerspectiveCamera(48,1,.1,120)
+ camera.position.set(0,6.0,15.5);camera.lookAt(0,1.8,3.2)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
@@ -385,8 +385,8 @@ function initScene(){
  const animate=()=>{
   raf=requestAnimationFrame(animate);const t=sceneClock.getElapsedTime()
   for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
-  const radius=18/zoom.value;const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,4.9+orbitTilt*8,Math.cos(orbitAngle)*radius)
-  camera.position.lerp(desired,.07);camera.lookAt(0,2.4,-.4);renderer.render(scene,camera)
+  const radius=15.5/zoom.value;const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,5.4+orbitTilt*8,3.0+Math.cos(orbitAngle)*radius)
+  camera.position.lerp(desired,.07);camera.lookAt(0,1.85,3.3);renderer.render(scene,camera)
  }
  animate()
 }
