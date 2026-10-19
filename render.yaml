@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ai-grocery-store-agent-api
+    runtime: node
+    plan: free
+    rootDir: services/agent-chat
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: API_ACCESS_TOKEN
+        sync: false
+      - key: DEEPSEEK_MODEL
+        value: deepseek-flash
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com
+      - key: ALLOWED_ORIGINS
+        value: https://airetail.store,https://www.airetail.store,http://localhost:5173
+      - key: AGENT_TIMEOUT_MS
+        value: "60000"
+      - key: RATE_LIMIT_MAX
+        value: "30"
