@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
@@ -31,6 +32,8 @@ const mode=ref('deepseek')
 const apiBase=ref(import.meta.env.VITE_AGENT_API || 'https://ai-grocery-store-agent-api.onrender.com')
 const sceneShell=ref(null)
 const canvasHost=ref(null)
+const roomRenderStatus=ref('正在加载高细节场景…')
+const highDetailRoomLoaded=ref(false)
 const messageList=ref(null)
 const focusAgent=ref('manager')
 const labelPositions=ref({})
@@ -128,7 +131,7 @@ function makeMarbleTexture(){
  },2,1)
 }
 function createBookcase(x,z,width=2.5,height=4.6,depth=.48,side=false){
- const g=new THREE.Group();g.position.set(x,0,z);if(side)g.rotation.y=Math.PI/2;scene.add(g)
+ const g=new THREE.Group();g.position.set(x,0,z);if(side)g.rotation.y=Math.PI/2;(roomRoot||scene).add(g)
  const oak=woodMat,dark=darkWoodMat,gold=brassMat
  mesh(new THREE.BoxGeometry(width,height,depth),oak,[0,height/2,0],g)
  mesh(new THREE.BoxGeometry(width+.07,.11,depth+.08),gold,[0,height+.02,0],g)
@@ -384,6 +387,54 @@ function createSpongeBob(a){
 }
 const agentPositions={manager:[-5.1,0,3.15],cashier:[-3.4,0,4.05],guide:[-1.7,0,3.0],buyer:[0,0,4.0],inventory:[1.7,0,3.05],pm:[3.4,0,4.0]}
 function buildCharacter(){for(const a of agents){const character=createSpongeBob(a);character.scale.setScalar(a.id==='pm'?1.55:1.25)}}
+
+const LIBRARY_SCENE_URL='https://cdn.3dassets.dev/assets/30951/v1/model.glb'
+const COFFEE_BAR_URL='https://cdn.3dassets.dev/assets/22245/v1/model.glb'
+function normalizeAsset(root,targetWidth){
+ root.updateMatrixWorld(true)
+ const bounds=new THREE.Box3().setFromObject(root)
+ const size=bounds.getSize(new THREE.Vector3())
+ const center=bounds.getCenter(new THREE.Vector3())
+ const scale=targetWidth/Math.max(size.x,size.z)
+ root.scale.setScalar(scale)
+ root.position.set(-center.x*scale,-bounds.min.y*scale,-center.z*scale)
+ root.updateMatrixWorld(true)
+ root.traverse(object=>{
+  if(!object.isMesh)return
+  object.castShadow=false
+  object.receiveShadow=true
+  const materials=Array.isArray(object.material)?object.material:[object.material]
+  for(const material of materials){if('envMapIntensity' in material)material.envMapIntensity=1.05;if(material.map)material.map.anisotropy=8}
+ })
+ return {root,size,scale}
+}
+function loadHighDetailRoom(){
+ const loader=new GLTFLoader()
+ loader.load(LIBRARY_SCENE_URL,gltf=>{
+  const result=normalizeAsset(gltf.scene,17.2)
+  result.root.name='CC0_HighDetail_Library_Environment'
+  scene.add(result.root)
+  if(roomRoot)roomRoot.visible=false
+  highDetailRoomLoaded.value=true
+  roomRenderStatus.value='高细节图书馆已载入 · PBR'
+  // Add a separate cafe GLB so that the environment has real coffee-service equipment and materials.
+  loader.load(COFFEE_BAR_URL,cafe=>{
+   const built=normalizeAsset(cafe.scene,5.2)
+   built.root.name='CC0_HighDetail_Coffee_Bar'
+   built.root.position.x-=3.35
+   built.root.position.z-=1.75
+   built.root.traverse(object=>{if(object.isMesh){object.castShadow=false;object.receiveShadow=true}})
+   scene.add(built.root)
+  },undefined,()=>{
+   roomRenderStatus.value='高细节图书馆已载入 · 咖啡吧备用模型'
+  })
+ },undefined,()=>{
+  highDetailRoomLoaded.value=false
+  roomRenderStatus.value='本地实时 3D 备用场景'
+  if(roomRoot)roomRoot.visible=true
+ })
+}
+
 function onCanvasPointerDown(e){
  if(!renderer||!camera)return
  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
@@ -414,7 +465,7 @@ function initScene(){
  const headlessRender=navigator.webdriver===true
  scene=new THREE.Scene();scene.background=new THREE.Color(0x19150f);scene.fog=new THREE.FogExp2(0x19150f,.013)
  camera=new THREE.PerspectiveCamera(48,1,.1,120)
- camera.position.set(0,6.0,15.5);camera.lookAt(0,1.8,3.2)
+ camera.position.set(0,3.25,12.5);camera.lookAt(0,1.55,-.5)
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,headlessRender ? 0.85 : 1.35));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.94;renderer.shadowMap.enabled=!headlessRender;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  const pmremGenerator=new THREE.PMREMGenerator(renderer);const roomEnvironment=new RoomEnvironment();environmentTarget=pmremGenerator.fromScene(roomEnvironment,.04);scene.environment=environmentTarget.texture;pmremGenerator.dispose();roomEnvironment.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})
@@ -424,6 +475,7 @@ function initScene(){
  const fill=new THREE.DirectionalLight(0xfff4e7,.72);fill.position.set(5,7,3);scene.add(fill)
  const warm=new THREE.PointLight(0xffc06e,22,16);warm.position.set(-1,5,0);scene.add(warm)
  buildLibraryRoom();buildCharacter();raycaster=new THREE.Raycaster()
+ loadHighDetailRoom()
  // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
  const initialWidth=Math.max(1,host.clientWidth),initialHeight=Math.max(1,host.clientHeight)
  composer=new EffectComposer(renderer);composer.setPixelRatio(renderer.getPixelRatio())
@@ -442,8 +494,8 @@ function initScene(){
  const animate=()=>{
   raf=requestAnimationFrame(animate);const t=sceneClock.getElapsedTime()
   for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
-  const radius=15.5/zoom.value;const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,5.4+orbitTilt*8,3.0+Math.cos(orbitAngle)*radius)
-  camera.position.lerp(desired,.07);camera.lookAt(0,1.85,3.3);camera.updateMatrixWorld()
+  const radius=12.8/zoom.value;const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,2.7+orbitTilt*4,-.5+Math.cos(orbitAngle)*radius)
+  camera.position.lerp(desired,.07);camera.lookAt(0,1.55,-.5);camera.updateMatrixWorld()
   // Anchor DOM labels to projected 3D head positions so they track rotation and zoom.
   if(Math.floor(t*18)!==Math.floor((t-1/60)*18)){
    const width=renderer.domElement.clientWidth,height=renderer.domElement.clientHeight,next={}
@@ -486,7 +538,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
      <div class="task-summary"><span>当前任务</span><b>{{busy?'岗位并行协作':'等待新任务'}}</b></div>
      <div class="summary-bottom"><span><i></i>{{activeAgents.length}} / 6 个岗位在线</span><span class="latency">⏱ 2h</span></div>
     </div>
-    <div class="environment-label">THE LIBRARY BAR <span>·</span> REAL-TIME 3D</div>
+    <div class="environment-label">THE LIBRARY BAR <span>·</span> {{roomRenderStatus}}</div>
     <div class="agent-labels">
      <button v-for="(a,i) in agents" :key="a.id" class="agent-label" :class="['agent-'+a.id,{focused:focusAgent===a.id,muted:!selected.includes(a.id)}]" :style="[{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')},labelPositions[a.id] || {}]" @click="focusAgent=a.id;motion='wave';if(!selected.includes(a.id))toggleAgent(a.id)">
       <i></i><span class="character-emoji">{{a.emoji}}</span><span class="agent-label-name"><b>{{a.name}}</b></span>
