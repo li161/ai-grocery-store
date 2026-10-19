@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import StoreNav from './components/StoreNav.vue'
 import StoreHero from './components/StoreHero.vue'
+import StoreOperations from './components/StoreOperations.vue'
 import ToolShelf from './components/ToolShelf.vue'
 import OutcomeShelf from './components/OutcomeShelf.vue'
 import CaseTracker from './components/CaseTracker.vue'
@@ -21,6 +22,8 @@ const { items: platformActionItems, meta: platformArchiveMeta } = usePlatformAct
 
 const activeSection = ref('home')
 const returnFromChat = () => navigate('home')
+const selectedAgentRole = ref('')
+function openAgentChat(role) { selectedAgentRole.value = role; navigate('agent-chat') }
 const drawerTool = ref(null)
 const selectedNews = ref(null)
 const showSearch = ref(false)
@@ -119,7 +122,8 @@ onMounted(() => {
   <div class="site">
     <StoreNav :sections="sections" :activeSection="activeSection" :darkMode="darkMode" :onNavigate="navigate" :onSearch="goSearch" :onToggleTheme="toggleTheme" />
     <main class="app-main">
-      <AgentGroupChat v-if="activeSection === 'agent-chat'" :onBack="returnFromChat" />
+      <AgentGroupChat v-if="activeSection === 'agent-chat'" :onBack="returnFromChat" :initialAgent="selectedAgentRole" />
+      <StoreOperations v-if="activeSection === 'home'" :onOpenAgent="openAgentChat" :onOpenModule="navigate" />
       <StoreHero v-if="activeSection === 'home'" :onNavigate="navigate" :onOpenTool="openTool" :onOpenIndustry="openIndustry" :onOpenBundle="openBundle" :onOpenNews="openNews" :tools="tools" :industries="industries" :bundles="bundles" :news="filteredNews" />
 
       <RetailNewsShelf v-else-if="activeSection === 'retail-news'" :lanes="newsLanes" :activeLane="activeNewsLane" :keyword="newsKeyword" :news="filteredNews" :events="eventHistory" :syncLabel="syncLabel" :dailyDigest="dailyDigest" :selected="selectedNews" :onOpen="openNews" @update:activeLane="activeNewsLane = $event" @update:keyword="newsKeyword = $event" @closeDetail="selectedNews = null" />
