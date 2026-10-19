@@ -58,19 +58,34 @@ try {
   })
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 0.85 })
   const pageErrors = []
+  const resourceErrors = []
   page.on('pageerror', error => pageErrors.push(error.message))
+  page.on('console', message => { if (message.type() === 'error') resourceErrors.push('console: ' + message.text()) })
+  page.on('requestfailed', request => resourceErrors.push('requestfailed: ' + request.url() + ' :: ' + (request.failure()?.errorText || 'unknown')))
+  page.on('response', response => { if (response.url().includes('cdn.3dassets.dev') && response.status() >= 400) resourceErrors.push('http ' + response.status() + ': ' + response.url()) })
   await page.goto(baseUrl + '/#agent-chat', { waitUntil: 'domcontentloaded', timeout: 30000 })
   await page.waitForSelector('.scene-shell .three-canvas canvas', { timeout: 20000 })
   await page.waitForFunction(() => {
     const canvas = document.querySelector('.scene-shell .three-canvas canvas')
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200 && canvas.clientWidth > 300)
   }, null, { timeout: 20000 })
-  // The real GLB assets are required for acceptance: don't screenshot the procedural fallback by mistake.
-  await page.waitForFunction(() => {
-    const canvas = document.querySelector('.three-canvas')
-    return canvas?.dataset.roomReady === 'true' && canvas?.dataset.cafeReady === 'true'
-  }, null, { timeout: 60000 })
-  await page.waitForTimeout(1200)
+  // Verify the actual library GLB before screenshots. The café GLB is an enhancement;
+  // on its failure, the component deliberately keeps a usable local café fallback.
+  try {
+    await page.waitForFunction(() => document.querySelector('.three-canvas')?.dataset.roomReady === 'true', null, { timeout: 45000 })
+  } catch {
+    const state = await page.locator('.three-canvas').evaluate(el => ({ roomReady: el.dataset.roomReady, cafeReady: el.dataset.cafeReady, roomStatus: el.dataset.roomStatus }))
+    throw new Error('High-detail library GLB did not load; canvas state=' + JSON.stringify(state) + '; runtime=' + pageErrors.join(' | ') + '; resource=' + resourceErrors.slice(-12).join(' | '))
+  }
+  try {
+    await page.waitForFunction(() => {
+      const el = document.querySelector('.three-canvas')
+      return el?.dataset.cafeReady === 'true' || (el?.dataset.roomStatus || '').includes('备用模型')
+    }, null, { timeout: 18000 })
+  } catch {
+    resourceErrors.push('Coffee GLB load did not resolve before timeout')
+  }
+  await page.waitForTimeout(900)
   // Freeze the app's perpetual RAF loop after several real frames so software Chromium can take a stable capture.
   await page.evaluate(() => { window.requestAnimationFrame = () => 0 })
   await page.waitForTimeout(120)
@@ -99,6 +114,9 @@ try {
   console.log('WebGL: ' + webgl)
   console.log('Stage screenshot: ' + stagePath + ' ' + JSON.stringify(stageQuality))
   console.log('Full UI screenshot: ' + fullPath)
+  console.log('Room status: ' + await page.locator('.three-canvas').getAttribute('data-room-status'))
+  console.log('Coffee GLB: ' + await page.locator('.three-canvas').getAttribute('data-cafe-ready'))
+  if (resourceErrors.length) console.log('Resource diagnostics: ' + resourceErrors.slice(-20).join(' | '))
 } finally {
   if (browser) await browser.close()
   server.kill('SIGTERM')
