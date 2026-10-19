@@ -1,5 +1,7 @@
 import http from 'node:http'
 import { randomUUID } from 'node:crypto'
+import { taskStore } from './src/task-store.mjs'
+import { executeAgentRun } from './src/harness/runtime.mjs'
 
 const port = Number(process.env.PORT || 8787)
 const deepseekApiKey = process.env.DEEPSEEK_API_KEY
@@ -26,7 +28,7 @@ function setCors(req, res) {
     res.setHeader('vary', 'Origin')
   }
   res.setHeader('access-control-allow-methods', 'GET, POST, OPTIONS')
-  res.setHeader('access-control-allow-headers', 'content-type')
+  res.setHeader('access-control-allow-headers', 'content-type, idempotency-key')
   return true
 }
 function rateLimited(ip) {
@@ -78,10 +80,7 @@ async function callDeepSeek({ message, agent, history, traceId }) {
       headers: { authorization: `Bearer ${deepseekApiKey}`, 'content-type': 'application/json' },
       signal: controller.signal,
       body: JSON.stringify({
-        model: deepseekModel,
-        stream: false,
-        temperature: 0.6,
-        max_tokens: 1200,
+        model: deepseekModel, stream: false, temperature: 0.6, max_tokens: 1200,
         messages: [
           { role: 'system', content: [
             `你是 AI 杂货铺中的“${agent.name}”，岗位：${agent.role}。`,
@@ -103,42 +102,72 @@ async function callDeepSeek({ message, agent, history, traceId }) {
     clearTimeout(timer)
   }
 }
+
 const server = http.createServer(async (req, res) => {
   const traceId = randomUUID()
-  if (!setCors(req, res)) return send(res, 403, { error: 'Origin not allowed', traceId })
-  if (req.method === 'OPTIONS') { res.writeHead(204); return res.end() }
-  const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
-  if (req.method === 'GET' && url.pathname === '/health') {
-    return send(res, 200, { ok: true, service: 'ai-grocery-store-agent-api', provider: 'DeepSeek', model: deepseekModel })
-  }
-  if (req.method !== 'POST' || url.pathname !== '/api/chat') return send(res, 404, { error: 'Not found', traceId })
-  if (!deepseekApiKey) return send(res, 503, { error: 'Server missing DEEPSEEK_API_KEY', traceId })
-  const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim()
-  if (rateLimited(ip)) return send(res, 429, { error: 'Rate limit exceeded; retry later', traceId })
-  let input
-  try { input = await readJson(req) }
-  catch (error) { return send(res, error.status || 400, { error: error.message || 'Invalid request', traceId }) }
-  const message = String(input.message || '').trim()
-  const agents = Array.isArray(input.agents) ? input.agents.slice(0, maxAgents) : []
-  if (!message) return send(res, 400, { error: 'message is required', traceId })
-  if (message.length > 6000) return send(res, 413, { error: 'message exceeds 6000 characters', traceId })
-  if (!agents.length) return send(res, 400, { error: 'at least one Agent is required', traceId })
-  const history = normalizeHistory(input.history)
-  const results = await Promise.allSettled(agents.map(raw => {
-    const agent = {
+  try {
+    if (!setCors(req, res)) return send(res, 403, { error: 'Origin not allowed', traceId })
+    if (req.method === 'OPTIONS') { res.writeHead(204); return res.end() }
+    const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
+    if (req.method === 'GET' && url.pathname === '/health') {
+      await taskStore.ready
+      return send(res, 200, {
+        ok: true, service: 'ai-grocery-store-agent-api', provider: 'DeepSeek',
+        model: deepseekModel, taskStorage: process.env.DATABASE_URL ? 'postgres' : 'memory'
+      })
+    }
+    if (req.method === 'GET' && url.pathname.startsWith('/api/tasks/')) {
+      const taskId = decodeURIComponent(url.pathname.slice('/api/tasks/'.length))
+      if (!taskId || taskId.includes('/')) return send(res, 400, { error: 'invalid task id', traceId })
+      const run = await taskStore.getRun(taskId)
+      return run ? send(res, 200, { traceId, task: run }) : send(res, 404, { error: 'Task not found', traceId })
+    }
+    if (req.method !== 'POST' || url.pathname !== '/api/chat') return send(res, 404, { error: 'Not found', traceId })
+    if (!deepseekApiKey) return send(res, 503, { error: 'Server missing DEEPSEEK_API_KEY', traceId })
+    const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim()
+    if (rateLimited(ip)) return send(res, 429, { error: 'Rate limit exceeded; retry later', traceId })
+    let input
+    try { input = await readJson(req) }
+    catch (error) { return send(res, error.status || 400, { error: error.message || 'Invalid request', traceId }) }
+    const message = String(input.message || '').trim()
+    const rawAgents = Array.isArray(input.agents) ? input.agents.slice(0, maxAgents) : []
+    if (!message) return send(res, 400, { error: 'message is required', traceId })
+    if (message.length > 6000) return send(res, 413, { error: 'message exceeds 6000 characters', traceId })
+    if (!rawAgents.length) return send(res, 400, { error: 'at least one Agent is required', traceId })
+    const agents = rawAgents.map(raw => ({
       id: String(raw.id || 'agent').slice(0, 40),
       name: String(raw.name || raw.id || '数字员工').slice(0, 80),
       role: String(raw.role || '协作岗位').slice(0, 100),
       instructions: String(raw.instructions || '').slice(0, 1200)
+    }))
+    if (new Set(agents.map(agent => agent.id)).size !== agents.length) {
+      return send(res, 400, { error: 'Agent ids must be unique within a run', traceId })
     }
-    return callDeepSeek({ message, agent, history, traceId })
-  }))
-  const replies = results.filter(result => result.status === 'fulfilled').map(result => result.value)
-  const errors = results.filter(result => result.status === 'rejected').map(result => String(result.reason?.message || 'Agent failed').slice(0, 250))
-  console.log(JSON.stringify({ traceId, requested: agents.length, succeeded: replies.length, failed: errors.length }))
-  return send(res, replies.length ? 200 : 502, {
-    traceId, provider: 'DeepSeek', model: deepseekModel, replies, failed: errors.length > 0,
-    ...(errors.length ? { errors } : {})
-  })
+    const history = normalizeHistory(input.history)
+    const key = String(req.headers['idempotency-key'] || '').trim().slice(0, 200) || null
+    const { run, created } = await taskStore.createRun({
+      id: traceId, idempotencyKey: key, message, provider: 'DeepSeek', model: deepseekModel, agents
+    })
+    if (!created) {
+      const replies = run.tasks.filter(task => task.status === 'succeeded')
+        .map(task => ({ agentId: task.agentId, text: task.result, traceId: run.id }))
+      return send(res, 200, { traceId: run.id, taskId: run.id, provider: run.provider, model: run.model, replies, failed: run.status !== 'completed', task: run, idempotentReplay: true })
+    }
+    const result = await executeAgentRun({
+      run, agents, taskStore,
+      executeAgent: agent => callDeepSeek({ message, agent, history, traceId }),
+      onEvent: event => console.log(JSON.stringify({ traceId, ...event }))
+    })
+    console.log(JSON.stringify({ traceId, requested: agents.length, succeeded: result.replies.length, failed: result.errors.length }))
+    const task = await taskStore.getRun(run.id)
+    return send(res, result.replies.length ? 200 : 502, {
+      traceId, taskId: run.id, provider: 'DeepSeek', model: deepseekModel,
+      replies: result.replies, failed: result.errors.length > 0, task,
+      ...(result.errors.length ? { errors: result.errors } : {})
+    })
+  } catch (error) {
+    console.error(JSON.stringify({ traceId, error: String(error?.message || error).slice(0, 300) }))
+    return send(res, 500, { error: 'Internal server error', traceId })
+  }
 })
 server.listen(port, '0.0.0.0', () => console.log(`DeepSeek Agent API listening on ${port}; model=${deepseekModel}`))
