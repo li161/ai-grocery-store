@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
@@ -285,6 +286,50 @@ function initScene(){
  centralCore=new THREE.Group()
  const sign=new THREE.Mesh(new THREE.BoxGeometry(1.8,.5,.08),new THREE.MeshStandardMaterial({color:0x5c3d2a,roughness:.55}))
  sign.position.set(0,2.25,-.72);centralCore.add(sign);centralCore.position.set(0,0,0);scene.add(centralCore)
+ // Load a licensed, textured GLB asset pack as the primary environment when available.
+ // The procedural room remains a resilient fallback if the remote asset cannot be reached.
+ const environmentLoader = new GLTFLoader()
+ let environmentRoot = null
+ environmentLoader.load(
+  'https://cdn.3dassets.dev/assets/22245/v1/model.glb',
+  (gltf) => {
+   if (!scene || !renderer) return
+   environmentRoot = gltf.scene
+   environmentRoot.name = 'RealisticCafeAssetPack'
+   environmentRoot.traverse((node) => {
+    if (node.isMesh) {
+     node.castShadow = true
+     node.receiveShadow = true
+     if (node.material) {
+      const materials = Array.isArray(node.material) ? node.material : [node.material]
+      materials.forEach((material) => {
+       if ('envMapIntensity' in material) material.envMapIntensity = 1.15
+      })
+     }
+    }
+   })
+   const bounds = new THREE.Box3().setFromObject(environmentRoot)
+   const size = bounds.getSize(new THREE.Vector3())
+   const center = bounds.getCenter(new THREE.Vector3())
+   const maxDimension = Math.max(size.x, size.y, size.z) || 1
+   // Normalize pack scale to the existing room's real-world scale.
+   environmentRoot.scale.setScalar(14 / maxDimension)
+   environmentRoot.position.x = -center.x * environmentRoot.scale.x
+   environmentRoot.position.z = -center.z * environmentRoot.scale.z
+   environmentRoot.position.y = -bounds.min.y * environmentRoot.scale.y - 0.08
+   scene.add(environmentRoot)
+   // The downloaded pack has authored PBR meshes and textures; keep the architecture
+   // shell as a backdrop, but suppress the hand-built counter and loose furniture layer.
+   room.children.forEach((node) => {
+    if (node.userData?.proceduralFurniture) node.visible = false
+   })
+   status.value = '高精度咖啡资产已加载 · 场景就绪'
+  },
+  undefined,
+  (error) => {
+   console.warn('Realistic cafe GLB unavailable; using procedural fallback.', error)
+  }
+ )
  for(const a of agents)createAgent(a)
  raycaster=new THREE.Raycaster()
  const resize=()=>{if(!canvasHost.value||!renderer)return;const w=canvasHost.value.clientWidth,h=canvasHost.value.clientHeight;camera.aspect=w/Math.max(h,1);camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
