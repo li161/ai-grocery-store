@@ -190,7 +190,7 @@ function buildLibraryRoom(){
  const stairCenter=new THREE.Vector3(5.65,0,-1.55)
  for(let i=0;i<23;i++){
   const t=i/22,ang=-Math.PI*.78+t*1.8*Math.PI,r=1.95-t*.25,y=3.95-t*3.45
-  const step=box(.72,.105,.48,stairCenter.x+Math.cos(ang)*r,y,stairCenter.z+Math.sin(ang)*r,i%3===0?woodMat:darkWoodMat,[roomRoot],null)
+  const step=box(.72,.105,.48,stairCenter.x+Math.cos(ang)*r,y,stairCenter.z+Math.sin(ang)*r,i%3===0?woodMat:darkWoodMat,roomRoot,null)
   step.rotation.y=-ang
   const post=mesh(new THREE.CylinderGeometry(.023,.028,.43,10),brassMat,[stairCenter.x+Math.cos(ang)*(r+.38),y+.26,stairCenter.z+Math.sin(ang)*(r+.38)],roomRoot)
   post.castShadow=true
@@ -335,10 +335,8 @@ function createSpongeBob(a){
  const ring=mesh(new THREE.TorusGeometry(.42,.012,8,44),new THREE.MeshBasicMaterial({color:a.color,transparent:true,opacity:.55}),[0,.025,0],g,[Math.PI/2,0,0])
  g.userData.ring=ring;scene.add(g);characterGroups.set(a.id,g);return g
 }
-function buildCharacter(){
- const agentPositions={manager:[-1.6,0,1.25],cashier:[-4.1,0,1.8],guide:[2.0,0,.8],buyer:[-3.1,0,.3],inventory:[.5,0,1.8],pm:[4.1,0,2.0]}
- for(const a of agents)createSpongeBob(a)
-}
+const agentPositions={manager:[-1.6,0,1.25],cashier:[-4.1,0,1.8],guide:[2.0,0,.8],buyer:[-3.1,0,.3],inventory:[.5,0,1.8],pm:[4.1,0,2.0]}
+function buildCharacter(){for(const a of agents)createSpongeBob(a)}
 function onCanvasPointerDown(e){
  if(!renderer||!camera)return
  pointerDown={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY}
