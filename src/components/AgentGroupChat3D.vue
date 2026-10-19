@@ -497,8 +497,10 @@ function initScene(){
  const animate=()=>{
   raf=requestAnimationFrame(animate);const t=sceneClock.getElapsedTime()
   for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
-  const radius=12.8/zoom.value;const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,2.7+orbitTilt*4,-.5+Math.cos(orbitAngle)*radius)
-  camera.position.lerp(desired,.07);camera.lookAt(0,1.55,-.5);camera.updateMatrixWorld()
+  const highDetail=highDetailRoomLoaded.value
+  const radius=(highDetail?12.8:15.5)/zoom.value
+  const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,highDetail?2.7+orbitTilt*4:5.4+orbitTilt*8,(highDetail?-.5:3.0)+Math.cos(orbitAngle)*radius)
+  camera.position.lerp(desired,.07);camera.lookAt(0,highDetail?1.55:2.4,highDetail?-.5:3.3);camera.updateMatrixWorld()
   // Anchor DOM labels to projected 3D head positions so they track rotation and zoom.
   if(Math.floor(t*18)!==Math.floor((t-1/60)*18)){
    const width=renderer.domElement.clientWidth,height=renderer.domElement.clientHeight,next={}
@@ -533,7 +535,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <main class="space-layout">
   <section class="stage-column">
    <div ref="sceneShell" class="scene-shell">
-    <div ref="canvasHost" class="three-canvas" :data-room-ready="highDetailRoomLoaded ? 'true' : 'false'" :data-cafe-ready="highDetailCafeLoaded ? 'true' : 'false'"></div>
+    <div ref="canvasHost" class="three-canvas" :data-room-ready="highDetailRoomLoaded ? 'true' : 'false'" :data-cafe-ready="highDetailCafeLoaded ? 'true' : 'false'" :data-room-status="roomRenderStatus"></div>
     <div class="scene-vignette"></div>
     <div class="left-glass glass-panel">
      <div class="panel-overline">SHARED CONTEXT / ROOM 001</div>
