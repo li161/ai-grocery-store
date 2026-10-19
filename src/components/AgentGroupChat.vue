@@ -12,9 +12,10 @@ const agents = [
 const messages = ref([{id:1,role:'system',text:'门店经营协作室已创建。店长负责拆解经营目标，收银、导购、采购、盘点与产品经理按岗位协作。当前为演示模式。',time:'刚刚'},{id:2,role:'manager',text:'我是店长 / 经营负责人。告诉我今天的经营目标，我会先拆任务，再协调各岗位数字员工。',time:'刚刚'}])
 const draft = ref('')
 const mode = ref('demo')
+const apiToken = ref('')
 const busy = ref(false)
 const status = ref('')
-const apiBase = ref(import.meta.env.VITE_AGENT_API || 'http://localhost:8787')
+const apiBase = ref(import.meta.env.VITE_AGENT_API || '')
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map(a => a.id))
 const activeAgents = computed(() => agents.filter(a => selected.value.includes(a.id)))
 const now = () => new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
@@ -32,40 +33,42 @@ async function send(){
  const mentions=[...text.matchAll(/@([\w\u4e00-\u9fa5]+)/g)].map(m=>m[1].toLowerCase())
  let targets=activeAgents.value
  if(mentions.length&&!mentions.some(n=>n==='所有人'||n==='all')){const found=agents.filter(a=>mentions.some(n=>a.id===n||a.name.toLowerCase().includes(n)||a.role.toLowerCase().includes(n)));if(found.length)targets=found}
- messages.value.push({id:Date.now(),role:'user',text,time:now()});draft.value='';busy.value=true;status.value=mode.value==='pi'?'正在请求 Pi Agent 服务…':'多个数字人正在并行思考…'
+ messages.value.push({id:Date.now(),role:'user',text,time:now()});draft.value='';busy.value=true;status.value=mode.value==='deepseek'?'正在并行调用 DeepSeek…':'多个数字人正在并行思考…'
  try{
-  if(mode.value==='pi'){
-   const response=await fetch(apiBase.value.replace(/\/$/, '')+'/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(-12).map(m=>({role:m.role,text:m.text}))})})
+  if(mode.value==='deepseek'){
+   if(!apiBase.value.trim())throw new Error('请先填写已部署的后端 API 地址')
+   if(!apiToken.value.trim())throw new Error('请先填写后端 API Token')
+   const response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat',{method:'POST',headers:{'content-type':'application/json','X-API-Token':apiToken.value.trim()},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(-12).map(m=>({role:m.role,text:m.text}))})})
    if(!response.ok)throw new Error((await response.text())||'Agent API 请求失败')
    const data=await response.json();for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
    if(!data.replies?.length)throw new Error('服务没有返回回复')
-   if(data.failed)status.value='部分 Agent 失败，已保留成功回复';else status.value='Pi Agent 已返回结果'
+   if(data.failed)status.value='部分 Agent 失败，已保留成功回复';else status.value='DeepSeek 已返回结果'
   }else{
    const results=await Promise.allSettled(targets.map(async(a,i)=>{await new Promise(r=>setTimeout(r,400+i*260));return {id:Date.now()+Math.random(),role:a.id,text:demoReply(a),time:now()}}))
    results.forEach(r=>{if(r.status==='fulfilled')messages.value.push(r.value)})
-   status.value='演示完成 · 切换 Pi 模式可调用真实 Agent'
+   status.value='演示完成 · 切换 DeepSeek 模式可调用真实模型'
   }
- }catch(e){status.value='调用失败：'+e.message;messages.value.push({id:Date.now()+Math.random(),role:'system',text:'Agent 服务调用失败。检查服务地址、Pi CLI 登录状态和服务日志。',time:now()})}
+ }catch(e){status.value='调用失败：'+e.message;messages.value.push({id:Date.now()+Math.random(),role:'system',text:'Agent 服务调用失败。请检查后端地址、API Token、DeepSeek API Key 配置和服务日志。',time:now()})}
  finally{busy.value=false}
 }
 </script>
 <template>
 <section class="gc-wrap">
- <header class="gc-top"><button class="gc-back" @click="props.onBack">← 返回杂货铺</button><div class="gc-brand"><span class="gc-live"></span>AI 杂货铺 <i>/</i> 数字人群聊</div><span class="gc-pill">MVP · {{mode==='demo'?'演示模式':'Pi Runtime'}}</span></header>
+ <header class="gc-top"><button class="gc-back" @click="props.onBack">← 返回杂货铺</button><div class="gc-brand"><span class="gc-live"></span>AI 杂货铺 <i>/</i> 数字人群聊</div><span class="gc-pill">MVP · {{mode==='demo'?'演示模式':'DeepSeek Runtime'}}</span></header>
  <div class="gc-layout">
   <aside class="gc-side"><div class="gc-label">协作空间 <span>01</span></div><div class="gc-room"><b>◉　门店经营协作室</b><small>6 个岗位数字人 · 共享群聊</small></div><div class="gc-label gc-gap">数字人 / AGENTS <span>{{activeAgents.length}}/6</span></div>
    <button v-for="a in agents" :key="a.id" class="gc-agent" :class="{chosen:selected.includes(a.id)}" @click="toggleAgent(a.id)"><span class="gc-avatar" :class="a.color">{{a.icon}}</span><span><b>{{a.name}}</b><small>{{a.role}}</small></span><i>{{selected.includes(a.id)?'✓':'+'}}</i></button>
    <div class="gc-side-note">✳　<b>Router 在线</b><small>规则优先 · 并行调度</small></div>
   </aside>
   <main class="gc-chat"><div class="gc-chat-head"><div><small>SHARED CONTEXT / ROOM 001</small><h1>产品共创室 <em>● 运行中</em></h1><p>多角色讨论 · 独立 Agent · 同一消息时间线</p></div><span>⌘　⋯</span></div>
-   <div class="gc-mode"><div><b>运行模式</b><small>{{mode==='demo'?'内置演示逻辑，不会调用模型':'请求已部署的 Pi Agent 后端'}}</small></div><div class="gc-switch"><button :class="{on:mode==='demo'}" @click="mode='demo'">演示</button><button :class="{on:mode==='pi'}" @click="mode='pi'">Pi Runtime</button></div></div>
-   <div v-if="mode==='pi'" class="gc-endpoint"><label>API 地址</label><input v-model="apiBase" placeholder="https://你的后端域名"/></div>
+   <div class="gc-mode"><div><b>运行模式</b><small>{{mode==='demo'?'内置演示逻辑，不会调用模型':'并行调用已部署的 DeepSeek API 后端'}}</small></div><div class="gc-switch"><button :class="{on:mode==='demo'}" @click="mode='demo'">演示</button><button :class="{on:mode==='pi'}" @click="mode='deepseek'">DeepSeek</button></div></div>
+   <div v-if="mode==='deepseek'" class="gc-endpoint"><label>后端 API 地址</label><input v-model="apiBase" placeholder="https://你的服务.onrender.com"/><label>访问 Token</label><input v-model="apiToken" type="password" autocomplete="off" placeholder="部署时设置的 API_ACCESS_TOKEN"/></div>
    <div class="gc-messages"><div v-for="m in messages" :key="m.id" class="gc-message" :class="'msg-'+m.role">
     <div v-if="m.role==='user'" class="gc-user">{{m.text}}</div><template v-else><span class="gc-avatar" :class="agents.find(a=>a.id===m.role)?.color||'system'">{{agents.find(a=>a.id===m.role)?.icon||'✳'}}</span><div class="gc-msg-body"><div class="gc-meta"><b>{{agents.find(a=>a.id===m.role)?.name||'系统'}}</b><span>{{agents.find(a=>a.id===m.role)?.role||'通知'}}</span><time>{{m.time}}</time></div><div class="gc-msg-text">{{m.text}}</div></div></template>
    </div><div v-if="busy" class="gc-thinking">● ● ●　{{status}}</div></div>
    <div class="gc-composer"><div class="gc-hint">@ 店长 / 收银员 / 导购 / 采购 / 盘点员 / 产品经理 / 所有人</div><textarea v-model="draft" :disabled="busy" rows="3" placeholder="发起讨论，或 @某位数字人定向提问…" @keydown.enter.exact.prevent="send"></textarea><div class="gc-send-row"><span>{{status||'Enter 发送 · Shift + Enter 换行'}}</span><button :disabled="busy||!draft.trim()||!selected.length" @click="send">{{busy?'协作中…':'发送消息 ↗'}}</button></div></div>
   </main>
-  <aside class="gc-monitor"><div class="gc-label">运行监控 <span class="gc-live-label">LIVE</span></div><div class="gc-metric"><small>在线数字人</small><strong>{{selected.length}}<i> / 6</i></strong><div class="gc-meter"><span :style="{width:(selected.length/6*100)+'%'}"></span></div></div><div class="gc-metric"><small>本房间消息</small><strong>{{messages.length}}<i> 条</i></strong></div><div class="gc-metric"><small>调度策略</small><b>Rule → Agent</b></div><div class="gc-label gc-gap">消息生命周期</div><div v-for="(s,i) in ['接收消息 · messageId','规则路由 · @ 提及','并行执行 · 独立上下文','回写时间线 · 失败隔离']" :key="s" class="gc-step"><span>{{i+1}}</span>{{s}}</div><div class="gc-safety"><b>安全边界</b><p>模型密钥只放后端环境变量。GitHub Pages 只托管界面，不承载 Pi 进程。</p></div></aside>
+  <aside class="gc-monitor"><div class="gc-label">运行监控 <span class="gc-live-label">LIVE</span></div><div class="gc-metric"><small>在线数字人</small><strong>{{selected.length}}<i> / 6</i></strong><div class="gc-meter"><span :style="{width:(selected.length/6*100)+'%'}"></span></div></div><div class="gc-metric"><small>本房间消息</small><strong>{{messages.length}}<i> 条</i></strong></div><div class="gc-metric"><small>调度策略</small><b>Rule → Agent</b></div><div class="gc-label gc-gap">消息生命周期</div><div v-for="(s,i) in ['接收消息 · messageId','规则路由 · @ 提及','并行执行 · 独立上下文','回写时间线 · 失败隔离']" :key="s" class="gc-step"><span>{{i+1}}</span>{{s}}</div><div class="gc-safety"><b>安全边界</b><p>DeepSeek 密钥仅保存在后端环境变量。前端只提交访问 Token；GitHub Pages 不运行模型服务。</p></div></aside>
  </div>
 </section>
 </template>
