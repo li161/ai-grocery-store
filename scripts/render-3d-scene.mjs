@@ -56,7 +56,7 @@ try {
       '--enable-unsafe-swiftshader'
     ]
   })
-  const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 })
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 0.85 })
   const pageErrors = []
   page.on('pageerror', error => pageErrors.push(error.message))
   await page.goto(baseUrl + '/#agent-chat', { waitUntil: 'domcontentloaded', timeout: 30000 })
@@ -64,8 +64,8 @@ try {
   await page.waitForFunction(() => {
     const canvas = document.querySelector('.scene-shell .three-canvas canvas')
     return Boolean(canvas && canvas.width > 300 && canvas.height > 200 && canvas.clientWidth > 300)
-  }, { timeout: 20000 })
-  await page.waitForTimeout(3500)
+  }, null, { timeout: 20000 })
+  await page.waitForTimeout(1800)
 
   const webgl = await page.locator('.scene-shell .three-canvas canvas').evaluate(canvas => {
     const gl = canvas.getContext('webgl2')
