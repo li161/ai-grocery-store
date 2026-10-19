@@ -14,7 +14,7 @@ const agents = [
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map(a=>a.id))
 const activeAgents = computed(()=>agents.filter(a=>selected.value.includes(a.id)))
 const messages = ref([
- {id:1,role:'system',text:'场景已加载。拖动背景可触发空间视差；点击角色标签可聚焦并发起协作。',time:'刚刚'},
+ {id:1,role:'system',text:'3D 协作空间已启动。拖动旋转真实模型；点击角色本体或标签可聚焦并发起协作。',time:'刚刚'},
  {id:2,role:'manager',text:'我是店长。告诉我经营目标，我会拆解任务并协调各岗位协作。',time:'刚刚'}
 ])
 const draft=ref('')
@@ -415,7 +415,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
      <div class="task-summary"><span>当前任务</span><b>{{busy?'岗位并行协作':'等待新任务'}}</b></div>
      <div class="summary-bottom"><span><i></i>{{activeAgents.length}} / 6 个岗位在线</span><span class="latency">⏱ 2h</span></div>
     </div>
-    <div class="environment-label">THE LIBRARY BAR <span>·</span> PHOTO ENVIRONMENT</div>
+    <div class="environment-label">THE LIBRARY BAR <span>·</span> REAL-TIME 3D</div>
     <div class="agent-labels">
      <button v-for="(a,i) in agents" :key="a.id" class="agent-label" :class="['agent-'+a.id,{focused:focusAgent===a.id,muted:!selected.includes(a.id)}]" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}" @click="focusAgent=a.id;motion='wave';if(!selected.includes(a.id))toggleAgent(a.id)">
       <i></i><span class="character-emoji">{{a.emoji}}</span><span><b>{{a.name}}</b><small>{{a.character}} · {{a.role}}</small></span><em>{{selected.includes(a.id)?'在线':'已静音'}}</em>
@@ -423,7 +423,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
     </div>
     <div class="view-dock">
      <div class="radar"><span class="radar-ring r1"></span><span class="radar-ring r2"></span><span class="radar-center"></span><i v-for="(a,i) in agents" :key="a.id" :style="{left:(24+((i*31)%56))+'%',top:(20+((i*23)%60))+'%',background:'#'+a.color.toString(16).padStart(6,'0')}"></i></div>
-     <div class="dock-controls"><b>视角控制</b><small>拖动场景 · 视差跟随</small><div><button @click="resetView">⟳ 复位</button><button @click="zoomBy(.12)">＋ 缩放</button><button @click="zoomBy(-.12)">－ 缩放</button></div></div>
+     <div class="dock-controls"><b>视角控制</b><small>拖动旋转 · 滚轮缩放 · 点击角色</small><div><button @click="resetView">⟳ 复位</button><button @click="zoomBy(.12)">＋ 缩放</button><button @click="zoomBy(-.12)">－ 缩放</button></div></div>
     </div>
     <div class="scene-footnote">当前场景：门店经营协作室 <span>·</span> {{activeAgents.length}} 个协作角色在线</div>
    </div>
