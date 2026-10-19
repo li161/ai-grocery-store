@@ -52,12 +52,29 @@ async function send(){
  try{
   if(mode.value==='deepseek'){
    if(!apiBase.value.trim())throw new Error('后端 API 地址未配置，请设置 VITE_AGENT_API')
-   const response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(0, -1).slice(-12).map(m=>({role:m.role,text:m.text}))})})
-   const data=await response.json().catch(()=>({}))
+   const controller=new AbortController()
+   const requestTimer=setTimeout(()=>controller.abort(),70000)
+   let response
+   let data
+   const requestKey=globalThis.crypto?.randomUUID?.()||('chat-'+Date.now()+'-'+Math.random().toString(36).slice(2))
+   try{
+    response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat',{
+     method:'POST',signal:controller.signal,
+     headers:{'content-type':'application/json','idempotency-key':requestKey},
+     body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(0, -1).slice(-12).map(m=>({role:m.role,text:m.text}))})
+    })
+    data=await response.json().catch(()=>({}))
+   }catch(error){
+    if(error.name==='AbortError')throw new Error('请求超过 70 秒已中止。可检查后端日志；不要立即重复提交相同的高成本任务。')
+    throw error
+   }finally{clearTimeout(requestTimer)}
    if(!response.ok)throw new Error(data.error||'Agent API 请求失败（HTTP '+response.status+'）')
    for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
    if(!data.replies?.length)throw new Error('服务没有返回回复')
-   if(data.failed)status.value='部分 Agent 失败，已保留成功回复';else status.value='DeepSeek 已返回结果'
+   const runId=data.taskId||data.traceId
+   if(data.failed)status.value='部分 Agent 失败 · 任务 '+(runId||'已记录').toString().slice(0,8)
+   else status.value='全部回复完成 · 任务 '+(runId||'已记录').toString().slice(0,8)
+   if(Array.isArray(data.errors)&&data.errors.length)messages.value.push({id:Date.now()+Math.random(),role:'system',text:'失败任务：'+data.errors.join('；'),time:now()})
   }else{
    const results=await Promise.allSettled(targets.map(async(a,i)=>{await new Promise(r=>setTimeout(r,400+i*260));return {id:Date.now()+Math.random(),role:a.id,text:demoReply(a),time:now()}}))
    results.forEach(r=>{if(r.status==='fulfilled')messages.value.push(r.value)})
