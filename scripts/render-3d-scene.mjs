@@ -76,8 +76,11 @@ try {
   await mkdir(outputDir, { recursive: true })
   const stagePath = outputDir + '/agent-group-chat-3d-stage.png'
   const fullPath = outputDir + '/agent-group-chat-3d-render.png'
-  await page.locator('.scene-shell .three-canvas canvas').screenshot({ path: stagePath, animations: 'disabled' })
-  await page.screenshot({ path: fullPath, animations: 'disabled' })
+  const canvasBox = await page.locator('.scene-shell .three-canvas canvas').boundingBox()
+  if (!canvasBox || canvasBox.width < 300 || canvasBox.height < 200) throw new Error('The rendered canvas has invalid screen bounds: ' + JSON.stringify(canvasBox))
+  // Capture by viewport crop instead of locator.screenshot(): an animated WebGL canvas never becomes layout-stable.
+  await page.screenshot({ path: stagePath, clip: { x: canvasBox.x, y: canvasBox.y, width: canvasBox.width, height: canvasBox.height } })
+  await page.screenshot({ path: fullPath })
   const stageQuality = countColorSamples(await readFile(stagePath))
   if (stageQuality.uniqueSampledColors < 100) {
     throw new Error('The WebGL scene screenshot appears visually blank: ' + JSON.stringify(stageQuality))
