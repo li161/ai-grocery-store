@@ -35,6 +35,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install visual verification tools
+        run: |
+          npm install --no-save --no-audit --no-fund playwright pngjs
+          npx playwright install --with-deps chromium
+
+      - name: Render and verify 3D scene in headless Chromium
+        run: node scripts/render-3d-scene.mjs
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
