@@ -113,10 +113,13 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'OPTIONS') { res.writeHead(204); return res.end() }
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
     if (req.method === 'GET' && url.pathname === '/health') {
-      await taskStore.ready
-      return send(res, 200, {
-        ok: true, service: 'ai-grocery-store-agent-api', provider: 'DeepSeek',
-        model: deepseekModel, taskStorage: process.env.DATABASE_URL ? 'postgres' : 'memory'
+      const database = await taskStore.checkConnection()
+      const configured = Boolean(process.env.DATABASE_URL)
+      const healthy = !configured || database.connected
+      return send(res, healthy ? 200 : 503, {
+        ok: healthy, service: 'ai-grocery-store-agent-api', provider: 'DeepSeek',
+        model: deepseekModel, taskStorage: database.storage,
+        database: { configured, connected: database.connected }
       })
     }
     if (req.method === 'GET' && url.pathname.startsWith('/api/tasks/')) {
