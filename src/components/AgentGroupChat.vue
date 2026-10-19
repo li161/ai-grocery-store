@@ -39,8 +39,9 @@ async function send(){
    if(!apiBase.value.trim())throw new Error('请先填写已部署的后端 API 地址')
    if(!apiToken.value.trim())throw new Error('请先填写后端 API Token')
    const response=await fetch(apiBase.value.trim().replace(/\/$/, '')+'/api/chat',{method:'POST',headers:{'content-type':'application/json','X-API-Token':apiToken.value.trim()},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(-12).map(m=>({role:m.role,text:m.text}))})})
-   if(!response.ok)throw new Error((await response.text())||'Agent API 请求失败')
-   const data=await response.json();for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
+   const data=await response.json().catch(()=>({}))
+   if(!response.ok)throw new Error(data.error||'Agent API 请求失败（HTTP '+response.status+'）')
+   for(const item of data.replies||[])messages.value.push({id:Date.now()+Math.random(),role:item.agentId,text:item.text,time:now()})
    if(!data.replies?.length)throw new Error('服务没有返回回复')
    if(data.failed)status.value='部分 Agent 失败，已保留成功回复';else status.value='DeepSeek 已返回结果'
   }else{
@@ -60,8 +61,8 @@ async function send(){
    <button v-for="a in agents" :key="a.id" class="gc-agent" :class="{chosen:selected.includes(a.id)}" @click="toggleAgent(a.id)"><span class="gc-avatar" :class="a.color">{{a.icon}}</span><span><b>{{a.name}}</b><small>{{a.role}}</small></span><i>{{selected.includes(a.id)?'✓':'+'}}</i></button>
    <div class="gc-side-note">✳　<b>Router 在线</b><small>规则优先 · 并行调度</small></div>
   </aside>
-  <main class="gc-chat"><div class="gc-chat-head"><div><small>SHARED CONTEXT / ROOM 001</small><h1>产品共创室 <em>● 运行中</em></h1><p>多角色讨论 · 独立 Agent · 同一消息时间线</p></div><span>⌘　⋯</span></div>
-   <div class="gc-mode"><div><b>运行模式</b><small>{{mode==='demo'?'内置演示逻辑，不会调用模型':'并行调用已部署的 DeepSeek API 后端'}}</small></div><div class="gc-switch"><button :class="{on:mode==='demo'}" @click="mode='demo'">演示</button><button :class="{on:mode==='pi'}" @click="mode='deepseek'">DeepSeek</button></div></div>
+  <main class="gc-chat"><div class="gc-chat-head"><div><small>SHARED CONTEXT / ROOM 001</small><h1>门店经营协作室 <em>● 运行中</em></h1><p>多角色讨论 · 独立 Agent · 同一消息时间线</p></div><span>⌘　⋯</span></div>
+   <div class="gc-mode"><div><b>运行模式</b><small>{{mode==='demo'?'内置演示逻辑，不会调用模型':'并行调用已部署的 DeepSeek API 后端'}}</small></div><div class="gc-switch"><button :class="{on:mode==='demo'}" @click="mode='demo'">演示</button><button :class="{on:mode==='deepseek'}" @click="mode='deepseek'">DeepSeek</button></div></div>
    <div v-if="mode==='deepseek'" class="gc-endpoint"><label>后端 API 地址</label><input v-model="apiBase" placeholder="https://你的服务.onrender.com"/><label>访问 Token</label><input v-model="apiToken" type="password" autocomplete="off" placeholder="部署时设置的 API_ACCESS_TOKEN"/></div>
    <div class="gc-messages"><div v-for="m in messages" :key="m.id" class="gc-message" :class="'msg-'+m.role">
     <div v-if="m.role==='user'" class="gc-user">{{m.text}}</div><template v-else><span class="gc-avatar" :class="agents.find(a=>a.id===m.role)?.color||'system'">{{agents.find(a=>a.id===m.role)?.icon||'✳'}}</span><div class="gc-msg-body"><div class="gc-meta"><b>{{agents.find(a=>a.id===m.role)?.name||'系统'}}</b><span>{{agents.find(a=>a.id===m.role)?.role||'通知'}}</span><time>{{m.time}}</time></div><div class="gc-msg-text">{{m.text}}</div></div></template>
