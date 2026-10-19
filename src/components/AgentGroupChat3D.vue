@@ -397,13 +397,6 @@ onMounted(()=>initScene())
 onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
 const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
 </script>
-function zoomBy(delta){zoom.value=Math.max(.7,Math.min(1.35,zoom.value+delta))}
-function retryScene(){sceneLoadError.value=false;sceneLoaded.value=true}
-function resetView(){orbitAngle=0;orbitTilt=.12;zoom.value=1;focusAgent.value='manager';motion.value='wave'}
-onMounted(()=>initScene())
-onBeforeUnmount(()=>{cancelAnimationFrame(raf);resizeObserver?.disconnect();for(const [el,event,handler] of sceneListeners)el.removeEventListener(event,handler);sceneListeners=[];if(renderer){renderer.dispose();renderer.domElement.remove()}scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){for(const m of (Array.isArray(o.material)?o.material:[o.material]))m.dispose()}})})
-const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents[0])
-</script>
 
 <template>
 <section class="space3d">
