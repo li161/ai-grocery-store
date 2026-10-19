@@ -71,7 +71,7 @@ async function send(){
    while(Date.now()<deadline){
     const pr=await fetch(base+'/api/tasks/'+encodeURIComponent(data.taskId));const pd=await pr.json().catch(()=>({}))
     if(!pr.ok)throw new Error(pd.error||'任务状态查询失败')
-    const task=pd.task;if(!task)throw new Error('任务状态响应缺少 task')
+    const task=pd.task;if(!task)throw new Error('任务状态响应缺少 task');data.task=task
     for(const item of task.tasks||[]){
      if(item.status==='succeeded'&&!shown.has(item.agentId)){addMessage(item.agentId,item.result||'任务已完成，但没有返回文本。');shown.add(item.agentId)}
      else if(['failed','skipped','interrupted'].includes(item.status)&&!shown.has('e'+item.agentId)){addMessage('system',(item.agentName||item.agentId)+'：'+(item.error||'任务未完成'));shown.add('e'+item.agentId)}
@@ -131,7 +131,7 @@ function initScene(){
  renderer.domElement.addEventListener('pointerdown',down);renderer.domElement.addEventListener('pointermove',pointerMove);renderer.domElement.addEventListener('pointerup',pointerUp)
  renderer.domElement.addEventListener('wheel',e=>{targetZoom=Math.max(.72,Math.min(1.45,targetZoom+(e.deltaY>0?-.06:.06)))},{passive:true})
  const animate=()=>{raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();centralCore.rotation.y=t*.32;centralCore.rotation.x=Math.sin(t*.3)*.15;orbitLines.forEach((r,i)=>{r.rotation.z=t*(i%2?-.1:.08);r.material.opacity=.35+Math.sin(t*1.4+i)*.12})
-  for(const [id,g] of avatarMeshes){const a=agents.find(x=>x.id===id);const active=selected.value.includes(id);const focus=focusAgent.value===id;g.position.y=a.pos[1]+Math.sin(t*1.5+agents.indexOf(a))*.06+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.35:0);g.rotation.y=Math.sin(t*.4+agents.indexOf(a))*.12;g.scale.setScalar((focus?1.13:1)*(active?1:.78));g.userData.ring.material.opacity=active?.9:.18;g.userData.halo.rotation.z=t*.65;g.userData.material.emissiveIntensity=focus?1.0:.22}
+  for(const [id,g] of avatarMeshes){const a=agents.find(x=>x.id===id);const active=selected.value.includes(id);const focus=focusAgent.value===id;g.position.y=a.pos[1]+Math.sin(t*1.5+agents.indexOf(a))*.06+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.35:0);g.rotation.y=Math.sin(t*.4+agents.indexOf(a))*.12;g.scale.setScalar((focus?1.13:1)*(active?1:.78));g.userData.ring.material.opacity=active?.9:.18;g.userData.halo.rotation.z=t*.65;g.userData.material.emissiveIntensity=focus ? 1.0 : 0.22}
   const radius=15/zoom.value;camera.position.x=Math.sin(orbitAngle)*radius;camera.position.z=Math.cos(orbitAngle)*radius;camera.position.y=5.4+orbitTilt*8;camera.lookAt(0,.7,0);camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z),.1);renderer.render(scene,camera)}
  animate()
 }
