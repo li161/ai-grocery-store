@@ -2,6 +2,11 @@
   "name": "ai-grocery-agent-chat-api",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node server.mjs" },
-  "engines": { "node": ">=22" }
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --check server.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
 }
