@@ -159,12 +159,39 @@ const server = http.createServer(async (req, res) => {
         .map(task => ({ agentId: task.agentId, text: task.result, traceId: run.id }))
       return send(res, 200, { traceId: run.id, taskId: run.id, provider: run.provider, model: run.model, replies, failed: run.status !== 'completed', task: run, idempotentReplay: true })
     }
-    const result = await executeAgentRun({
-      run, agents, taskStore,
-      executeAgent: (agent, dependencyResults) => callDeepSeek({ message, agent, history, traceId, dependencyResults }),
-      onEvent: event => console.log(JSON.stringify({ traceId, ...event }))
-    })
-    console.log(JSON.stringify({ traceId, requested: agents.length, succeeded: result.replies.length, failed: result.errors.length }))
+    const execute = async () => {
+      try {
+        const result = await executeAgentRun({
+          run, agents, taskStore,
+          executeAgent: (agent, dependencyResults) => callDeepSeek({ message, agent, history, traceId, dependencyResults }),
+          onEvent: event => console.log(JSON.stringify({ traceId, ...event }))
+        })
+        console.log(JSON.stringify({ traceId, requested: agents.length, succeeded: result.replies.length, failed: result.errors.length }))
+        return result
+      } catch (error) {
+        const message = String(error?.message || 'Agent scheduler failed').slice(0, 200)
+        const latest = await taskStore.getRun(run.id)
+        for (const task of latest?.tasks || []) {
+          if (['queued', 'running'].includes(task.status)) {
+            await taskStore.updateTask(run.id, task.agentId, {
+              status: 'failed', error: '调度异常：' + message, completedAt: new Date().toISOString()
+            })
+          }
+        }
+        throw error
+      }
+    }
+    if (url.searchParams.get('async') === '1') {
+      // Return the durable run ID immediately so the UI can poll task-level progress.
+      void execute().catch(error => console.error(JSON.stringify({
+        traceId, phase: 'background-run', error: String(error?.message || error).slice(0, 250)
+      })))
+      return send(res, 202, {
+        traceId, taskId: run.id, provider: 'DeepSeek', model: deepseekModel,
+        started: true, task: await taskStore.getRun(run.id)
+      })
+    }
+    const result = await execute()
     const task = await taskStore.getRun(run.id)
     return send(res, result.replies.length ? 200 : 502, {
       traceId, taskId: run.id, provider: 'DeepSeek', model: deepseekModel,
