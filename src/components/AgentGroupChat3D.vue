@@ -132,18 +132,45 @@ function createBookcase(x,z,width=2.5,height=4.6,depth=.48,side=false){
  const oak=woodMat,dark=darkWoodMat,gold=brassMat
  mesh(new THREE.BoxGeometry(width,height,depth),oak,[0,height/2,0],g)
  mesh(new THREE.BoxGeometry(width+.07,.11,depth+.08),gold,[0,height+.02,0],g)
+ // Stable per-shelf randomization keeps the books natural without changing on every rebuild.
+ let seed=Math.abs(Math.floor((x+30)*7919+(z+30)*104729))||1
+ const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+ const booksByMaterial=bookMaterials.map(()=>[])
+ const spineBands=[]
  for(let row=1;row<5;row++){
   const y=row*(height/5)
   mesh(new THREE.BoxGeometry(width-.08,.065,depth+.035),dark,[0,y,0],g)
   let x0=-width/2+.09;const shelfY=y+.07
   while(x0<width/2-.1){
-   const bw=Math.min(.075+Math.random()*.105,width/2-.1-x0)
-   const bh=.28+Math.random()*.42
-   const bm=bookMaterials[Math.floor(Math.random()*bookMaterials.length)]
-   const book=mesh(new THREE.BoxGeometry(bw,bh,.18),bm,[x0+bw/2,shelfY+bh/2,.01],g,[0,0,(Math.random()-.5)*.035])
-   mesh(new THREE.BoxGeometry(bw*.36,.018,.008),brassMat,[x0+bw*.5,shelfY+bh*.68,.104],g)
+   const bw=Math.min(.075+random()*.105,width/2-.1-x0)
+   const bh=.28+random()*.42
+   const materialIndex=Math.floor(random()*bookMaterials.length)
+   booksByMaterial[materialIndex].push({x:x0+bw/2,y:shelfY+bh/2,z:.01,w:bw,h:bh,d:.18,rotation:(random()-.5)*.035})
+   spineBands.push({x:x0+bw*.5,y:shelfY+bh*.68,z:.104,w:bw*.36,h:.018,d:.008})
    x0+=bw+.018
   }
+ }
+ // Instancing draws hundreds of books in a handful of GPU calls instead of one draw per book.
+ const unitBookGeometry=new THREE.BoxGeometry(1,1,1)
+ const dummy=new THREE.Object3D()
+ for(let materialIndex=0;materialIndex<booksByMaterial.length;materialIndex++){
+  const items=booksByMaterial[materialIndex]
+  if(!items.length)continue
+  const instances=new THREE.InstancedMesh(unitBookGeometry,bookMaterials[materialIndex],items.length)
+  items.forEach((book,index)=>{
+   dummy.position.set(book.x,book.y,book.z);dummy.rotation.set(0,0,book.rotation);dummy.scale.set(book.w,book.h,book.d);dummy.updateMatrix()
+   instances.setMatrixAt(index,dummy.matrix)
+  })
+  instances.instanceMatrix.needsUpdate=true;instances.castShadow=false;instances.receiveShadow=true;g.add(instances)
+ }
+ if(spineBands.length){
+  const bandGeometry=new THREE.BoxGeometry(1,1,1)
+  const bands=new THREE.InstancedMesh(bandGeometry,brassMat,spineBands.length)
+  spineBands.forEach((band,index)=>{
+   dummy.position.set(band.x,band.y,band.z);dummy.rotation.set(0,0,0);dummy.scale.set(band.w,band.h,band.d);dummy.updateMatrix()
+   bands.setMatrixAt(index,dummy.matrix)
+  })
+  bands.instanceMatrix.needsUpdate=true;bands.castShadow=false;bands.receiveShadow=true;g.add(bands)
  }
  for(let px=-width/2+.08;px<width/2;px+=width>2?1.05:.72){
   mesh(new THREE.BoxGeometry(.055,height,depth+.055),gold,[px,height/2,0],g)
