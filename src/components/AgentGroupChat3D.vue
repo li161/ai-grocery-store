@@ -101,7 +101,10 @@ async function send(){
 const mat=(color,roughness=.72,metalness=0,extra={})=>new THREE.MeshStandardMaterial({color,roughness,metalness,...extra})
 const characterMat=(color,roughness=.48,extra={})=>new THREE.MeshPhysicalMaterial({color,roughness,metalness:0,clearcoat:.16,clearcoatRoughness:.3,...extra})
 function mesh(geometry,material,pos,parent,rot=null,scale=null){
- const m=new THREE.Mesh(geometry,material);m.position.set(pos[0],pos[1],pos[2]);if(rot)m.rotation.set(rot[0],rot[1],rot[2]);if(scale)m.scale.set(scale[0],scale[1],scale[2]);m.castShadow=true;m.receiveShadow=true;(parent||scene).add(m);return m
+ const m=new THREE.Mesh(geometry,material);m.position.set(pos[0],pos[1],pos[2]);if(rot)m.rotation.set(rot[0],rot[1],rot[2]);if(scale)m.scale.set(scale[0],scale[1],scale[2])
+ // Decorative room pieces receive lighting/AO but do not all enter the shadow map.
+ // Cast shadows explicitly for hero characters, staircase railings and selected focal objects.
+ m.castShadow=false;m.receiveShadow=true;(parent||scene).add(m);return m
 }
 function canvasTexture(paint,repeatX=1,repeatY=1){
  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512
@@ -265,7 +268,7 @@ function faceEyes(parent,x,y,z,eyeScale=.13,irisColor=0x3d7dbb){
 function createSpongeBob(a){
  const g=new THREE.Group();g.position.set(...agentPositions[a.id]);g.userData.agentId=a.id
  const yellow=characterMat(0xf5cf32,.48),yellowShade=mat(0xd5a922,.65),white=characterMat(0xfff4df,.42),brown=characterMat(0x8b4e27,.62),red=characterMat(0xdf3c34,.42),black=mat(0x292a2d,.42),blue=characterMat(0x2e8bc7,.3),pink=characterMat(0xffa2b6,.48),green=characterMat(0x74a94c,.5),purple=characterMat(0x7665b8,.44),teal=characterMat(0x3e9da0,.44)
- const add=(geo,m,p,r=null,s=null)=>mesh(geo,m,p,g,r,s)
+ const add=(geo,m,p,r=null,s=null)=>{const part=mesh(geo,m,p,g,r,s);part.castShadow=true;part.receiveShadow=true;return part}
  const rounded=(w,h,d,rad,m,p)=>add(new THREE.BoxGeometry(w,h,d,8,8,4),m,p,null,[1,1,1])
  const hit=mesh(new THREE.SphereGeometry(.86,16,12),mat(0xffffff,.8,0,{transparent:true,opacity:0,depthWrite:false}),[0,1,0],g);hit.castShadow=false;hit.receiveShadow=false;hit.userData.agentId=a.id;characterHitMeshes.push(hit)
  const smileCurve=(pts,material,r=.018)=>{const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=new THREE.Mesh(new THREE.TubeGeometry(curve,28,r,8,false),material);g.add(m)}
