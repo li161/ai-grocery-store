@@ -4,12 +4,12 @@ import * as THREE from 'three'
 
 const props = defineProps({ onBack: { type: Function, required: true }, initialAgent: { type: String, default: '' } })
 const agents = [
-  { id:'manager', name:'店长', role:'经营负责人', color:0x9a7bff, guide:'统筹经营目标、拆解任务、协调岗位并汇总结果。', pos:[0,0,-1.75] },
-  { id:'cashier', name:'小票', role:'收银员', color:0x42c8ff, guide:'处理订单咨询、支付流程指引与售后分流。', pos:[-2.25,0,-1.65] },
-  { id:'guide', name:'小导', role:'导购顾问', color:0xffbd65, guide:'识别顾客需求、比较商品并提供组合购买建议。', pos:[2.35,0,1.75] },
-  { id:'buyer', name:'采购', role:'采购补货', color:0x50e0bd, guide:'整理缺货信号、供应商报价与补货建议。', pos:[-4.1,0,-2.7] },
-  { id:'inventory', name:'盘点员', role:'库存盘点', color:0x65a6ff, guide:'核对库存差异，发现临期和损耗风险。', pos:[4.05,0,1.65] },
-  { id:'pm', name:'林舟', role:'产品经理', color:0xff79c6, guide:'将经营目标拆成流程、验收标准和迭代计划。', pos:[0,0,3.65] }
+  { id:'manager', name:'店长', role:'经营负责人', color:0x9a7bff, guide:'统筹经营目标、拆解任务、协调岗位并汇总结果。', pos:[0,0,-1.9] },
+  { id:'cashier', name:'小票', role:'收银员', color:0x42c8ff, guide:'处理订单咨询、支付流程指引与售后分流。', pos:[-2.1,0,-2.0] },
+  { id:'guide', name:'小导', role:'导购顾问', color:0xffbd65, guide:'识别顾客需求、比较商品并提供组合购买建议。', pos:[2.6,0,1.9] },
+  { id:'buyer', name:'采购', role:'采购补货', color:0x50e0bd, guide:'整理缺货信号、供应商报价与补货建议。', pos:[-4.5,0,1.5] },
+  { id:'inventory', name:'盘点员', role:'库存盘点', color:0x65a6ff, guide:'核对库存差异，发现临期和损耗风险。', pos:[4.4,0,1.3] },
+  { id:'pm', name:'林舟', role:'产品经理', color:0xff79c6, guide:'将经营目标拆成流程、验收标准和迭代计划。', pos:[0,0,4.2] }
 ]
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map(a=>a.id))
 const activeAgents = computed(()=>agents.filter(a=>selected.value.includes(a.id)))
@@ -135,23 +135,35 @@ function initScene(){
  if(!canvasHost.value)return
  scene=new THREE.Scene();scene.background=new THREE.Color(0xe8dfcf);scene.fog=new THREE.FogExp2(0xe8dfcf,.006)
  camera=new THREE.PerspectiveCamera(42,1,.1,100);camera.position.set(0,7.6,15.8)
- renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.55
+ renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap
  canvasHost.value.appendChild(renderer.domElement)
  scene.add(new THREE.HemisphereLight(0xfff5df,0x75604a,2.1));scene.add(new THREE.AmbientLight(0xffffff,.72))
- const key=new THREE.DirectionalLight(0xffe6bd,2.3);key.position.set(-4,9,5);scene.add(key)
- const fill=new THREE.DirectionalLight(0xffffff,1.15);fill.position.set(5,6,2);scene.add(fill)
+ const key=new THREE.DirectionalLight(0xffe6bd,3.1);key.position.set(-4,9,5);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.camera.left=-12;key.shadow.camera.right=12;key.shadow.camera.top=10;key.shadow.camera.bottom=-10;key.shadow.bias=-0.00025;scene.add(key)
+ const fill=new THREE.DirectionalLight(0xffffff,1.0);fill.position.set(5,6,2);scene.add(fill)
  const warmLamp=new THREE.PointLight(0xffc875,75,22);warmLamp.position.set(0,5,-1);scene.add(warmLamp)
  const room=new THREE.Group();scene.add(room)
  const box=(w,h,d,x,y,z,mat,group=room)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;group.add(m);return m}
- const wood=new THREE.MeshStandardMaterial({color:0x68432d,roughness:.72,metalness:.02})
- const darkWood=new THREE.MeshStandardMaterial({color:0x35271f,roughness:.6})
+ // Procedural canvas textures give timber a visible grain instead of flat, toy-like color blocks.
+ function makeGrainTexture(base, line, seed=1){
+  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle=base;ctx.fillRect(0,0,512,512);let n=seed;
+  const rand=()=>{n=(n*1664525+1013904223)>>>0;return n/4294967296};
+  for(let i=0;i<260;i++){ctx.beginPath();const y=rand()*512;ctx.moveTo(0,y);ctx.bezierCurveTo(120,y+(rand()-.5)*18,350,y+(rand()-.5)*20,512,y+(rand()-.5)*12);ctx.strokeStyle=line;ctx.globalAlpha=.025+rand()*.11;ctx.lineWidth=.4+rand()*2.2;ctx.stroke()}
+  ctx.globalAlpha=1;const tex=new THREE.CanvasTexture(canvas);tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;return tex;
+ }
+ const woodTex=makeGrainTexture('#70472e','#e2b17a',7);woodTex.repeat.set(2,1);
+ const darkTex=makeGrainTexture('#38271e','#b1845b',11);darkTex.repeat.set(2,1);
+ const wood=new THREE.MeshStandardMaterial({map:woodTex,color:0xffffff,roughness:.76,metalness:.01})
+ const darkWood=new THREE.MeshStandardMaterial({map:darkTex,color:0xffffff,roughness:.68})
  const trim=new THREE.MeshStandardMaterial({color:0xb98a54,roughness:.42,metalness:.12})
  const plaster=new THREE.MeshStandardMaterial({color:0xe8dfcf,roughness:.95})
  const brass=new THREE.MeshStandardMaterial({color:0xc69a55,metalness:.68,roughness:.28})
  const bookMats=[0x7c342d,0x284c46,0x263e5b,0xb08a54,0x8b6848,0x4c3b58,0xc7b58f,0x536a58].map(color=>new THREE.MeshStandardMaterial({color,roughness:.82}))
- const floorMat=new THREE.MeshStandardMaterial({color:0x98704b,roughness:.56})
+ const floorTex=makeGrainTexture('#986b45','#e0b27a',19);floorTex.repeat.set(5,3);
+ const floorMat=new THREE.MeshStandardMaterial({map:floorTex,color:0xffffff,roughness:.68})
  box(20,.22,19,0,-.24,0,floorMat)
- for(let z=-8.7;z<9;z+=.82){box(19.9,.012,.018,0,-.115,z,trim)}
+ // Board seams run lengthwise for a believable timber floor; thin brass lines are removed from the floor itself.
+ for(let x=-9.5;x<10;x+=1.25){box(.012,.008,18.8,x,-.122,0,darkWood)}
+ for(let z=-8.7;z<9;z+=.82){box(19.9,.009,.012,0,-.122,z,darkWood)}
  // Warm plaster walls and dark walnut ceiling beams frame the room.
  box(20,7,.28,0,3.35,-8.7,plaster);box(.28,7,18, -9.85,3.35,0,plaster);box(.28,7,18,9.85,3.35,0,plaster)
  const beamMat=new THREE.MeshStandardMaterial({color:0x4b3425,roughness:.62})
@@ -191,6 +203,8 @@ function initScene(){
  box(8.16,.12,1.2,0,1.13,-.05,trim)
  box(7.65,.12,.12,0,.36,.45,trim)
  for(let x=-3.5;x<=3.5;x+=.7)box(.025,.7,.015,x,.53,.435,trim)
+ // Recessed counter panels and small brass pulls create the crafted joinery of a real café bar.
+ for(let x=-3.15;x<=3.15;x+=1.05){box(.78,.53,.035,x,.53,.48,darkWood);box(.68,.42,.018,x,.53,.503,wood);box(.12,.025,.025,x,.52,.52,brass)}
  // Coffee machine, cup stack, grinder and book display make the counter read as a real place.
  const steel=new THREE.MeshStandardMaterial({color:0x9aa6a7,metalness:.72,roughness:.27})
  box(.75,.62,.52,-2.8,1.5,-.18,steel);box(.52,.18,.38,-2.8,1.9,-.18,darkWood)
@@ -206,9 +220,12 @@ function initScene(){
  // A few reading tables and upholstered chairs in the public side of the room.
  const tableMat=new THREE.MeshStandardMaterial({color:0x65422e,roughness:.55})
  for(const [x,z] of [[-5,3.7],[5,4.2]]){
-  box(1.7,.13,1.05,x,.85,z,tableMat);for(const dx of [-.68,.68])for(const dz of [-.38,.38])box(.09,.82,.09,x+dx,.4,z+dz,darkWood)
-  for(const dx of [-.9,.9]){box(.55,.12,.5,x+dx,.48,z,wood);box(.09,.65,.09,x+dx,.18,z,darkWood)}
+  box(1.7,.13,1.05,x,.85,z,tableMat);box(1.58,.025,.93,x,.925,z,trim);for(const dx of [-.68,.68])for(const dz of [-.38,.38])box(.09,.82,.09,x+dx,.4,z+dz,darkWood)
+  for(const dx of [-.9,.9]){box(.55,.12,.5,x+dx,.48,z,wood);box(.55,.48,.08,x+dx,.73,z-.2,darkWood);box(.09,.65,.09,x+dx,.18,z,darkWood)}
  }
+ // Leafy potted plants soften the timber-heavy room and add scale cues near the windows.
+ const potMat=new THREE.MeshStandardMaterial({color:0xb56e48,roughness:.86});const leafMats=[0x466b42,0x63834c,0x2f593c].map(color=>new THREE.MeshStandardMaterial({color,roughness:.9,side:THREE.DoubleSide}));
+ for(const [px,pz] of [[7.9,-6.4],[7.9,2.5],[-7.8,5.7]]){const pot=new THREE.Mesh(new THREE.CylinderGeometry(.2,.15,.35,16),potMat);pot.position.set(px,.06,pz);room.add(pot);for(let i=0;i<9;i++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.11,8,7),leafMats[i%leafMats.length]);const angle=i*2.399;leaf.position.set(px+Math.cos(angle)*(.12+(i%3)*.05),.34+(i%4)*.12,pz+Math.sin(angle)*(.12+(i%3)*.05));leaf.scale.set(.65,1.8,.55);leaf.rotation.z=Math.cos(angle)*.55;room.add(leaf)}}
  // Replace the sci-fi floor grid with a softly lit, continuous timber floor.
  const rug=new THREE.Mesh(new THREE.BoxGeometry(5.2,.025,2.5),new THREE.MeshStandardMaterial({color:0x43534a,roughness:1}));rug.position.set(0,-.105,3.7);room.add(rug)
  // The timber floor, built-in shelves and counter form the physical room.
