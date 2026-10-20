@@ -2,7 +2,7 @@
 defineProps({
   detail: { type: Object, required: true },
   onClose: { type: Function, required: true },
-  onOpenTool: { type: Function, required: true }
+  onOpenTool: { type: Function, required: true },
 })
 </script>
 
@@ -38,7 +38,7 @@ defineProps({
             <div class="detail-block">
               <span class="detail-label">可以直接拿来做什么</span>
               <div class="action-list">
-                <div v-for="(item, index) in (detail.actions || detail.steps || [])" :key="item">
+                <div v-for="(item, index) in detail.actions || detail.steps || []" :key="item">
                   <b>{{ String(index + 1).padStart(2, '0') }}</b>
                   <span>{{ item }}</span>
                 </div>

@@ -4,18 +4,19 @@ import { setTimeout as delay } from 'node:timers/promises'
 
 const root = process.cwd()
 const targetDir = join(root, 'public', 'models')
-const sourceRoot = 'https://raw.githubusercontent.com/ErfanMo77/gltf-research-scenes/main/scenes/breakfast-room'
+const sourceRoot =
+  'https://raw.githubusercontent.com/ErfanMo77/gltf-research-scenes/main/scenes/breakfast-room'
 const assets = [
   {
     name: 'breakfast_room_extended.gltf',
     url: sourceRoot + '/gltf/breakfast_room_extended.gltf',
-    minBytes: 85000
+    minBytes: 85000,
   },
   {
     name: 'breakfast_room.bin',
     url: 'https://media.githubusercontent.com/media/ErfanMo77/gltf-research-scenes/main/scenes/breakfast-room/gltf/breakfast_room.bin',
-    minBytes: 12000000
-  }
+    minBytes: 12000000,
+  },
 ]
 
 async function existsWithMinimumSize(path, minBytes) {
@@ -40,7 +41,7 @@ async function fetchAsset(asset) {
       console.log('[render-assets] Downloading ' + asset.name + ' (attempt ' + attempt + '/4)')
       const response = await fetch(asset.url, {
         signal: AbortSignal.timeout(120000),
-        headers: { 'user-agent': 'ai-grocery-store-render-asset-fetcher' }
+        headers: { 'user-agent': 'ai-grocery-store-render-asset-fetcher' },
       })
       if (!response.ok) throw new Error('HTTP ' + response.status + ' ' + response.statusText)
       const bytes = Buffer.from(await response.arrayBuffer())
@@ -66,7 +67,7 @@ for (const asset of assets) await fetchAsset(asset)
 
 const gltfPath = join(targetDir, 'breakfast_room_extended.gltf')
 const gltf = JSON.parse(await readFile(gltfPath, 'utf8'))
-for (const buffer of (gltf.buffers || [])) {
+for (const buffer of gltf.buffers || []) {
   if (buffer.uri && !buffer.uri.startsWith('data:')) {
     const dependency = join(targetDir, buffer.uri)
     if (!(await existsWithMinimumSize(dependency, buffer.byteLength * 0.98))) {

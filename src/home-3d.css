@@ -1,41 +1,739 @@
 /* Immersive interactive 3D home: layered CSS perspective, motion and accessible reduced-motion fallback. */
-.app-main>.store-hero{--tilt-x:0deg;--tilt-y:0deg;--tilt-x-soft:0deg;--tilt-y-soft:0deg;--tilt-x-orbit:0deg;--tilt-y-orbit:0deg;--tilt-x-floor:0deg;--tilt-y-floor:0deg;min-height:850px;height:100svh;max-height:1120px;isolation:isolate;background:#081315;background-image:radial-gradient(ellipse at 72% 42%,#17625b99,transparent 38%),linear-gradient(125deg,#10191c,#111817 52%,#090d0e)}
-.app-main>.store-hero:before{content:"";position:absolute;inset:0;z-index:-4;pointer-events:none;background:linear-gradient(90deg,#060b0cf2 0%,#060b0ca8 38%,#060b0c10 74%,#060b0c70),linear-gradient(0deg,#05090ae8,transparent 42%,#04080966)}
-.app-main>.store-hero:after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;opacity:.15;background-image:linear-gradient(#a8e2db20 1px,transparent 1px),linear-gradient(90deg,#a8e2db20 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(90deg,transparent,#000 45%,#000)}
-.app-main>.store-hero .store-backdrop{opacity:.46;filter:saturate(.7) contrast(1.13);transform:scale(1.04);transition:transform .8s,filter .8s}
-.app-main>.store-hero:hover .store-backdrop{transform:scale(1.075);filter:saturate(.9) contrast(1.18)}
-.app-main>.store-hero .hero-sign{left:5%;top:17%;width:min(34vw,530px);min-width:0;padding:28px 30px;background:linear-gradient(145deg,#e8f4ecf5,#c4ddd5ed);border:1px solid #d9fff080;box-shadow:0 25px 70px #0008,0 0 0 8px #a5e5d815,inset 0 1px #fff;transform:perspective(1000px) rotateY(var(--tilt-y-soft)) rotateX(var(--tilt-x-soft)) translateZ(24px);transform-origin:left center;transition:transform .16s}
-.app-main>.store-hero .hero-sign:after{inset:8px;border:1px solid #517a7066}
-.app-main>.store-hero .sign-kicker{color:#39736b;letter-spacing:.24em}
-.app-main>.store-hero .hero-sign h1{font-family:"Noto Sans SC",sans-serif;font-size:clamp(48px,5vw,82px);letter-spacing:-.09em;color:#142e2b}
-.app-main>.store-hero .hero-sign p{color:#385752;font-size:13px}
-.app-main>.store-hero .scene-note{left:5%;top:39%;width:min(32vw,470px);white-space:normal;background:#10191be8;border:1px solid #83c9bd44;border-left:3px solid #6ce0c7;box-shadow:0 14px 38px #0006;color:#d5e8e2}
-.supply-orbit{position:absolute;z-index:12;right:5%;top:6%;width:min(49vw,680px);height:455px;perspective:1100px;pointer-events:none}
-.orbit-caption{position:absolute;top:10px;right:18px;display:flex;align-items:center;gap:9px;color:#b6d5cf;font-size:9px;letter-spacing:.2em;font-weight:800}.orbit-caption small{font-size:8px;letter-spacing:.04em;color:#7d9b95;font-weight:500}
-.orbit-live{width:6px;height:6px;border-radius:50%;background:#71f3cf;box-shadow:0 0 15px #71f3cf;animation:orbitPulse 2s infinite}
-.orbit-stage{position:absolute;inset:24px 0 0;transform-style:preserve-3d;transform:rotateX(calc(57deg + var(--tilt-x-orbit))) rotateY(calc(-18deg + var(--tilt-y-orbit)));transition:transform .16s}
-.orbit-ring{position:absolute;left:50%;top:48%;width:67%;height:67%;border:1px solid #81e0d15c;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 24px #49d7c30b,inset 0 0 25px #49d7c30b}
-.orbit-ring-a{animation:orbitSpin 24s linear infinite}.orbit-ring-b{width:84%;height:84%;transform:translate(-50%,-50%) rotateZ(60deg);border-color:#b7c8ff4a;animation:orbitSpinReverse 31s linear infinite}.orbit-ring-c{width:48%;height:102%;transform:translate(-50%,-50%) rotateZ(-42deg);border-color:#c6a9ff45;animation:orbitSpin 37s linear infinite}
-.orbit-core{pointer-events:auto;position:absolute;left:50%;top:48%;width:140px;height:140px;transform:translate(-50%,-50%) rotateX(-57deg) translateZ(46px);border:1px solid #9af0d4a6;border-radius:50%;background:radial-gradient(circle at 35% 28%,#4a9d8c,#153b3c 58%,#101d23);color:#e8fff4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 0 0 12px #6ce0c70b,0 0 55px #41d7c64d,inset 0 0 24px #c7fff326;transition:box-shadow .25s,scale .25s;cursor:pointer}
-.orbit-core:hover{scale:1.06;box-shadow:0 0 0 18px #6ce0c70e,0 0 80px #41d7c67d}.orbit-core strong{font-size:36px;line-height:1;text-shadow:0 0 20px #a4ffe4}.orbit-core small{font-size:11px;font-weight:800;letter-spacing:.08em}
-.core-glow{position:absolute;inset:-9px;border:1px solid #75e9d24d;border-radius:50%;animation:coreBreath 3s infinite}
-.orbit-node{pointer-events:auto;position:absolute;width:96px;height:96px;border:1px solid #8bcfc54f;border-radius:50%;background:linear-gradient(145deg,#172c30ed,#101719e8);color:#c5e8df;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 30px #0006,inset 0 0 25px #7ef0d20c;backdrop-filter:blur(8px);transform:rotateX(-57deg) translateZ(26px);transition:transform .25s,border-color .25s,background .25s,box-shadow .25s}
-.orbit-node span{font-size:24px;color:#8cebd3;text-shadow:0 0 15px #54d6bd44}.orbit-node small{font-size:9px;font-weight:700;white-space:nowrap}.orbit-node:hover,.orbit-node[aria-pressed=true]{border-color:#a2ffe0;background:linear-gradient(145deg,#28534f,#152629);box-shadow:0 0 30px #48e4c12e;transform:rotateX(-57deg) translateZ(45px) scale(1.07)}
-.orbit-node-0{left:12%;top:11%}.orbit-node-1{right:8%;top:19%}.orbit-node-2{right:14%;bottom:7%}.orbit-node-3{left:9%;bottom:5%}
-.orbit-controls{pointer-events:auto;position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:center;gap:15px;padding:8px 12px;border:1px solid #8bd5c53d;background:#101719c9;backdrop-filter:blur(8px);min-width:215px;justify-content:space-between}
-.orbit-controls button{width:28px;height:28px;border:1px solid #7bb9ad55;background:#1c3030;color:#c8f1e6;font-size:19px;border-radius:50%}.orbit-controls div{text-align:center}.orbit-controls strong{display:block;font-size:10px;color:#e2fff4}.orbit-controls small{display:block;font-size:8px;color:#88b2a7;margin-top:3px}
-.spatial-store{right:3.5%;top:auto;bottom:8%;width:min(57vw,820px);z-index:18;transform:perspective(1400px) rotateY(calc(-9deg + var(--tilt-y-floor))) rotateX(calc(2deg + var(--tilt-x-floor))) translateZ(16px);transform-origin:center right;transition:transform .16s;background:linear-gradient(145deg,#102326ef,#101719ed 60%,#1a1d1aef);border-color:#79d5c34d;box-shadow:0 35px 75px #0009,0 0 45px #38cdb50b,0 2px 0 #a9ffe344}
-.spatial-store:before{background:linear-gradient(90deg,transparent,#92ffe0,transparent);opacity:.8}.spatial-store:after{background:linear-gradient(#3c8e7d,#193e39);height:12px;box-shadow:0 10px 22px #0009}
-.spatial-header{color:#dff8f0}.spatial-header span{color:#8ae5d0}.spatial-header strong{font-size:16px}.spatial-header button{border-color:#58b9a6;background:#142a2b;color:#a7efdb;transition:.2s}.spatial-header button:hover{background:#27514c;transform:translateY(-2px)}
-.spatial-shelves{background:linear-gradient(180deg,#101719,#18302e)}.spatial-shelves:before,.spatial-shelves:after{background:linear-gradient(#6abca8,#275b50);box-shadow:0 7px 16px #0009}
-.spatial-product{background:linear-gradient(145deg,#e5f3e8,#b7d1c9);border-color:#e1fff0;color:#18312c;box-shadow:0 16px 25px #0006;transform:translateZ(12px);transition:transform .25s,box-shadow .25s,filter .25s}.spatial-product:hover{transform:translateY(-12px) translateZ(36px) rotateY(-4deg);box-shadow:0 25px 38px #0008;filter:brightness(1.06)}
-.spatial-pack{box-shadow:0 12px 16px #0b24202e,inset 0 -8px #00000012;border:1px solid #fff9}.spatial-product strong{font-size:12px}.spatial-product small{font-size:8px;color:#4d6c64}.spatial-product i{color:#267a6b;font-size:8px}.product-price{background:#173c37;color:#bdf7df}
-.spatial-bottom{gap:9px}.spatial-bin{background:#132528;border-color:#35635a;color:#d6eee5;transition:transform .2s,border-color .2s,background .2s}.spatial-bin:hover{transform:translateY(-5px) translateZ(12px);border-color:#81e9ce;background:#1b3939}.spatial-bin span{color:#85d9c4}.spatial-bin strong{font-size:10px}.spatial-bin i{color:#8aaea5}
-.app-main>.store-hero .hero-cta{left:5%;bottom:8%;gap:10px}.app-main>.store-hero .hero-cta button{height:48px;border-radius:3px;font-size:11px;transition:transform .2s,box-shadow .2s}.app-main>.store-hero .hero-cta button:hover{transform:translateY(-4px);box-shadow:0 15px 30px #0007}.app-main>.store-hero .cta-primary{background:#8ce4ca;border-color:#b7ffe6;color:#102b29}.app-main>.store-hero .cta-secondary{background:#10191be8;border-color:#8bd5c366;color:#d7efe8}
-.app-main>.store-hero .hero-counter{top:90px;bottom:auto;right:3.5%;background:#0d1719cf;border-color:#8bd5c333;backdrop-filter:blur(8px)}.app-main>.store-hero .hero-counter strong{color:#9ff2d7}.app-main>.store-hero .hero-counter small{color:#9bbab2}
-@keyframes orbitPulse{0%,100%{opacity:.5;box-shadow:0 0 4px #71f3cf}50%{opacity:1;box-shadow:0 0 18px #71f3cf}}@keyframes orbitSpin{from{transform:translate(-50%,-50%) rotateZ(0)}to{transform:translate(-50%,-50%) rotateZ(360deg)}}@keyframes orbitSpinReverse{from{transform:translate(-50%,-50%) rotateZ(360deg)}to{transform:translate(-50%,-50%) rotateZ(0)}}@keyframes coreBreath{0%,100%{opacity:.45;transform:scale(.98)}50%{opacity:1;transform:scale(1.05)}}
-@media(max-width:1250px){.app-main>.store-hero .hero-sign{top:17%;width:34vw}.supply-orbit{right:1%;top:8%;width:51vw;height:420px}.spatial-store{width:60vw;bottom:7%}.app-main>.store-hero .scene-note{top:39%;width:31vw}}
-@media(max-width:900px){.supply-orbit{right:0;top:7%;width:52vw;height:390px}.orbit-node{width:80px;height:80px}.orbit-core{width:116px;height:116px}.spatial-store{width:62vw;right:2%;bottom:7%}.app-main>.store-hero .hero-sign{width:37vw;padding:22px}.app-main>.store-hero .hero-sign h1{font-size:clamp(42px,5vw,62px)}.app-main>.store-hero .scene-note{left:5%;top:38%;width:34vw}}
-@media(max-width:700px){.app-main>.store-hero{height:auto;max-height:none;min-height:1180px;overflow:hidden;padding-top:1px}.app-main>.store-hero .store-backdrop{object-position:58% center;opacity:.43}.app-main>.store-hero .hero-sign{left:18px;right:18px;top:8%;width:auto;padding:22px}.app-main>.store-hero .hero-sign h1{font-size:50px}.app-main>.store-hero .scene-note{left:18px;right:18px;top:23%;width:auto;min-height:42px;font-size:10px}.supply-orbit{left:0;right:0;top:28%;width:100%;height:360px;transform:scale(.96)}.orbit-caption{right:20px;top:4px}.orbit-stage{inset:15px 0 0}.orbit-node{width:70px;height:70px}.orbit-node span{font-size:20px}.orbit-node small{font-size:8px}.orbit-node-0{left:6%;top:13%}.orbit-node-1{right:5%;top:18%}.orbit-node-2{right:7%;bottom:7%}.orbit-node-3{left:5%;bottom:5%}.orbit-core{width:106px;height:106px}.orbit-controls{bottom:0;min-width:205px}.app-main>.store-hero .spatial-store{left:15px;right:15px;top:60%;bottom:auto;width:auto;transform:perspective(1000px) rotateY(-2deg);padding:9px}.spatial-header strong{font-size:12px}.spatial-header button{font-size:7px}.spatial-product{min-height:126px;padding:7px 6px}.spatial-pack{width:34px;height:40px;font-size:18px;margin:7px 0}.spatial-product strong{font-size:8px}.spatial-product i{font-size:6px}.spatial-bottom{grid-template-columns:1fr;gap:5px}.spatial-bin{min-height:48px;padding:8px}.spatial-bin strong{font-size:9px}.app-main>.store-hero .hero-cta{left:18px;right:18px;bottom:3%;gap:8px}.app-main>.store-hero .hero-cta button{flex:1;height:44px;padding:0 10px;font-size:10px}.app-main>.store-hero .hero-counter{display:none}}
-@media(max-width:420px){.app-main>.store-hero{min-height:1210px}.app-main>.store-hero .hero-sign h1{font-size:45px}.supply-orbit{top:28%;transform:scale(.9);transform-origin:top center}.app-main>.store-hero .spatial-store{top:59%}.spatial-product{min-height:112px}.spatial-product i{display:none}}
-@media(prefers-reduced-motion:reduce){.orbit-ring,.orbit-live,.core-glow{animation:none!important}.app-main>.store-hero *,.app-main>.store-hero *:before,.app-main>.store-hero *:after{transition:none!important;scroll-behavior:auto!important}}
+.app-main > .store-hero {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --tilt-x-soft: 0deg;
+  --tilt-y-soft: 0deg;
+  --tilt-x-orbit: 0deg;
+  --tilt-y-orbit: 0deg;
+  --tilt-x-floor: 0deg;
+  --tilt-y-floor: 0deg;
+  min-height: 850px;
+  height: 100svh;
+  max-height: 1120px;
+  isolation: isolate;
+  background: #081315;
+  background-image:
+    radial-gradient(ellipse at 72% 42%, #17625b99, transparent 38%),
+    linear-gradient(125deg, #10191c, #111817 52%, #090d0e);
+}
+.app-main > .store-hero:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #060b0cf2 0%, #060b0ca8 38%, #060b0c10 74%, #060b0c70),
+    linear-gradient(0deg, #05090ae8, transparent 42%, #04080966);
+}
+.app-main > .store-hero:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(#a8e2db20 1px, transparent 1px),
+    linear-gradient(90deg, #a8e2db20 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(90deg, transparent, #000 45%, #000);
+}
+.app-main > .store-hero .store-backdrop {
+  opacity: 0.46;
+  filter: saturate(0.7) contrast(1.13);
+  transform: scale(1.04);
+  transition:
+    transform 0.8s,
+    filter 0.8s;
+}
+.app-main > .store-hero:hover .store-backdrop {
+  transform: scale(1.075);
+  filter: saturate(0.9) contrast(1.18);
+}
+.app-main > .store-hero .hero-sign {
+  left: 5%;
+  top: 17%;
+  width: min(34vw, 530px);
+  min-width: 0;
+  padding: 28px 30px;
+  background: linear-gradient(145deg, #e8f4ecf5, #c4ddd5ed);
+  border: 1px solid #d9fff080;
+  box-shadow:
+    0 25px 70px #0008,
+    0 0 0 8px #a5e5d815,
+    inset 0 1px #fff;
+  transform: perspective(1000px) rotateY(var(--tilt-y-soft)) rotateX(var(--tilt-x-soft))
+    translateZ(24px);
+  transform-origin: left center;
+  transition: transform 0.16s;
+}
+.app-main > .store-hero .hero-sign:after {
+  inset: 8px;
+  border: 1px solid #517a7066;
+}
+.app-main > .store-hero .sign-kicker {
+  color: #39736b;
+  letter-spacing: 0.24em;
+}
+.app-main > .store-hero .hero-sign h1 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: clamp(48px, 5vw, 82px);
+  letter-spacing: -0.09em;
+  color: #142e2b;
+}
+.app-main > .store-hero .hero-sign p {
+  color: #385752;
+  font-size: 13px;
+}
+.app-main > .store-hero .scene-note {
+  left: 5%;
+  top: 39%;
+  width: min(32vw, 470px);
+  white-space: normal;
+  background: #10191be8;
+  border: 1px solid #83c9bd44;
+  border-left: 3px solid #6ce0c7;
+  box-shadow: 0 14px 38px #0006;
+  color: #d5e8e2;
+}
+.supply-orbit {
+  position: absolute;
+  z-index: 12;
+  right: 5%;
+  top: 6%;
+  width: min(49vw, 680px);
+  height: 455px;
+  perspective: 1100px;
+  pointer-events: none;
+}
+.orbit-caption {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #b6d5cf;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  font-weight: 800;
+}
+.orbit-caption small {
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  color: #7d9b95;
+  font-weight: 500;
+}
+.orbit-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #71f3cf;
+  box-shadow: 0 0 15px #71f3cf;
+  animation: orbitPulse 2s infinite;
+}
+.orbit-stage {
+  position: absolute;
+  inset: 24px 0 0;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(57deg + var(--tilt-x-orbit))) rotateY(calc(-18deg + var(--tilt-y-orbit)));
+  transition: transform 0.16s;
+}
+.orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 67%;
+  height: 67%;
+  border: 1px solid #81e0d15c;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 24px #49d7c30b,
+    inset 0 0 25px #49d7c30b;
+}
+.orbit-ring-a {
+  animation: orbitSpin 24s linear infinite;
+}
+.orbit-ring-b {
+  width: 84%;
+  height: 84%;
+  transform: translate(-50%, -50%) rotateZ(60deg);
+  border-color: #b7c8ff4a;
+  animation: orbitSpinReverse 31s linear infinite;
+}
+.orbit-ring-c {
+  width: 48%;
+  height: 102%;
+  transform: translate(-50%, -50%) rotateZ(-42deg);
+  border-color: #c6a9ff45;
+  animation: orbitSpin 37s linear infinite;
+}
+.orbit-core {
+  pointer-events: auto;
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 140px;
+  height: 140px;
+  transform: translate(-50%, -50%) rotateX(-57deg) translateZ(46px);
+  border: 1px solid #9af0d4a6;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #4a9d8c, #153b3c 58%, #101d23);
+  color: #e8fff4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow:
+    0 0 0 12px #6ce0c70b,
+    0 0 55px #41d7c64d,
+    inset 0 0 24px #c7fff326;
+  transition:
+    box-shadow 0.25s,
+    scale 0.25s;
+  cursor: pointer;
+}
+.orbit-core:hover {
+  scale: 1.06;
+  box-shadow:
+    0 0 0 18px #6ce0c70e,
+    0 0 80px #41d7c67d;
+}
+.orbit-core strong {
+  font-size: 36px;
+  line-height: 1;
+  text-shadow: 0 0 20px #a4ffe4;
+}
+.orbit-core small {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.core-glow {
+  position: absolute;
+  inset: -9px;
+  border: 1px solid #75e9d24d;
+  border-radius: 50%;
+  animation: coreBreath 3s infinite;
+}
+.orbit-node {
+  pointer-events: auto;
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border: 1px solid #8bcfc54f;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #172c30ed, #101719e8);
+  color: #c5e8df;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow:
+    0 12px 30px #0006,
+    inset 0 0 25px #7ef0d20c;
+  backdrop-filter: blur(8px);
+  transform: rotateX(-57deg) translateZ(26px);
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    background 0.25s,
+    box-shadow 0.25s;
+}
+.orbit-node span {
+  font-size: 24px;
+  color: #8cebd3;
+  text-shadow: 0 0 15px #54d6bd44;
+}
+.orbit-node small {
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.orbit-node:hover,
+.orbit-node[aria-pressed='true'] {
+  border-color: #a2ffe0;
+  background: linear-gradient(145deg, #28534f, #152629);
+  box-shadow: 0 0 30px #48e4c12e;
+  transform: rotateX(-57deg) translateZ(45px) scale(1.07);
+}
+.orbit-node-0 {
+  left: 12%;
+  top: 11%;
+}
+.orbit-node-1 {
+  right: 8%;
+  top: 19%;
+}
+.orbit-node-2 {
+  right: 14%;
+  bottom: 7%;
+}
+.orbit-node-3 {
+  left: 9%;
+  bottom: 5%;
+}
+.orbit-controls {
+  pointer-events: auto;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 12px;
+  border: 1px solid #8bd5c53d;
+  background: #101719c9;
+  backdrop-filter: blur(8px);
+  min-width: 215px;
+  justify-content: space-between;
+}
+.orbit-controls button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #7bb9ad55;
+  background: #1c3030;
+  color: #c8f1e6;
+  font-size: 19px;
+  border-radius: 50%;
+}
+.orbit-controls div {
+  text-align: center;
+}
+.orbit-controls strong {
+  display: block;
+  font-size: 10px;
+  color: #e2fff4;
+}
+.orbit-controls small {
+  display: block;
+  font-size: 8px;
+  color: #88b2a7;
+  margin-top: 3px;
+}
+.spatial-store {
+  right: 3.5%;
+  top: auto;
+  bottom: 8%;
+  width: min(57vw, 820px);
+  z-index: 18;
+  transform: perspective(1400px) rotateY(calc(-9deg + var(--tilt-y-floor)))
+    rotateX(calc(2deg + var(--tilt-x-floor))) translateZ(16px);
+  transform-origin: center right;
+  transition: transform 0.16s;
+  background: linear-gradient(145deg, #102326ef, #101719ed 60%, #1a1d1aef);
+  border-color: #79d5c34d;
+  box-shadow:
+    0 35px 75px #0009,
+    0 0 45px #38cdb50b,
+    0 2px 0 #a9ffe344;
+}
+.spatial-store:before {
+  background: linear-gradient(90deg, transparent, #92ffe0, transparent);
+  opacity: 0.8;
+}
+.spatial-store:after {
+  background: linear-gradient(#3c8e7d, #193e39);
+  height: 12px;
+  box-shadow: 0 10px 22px #0009;
+}
+.spatial-header {
+  color: #dff8f0;
+}
+.spatial-header span {
+  color: #8ae5d0;
+}
+.spatial-header strong {
+  font-size: 16px;
+}
+.spatial-header button {
+  border-color: #58b9a6;
+  background: #142a2b;
+  color: #a7efdb;
+  transition: 0.2s;
+}
+.spatial-header button:hover {
+  background: #27514c;
+  transform: translateY(-2px);
+}
+.spatial-shelves {
+  background: linear-gradient(180deg, #101719, #18302e);
+}
+.spatial-shelves:before,
+.spatial-shelves:after {
+  background: linear-gradient(#6abca8, #275b50);
+  box-shadow: 0 7px 16px #0009;
+}
+.spatial-product {
+  background: linear-gradient(145deg, #e5f3e8, #b7d1c9);
+  border-color: #e1fff0;
+  color: #18312c;
+  box-shadow: 0 16px 25px #0006;
+  transform: translateZ(12px);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    filter 0.25s;
+}
+.spatial-product:hover {
+  transform: translateY(-12px) translateZ(36px) rotateY(-4deg);
+  box-shadow: 0 25px 38px #0008;
+  filter: brightness(1.06);
+}
+.spatial-pack {
+  box-shadow:
+    0 12px 16px #0b24202e,
+    inset 0 -8px #00000012;
+  border: 1px solid #fff9;
+}
+.spatial-product strong {
+  font-size: 12px;
+}
+.spatial-product small {
+  font-size: 8px;
+  color: #4d6c64;
+}
+.spatial-product i {
+  color: #267a6b;
+  font-size: 8px;
+}
+.product-price {
+  background: #173c37;
+  color: #bdf7df;
+}
+.spatial-bottom {
+  gap: 9px;
+}
+.spatial-bin {
+  background: #132528;
+  border-color: #35635a;
+  color: #d6eee5;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+}
+.spatial-bin:hover {
+  transform: translateY(-5px) translateZ(12px);
+  border-color: #81e9ce;
+  background: #1b3939;
+}
+.spatial-bin span {
+  color: #85d9c4;
+}
+.spatial-bin strong {
+  font-size: 10px;
+}
+.spatial-bin i {
+  color: #8aaea5;
+}
+.app-main > .store-hero .hero-cta {
+  left: 5%;
+  bottom: 8%;
+  gap: 10px;
+}
+.app-main > .store-hero .hero-cta button {
+  height: 48px;
+  border-radius: 3px;
+  font-size: 11px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.app-main > .store-hero .hero-cta button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px #0007;
+}
+.app-main > .store-hero .cta-primary {
+  background: #8ce4ca;
+  border-color: #b7ffe6;
+  color: #102b29;
+}
+.app-main > .store-hero .cta-secondary {
+  background: #10191be8;
+  border-color: #8bd5c366;
+  color: #d7efe8;
+}
+.app-main > .store-hero .hero-counter {
+  top: 90px;
+  bottom: auto;
+  right: 3.5%;
+  background: #0d1719cf;
+  border-color: #8bd5c333;
+  backdrop-filter: blur(8px);
+}
+.app-main > .store-hero .hero-counter strong {
+  color: #9ff2d7;
+}
+.app-main > .store-hero .hero-counter small {
+  color: #9bbab2;
+}
+@keyframes orbitPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    box-shadow: 0 0 4px #71f3cf;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 18px #71f3cf;
+  }
+}
+@keyframes orbitSpin {
+  from {
+    transform: translate(-50%, -50%) rotateZ(0);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+}
+@keyframes orbitSpinReverse {
+  from {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateZ(0);
+  }
+}
+@keyframes coreBreath {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+@media (max-width: 1250px) {
+  .app-main > .store-hero .hero-sign {
+    top: 17%;
+    width: 34vw;
+  }
+  .supply-orbit {
+    right: 1%;
+    top: 8%;
+    width: 51vw;
+    height: 420px;
+  }
+  .spatial-store {
+    width: 60vw;
+    bottom: 7%;
+  }
+  .app-main > .store-hero .scene-note {
+    top: 39%;
+    width: 31vw;
+  }
+}
+@media (max-width: 900px) {
+  .supply-orbit {
+    right: 0;
+    top: 7%;
+    width: 52vw;
+    height: 390px;
+  }
+  .orbit-node {
+    width: 80px;
+    height: 80px;
+  }
+  .orbit-core {
+    width: 116px;
+    height: 116px;
+  }
+  .spatial-store {
+    width: 62vw;
+    right: 2%;
+    bottom: 7%;
+  }
+  .app-main > .store-hero .hero-sign {
+    width: 37vw;
+    padding: 22px;
+  }
+  .app-main > .store-hero .hero-sign h1 {
+    font-size: clamp(42px, 5vw, 62px);
+  }
+  .app-main > .store-hero .scene-note {
+    left: 5%;
+    top: 38%;
+    width: 34vw;
+  }
+}
+@media (max-width: 700px) {
+  .app-main > .store-hero {
+    height: auto;
+    max-height: none;
+    min-height: 1180px;
+    overflow: hidden;
+    padding-top: 1px;
+  }
+  .app-main > .store-hero .store-backdrop {
+    object-position: 58% center;
+    opacity: 0.43;
+  }
+  .app-main > .store-hero .hero-sign {
+    left: 18px;
+    right: 18px;
+    top: 8%;
+    width: auto;
+    padding: 22px;
+  }
+  .app-main > .store-hero .hero-sign h1 {
+    font-size: 50px;
+  }
+  .app-main > .store-hero .scene-note {
+    left: 18px;
+    right: 18px;
+    top: 23%;
+    width: auto;
+    min-height: 42px;
+    font-size: 10px;
+  }
+  .supply-orbit {
+    left: 0;
+    right: 0;
+    top: 28%;
+    width: 100%;
+    height: 360px;
+    transform: scale(0.96);
+  }
+  .orbit-caption {
+    right: 20px;
+    top: 4px;
+  }
+  .orbit-stage {
+    inset: 15px 0 0;
+  }
+  .orbit-node {
+    width: 70px;
+    height: 70px;
+  }
+  .orbit-node span {
+    font-size: 20px;
+  }
+  .orbit-node small {
+    font-size: 8px;
+  }
+  .orbit-node-0 {
+    left: 6%;
+    top: 13%;
+  }
+  .orbit-node-1 {
+    right: 5%;
+    top: 18%;
+  }
+  .orbit-node-2 {
+    right: 7%;
+    bottom: 7%;
+  }
+  .orbit-node-3 {
+    left: 5%;
+    bottom: 5%;
+  }
+  .orbit-core {
+    width: 106px;
+    height: 106px;
+  }
+  .orbit-controls {
+    bottom: 0;
+    min-width: 205px;
+  }
+  .app-main > .store-hero .spatial-store {
+    left: 15px;
+    right: 15px;
+    top: 60%;
+    bottom: auto;
+    width: auto;
+    transform: perspective(1000px) rotateY(-2deg);
+    padding: 9px;
+  }
+  .spatial-header strong {
+    font-size: 12px;
+  }
+  .spatial-header button {
+    font-size: 7px;
+  }
+  .spatial-product {
+    min-height: 126px;
+    padding: 7px 6px;
+  }
+  .spatial-pack {
+    width: 34px;
+    height: 40px;
+    font-size: 18px;
+    margin: 7px 0;
+  }
+  .spatial-product strong {
+    font-size: 8px;
+  }
+  .spatial-product i {
+    font-size: 6px;
+  }
+  .spatial-bottom {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .spatial-bin {
+    min-height: 48px;
+    padding: 8px;
+  }
+  .spatial-bin strong {
+    font-size: 9px;
+  }
+  .app-main > .store-hero .hero-cta {
+    left: 18px;
+    right: 18px;
+    bottom: 3%;
+    gap: 8px;
+  }
+  .app-main > .store-hero .hero-cta button {
+    flex: 1;
+    height: 44px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+  .app-main > .store-hero .hero-counter {
+    display: none;
+  }
+}
+@media (max-width: 420px) {
+  .app-main > .store-hero {
+    min-height: 1210px;
+  }
+  .app-main > .store-hero .hero-sign h1 {
+    font-size: 45px;
+  }
+  .supply-orbit {
+    top: 28%;
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+  .app-main > .store-hero .spatial-store {
+    top: 59%;
+  }
+  .spatial-product {
+    min-height: 112px;
+  }
+  .spatial-product i {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring,
+  .orbit-live,
+  .core-glow {
+    animation: none !important;
+  }
+  .app-main > .store-hero *,
+  .app-main > .store-hero *:before,
+  .app-main > .store-hero *:after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
