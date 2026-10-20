@@ -233,6 +233,7 @@ const apiBase = ref(
 const sceneShell = ref(null)
 const canvasHost = ref(null)
 const roomRenderStatus = ref('正在加载高细节场景…')
+const businessMode = ref(false)
 const highDetailRoomLoaded = ref(false)
 const highDetailCafeLoaded = ref(false)
 const messageList = ref(null)
@@ -2218,6 +2219,28 @@ function initScene() {
 function zoomBy(delta) {
   zoom.value = Math.max(0.7, Math.min(1.35, zoom.value + delta))
 }
+function toggleBusinessMode() {
+  businessMode.value = !businessMode.value
+  if (scene) {
+    const business = businessMode.value
+    scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
+    if (scene.fog) {
+      scene.fog.color.setHex(business ? 0x17222b : 0x19150f)
+      scene.fog.density = business ? 0.009 : 0.013
+    }
+    if (renderer) renderer.toneMappingExposure = business ? 1.02 : 1.08
+    scene.traverse((object) => {
+      if (object.isLight && object.name === 'Warm_Deli_Practical_Lights') object.intensity = business ? 0 : object.intensity
+    })
+    const practicals = scene.getObjectByName('Warm_Deli_Practical_Lights')
+    if (practicals) {
+      practicals.children.forEach((light) => {
+        if (light.isLight) light.intensity = business ? 20 : 28
+      })
+    }
+  }
+  status.value = businessMode.value ? '商务写实主题已启用' : '童话主题已启用'
+}
 function resetView() {
   orbitAngle = 0
   orbitTilt = 0.12
@@ -2266,7 +2289,7 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
 </script>
 
 <template>
-  <section class="space3d">
+  <section class="space3d" :class="{ 'business-theme': businessMode }">
     <header class="space-top">
       <button class="back" @click="props.onBack" aria-label="返回杂货铺">‹</button>
       <div class="brand">
@@ -2292,6 +2315,9 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
       <div class="top-state">
         <i></i><span>协作空间在线</span><small>角色可用 · 等待调度</small>
       </div>
+      <button class="scene-mode-btn" @click="toggleBusinessMode" :aria-pressed="businessMode">
+        {{ businessMode ? '✦ 商务写实版' : '◈ 童话场景版' }}
+      </button>
       <button class="mode-btn" @click="mode = mode === 'demo' ? 'deepseek' : 'demo'">
         {{ mode === 'demo' ? '演示模式' : 'DeepSeek Runtime' }}
       </button>
@@ -2531,6 +2557,66 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
 </template>
 
 <style>
+
+/* Scene presets: keep the interactive 3D canvas, role controls and chat state intact. */
+.scene-mode-btn {
+  flex: 0 0 auto;
+  border: 1px solid #e7c28a66;
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #f8e6c7;
+  background: linear-gradient(135deg, #76502bdb, #282a2bcc);
+  box-shadow: 0 4px 18px #0003, inset 0 1px #ffffff1c;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.scene-mode-btn:hover { transform: translateY(-1px); border-color: #f6d7a4; }
+.business-theme .space-top {
+  background: linear-gradient(180deg, #101b24f5, #14212bd9);
+  border-bottom-color: #c5a16b66;
+}
+.business-theme .brand-orb {
+  background: radial-gradient(circle at 35% 25%, #f4d5a0, #9c6a36 72%);
+  box-shadow: 0 0 24px #d4a15c40;
+}
+.business-theme .glass-panel,
+.business-theme .chat-panel {
+  border-color: #d4b17a88;
+  background: linear-gradient(155deg, #17242bea, #101a23f2);
+  box-shadow: 0 20px 60px #0008, inset 0 1px #f2d5a02b;
+}
+.business-theme .left-glass { border-radius: 8px; }
+.business-theme .chat-panel { border-radius: 10px; }
+.business-theme .live-badge { color: #c6e7d2; border-color: #79c7a35c; }
+.business-theme .scene-mode-btn {
+  color: #17212a;
+  border-color: #f4d7a4;
+  background: linear-gradient(135deg, #f1d8aa, #c79b5b);
+}
+.business-theme .agent-label {
+  border-radius: 8px;
+  background: #17232bdc;
+  border-color: #ddc18c75;
+}
+.business-theme .agent-label.focused {
+  background: #26353edc;
+  box-shadow: 0 0 18px #e0b87335;
+}
+.business-theme .view-dock {
+  border-color: #d7b77c5c;
+  background: linear-gradient(120deg, #17232be8, #202b32df);
+}
+.business-theme .radar { border-color: #c5a16b9c; background: radial-gradient(circle, #d5ac6d30, transparent 72%), #101a20c9; }
+@media (max-width: 1180px) {
+  .scene-mode-btn { padding: 8px 9px; font-size: 10px; }
+}
+@media (max-width: 860px) {
+  .scene-mode-btn { display: none; }
+}
+
 .space3d {
   position: relative;
   height: 100vh;
