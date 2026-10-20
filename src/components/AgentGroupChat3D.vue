@@ -1459,6 +1459,9 @@ function createBusinessArchitecture() {
   add(new THREE.BoxGeometry(0.18, 7.2, 17.4), plaster, -9.65, 3.55, -0.1)
   add(new THREE.BoxGeometry(20.0, 7.2, 0.18), plaster, 0, 3.55, -8.75)
   // Full-height library wall: timber bays, five shelves per bay, and individually colored book spines.
+  const bookMaterials = [0x355b50, 0x7d4535, 0x263b50, 0xb28a50, 0x60486d, 0xc3b18a, 0x8b5c42].map((color) =>
+    material(color, 0.72),
+  )
   for (let bay = 0; bay < 7; bay++) {
     const x = -7.8 + bay * 2.6
     add(new THREE.BoxGeometry(2.42, 5.25, 0.24), walnut, x, 2.92, -8.42)
@@ -1470,8 +1473,7 @@ function createBusinessArchitecture() {
       for (let book = 0; book < 13; book++) {
         const bw = 0.105 + ((bay * 3 + level + book) % 3) * 0.018
         const bh = 0.48 + ((bay * 7 + level * 2 + book) % 5) * 0.075
-        const colors = [0x355b50, 0x7d4535, 0x263b50, 0xb28a50, 0x60486d, 0xc3b18a, 0x8b5c42]
-        const spine = material(colors[(bay + level + book) % colors.length], 0.72)
+        const spine = bookMaterials[(bay + level + book) % bookMaterials.length]
         const bx = x - 1.12 + book * 0.185
         add(new THREE.BoxGeometry(bw, bh, 0.12), spine, bx, y + 0.075 + bh / 2, -8.16)
         add(new THREE.BoxGeometry(bw * 0.62, 0.025, 0.012), brass, bx, y + 0.18, -8.09)
