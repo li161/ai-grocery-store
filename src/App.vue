@@ -351,11 +351,7 @@ onMounted(() => {
             autofocus
             placeholder="搜索 AI 工具，例如 Cursor、论文、设计..."
             @keyup.enter="handleSearchSubmit"
-          /><button
-            @click="handleSearchSubmit"
-          >
-            进入货架 →
-          </button>
+          /><button @click="handleSearchSubmit">进入货架 →</button>
         </div>
       </div>
     </transition>
