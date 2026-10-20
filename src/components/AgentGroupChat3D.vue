@@ -837,11 +837,23 @@ function buildBusinessRetailScene() {
     box(3.15, 0.08, 0.22, x, 0.035, -2.05, teal, retailRoot)
   }
   createRetailAisle()
-  const fixture = mat(0xe5f2ee, 0.28, 0.12, { emissive: 0xb8e7dc, emissiveIntensity: 0.35 })
+  const fixture = mat(0xe5f2ee, 0.28, 0.12, { emissive: 0xb8e7dc, emissiveIntensity: 0.55 })
+  const ceilingRail = mat(0x1b292d, 0.4, 0.55)
   for (const z of [-4.6, -1.0, 2.6]) {
-    box(12.8, 0.055, 0.13, 0, 5.9, z, teal, retailRoot)
+    box(12.8, 0.055, 0.13, 0, 5.9, z, ceilingRail, retailRoot)
     for (const x of [-5.1, -1.7, 1.7, 5.1]) {
       box(2.15, 0.045, 0.22, x, 5.82, z, fixture, retailRoot)
+    }
+    const aisleLight = new THREE.PointLight(0xd8fff2, 18, 8, 1.6)
+    aisleLight.position.set(0, 5.35, z)
+    retailRoot.add(aisleLight)
+  }
+  // Open ceiling trusses and column rhythm establish a larger commercial footprint.
+  const columnMat = mat(0x52656a, 0.42, 0.45)
+  for (const x of [-7.65, 7.65]) {
+    for (const z of [-5.4, -1.6, 2.2, 5.6]) {
+      box(0.18, 6.25, 0.18, x, 3.05, z, columnMat, retailRoot)
+      box(0.38, 0.12, 0.38, x, 6.18, z, amber, retailRoot)
     }
   }
   // Checkout island and circulation markings make this read as retail, not hospitality.
@@ -2386,8 +2398,8 @@ function toggleBusinessMode() {
     if (practicals) {
       practicals.children.forEach((light) => {
         if (light.isLight) {
-          light.color.setHex(business ? 0xffc77a : 0x8abfff)
-          light.intensity = business ? 28 : 17
+          light.color.setHex(business ? 0xe4fff5 : 0x8abfff)
+          light.intensity = business ? 8 : 17
         }
       })
     }
