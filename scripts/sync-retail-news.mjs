@@ -538,15 +538,13 @@ async function llm(system, data) {
 async function score(items) {
   const all = []
   for (let offset = 0; offset < items.length; offset += 60) {
-    const data = items
-      .slice(offset, offset + 60)
-      .map((x, i) => ({
-        index: offset + i,
-        title: x.title,
-        source: x.source,
-        lane: x.lane,
-        date: x.date,
-      }))
+    const data = items.slice(offset, offset + 60).map((x, i) => ({
+      index: offset + i,
+      title: x.title,
+      source: x.source,
+      lane: x.lane,
+      date: x.date,
+    }))
     const r = await llm(
       '你是零售平台动作情报筛选器。重点监控京东、拼多多、美团、淘宝/天猫/阿里等平台的新产品、新功能、商家工具、规则政策、流量/搜索推荐、广告、佣金费用、促销补贴、即时零售、履约和商家经营变化；不要求事件必须与AI直接相关。relevance=与零售平台及商家经营相关程度；impact=对商家定价、流量、投放、转化、库存、履约、利润和运营流程的潜在影响；novelty=新颖程度；evidence=证据可信度。均0-100。keep仅在relevance>=55且impact>=40时为true。仅凭标题可推断时要保守，不得编造事实。输出JSON数组，并保留index。',
       data,
@@ -619,18 +617,16 @@ function scoreEvents(events) {
     .sort((a, b) => b.heatScore - a.heatScore)
 }
 async function enrich(events) {
-  const data = events
-    .slice(0, 20)
-    .map((e, i) => ({
-      index: i,
-      id: e.id,
-      title: e.title,
-      heatScore: e.heatScore,
-      sourceCount: e.sourceCount,
-      latestAt: e.latestAt,
-      lane: e.lane,
-      reports: e.items.slice(0, 3).map((x) => ({ title: x.title, source: x.source, date: x.date })),
-    }))
+  const data = events.slice(0, 20).map((e, i) => ({
+    index: i,
+    id: e.id,
+    title: e.title,
+    heatScore: e.heatScore,
+    sourceCount: e.sourceCount,
+    latestAt: e.latestAt,
+    lane: e.lane,
+    reports: e.items.slice(0, 3).map((x) => ({ title: x.title, source: x.source, date: x.date })),
+  }))
   const r = await llm(
     '你是零售平台与商家经营情报分析师。只基于事件标题和报道资料生成summary(平台做了什么，<=70字)、why(为什么值得零售经营者关注，<=55字)、watch(下一步验证什么，<=55字)、merchantImpact(商家可能受到什么影响，<=70字)、merchantActions(建议商家检查或准备的动作，数组最多3项，每项<=35字)、impactConfidence(只能是 high/medium/low)。商家影响与动作属于分析推断，不得写成已发生事实；证据不足时明确写“待核实”。不得编造数字。输出JSON数组并保留index。',
     data,

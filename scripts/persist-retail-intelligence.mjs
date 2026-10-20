@@ -216,22 +216,18 @@ let events = [...eventMap.values()]
   .slice(0, 300)
 
 // 3. Multi-source verification compares only the reports actually stored in the event.
-const candidates = events
-  .slice(0, 30)
-  .map((e, index) => ({
-    index,
-    id: e.id,
-    title: e.title,
-    reports: e.reports
-      .slice(-8)
-      .map((x) => ({
-        date: x.date,
-        source: x.source,
-        domain: x.sourceDomain,
-        title: x.title,
-        excerpt: x.articleExcerpt && x.articleExcerpt.slice(0, 900),
-      })),
-  }))
+const candidates = events.slice(0, 30).map((e, index) => ({
+  index,
+  id: e.id,
+  title: e.title,
+  reports: e.reports.slice(-8).map((x) => ({
+    date: x.date,
+    source: x.source,
+    domain: x.sourceDomain,
+    title: x.title,
+    excerpt: x.articleExcerpt && x.articleExcerpt.slice(0, 900),
+  })),
+}))
 const checks = await llm(
   '你是多来源事实核验器。只能比较输入中的原始报道摘录，不可调用外部知识。status只能是 verified、partially_verified、needs_review。verified要求至少2个独立来源支持核心事实且没有明显冲突；partially_verified表示只有部分事实得到支持或只有一个来源；needs_review表示来源不足、正文不可读或存在冲突。不要把企业计划、意向、预计数字写成已发生结果。输出JSON数组：index,status,confirmedFacts[],uncertainFacts[],conflicts[],nextChecks[]。',
   candidates,
