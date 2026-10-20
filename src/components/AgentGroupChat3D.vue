@@ -1689,8 +1689,16 @@ function moveFocusedAgent(dx, dz, fast = false) {
   }
 
   const step = fast ? 0.42 : 0.22
-  const nextX = THREE.MathUtils.clamp(character.position.x + dx * step, -8.35, 8.35)
-  const nextZ = THREE.MathUtils.clamp(character.position.z + dz * step, -7.35, 8.1)
+  const nextX = THREE.MathUtils.clamp(
+    character.position.x + dx * step,
+    -8.35,
+    8.35,
+  )
+  const nextZ = THREE.MathUtils.clamp(
+    character.position.z + dz * step,
+    -7.35,
+    8.1,
+  )
 
   character.position.x = nextX
   character.position.z = nextZ
@@ -2005,11 +2013,41 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
               <span>角色移动</span>
               <b>{{ selectedAgent.name }}</b>
             </div>
-            <button class="move-up" aria-label="向前移动" title="向前 (↑ / W)" @click="moveFocusedAgent(0, -1)">↑</button>
-            <button class="move-left" aria-label="向左移动" title="向左 (← / A)" @click="moveFocusedAgent(-1, 0)">←</button>
-            <button class="move-stop" aria-label="回到聚焦角色" title="当前控制对象">{{ selectedAgent.emoji }}</button>
-            <button class="move-right" aria-label="向右移动" title="向右 (→ / D)" @click="moveFocusedAgent(1, 0)">→</button>
-            <button class="move-down" aria-label="向后移动" title="向后 (↓ / S)" @click="moveFocusedAgent(0, 1)">↓</button>
+            <button
+              class="move-up"
+              aria-label="向前移动"
+              title="向前 (↑ / W)"
+              @click="moveFocusedAgent(0, -1)"
+            >
+              ↑
+            </button>
+            <button
+              class="move-left"
+              aria-label="向左移动"
+              title="向左 (← / A)"
+              @click="moveFocusedAgent(-1, 0)"
+            >
+              ←
+            </button>
+            <button class="move-stop" aria-label="当前控制对象" title="当前控制对象">
+              {{ selectedAgent.emoji }}
+            </button>
+            <button
+              class="move-right"
+              aria-label="向右移动"
+              title="向右 (→ / D)"
+              @click="moveFocusedAgent(1, 0)"
+            >
+              →
+            </button>
+            <button
+              class="move-down"
+              aria-label="向后移动"
+              title="向后 (↓ / S)"
+              @click="moveFocusedAgent(0, 1)"
+            >
+              ↓
+            </button>
             <small>先点击角色切换控制对象 · Shift 加速</small>
           </div>
           <div class="agent-labels">
@@ -3314,13 +3352,33 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
   cursor: pointer;
   transition: background .15s ease, transform .15s ease;
 }
-.movement-pad button:hover { background: #315772; }
-.movement-pad button:active { transform: scale(.94); }
-.movement-pad .move-up { grid-column: 2; grid-row: 2; }
-.movement-pad .move-left { grid-column: 1; grid-row: 3; }
-.movement-pad .move-stop { grid-column: 2; grid-row: 3; font-size: 18px; }
-.movement-pad .move-right { grid-column: 3; grid-row: 3; }
-.movement-pad .move-down { grid-column: 2; grid-row: 4; }
+.movement-pad button:hover {
+  background: #315772;
+}
+.movement-pad button:active {
+  transform: scale(0.94);
+}
+.movement-pad .move-up {
+  grid-column: 2;
+  grid-row: 2;
+}
+.movement-pad .move-left {
+  grid-column: 1;
+  grid-row: 3;
+}
+.movement-pad .move-stop {
+  grid-column: 2;
+  grid-row: 3;
+  font-size: 18px;
+}
+.movement-pad .move-right {
+  grid-column: 3;
+  grid-row: 3;
+}
+.movement-pad .move-down {
+  grid-column: 2;
+  grid-row: 4;
+}
 .movement-pad small {
   grid-column: 1 / -1;
   color: #91a9bb;
