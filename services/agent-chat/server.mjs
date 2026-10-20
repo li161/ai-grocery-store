@@ -1,6 +1,7 @@
 import http from 'node:http'
 import { randomUUID } from 'node:crypto'
 import { taskStore } from './src/task-store.mjs'
+import { conversationStore } from './src/conversation-store.mjs'
 import { executeAgentRun, validateTaskGraph } from './src/harness/runtime.mjs'
 
 const port = Number(process.env.PORT || 8787)
@@ -52,14 +53,14 @@ function rateLimited(ip) {
   entry.count += 1
   return entry.count > rateLimitMax
 }
-function readJson(req) {
+function readJson(req, bodyLimit = maxBody) {
   return new Promise((resolve, reject) => {
     let size = 0
     const chunks = []
     req.on('data', (chunk) => {
       size += chunk.length
-      if (size > maxBody) {
-        reject(Object.assign(new Error('Request body exceeds 64 KB'), { status: 413 }))
+      if (size > bodyLimit) {
+        reject(Object.assign(new Error('Request body exceeds request limit'), { status: 413 }))
         req.destroy()
         return
       }
@@ -147,16 +148,51 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
     if (req.method === 'GET' && url.pathname === '/health') {
       const database = await taskStore.checkConnection()
+      const conversations = await conversationStore.checkConnection()
       const configured = Boolean(process.env.DATABASE_URL)
-      const healthy = !configured || database.connected
+      const healthy = !configured || (database.connected && conversations.connected)
       return send(res, healthy ? 200 : 503, {
         ok: healthy,
         service: 'ai-grocery-store-agent-api',
         provider: 'DeepSeek',
         model: deepseekModel,
         taskStorage: database.storage,
-        database: { configured, connected: database.connected },
+        database: { configured, connected: database.connected && conversations.connected },
+        conversationStorage: conversations.storage,
       })
+    }
+    if (url.pathname === '/api/conversations' && req.method === 'GET') {
+      const ownerId = String(req.headers['x-client-id'] || '').trim()
+      if (!/^[a-zA-Z0-9_-]{16,100}$/.test(ownerId))
+        return send(res, 400, { error: 'X-Client-Id header is required', traceId })
+      const conversations = await conversationStore.list(ownerId)
+      return send(res, 200, { traceId, conversations })
+    }
+    if (url.pathname.startsWith('/api/conversations/') && req.method === 'PUT') {
+      const ownerId = String(req.headers['x-client-id'] || '').trim()
+      if (!/^[a-zA-Z0-9_-]{16,100}$/.test(ownerId))
+        return send(res, 400, { error: 'X-Client-Id header is required', traceId })
+      const id = decodeURIComponent(url.pathname.slice('/api/conversations/'.length))
+      if (!id || id.includes('/')) return send(res, 400, { error: 'invalid conversation id', traceId })
+      let input
+      try {
+        input = await readJson(req, 1024 * 1024)
+      } catch (error) {
+        return send(res, error.status || 400, { error: error.message || 'Invalid request', traceId })
+      }
+      const conversation = await conversationStore.upsert(ownerId, { ...input, id })
+      return send(res, 200, { traceId, conversation })
+    }
+    if (url.pathname.startsWith('/api/conversations/') && req.method === 'DELETE') {
+      const ownerId = String(req.headers['x-client-id'] || '').trim()
+      if (!/^[a-zA-Z0-9_-]{16,100}$/.test(ownerId))
+        return send(res, 400, { error: 'X-Client-Id header is required', traceId })
+      const id = decodeURIComponent(url.pathname.slice('/api/conversations/'.length))
+      if (!id || id.includes('/')) return send(res, 400, { error: 'invalid conversation id', traceId })
+      const deleted = await conversationStore.remove(ownerId, id)
+      return deleted
+        ? send(res, 200, { traceId, deleted: true })
+        : send(res, 404, { error: 'Conversation not found', traceId })
     }
     if (req.method === 'GET' && url.pathname.startsWith('/api/tasks/')) {
       const taskId = decodeURIComponent(url.pathname.slice('/api/tasks/'.length))
