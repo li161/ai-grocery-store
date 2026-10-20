@@ -13,7 +13,7 @@ const assets = [
   },
   {
     name: 'breakfast_room.bin',
-    url: sourceRoot + '/gltf/breakfast_room.bin',
+    url: 'https://media.githubusercontent.com/media/ErfanMo77/gltf-research-scenes/main/scenes/breakfast-room/gltf/breakfast_room.bin',
     minBytes: 12000000
   }
 ]
