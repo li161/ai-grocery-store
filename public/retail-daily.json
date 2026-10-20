@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "generatedAt": "2026-10-20T19:15:34.407Z",
+  "generatedAt": "2026-10-20T23:52:19.350Z",
   "title": "AI 零售日报",
   "lead": "日报于 2026-10-20 自动重建：近 7 日发现 160 条有日期和原文链接的信号，筛出 6 个优先事件（来源标识 8 个）。请以原文核验事实与经营影响。",
   "sections": [
@@ -20,6 +20,15 @@
       "date": "2026-10-15",
       "source": "Grocery Trade News",
       "sourceUrl": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9CdC02T2hJT3p0TEhXd051bUJhT2lIRlRtcDVOb0d5YmFVenFiUno0eGFDV2NlVHdNZWFOU0VRZjhaalVLWlExZ01UVnhDYm5ReGZwZDlnTzdaX2lTdXFZS0pkM3ppekRKaXc",
+      "evidence": "可追溯"
+    },
+    {
+      "title": "Klarna Takes BNPL Beyond Retail with Fiserv Partnership - PaymentsJournal",
+      "summary": "信源原文自动同步；事实以原始报道为准。",
+      "eventId": "event-1fl1dqe",
+      "date": "2026-10-19",
+      "source": "PaymentsJournal",
+      "sourceUrl": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNeFhFMTFISTlzZGZqeDQwT3hwa1hJMkh5Y2tBSXF2dmpXX1FaVF9oTzVqemJvY2NXVjU0Ykcwc2JQWGZFUEpkbTU1U2dINUNCVDVZWUNQcUo2aEY4RHFfSnZfLTBWZFdWNzEyOFFOcDdqWnhtd0dLNXhsNG53TWRKWnlJWGFmSlRRNWliR3hYWndsd9IBlwFBVV95cUxOY1B6VUFpNG1hMWh4WkxPb3ZYczN4d2RiZkxwZ1Zmbm5RckVuSjU1cTJLUkVhc1hxZDBLd1AwWG52YkVWSkFFV1Bfb0JVamUxOS14NXFBNFF6dnNaQ2E2LUNpMnp1U2Rid3diUWgzaGVZNUFRVVZqVWItMnVOcWgxS3dMYngxdzNWcWM4cEI2cFdia0hhTkQ4",
       "evidence": "可追溯"
     },
     {
@@ -48,23 +57,14 @@
       "source": "FinTech Global",
       "sourceUrl": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPdlFCRVlWQnJEV0FlRVM4WGNGdFNhMXdMR1hWWldZSW1kYm01Tm5namFiVmtySGhpTHB2VU90UzYzVWd4cVVaVnJ1d044cEt6U1ZJNWpNZThOWllOM2lxM3VYS2gtaHJGeXlHZDJxSElybnFuUVpxN2c4eWRVQnk5TURhMkN2M1dSWjFIVm5KdG4",
       "evidence": "可追溯"
-    },
-    {
-      "title": "Skyfire and Forter Enrich Trusted Agentic Commerce Decisions at Checkout - Business Wire",
-      "summary": "信源原文自动同步；事实以原始报道为准。",
-      "eventId": "event-1225ych",
-      "date": "2026-10-19",
-      "source": "Business Wire",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQdXpQNHQxbk1CY2VydVB1YWctYm16SXpPbWFrU2pqSU9zME5tc3c5LTJxaUFJSkthWlFyU19XdVlvMmdPYWxYUVhoZENuNEJ0eEY3Y2luVWhaT1lBdXFQZDNVbHE1OXdhc1hjZVFiNFBySklUNElZRlBqUEUtTVJmZWY2SThCTlM5TUx3NmZUckxtUjlHSkxrRmFnTWpUclNGaWh1VjByTlg3eDdoazVXMVlvajFEZ0VTbGhNRGYybHNzSlNSd051Ug",
-      "evidence": "可追溯"
     }
   ],
   "watchlist": [
     "核验「NRF forecasts 4.2% holiday sales growth, muted s」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Nedap RFID Self-Checkout Expands as Q3 Sales Ris」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
+    "核验「Klarna Takes BNPL Beyond Retail with Fiserv Part」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Stable and time-aware explanations for supply-ch」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「Shoplazza to Span TikTok’s AI Ads Hub and Buy Di」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「Skyfire and Forter target fraud in AI agent chec」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
+    "核验「Shoplazza to Span TikTok’s AI Ads Hub and Buy Di」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
   ],
   "method": "多源采集 → 日期与原文链接校验 → 事件去重 → 来源追溯 → 日报重建",
   "factBoundary": "日报是公开信号导航，不等同于事实确认；关键结论需核对原始公告、报道正文或财报。",
