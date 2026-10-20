@@ -187,6 +187,76 @@ function createBookcase(x,z,width=2.5,height=4.6,depth=.48,side=false){
  return g
 }
 let roomRoot, woodMat, darkWoodMat, brassMat, plasterMat, marbleMat, floorMat, bookMaterials
+
+// Full-size supermarket gondola: metal uprights, loaded shelves, real product silhouettes,
+// front-facing package labels, and price rails. Kept separate from the legacy room furniture.
+function createGroceryGondola(x,z,width=2.65,height=2.35,depth=0.88){
+ const g=new THREE.Group();g.position.set(x,0,z);roomRoot.add(g)
+ const steel=mat(0x56636a,.42,.62),darkSteel=mat(0x26343a,.48,.52),shelfMetal=mat(0xc7cdd0,.32,.48)
+ const rail=mat(0xf0e6cf,.42,.08),labelInk=mat(0x25323a,.62,.02)
+ const uprights=[-width/2+.045,width/2-.045]
+ for(const px of uprights){
+  mesh(new RoundedBoxGeometry(.075,height,.09,3,.012),steel,[px,height/2,0],g)
+  for(let y=.12;y<height;y+=.16)mesh(new THREE.BoxGeometry(.083,.018,.095),darkSteel,[px,y,0],g)
+ }
+ mesh(new RoundedBoxGeometry(width,.07,.12,3,.015),darkSteel,[0,height-.04,0],g)
+ mesh(new RoundedBoxGeometry(width+.08,.045,.1,3,.012),steel,[0,.06,0],g)
+ const levelYs=[.27,.78,1.29,1.80]
+ const packageColors=[0x3b8d67,0xe1b94f,0xc94e43,0x4e7fae,0xf0e7d5,0x8c68a8,0x78a8a1,0xd98542]
+ let seed=Math.abs(Math.floor((x+18)*7919+(z+18)*104729))||1
+ const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+ for(let side of [-1,1]){
+  const front=side*(depth/2)
+  for(let row=0;row<levelYs.length;row++){
+   const y=levelYs[row]
+   mesh(new RoundedBoxGeometry(width,.055,depth,3,.012),shelfMetal,[0,y,0],g)
+   mesh(new THREE.BoxGeometry(width,.035,.055),darkSteel,[0,y+.025,front*.96],g)
+   mesh(new RoundedBoxGeometry(width-.05,.075,.025,2,.008),rail,[0,y+.065,front*1.035],g)
+   // A continuous price strip with individual ticket cards.
+   for(let px=-width/2+.16;px<width/2-.1;px+=.42){
+    mesh(new THREE.BoxGeometry(.34,.043,.009),labelInk,[px,y+.065,front*1.065],g)
+    mesh(new THREE.BoxGeometry(.17,.008,.01),mat(0xfff7e7,.7),[px-.055,y+.069,front*1.08],g)
+    mesh(new THREE.BoxGeometry(.07,.008,.01),mat(0xd76a42,.6),[px+.095,y+.069,front*1.08],g)
+   }
+   let px=-width/2+.11
+   while(px<width/2-.12){
+    const pw=.13+random()*.12,ph=.22+random()*.25,color=packageColors[Math.floor(random()*packageColors.length)]
+    const product=mat(color,.4,.05),productFront=front+side*.012
+    if(random()<.28){
+     const radius=.045+random()*.018,canH=Math.min(ph,.28)
+     mesh(new THREE.CylinderGeometry(radius,radius,canH,18),product,[px+pw/2,y+.055+canH/2,productFront],g)
+     mesh(new THREE.CylinderGeometry(radius*.92,radius*.92,.012,18),mat(0xd9dfe1,.24,.62),[px+pw/2,y+.055+canH,productFront],g)
+     mesh(new THREE.BoxGeometry(radius*1.25,.055,.008),rail,[px+pw/2,y+.055+canH*.52,productFront+side*.04],g)
+    }else{
+     mesh(new RoundedBoxGeometry(pw,ph,.13,3,.012),product,[px+pw/2,y+.055+ph/2,productFront],g)
+     mesh(new THREE.BoxGeometry(pw*.68,.025,.008),rail,[px+pw/2,y+.055+ph*.68,productFront+side*.071],g)
+     mesh(new THREE.BoxGeometry(pw*.44,.012,.009),darkSteel,[px+pw/2,y+.055+ph*.53,productFront+side*.072],g)
+    }
+    px+=pw+.025
+   }
+  }
+ }
+ // Feet and stabilizers keep the fixture grounded rather than floating like a decorative prop.
+ for(const px of uprights)for(const zz of [-depth/2+.08,depth/2-.08]){
+  mesh(new RoundedBoxGeometry(.18,.055,.24,3,.012),darkSteel,[px,.035,zz],g)
+ }
+ return g
+}
+function createRetailAisle(){
+ // Three clearly readable, freestanding supermarket gondolas behind the people,
+ // plus a category header so the scene reads as retail rather than a library.
+ createGroceryGondola(-5.6,-2.05,2.7,2.25,.9)
+ createGroceryGondola(-1.85,-2.05,2.7,2.25,.9)
+ createGroceryGondola(1.9,-2.05,2.7,2.25,.9)
+ createGroceryGondola(5.55,-2.05,2.7,2.25,.9)
+ const headerMat=mat(0x173c43,.36,.22),headerText=mat(0xf4e5bd,.46,.02,{emissive:0x45351c,emissiveIntensity:.18})
+ for(const [x,labelColor] of [[-5.6,0xe6b54c],[-1.85,0x65bca0],[1.9,0x5e9cc7],[5.55,0xd67d57]]){
+  mesh(new RoundedBoxGeometry(2.48,.3,.12,4,.025),headerMat,[x,2.58,-2.05],roomRoot)
+  mesh(new THREE.BoxGeometry(1.7,.035,.014),mat(labelColor,.4,.08),[x,2.58,-1.975],roomRoot)
+  // Category marker dots mimic real aisle end-cap signage without text textures.
+  for(let j=0;j<5;j++)mesh(new THREE.SphereGeometry(.035,10,8),headerText,[x-.78+j*.39,2.58,-1.96],roomRoot)
+ }
+}
 function buildLibraryRoom(){
  roomRoot=new THREE.Group();scene.add(roomRoot)
  const woodTex=makeWoodTexture(), floorTex=makeWoodTexture(), marbleTex=makeMarbleTexture()
@@ -568,6 +638,28 @@ function onCanvasPointerUp(e){
  }
  pointerDown=null
 }
+function onSceneKeyDown(e){
+ // Keyboard movement is active after a character has been focused; keep typing controls untouched.
+ const target=e.target
+ if(target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select, [contenteditable="true"]')))return
+ const key=e.key.toLowerCase()
+ const directions={
+  arrowup:[0,-1],w:[0,-1],
+  arrowdown:[0,1],s:[0,1],
+  arrowleft:[-1,0],a:[-1,0],
+  arrowright:[1,0],d:[1,0]
+ }
+ const direction=directions[key]
+ if(!direction)return
+ const character=characterGroups.get(focusAgent.value)
+ if(!character)return
+ e.preventDefault()
+ const step=e.shiftKey ? 0.42 : 0.18
+ character.position.x=THREE.MathUtils.clamp(character.position.x+direction[0]*step,-8.35,8.35)
+ character.position.z=THREE.MathUtils.clamp(character.position.z+direction[1]*step,-7.35,8.1)
+ character.userData.moveFacing=Math.atan2(direction[0],direction[1])
+ motion.value='idle'
+}
 function initScene(){
  const host=canvasHost.value;if(!host)return
  const headlessRender=navigator.webdriver===true
@@ -582,7 +674,7 @@ function initScene(){
  const sun=new THREE.DirectionalLight(0xffd8a4,2.35);sun.position.set(-7,10,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;sun.shadow.bias=-.00022;scene.add(sun)
  const fill=new THREE.DirectionalLight(0xfff4e7,.72);fill.position.set(5,7,3);scene.add(fill)
  const warm=new THREE.PointLight(0xffc06e,22,16);warm.position.set(-1,5,0);scene.add(warm)
- buildLibraryRoom();buildCharacter();raycaster=new THREE.Raycaster()
+ buildLibraryRoom();createRetailAisle();buildCharacter();raycaster=new THREE.Raycaster()
  // Use the custom-built retail scene as the single source of truth. Loading the benchmark café GLTF here
  // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
  highDetailRoomLoaded.value=true
@@ -602,10 +694,10 @@ function initScene(){
  host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',()=>{pointerDown=null})
  const wheel=e=>{e.preventDefault();zoom.value=Math.max(.7,Math.min(1.35,zoom.value+(e.deltaY>0?-.055:.055)))}
  host.addEventListener('wheel',wheel,{passive:false})
- sceneListeners=[[host,'pointerdown',down],[host,'pointermove',move],[host,'pointerup',up],[host,'wheel',wheel]]
+ window.addEventListener('keydown',onSceneKeyDown);sceneListeners=[[host,'pointerdown',down],[host,'pointermove',move],[host,'pointerup',up],[host,'wheel',wheel],[window,'keydown',onSceneKeyDown]]
  const animate=()=>{
   raf=requestAnimationFrame(animate);const t=sceneClock.getElapsedTime()
-  for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
+  for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Number.isFinite(g.userData.moveFacing)?g.userData.moveFacing:Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
   const highDetail=highDetailRoomLoaded.value
   const radius=(highDetail?12.8:15.5)/zoom.value
   const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,highDetail?2.7+orbitTilt*4:5.4+orbitTilt*8,(highDetail?-.5:3.0)+Math.cos(orbitAngle)*radius)
