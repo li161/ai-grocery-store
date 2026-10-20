@@ -347,12 +347,12 @@ onMounted(() => {
             autofocus
             placeholder="搜索 AI 工具，例如 Cursor、论文、设计..."
             @keyup.enter="
-              showSearch = false
+              showSearch = false;
               navigate('tools')
             "
           /><button
             @click="
-              showSearch = false
+              showSearch = false;
               navigate('tools')
             "
           >
