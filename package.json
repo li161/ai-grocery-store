@@ -7,6 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run lint && npm run build",
     "sync:retail": "node scripts/sync-retail-news.mjs",
     "sync:platform": "node scripts/sync-platform-actions.mjs",
     "predev": "node scripts/fetch-render-assets.mjs",
@@ -20,7 +25,13 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
     "@vitejs/plugin-vue": "^6.0.9",
-    "vite": "^8.3.0"
+    "eslint": "^9.39.0",
+    "eslint-plugin-vue": "^10.5.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.6.2",
+    "vite": "^8.3.0",
+    "vue-eslint-parser": "^10.2.0"
   }
 }
