@@ -39,8 +39,8 @@ function setCors(req, res) {
     res.setHeader('access-control-allow-origin', origin)
     res.setHeader('vary', 'Origin')
   }
-  res.setHeader('access-control-allow-methods', 'GET, POST, OPTIONS')
-  res.setHeader('access-control-allow-headers', 'content-type, idempotency-key')
+  res.setHeader('access-control-allow-methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.setHeader('access-control-allow-headers', 'content-type, idempotency-key, x-client-id')
   return true
 }
 function rateLimited(ip) {
