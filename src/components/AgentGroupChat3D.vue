@@ -1696,7 +1696,7 @@ function buildCharacter() {
   characterHitMeshes.push(...businessHitMeshes)
 }
 
-const LIBRARY_SCENE_URL = '/models/breakfast_room_extended.gltf'
+const LIBRARY_SCENE_URL = `${import.meta.env.BASE_URL}models/breakfast_room_extended.gltf`
 function normalizeAsset(root, targetWidth) {
   root.updateMatrixWorld(true)
   const bounds = new THREE.Box3().setFromObject(root)
@@ -2365,8 +2365,8 @@ function initScene() {
   highDetailRoomLoaded.value = true
   highDetailCafeLoaded.value = true
   roomRenderStatus.value = businessMode.value
-    ? '精品书店咖啡馆 · PBR 材质 · 实时阴影与暖光'
-    : '童话零售空间 · 实时 3D 场景'
+    ? '商务书店咖啡馆 · 程序化 3D 场景 · 实时灯光'
+    : '童话零售空间 · 程序化 3D 场景'
   // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
   const initialWidth = Math.max(1, host.clientWidth),
     initialHeight = Math.max(1, host.clientHeight)
