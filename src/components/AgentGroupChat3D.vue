@@ -2252,15 +2252,15 @@ function initScene() {
   const warm = new THREE.PointLight(0xffc06e, 22, 16)
   warm.position.set(-1, 5, 0)
   scene.add(warm)
-  // The reference composition is a bookstore café, not a grocery aisle. Keep the café architecture as the only environment layer; the legacy aisle and duplicate bar were overlapping it and visually fighting the reference layout.
+  // Keep the two environments distinct: business mode uses the premium bookstore café;
+  // fairytale mode uses the separate retail-world set. Hide the legacy room to prevent overlap.
   buildLibraryRoom()
   createBusinessArchitecture()
   buildBusinessRetailScene()
   const cafeArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
   const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
-  // Business and fairytale modes now switch between separate environment geometry.
-  if (cafeArchitecture) cafeArchitecture.visible = !businessMode.value
-  if (retailScene) retailScene.visible = businessMode.value
+  if (cafeArchitecture) cafeArchitecture.visible = businessMode.value
+  if (retailScene) retailScene.visible = !businessMode.value
   if (roomRoot) roomRoot.visible = false
   buildCharacter()
   raycaster = new THREE.Raycaster()
@@ -2384,9 +2384,10 @@ function toggleBusinessMode() {
   if (scene) {
     const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
     const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
-    // Switch whole environment layers; SpongeBob agents and chat UI remain shared.
-    if (businessArchitecture) businessArchitecture.visible = !businessMode.value
-    if (retailScene) retailScene.visible = businessMode.value
+    // Business = premium bookstore café; fairytale = separate retail-world set.
+    // SpongeBob agents, interaction targets and chat UI remain shared.
+    if (businessArchitecture) businessArchitecture.visible = businessMode.value
+    if (retailScene) retailScene.visible = !businessMode.value
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
     if (scene.fog) {
