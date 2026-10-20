@@ -81,16 +81,41 @@ try {
   })
   await page.goto(baseUrl + '/#agent-chat', { waitUntil: 'domcontentloaded', timeout: 30000 })
   await page.waitForSelector('.scene-shell .three-canvas canvas', { timeout: 20000 })
-  await page.waitForFunction(
-    () => {
-      const canvas = document.querySelector('.scene-shell .three-canvas canvas')
-      return Boolean(
-        canvas && canvas.width > 300 && canvas.height > 200 && canvas.clientWidth > 300,
-      )
-    },
-    null,
-    { timeout: 20000 },
-  )
+  // The component can mount while its route/layout is still settling in headless Chromium.
+  // Trigger one layout pass and wait on the actual CSS box as well as the WebGL drawing buffer.
+  await page.evaluate(() => window.dispatchEvent(new Event('resize')))
+  try {
+    await page.waitForFunction(
+      () => {
+        const canvas = document.querySelector('.scene-shell .three-canvas canvas')
+        const box = canvas?.getBoundingClientRect()
+        return Boolean(
+          canvas &&
+            box &&
+            box.width > 300 &&
+            box.height > 200 &&
+            canvas.width > 0 &&
+            canvas.height > 0,
+        )
+      },
+      null,
+      { timeout: 20000 },
+    )
+  } catch (error) {
+    const diagnostics = await page.evaluate(() => {
+      const host = document.querySelector('.scene-shell .three-canvas')
+      const canvas = host?.querySelector('canvas')
+      const box = canvas?.getBoundingClientRect()
+      const hostBox = host?.getBoundingClientRect()
+      return {
+        url: location.href,
+        hostBox: hostBox ? { width: hostBox.width, height: hostBox.height } : null,
+        canvasBox: box ? { width: box.width, height: box.height } : null,
+        drawingBuffer: canvas ? { width: canvas.width, height: canvas.height } : null,
+      }
+    })
+    throw new Error('3D canvas did not reach a visible render size: ' + JSON.stringify(diagnostics))
+  }
   // Wait for either the high-detail GLB or the explicit procedural fallback state.
   // The production browser may be able to fetch the asset CDN even if a restricted CI network cannot.
   await page.waitForFunction(
