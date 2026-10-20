@@ -1681,15 +1681,38 @@ function onCanvasPointerUp(e) {
   }
   pointerDown = null
 }
+function moveFocusedAgent(dx, dz, fast = false) {
+  const character = characterGroups.get(focusAgent.value)
+  if (!character) {
+    status.value = '场景角色尚未加载，请稍后再试'
+    return
+  }
+
+  const step = fast ? 0.42 : 0.22
+  const nextX = THREE.MathUtils.clamp(character.position.x + dx * step, -8.35, 8.35)
+  const nextZ = THREE.MathUtils.clamp(character.position.z + dz * step, -7.35, 8.1)
+
+  character.position.x = nextX
+  character.position.z = nextZ
+  if (dx !== 0 || dz !== 0) {
+    character.userData.moveFacing = Math.atan2(dx, dz)
+  }
+  motion.value = 'idle'
+  const agent = agents.find((item) => item.id === focusAgent.value)
+  status.value = (agent?.name || '当前角色') + ' 已移动'
+}
+
 function onSceneKeyDown(e) {
-  // Keyboard movement is active after a character has been focused; keep typing controls untouched.
+  // Keep typing in the chat composer separate from 3D movement.
   const target = e.target
   if (
     target instanceof HTMLElement &&
     (target.isContentEditable ||
       target.closest('input, textarea, select, [contenteditable="true"]'))
-  )
+  ) {
     return
+  }
+
   const key = e.key.toLowerCase()
   const directions = {
     arrowup: [0, -1],
@@ -1703,22 +1726,9 @@ function onSceneKeyDown(e) {
   }
   const direction = directions[key]
   if (!direction) return
-  const character = characterGroups.get(focusAgent.value)
-  if (!character) return
+
   e.preventDefault()
-  const step = e.shiftKey ? 0.42 : 0.18
-  character.position.x = THREE.MathUtils.clamp(
-    character.position.x + direction[0] * step,
-    -8.35,
-    8.35,
-  )
-  character.position.z = THREE.MathUtils.clamp(
-    character.position.z + direction[1] * step,
-    -7.35,
-    8.1,
-  )
-  character.userData.moveFacing = Math.atan2(direction[0], direction[1])
-  motion.value = 'idle'
+  moveFocusedAgent(direction[0], direction[1], e.shiftKey)
 }
 function initScene() {
   const host = canvasHost.value
@@ -1989,6 +1999,18 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
           <div class="environment-label">
             LIBRARY CAFÉ <span>·</span> {{ roomRenderStatus }}
             <small>Environment: The Breakfast Room by Wig42 · CC BY 3.0</small>
+          </div>
+          <div class="movement-pad" aria-label="角色移动控制">
+            <div class="movement-pad-heading">
+              <span>角色移动</span>
+              <b>{{ selectedAgent.name }}</b>
+            </div>
+            <button class="move-up" aria-label="向前移动" title="向前 (↑ / W)" @click="moveFocusedAgent(0, -1)">↑</button>
+            <button class="move-left" aria-label="向左移动" title="向左 (← / A)" @click="moveFocusedAgent(-1, 0)">←</button>
+            <button class="move-stop" aria-label="回到聚焦角色" title="当前控制对象">{{ selectedAgent.emoji }}</button>
+            <button class="move-right" aria-label="向右移动" title="向右 (→ / D)" @click="moveFocusedAgent(1, 0)">→</button>
+            <button class="move-down" aria-label="向后移动" title="向后 (↓ / S)" @click="moveFocusedAgent(0, 1)">↓</button>
+            <small>先点击角色切换控制对象 · Shift 加速</small>
           </div>
           <div class="agent-labels">
             <button
@@ -3251,4 +3273,64 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
     transition: none !important;
   }
 }
+
+.movement-pad {
+  position: absolute;
+  z-index: 12;
+  left: 18px;
+  bottom: 18px;
+  width: 174px;
+  display: grid;
+  grid-template-columns: repeat(3, 42px);
+  grid-template-rows: auto repeat(3, 38px) auto;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid #d6e8f32b;
+  border-radius: 16px;
+  background: #0c1b2bd9;
+  box-shadow: 0 12px 35px #0005;
+  backdrop-filter: blur(14px);
+}
+.movement-pad-heading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+  font-size: 11px;
+  color: #a8bdce;
+}
+.movement-pad-heading b { color: #fff; font-size: 12px; }
+.movement-pad button {
+  display: grid;
+  place-items: center;
+  border: 1px solid #b9d8ed30;
+  border-radius: 9px;
+  background: #20384c;
+  color: #f5fbff;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.movement-pad button:hover { background: #315772; }
+.movement-pad button:active { transform: scale(.94); }
+.movement-pad .move-up { grid-column: 2; grid-row: 2; }
+.movement-pad .move-left { grid-column: 1; grid-row: 3; }
+.movement-pad .move-stop { grid-column: 2; grid-row: 3; font-size: 18px; }
+.movement-pad .move-right { grid-column: 3; grid-row: 3; }
+.movement-pad .move-down { grid-column: 2; grid-row: 4; }
+.movement-pad small {
+  grid-column: 1 / -1;
+  color: #91a9bb;
+  font-size: 9px;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .movement-pad { left: 10px; bottom: 10px; transform: scale(.9); transform-origin: bottom left; }
+}
+
 </style>
