@@ -1,0 +1,30 @@
+name: Group Chat Harness Demos
+
+on:
+  push:
+    paths:
+      - "experiments/group-chat-harness-demos/**"
+      - ".github/workflows/group-chat-harness-demos.yml"
+  pull_request:
+    paths:
+      - "experiments/group-chat-harness-demos/**"
+      - ".github/workflows/group-chat-harness-demos.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: experiments/group-chat-harness-demos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: experiments/group-chat-harness-demos/package.json
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run demo
+      - run: npm run demo:team
