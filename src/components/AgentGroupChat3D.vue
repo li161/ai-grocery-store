@@ -257,7 +257,7 @@ function createRetailAisle(){
   for(let j=0;j<5;j++)mesh(new THREE.SphereGeometry(.035,10,8),headerText,[x-.78+j*.39,2.58,-1.96],roomRoot)
  }
 }
-function buildLibraryRoom(){
+function buildLegacyLibraryRoom(){
  roomRoot=new THREE.Group();scene.add(roomRoot)
  const woodTex=makeWoodTexture(), floorTex=makeWoodTexture(), marbleTex=makeMarbleTexture()
  woodMat=new THREE.MeshStandardMaterial({map:woodTex,color:0xffffff,roughness:.7})
@@ -502,6 +502,76 @@ function normalizeAsset(root,targetWidth){
   }
  })
  return {root,size,scale}
+}
+function buildLibraryRoom(){
+ // Purpose-built supermarket interior: ceramic retail flooring, open ceiling grid,
+ // glazed storefront, illuminated chilled cabinets, and checkout furniture.
+ roomRoot=new THREE.Group();roomRoot.name='Realistic_Supermarket_Interior';scene.add(roomRoot)
+ const floorTile=mat(0xc8c7c0,.34,.04), grout=mat(0xaaa9a2,.8), wall=mat(0xe8e9e4,.88), trim=mat(0x293b40,.42,.46)
+ const stainless=mat(0x9da8ab,.28,.62), dark=mat(0x273238,.4,.52), glass=new THREE.MeshPhysicalMaterial({color:0xdceef0,roughness:.08,metalness:.04,transparent:true,opacity:.22,transmission:.35,thickness:.06})
+ const green=mat(0x2d6d52,.52), warm=mat(0xe5b44e,.42), red=mat(0xc34e3f,.48), white=mat(0xf5f2e9,.72)
+ const add=(geo,m,pos,rot=null,scale=null)=>mesh(geo,m,pos,roomRoot,rot,scale)
+ // Commercial polished tile floor with fine grout lines.
+ add(new THREE.BoxGeometry(20,.18,22),floorTile,[0,-.16,0])
+ for(let x=-9.5;x<=9.5;x+=1.25)add(new THREE.BoxGeometry(.012,.006,21.8),grout,[x,-.065,0])
+ for(let z=-10.5;z<=10.5;z+=1.25)add(new THREE.BoxGeometry(19.8,.006,.012),grout,[0,-.064,z])
+ // Tall neutral walls and a suspended retail ceiling frame.
+ add(new THREE.BoxGeometry(20,7.7,.28),wall,[0,3.75,-8.95])
+ add(new THREE.BoxGeometry(.28,7.7,18.1),wall,[-9.85,3.75,0])
+ add(new THREE.BoxGeometry(.28,7.7,18.1),wall,[9.85,3.75,0])
+ add(new THREE.BoxGeometry(20,.18,22),mat(0xe3e5e2,.82),[0,7.55,0])
+ for(let x=-9;x<=9;x+=3)add(new THREE.BoxGeometry(.11,.22,21.2),trim,[x,7.38,0])
+ for(let z=-8;z<=8;z+=3)add(new THREE.BoxGeometry(19.5,.12,.12),trim,[0,7.38,z])
+ // Front storefront glazing, metal mullions and daylight opening.
+ add(new THREE.BoxGeometry(20,5.9,.12),glass,[0,3.0,8.9])
+ for(let x=-9.6;x<=9.6;x+=2.4)add(new THREE.BoxGeometry(.075,6.1,.18),stainless,[x,3.0,8.82])
+ add(new THREE.BoxGeometry(20,.12,.2),trim,[0,6.08,8.82])
+ add(new THREE.BoxGeometry(20,.16,.2),trim,[0,.15,8.82])
+ // Bold, readable fascia sign over the chilled-food wall.
+ const signTex=canvasTexture((ctx,w,h)=>{ctx.fillStyle='#173f35';ctx.fillRect(0,0,w,h);ctx.fillStyle='#f6f1df';ctx.font='bold 58px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('FRESH MARKET',w/2,h/2-7);ctx.fillStyle='#e7b94f';ctx.fillRect(80,h-42,w-160,5)},1,1)
+ add(new THREE.BoxGeometry(5.5,1.05,.18),trim,[0,6.05,-8.65])
+ add(new THREE.PlaneGeometry(5.25,.82),new THREE.MeshStandardMaterial({map:signTex,roughness:.6,emissive:0x1b3329,emissiveIntensity:.14}),[0,6.05,-8.545])
+ // Back-wall refrigerated display: stainless plinth, dark interior, glass doors,
+ // illuminated shelves and colorful fresh-food packages.
+ for(let i=0;i<5;i++){
+  const x=-7.25+i*3.62
+  add(new THREE.BoxGeometry(3.42,3.15,.82),dark,[x,1.72,-8.28])
+  add(new THREE.BoxGeometry(3.32,.16,.88),stainless,[x,.18,-8.22])
+  add(new THREE.BoxGeometry(3.32,.12,.88),stainless,[x,3.26,-8.22])
+  add(new THREE.BoxGeometry(3.12,2.7,.035),glass,[x,1.78,-7.82])
+  for(let row=0;row<4;row++){
+   const y=.65+row*.64
+   add(new THREE.BoxGeometry(3.06,.045,.58),stainless,[x,y,-8.0])
+   for(let j=0;j<10;j++){
+    const color=[0x6eaa64,0xe3c75d,0xc75c4c,0xf0e9d5,0x8db9cb,0xdda16a][(j+row+i)%6]
+    const h=.22+((j*7+row*3+i)%4)*.055
+    add(new THREE.BoxGeometry(.22,h,.24),mat(color,.55),[x-1.38+j*.305,y+.03+h/2,-8.0])
+   }
+  }
+  for(let d=-1;d<=1;d+=2)add(new THREE.BoxGeometry(.035,2.75,.055),stainless,[x+d*1.02,1.78,-7.78])
+  add(new THREE.BoxGeometry(3.28,.055,.05),mat(0x8ef0c3,.22,.1,{emissive:0x43cfa0,emissiveIntensity:.75}),[x,3.05,-7.76])
+ }
+ // Ceiling light panels and suspended aisle lights give the scene a real retail scale.
+ const lightPanel=new THREE.MeshStandardMaterial({color:0xfff8e8,emissive:0xfff0d1,emissiveIntensity:1.5,roughness:.35})
+ for(let x=-7.5;x<=7.5;x+=5)for(let z=-6;z<=6;z+=4){
+  add(new THREE.BoxGeometry(2.25,.045,1.05),white,[x,7.245,z])
+  add(new THREE.BoxGeometry(2.08,.025,.9),lightPanel,[x,7.21,z])
+ }
+ // Checkout counters at the front corners, away from the main aisle.
+ for(const x of [-6.9,6.9]){
+  add(new THREE.BoxGeometry(2.45,.92,.95),trim,[x,.48,5.15])
+  add(new THREE.BoxGeometry(2.35,.1,.86),mat(0x292e31,.3,.38),[x,.98,5.15])
+  add(new THREE.BoxGeometry(1.05,.045,.62),mat(0x8cc4bc,.22,.16,{emissive:0x2a6f68,emissiveIntensity:.22}),[x-.35,1.055,5.12])
+  add(new THREE.BoxGeometry(.28,.5,.22),dark,[x+.75,1.24,5.08])
+  add(new THREE.BoxGeometry(.55,.035,.34),warm,[x+.72,1.5,5.08])
+  // Small stacked grocery bags and checkout impulse items.
+  for(let j=0;j<3;j++)add(new THREE.BoxGeometry(.22,.28,.18),mat([0x6ba77a,0xd6b454,0xc56b53][j],.7),[x-.78+j*.25,.62,4.75])
+ }
+ // Floor-level aisle endcaps and safety bollards anchor the gondolas visually.
+ for(const x of [-7.0,-3.45,.3,4.0,7.1]){
+  add(new THREE.BoxGeometry(.16,.65,.16),warm,[x,.33,1.4])
+  add(new THREE.CylinderGeometry(.12,.15,.08,16),dark,[x,.05,1.4])
+ }
 }
 function createCoffeeBarAccent(){
  const bar=new THREE.Group()
