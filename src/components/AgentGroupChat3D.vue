@@ -73,6 +73,7 @@ const agents = [
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map((a) => a.id))
 const activeAgents = computed(() => agents.filter((a) => selected.value.includes(a.id)))
 const CHAT_HISTORY_KEY = 'ai-grocery-agent-chat-history-v1'
+const CONVERSATIONS_KEY = 'ai-grocery-agent-conversations-v2'
 const initialMessages = [
   {
     id: 1,
@@ -87,35 +88,139 @@ const initialMessages = [
     time: '刚刚',
   },
 ]
-function loadChatHistory() {
+function makeConversation(messages = initialMessages, title = '新对话') {
+  const timestamp = Date.now()
+  return {
+    id: 'chat-' + timestamp + '-' + Math.random().toString(36).slice(2, 8),
+    title,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    messages: messages.slice(-500),
+  }
+}
+function isValidMessages(value) {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (message) =>
+        message &&
+        typeof message.id !== 'undefined' &&
+        typeof message.role === 'string' &&
+        typeof message.text === 'string',
+    )
+  )
+}
+function loadConversationState() {
   try {
-    const saved = window.localStorage.getItem(CHAT_HISTORY_KEY)
-    if (!saved) return initialMessages
-    const parsed = JSON.parse(saved)
-    if (
-      Array.isArray(parsed) &&
-      parsed.every(
-        (message) =>
-          message &&
-          typeof message.id !== 'undefined' &&
-          typeof message.role === 'string' &&
-          typeof message.text === 'string',
-      )
-    ) {
-      return parsed.slice(-500)
+    const savedSessions = window.localStorage.getItem(CONVERSATIONS_KEY)
+    if (savedSessions) {
+      const parsed = JSON.parse(savedSessions)
+      if (Array.isArray(parsed.conversations) && parsed.conversations.length) {
+        const conversations = parsed.conversations
+          .filter((item) => item && typeof item.id === 'string' && isValidMessages(item.messages))
+          .map((item) => ({ ...item, messages: item.messages.slice(-500) }))
+        if (conversations.length) {
+          const activeId = conversations.some((item) => item.id === parsed.activeConversationId)
+            ? parsed.activeConversationId
+            : conversations[0].id
+          return { conversations, activeId }
+        }
+      }
+    }
+    // Migrate the single-chat history saved by the previous version.
+    const legacy = JSON.parse(window.localStorage.getItem(CHAT_HISTORY_KEY) || 'null')
+    if (isValidMessages(legacy)) {
+      const migrated = makeConversation(legacy, '历史对话')
+      return { conversations: [migrated], activeId: migrated.id }
     }
   } catch (error) {
-    console.warn('无法恢复群聊记录，将使用初始消息。', error)
+    console.warn('无法恢复本地对话记录，将创建新对话。', error)
   }
-  return initialMessages
+  const first = makeConversation()
+  return { conversations: [first], activeId: first.id }
 }
-const messages = ref(loadChatHistory())
+const initialConversationState = loadConversationState()
+const conversations = ref(initialConversationState.conversations)
+const activeConversationId = ref(initialConversationState.activeId)
+const activeConversation = computed(
+  () => conversations.value.find((item) => item.id === activeConversationId.value) || null,
+)
+const messages = ref(activeConversation.value?.messages || initialMessages)
+const showConversationManager = ref(false)
+const conversationSearch = ref('')
+const filteredConversations = computed(() => {
+  const query = conversationSearch.value.trim().toLowerCase()
+  return [...conversations.value]
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .filter((item) => !query || item.title.toLowerCase().includes(query))
+})
 function persistChatHistory() {
   try {
+    const current = conversations.value.find((item) => item.id === activeConversationId.value)
+    if (current) {
+      current.messages = messages.value.slice(-500)
+      current.updatedAt = Date.now()
+      const firstUserMessage = current.messages.find((message) => message.role === 'user')
+      if (firstUserMessage && current.title === '新对话') {
+        current.title = firstUserMessage.text.trim().slice(0, 32) || '新对话'
+      }
+    }
+    window.localStorage.setItem(
+      CONVERSATIONS_KEY,
+      JSON.stringify({
+        activeConversationId: activeConversationId.value,
+        conversations: conversations.value,
+      }),
+    )
+    // Keep the old key in sync for backward compatibility with older builds.
     window.localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages.value.slice(-500)))
   } catch (error) {
     console.warn('群聊记录暂时无法写入本地存储。', error)
   }
+}
+function createConversation() {
+  if (busy.value) return
+  const conversation = makeConversation([
+    {
+      id: Date.now(),
+      role: 'system',
+      text: '新会话已创建。所有数字人共享本房间上下文。',
+      time: now(),
+    },
+  ])
+  conversations.value.unshift(conversation)
+  activeConversationId.value = conversation.id
+  messages.value = conversation.messages
+  showConversationManager.value = false
+  persistChatHistory()
+}
+function switchConversation(id) {
+  if (busy.value || id === activeConversationId.value) return
+  persistChatHistory()
+  const conversation = conversations.value.find((item) => item.id === id)
+  if (!conversation) return
+  activeConversationId.value = id
+  messages.value = conversation.messages.slice(-500)
+  showConversationManager.value = false
+  nextTick(() => {
+    if (messageList.value) messageList.value.scrollTop = messageList.value.scrollHeight
+  })
+}
+function deleteConversation(id) {
+  if (busy.value) return
+  const conversation = conversations.value.find((item) => item.id === id)
+  if (!conversation || !window.confirm('确定删除对话「' + conversation.title + '」吗？此操作无法撤销。'))
+    return
+  conversations.value = conversations.value.filter((item) => item.id !== id)
+  if (activeConversationId.value === id) {
+    if (!conversations.value.length) {
+      const replacement = makeConversation()
+      conversations.value.push(replacement)
+    }
+    activeConversationId.value = conversations.value[0].id
+    messages.value = conversations.value[0].messages.slice(-500)
+  }
+  persistChatHistory()
 }
 watch(messages, persistChatHistory, { deep: true })
 const draft = ref('')
@@ -2159,25 +2264,34 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
           <div>
             <span class="eyebrow">SHARED CONVERSATION</span>
             <h2>团队群聊 <span class="live-pill">● LIVE</span></h2>
-            <p>同一上下文，岗位独立响应</p>
+            <p>{{ conversations.length }} 个本地对话 · 自动保存</p>
           </div>
-          <button
-            class="panel-menu"
-            aria-label="新建会话"
-            @click="
-              messages = [
-                {
-                  id: Date.now(),
-                  role: 'system',
-                  text: '新会话已创建。所有数字人共享本房间上下文。',
-                  time: now(),
-                },
-              ]
-            "
-          >
-            ↻
-          </button>
+          <div class="conversation-head-actions">
+            <button class="panel-menu" aria-label="管理对话记录" :aria-expanded="showConversationManager" @click="showConversationManager = !showConversationManager">
+              ☷ 记录
+            </button>
+            <button class="panel-menu new-chat-button" aria-label="新建会话" :disabled="busy" @click="createConversation">
+              ＋ 新建
+            </button>
+          </div>
         </div>
+        <section v-if="showConversationManager" class="conversation-manager">
+          <div class="conversation-manager-title">
+            <b>对话记录</b>
+            <span>{{ conversations.length }} 条</span>
+          </div>
+          <input v-model="conversationSearch" class="conversation-search" placeholder="搜索对话标题…" aria-label="搜索对话标题" />
+          <div v-if="!filteredConversations.length" class="conversation-empty">没有匹配的对话记录</div>
+          <div v-for="conversation in filteredConversations" :key="conversation.id" class="conversation-item" :class="{ active: conversation.id === activeConversationId }">
+            <button class="conversation-open" :disabled="busy" @click="switchConversation(conversation.id)">
+              <b>{{ conversation.title }}</b>
+              <small>{{ conversation.messages.length }} 条消息 · {{ new Date(conversation.updatedAt).toLocaleString() }}</small>
+              <span>{{ conversation.messages.find((message) => message.role === 'user')?.text || '尚未发送消息' }}</span>
+            </button>
+            <button class="conversation-delete" :disabled="busy" :aria-label="'删除对话 ' + conversation.title" title="删除对话" @click="deleteConversation(conversation.id)">×</button>
+          </div>
+          <p class="conversation-storage-note">记录仅保存在当前浏览器；清除浏览器站点数据会删除这些记录。</p>
+        </section>
         <div class="focus-card">
           <div
             class="focus-avatar"
@@ -2851,8 +2965,127 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   border-bottom: 1px solid #b0d3e51c;
   background: #07152242;
+}
+.conversation-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.panel-menu:disabled,
+.conversation-open:disabled,
+.conversation-delete:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.conversation-manager {
+  padding: 10px;
+  max-height: 245px;
+  overflow-y: auto;
+  border-bottom: 1px solid #b0d3e51c;
+  background: #071522d9;
+}
+.conversation-manager-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #eaf5ff;
+  font-size: 11px;
+}
+.conversation-manager-title span,
+.conversation-storage-note {
+  color: #8ca9bd;
+  font-size: 9px;
+}
+.conversation-search {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid #91bad02b;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff08;
+  color: #f3f8fc;
+  font: inherit;
+  font-size: 11px;
+}
+.conversation-search:focus {
+  border-color: #67c8f0a6;
+}
+.conversation-search::placeholder {
+  color: #7997ad;
+}
+.conversation-item {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  margin-bottom: 5px;
+  border: 1px solid #91bad018;
+  border-radius: 8px;
+  background: #ffffff05;
+}
+.conversation-item.active {
+  border-color: #6ccdf077;
+  background: #56b9e514;
+}
+.conversation-open {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #e9f5ff;
+  text-align: left;
+  cursor: pointer;
+}
+.conversation-open b,
+.conversation-open small,
+.conversation-open span {
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.conversation-open b {
+  font-size: 10px;
+  font-weight: 650;
+}
+.conversation-open small {
+  color: #8ca9bd;
+  font-size: 8px;
+}
+.conversation-open span {
+  color: #b2c8d8;
+  font-size: 9px;
+}
+.conversation-delete {
+  align-self: center;
+  margin-right: 5px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ff8a8a30;
+  border-radius: 6px;
+  background: #ff77770a;
+  color: #ffaaaa;
+  cursor: pointer;
+}
+.conversation-empty {
+  padding: 14px 5px;
+  color: #9bb3c5;
+  font-size: 10px;
+  text-align: center;
+}
+.conversation-storage-note {
+  line-height: 1.5;
+  margin: 8px 2px 0;
 }
 .eyebrow {
   font-size: 9px;
