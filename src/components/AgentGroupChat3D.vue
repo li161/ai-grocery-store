@@ -1432,6 +1432,73 @@ const agentPositions = {
   inventory: [1.7, 0, 3.05],
   pm: [3.4, 0, 4.0],
 }
+function createBusinessArchitecture() {
+  // Dedicated architectural layer inspired by the supplied upscale cafe reference.
+  const root = new THREE.Group()
+  root.name = 'Business_Cafe_Architecture'
+  root.visible = false
+  scene.add(root)
+  const material = (color, roughness = 0.55, metalness = 0.05) => new THREE.MeshStandardMaterial({ color, roughness, metalness })
+  const walnut = material(0x573725, 0.42), walnutEdge = material(0x9a6b43, 0.36)
+  const darkMetal = material(0x252b2e, 0.3, 0.68), brass = material(0xc79b58, 0.27, 0.72)
+  const plaster = material(0xe7d9c5, 0.86)
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0xd9ecf4, roughness: 0.08, metalness: 0.02, transmission: 0.52, transparent: true, opacity: 0.24, thickness: 0.06, side: THREE.DoubleSide })
+  const add = (geometry, mat, x, y, z, parent = root) => {
+    const object = new THREE.Mesh(geometry, mat)
+    object.position.set(x, y, z); object.castShadow = true; object.receiveShadow = true; parent.add(object)
+    return object
+  }
+  const line = (points, radius, mat, parent = root) => {
+    const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)))
+    const object = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(24, points.length * 8), radius, 8, false), mat)
+    object.castShadow = true; parent.add(object); return object
+  }
+  // Raised mezzanine with a bowed front edge and brass balustrade.
+  add(new THREE.BoxGeometry(15.8, 0.22, 3.1), walnut, 0, 4.15, -3.7)
+  add(new THREE.BoxGeometry(15.5, 0.09, 3.0), walnutEdge, 0, 4.29, -3.7)
+  const balcony = []
+  for (let i=0;i<=48;i++) { const t=i/48; balcony.push([-7.7+t*15.4,4.85,-2.25-0.9*Math.sin(t*Math.PI)]) }
+  line(balcony,0.055,darkMetal); line(balcony.map(([x,y,z])=>[x,y-0.62,z]),0.025,brass)
+  for(let i=0;i<=32;i++){const t=i/32,x=-7.6+t*15.2,z=-2.25-0.9*Math.sin(t*Math.PI);line([[x,4.24,z],[x,4.84,z]],0.018,darkMetal)}
+  // Tall right-side window wall, dark mullions and arched transoms.
+  const windows = new THREE.Group(); windows.position.set(9.15,0,-0.2); root.add(windows)
+  add(new THREE.BoxGeometry(0.12,5.9,14.5),plaster,0,2.95,-0.2,windows)
+  for(const z of [-5.7,-2.1,1.5,5.1]){
+    add(new THREE.BoxGeometry(0.08,4.4,2.9),glass,-0.09,3.0,z,windows)
+    for(const dz of [-1.48,1.48]) add(new THREE.BoxGeometry(0.12,4.45,0.09),darkMetal,-0.17,3.0,z+dz,windows)
+    add(new THREE.BoxGeometry(0.12,0.09,2.95),darkMetal,-0.17,0.78,z,windows)
+    add(new THREE.BoxGeometry(0.12,0.09,2.95),darkMetal,-0.17,4.62,z,windows)
+    add(new THREE.BoxGeometry(0.12,4.2,0.06),darkMetal,-0.18,2.9,z,windows)
+    const arc=[]; for(let i=0;i<=24;i++){const a=Math.PI+Math.PI*i/24;arc.push([-0.17,4.55+0.78*Math.sin(a),z+1.48*Math.cos(a)])}
+    line(arc,0.045,darkMetal,windows)
+  }
+  // Curved stair climbing toward the gallery, with handrail.
+  const stair = new THREE.Group(); stair.name='Curved_Mezzanine_Stair'; root.add(stair)
+  for(let i=0;i<22;i++){const t=i/21,a=-Math.PI*0.48+t*Math.PI*0.72,r=3.05,x=5.9+Math.cos(a)*r,z=2.2+Math.sin(a)*r;const step=add(new THREE.BoxGeometry(0.78,0.12,0.48),walnutEdge,x,0.3+t*3.8,z,stair);step.rotation.y=-a}
+  const rail=[];for(let i=0;i<=40;i++){const t=i/40,a=-Math.PI*0.48+t*Math.PI*0.72;rail.push([5.9+Math.cos(a)*3.05,1+t*3.8,2.2+Math.sin(a)*3.05])}
+  line(rail,0.055,darkMetal,stair);line(rail.map(([x,y,z])=>[x,y-0.45,z]),0.025,brass,stair)
+  // Walnut pastry counter with pale stone top, glass guard and display pieces.
+  add(new THREE.BoxGeometry(7.2,1.0,1.55),walnut,-5,0.62,2.4)
+  add(new THREE.BoxGeometry(7.35,0.14,1.68),material(0xe5d9c8,0.22),-5,1.19,2.4)
+  add(new THREE.BoxGeometry(6.7,0.72,0.05),glass,-5,1.62,1.72)
+  for(let i=0;i<6;i++) add(new THREE.BoxGeometry(0.72,0.12,0.42),material([0xc88b48,0x8b4a30,0xe7c58d][i%3],0.55),-7.7+i*1.08,1.36,2.35)
+  // Cafe tables and upholstered lounge chairs.
+  for(const [x,z] of [[-1.8,4.4],[2,4.9],[4,-0.1]]){
+    add(new THREE.CylinderGeometry(0.58,0.62,0.12,32),walnutEdge,x,0.86,z)
+    add(new THREE.CylinderGeometry(0.07,0.09,0.82,12),darkMetal,x,0.42,z)
+    for(const dx of [-0.95,0.95]){add(new THREE.BoxGeometry(0.72,0.9,0.72),walnut,x+dx,0.48,z);add(new THREE.BoxGeometry(0.72,0.12,0.72),material(0x6e5140,0.85),x+dx,0.98,z)}
+  }
+  // Warm brass pendant lamps.
+  for(const [x,z] of [[-6.5,-1.4],[-3.4,-1.4],[-0.2,-1.4],[3,-1.4],[6,-1.4]]){
+    line([[x,7.35,z],[x,6.35,z]],0.018,darkMetal)
+    add(new THREE.CylinderGeometry(0.34,0.55,0.22,24),brass,x,6.3,z)
+    const bulbMat=new THREE.MeshStandardMaterial({color:0xffe2a5,emissive:0xffb34d,emissiveIntensity:2.2,roughness:0.25})
+    add(new THREE.SphereGeometry(0.16,16,12),bulbMat,x,6.05,z)
+    const light=new THREE.PointLight(0xffc777,10,7,1.8);light.position.set(x,6,z);root.add(light)
+  }
+  return root
+}
+
 function buildCharacter() {
   const labelHeights = {
     manager: 1.96,
@@ -2100,6 +2167,7 @@ function initScene() {
   warm.position.set(-1, 5, 0)
   scene.add(warm)
   buildLibraryRoom()
+  createBusinessArchitecture()
   createRetailAisle()
   createCoffeeBarAccent()
   buildCharacter()
@@ -2222,6 +2290,8 @@ function zoomBy(delta) {
 function toggleBusinessMode() {
   businessMode.value = !businessMode.value
   if (scene) {
+    const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
+    if (businessArchitecture) businessArchitecture.visible = businessMode.value
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
     if (scene.fog) {
