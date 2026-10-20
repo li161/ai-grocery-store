@@ -1280,6 +1280,101 @@ function createBusinessArchitecture() {
     add(new THREE.SphereGeometry(0.16,16,12),bulbMat,x,6.05,z)
     const light=new THREE.PointLight(0xffc777,10,7,1.8);light.position.set(x,6,z);root.add(light)
   }
+
+  // Reference-matched architectural dressing: book wall, café menu, curved service bar,
+  // glass pastry vitrines, layered greenery and reflective stone flooring.
+  const bookMaterials = [0x7b3d2f,0x304b48,0x9b7448,0x27394a,0xb7a17a,0x5c6650,0x6d4d63,0xddd0b9]
+    .map(color => material(color, 0.72))
+  // Tall walnut bookcases along the left/back wall, with individually modeled spines.
+  for (const x of [-8.35,-6.55,-4.75,-2.95,-1.15]) {
+    add(new THREE.BoxGeometry(1.62,5.35,0.32),walnut,x,2.95,-6.55)
+    for (const y of [1.05,1.92,2.79,3.66,4.53,5.4]) {
+      add(new THREE.BoxGeometry(1.56,0.075,0.48),walnutEdge,x,y,-6.25)
+      let cursor=x-0.72
+      while(cursor<x+0.68){
+        const w=0.075+Math.random()*0.105
+        const h=0.34+Math.random()*0.34
+        const book=add(new THREE.BoxGeometry(w,h,0.12),bookMaterials[Math.floor(Math.random()*bookMaterials.length)],cursor+w/2,y+0.06+h/2,-6.13)
+        book.rotation.z=(Math.random()-0.5)*0.035
+        cursor+=w+0.018
+      }
+    }
+  }
+  // Black café menu boards with crisp readable lettering, like the reference image.
+  const makeMenu = (title, lines, x, y, z, width=1.75) => {
+    const canvas=document.createElement('canvas')
+    canvas.width=512; canvas.height=640
+    const ctx=canvas.getContext('2d')
+    ctx.fillStyle='#17201f';ctx.fillRect(0,0,512,640)
+    ctx.strokeStyle='#b68c52';ctx.lineWidth=8;ctx.strokeRect(12,12,488,616)
+    ctx.fillStyle='#f4e8d5';ctx.textAlign='center';ctx.font='bold 42px Georgia';ctx.fillText(title,256,76)
+    ctx.strokeStyle='#8f754f';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(48,104);ctx.lineTo(464,104);ctx.stroke()
+    ctx.textAlign='left';ctx.font='26px Georgia'
+    lines.forEach((line,i)=>{ctx.fillText(line,42,154+i*65)})
+    const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace
+    const faceMat=new THREE.MeshBasicMaterial({map:texture})
+    add(new THREE.BoxGeometry(width,2.15,0.09),darkMetal,x,y,z)
+    const face=add(new THREE.PlaneGeometry(width-0.08,2.07),faceMat,x,y,z+0.052)
+    face.castShadow=false
+  }
+  makeMenu('COFFEE',['Espresso     3.5','Americano    4.0','Latte        4.5','Cappuccino   4.5','Mocha        5.0','Flat White   4.5'],-6.6,3.0,-5.93,1.7)
+  makeMenu('TEA',['Earl Grey    3.5','Green Tea    4.0','Oolong       4.0','Herbal Tea   4.5','Fruit Tea    4.5','Iced Tea     4.5'],-4.7,3.0,-5.93,1.7)
+  makeMenu('GOOD FOOD',['Good Books','Better Together','☕  EST. 2024'],-2.8,3.0,-5.93,1.7)
+  // Replace the rectangular visual read of the service counter with a bowed front.
+  const counterCurve=[]
+  for(let i=0;i<=36;i++){
+    const t=i/36,angle=Math.PI+(Math.PI*t)
+    counterCurve.push([-5+3.62*Math.cos(angle),0.12,2.42+0.62*Math.sin(angle)])
+  }
+  line(counterCurve,0.055,brass)
+  for(let i=0;i<36;i++){
+    const t=(i+0.5)/36,angle=Math.PI+Math.PI*t
+    const x=-5+3.58*Math.cos(angle),z=2.42+0.59*Math.sin(angle)
+    const panel=add(new THREE.BoxGeometry(0.42,0.82,0.075),walnutEdge,x,0.62,z)
+    panel.rotation.y=-angle+Math.PI/2
+  }
+  const counterEdge=[]
+  for(let i=0;i<=36;i++){
+    const t=i/36,angle=Math.PI+Math.PI*t
+    counterEdge.push([-5+3.72*Math.cos(angle),1.28,2.42+0.69*Math.sin(angle)])
+  }
+  line(counterEdge,0.065,material(0xf0e5d5,0.2))
+  // Glass pastry cases with metal frames, shelves and plated pastries.
+  for(const [x,z] of [[-7.0,1.95],[-5.2,1.95],[-3.4,1.95]]){
+    add(new THREE.BoxGeometry(1.48,0.62,0.72),glass,x,1.55,z)
+    for(const dx of [-0.71,0.71]) add(new THREE.BoxGeometry(0.035,0.65,0.76),brass,x+dx,1.55,z)
+    add(new THREE.BoxGeometry(1.48,0.035,0.72),material(0xf1e5d4,0.24),x,1.23,z)
+    for(let k=0;k<5;k++){
+      const pastry=add(new THREE.SphereGeometry(0.105,16,12),bookMaterials[k%4],x-0.55+k*0.27,1.34,z+0.02)
+      pastry.scale.set(1.15,0.62,0.88)
+    }
+  }
+  // Books, ceramic cups and espresso equipment behind the counter.
+  add(new THREE.BoxGeometry(0.48,0.52,0.38),darkMetal,-5.1,1.72,0.72)
+  add(new THREE.CylinderGeometry(0.11,0.13,0.18,20),brass,-5.1,2.07,0.72)
+  for(const [x,z] of [[-7.7,-3.1],[-2.1,-3.5],[7.2,0.4],[3.8,5.9]]){
+    const planter=material(0x6b4736,0.8)
+    add(new THREE.CylinderGeometry(0.22,0.17,0.36,20),planter,x,0.18,z)
+    for(let k=0;k<7;k++){
+      const angle=k*Math.PI*2/7
+      const leaf=add(new THREE.SphereGeometry(0.22,14,10),material(k%2?0x446b4d:0x6b8a59,0.86),x+Math.cos(angle)*0.17,0.53+(k%3)*0.11,z+Math.sin(angle)*0.17)
+      leaf.scale.set(0.48,1.65,0.55);leaf.rotation.z=Math.cos(angle)*0.45
+    }
+    add(new THREE.SphereGeometry(0.18,16,12),material(0x4c704c,0.88),x,0.77,z)
+  }
+  // Lounge seating: upholstered chair backs and cushions, not plain block placeholders.
+  for(const [x,z] of [[-1.7,5.8],[1.2,5.7],[4.2,4.7],[6.0,2.8]]){
+    for(const side of [-1,1]){
+      const cx=x+side*0.83
+      add(new THREE.BoxGeometry(0.68,0.76,0.12),material(0x55473e,0.9),cx,0.62,z-0.24)
+      add(new THREE.BoxGeometry(0.62,0.12,0.62),material(0x756052,0.92),cx,0.34,z+0.05)
+      add(new THREE.BoxGeometry(0.09,0.34,0.09),darkMetal,cx-0.22,0.16,z+0.05)
+      add(new THREE.BoxGeometry(0.09,0.34,0.09),darkMetal,cx+0.22,0.16,z+0.05)
+    }
+  }
+  // Subtle floor inlays create scale and perspective cues without overpowering the scene.
+  const floorLineMat=material(0xb7a28b,0.32)
+  for(let z=-5.5;z<=7;z+=2.5) add(new THREE.BoxGeometry(17.5,0.012,0.018),floorLineMat,0,0.018,z)
   return root
 }
 
