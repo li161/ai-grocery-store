@@ -64,6 +64,10 @@ function navigate(id, { syncHash = true } = {}) {
   if (syncHash) history.replaceState(null, '', '#' + id)
   window.scrollTo({ top: 0, behavior: 'auto' })
 }
+function handleSearchSubmit() {
+  showSearch.value = false
+  navigate('tools')
+}
 function openTool(tool) {
   drawerTool.value = tool
 }
@@ -346,15 +350,9 @@ onMounted(() => {
             v-model="keyword"
             autofocus
             placeholder="搜索 AI 工具，例如 Cursor、论文、设计..."
-            @keyup.enter="
-              showSearch = false
-              navigate('tools')
-            "
+            @keyup.enter="handleSearchSubmit"
           /><button
-            @click="
-              showSearch = false
-              navigate('tools')
-            "
+            @click="handleSearchSubmit"
           >
             进入货架 →
           </button>
