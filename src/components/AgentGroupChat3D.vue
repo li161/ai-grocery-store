@@ -1453,6 +1453,35 @@ function createBusinessArchitecture() {
     const object = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(24, points.length * 8), radius, 8, false), mat)
     object.castShadow = true; parent.add(object); return object
   }
+  // Continuous limestone floor and a warm walnut perimeter plinth keep the room grounded.
+  add(new THREE.BoxGeometry(20.2, 0.24, 22.2), material(0xd6c7b3, 0.32), 0, -0.18, 0)
+  add(new THREE.BoxGeometry(20.0, 0.12, 0.18), walnutEdge, 0, 0.02, -8.65)
+  add(new THREE.BoxGeometry(0.18, 7.2, 17.4), plaster, -9.65, 3.55, -0.1)
+  add(new THREE.BoxGeometry(20.0, 7.2, 0.18), plaster, 0, 3.55, -8.75)
+  // Full-height library wall: timber bays, five shelves per bay, and individually colored book spines.
+  for (let bay = 0; bay < 7; bay++) {
+    const x = -7.8 + bay * 2.6
+    add(new THREE.BoxGeometry(2.42, 5.25, 0.24), walnut, x, 2.92, -8.42)
+    add(new THREE.BoxGeometry(2.38, 0.12, 0.34), walnutEdge, x, 0.42, -8.2)
+    add(new THREE.BoxGeometry(2.38, 0.12, 0.34), walnutEdge, x, 5.42, -8.2)
+    for (let level = 0; level < 5; level++) {
+      const y = 0.95 + level * 0.91
+      add(new THREE.BoxGeometry(2.34, 0.075, 0.34), walnutEdge, x, y, -8.2)
+      for (let book = 0; book < 13; book++) {
+        const bw = 0.105 + ((bay * 3 + level + book) % 3) * 0.018
+        const bh = 0.48 + ((bay * 7 + level * 2 + book) % 5) * 0.075
+        const colors = [0x355b50, 0x7d4535, 0x263b50, 0xb28a50, 0x60486d, 0xc3b18a, 0x8b5c42]
+        const spine = material(colors[(bay + level + book) % colors.length], 0.72)
+        const bx = x - 1.12 + book * 0.185
+        add(new THREE.BoxGeometry(bw, bh, 0.12), spine, bx, y + 0.075 + bh / 2, -8.16)
+        add(new THREE.BoxGeometry(bw * 0.62, 0.025, 0.012), brass, bx, y + 0.18, -8.09)
+      }
+    }
+  }
+  // A subtle brass compass inlay frames the social space without competing with the cast.
+  const floorInlay = material(0x9b7548, 0.28, 0.55)
+  for (const z of [-7.1, 7.1]) add(new THREE.BoxGeometry(15.5, 0.018, 0.035), floorInlay, 0, -0.045, z)
+  for (const x of [-7.75, 7.75]) add(new THREE.BoxGeometry(0.035, 0.018, 14.2), floorInlay, x, -0.045, 0)
   // Raised mezzanine with a bowed front edge and brass balustrade.
   add(new THREE.BoxGeometry(15.8, 0.22, 3.1), walnut, 0, 4.15, -3.7)
   add(new THREE.BoxGeometry(15.5, 0.09, 3.0), walnutEdge, 0, 4.29, -3.7)
@@ -2170,6 +2199,7 @@ function initScene() {
   buildLibraryRoom()
   createBusinessArchitecture()
   const cafeArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
+  // Both visual modes retain a complete room; switching themes must never hide the only built environment.
   if (cafeArchitecture) cafeArchitecture.visible = true
   if (roomRoot) roomRoot.visible = false
   buildCharacter()
@@ -2293,7 +2323,8 @@ function toggleBusinessMode() {
   businessMode.value = !businessMode.value
   if (scene) {
     const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
-    if (businessArchitecture) businessArchitecture.visible = businessMode.value
+    // The cafe/library is the shared physical room in both themes; only its presentation changes.
+    if (businessArchitecture) businessArchitecture.visible = true
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
     if (scene.fog) {
@@ -2301,15 +2332,18 @@ function toggleBusinessMode() {
       scene.fog.density = business ? 0.009 : 0.013
     }
     if (renderer) renderer.toneMappingExposure = business ? 1.02 : 1.08
-    scene.traverse((object) => {
-      if (object.isLight && object.name === 'Warm_Deli_Practical_Lights') object.intensity = business ? 0 : object.intensity
-    })
     const practicals = scene.getObjectByName('Warm_Deli_Practical_Lights')
     if (practicals) {
       practicals.children.forEach((light) => {
-        if (light.isLight) light.intensity = business ? 20 : 28
+        if (light.isLight) {
+          light.color.setHex(business ? 0xffc77a : 0x8abfff)
+          light.intensity = business ? 28 : 17
+        }
       })
     }
+    scene.traverse((object) => {
+      if (object.isLight && object.name === 'Warm_Deli_Practical_Lights') object.visible = true
+    })
   }
   status.value = businessMode.value ? '商务写实主题已启用' : '童话主题已启用'
 }
