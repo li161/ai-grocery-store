@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "sync:retail": "node scripts/sync-retail-news.mjs",
-    "sync:platform": "node scripts/sync-platform-actions.mjs"
+    "sync:platform": "node scripts/sync-platform-actions.mjs",
+    "predev": "node scripts/fetch-render-assets.mjs",
+    "prebuild": "node scripts/fetch-render-assets.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
