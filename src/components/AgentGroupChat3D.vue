@@ -1483,8 +1483,8 @@ function buildLibraryRoom() {
   roomRoot = new THREE.Group()
   roomRoot.name = 'Realistic_Supermarket_Interior'
   scene.add(roomRoot)
-  const floorTile = mat(0xc8c7c0, 0.34, 0.04),
-    grout = mat(0xaaa9a2, 0.8),
+  const floorTile = mat(0xb8a58c, 0.3, 0.08),
+    grout = mat(0x75614d, 0.8),
     wall = mat(0xe8e9e4, 0.88),
     trim = mat(0x293b40, 0.42, 0.46)
   const stainless = mat(0x9da8ab, 0.28, 0.62),
@@ -1509,6 +1509,20 @@ function buildLibraryRoom() {
     add(new THREE.BoxGeometry(0.012, 0.006, 21.8), grout, [x, -0.065, 0])
   for (let z = -10.5; z <= 10.5; z += 1.25)
     add(new THREE.BoxGeometry(19.8, 0.006, 0.012), grout, [0, -0.064, z])
+  // Richly zoned flooring: a teal central aisle, terracotta checkout bays, and brass inlay.
+  const aisleTeal = mat(0x356d68, 0.36, 0.12)
+  const checkoutClay = mat(0xb86f4e, 0.4, 0.06)
+  const brassInlay = mat(0xe0b65e, 0.28, 0.42)
+  add(new THREE.BoxGeometry(3.05, 0.018, 10.2), aisleTeal, [0, -0.061, 0.2])
+  add(new THREE.BoxGeometry(4.2, 0.018, 3.2), checkoutClay, [-6.85, -0.061, 5.35])
+  add(new THREE.BoxGeometry(4.2, 0.018, 3.2), checkoutClay, [6.85, -0.061, 5.35])
+  for (const x of [-1.58, 1.58]) {
+    add(new THREE.BoxGeometry(0.045, 0.02, 10.2), brassInlay, [x, -0.05, 0.2])
+  }
+  for (const z of [4.95, 5.75]) {
+    add(new THREE.BoxGeometry(4.0, 0.02, 0.035), brassInlay, [-6.85, -0.05, z])
+    add(new THREE.BoxGeometry(4.0, 0.02, 0.035), brassInlay, [6.85, -0.05, z])
+  }
   // Tall neutral walls and a suspended retail ceiling frame.
   add(new THREE.BoxGeometry(20, 7.7, 0.28), wall, [0, 3.75, -8.95])
   add(new THREE.BoxGeometry(0.28, 7.7, 18.1), wall, [-9.85, 3.75, 0])
@@ -1620,7 +1634,7 @@ function buildLibraryRoom() {
 function createCoffeeBarAccent() {
   const bar = new THREE.Group()
   bar.name = 'PBR_Coffee_Bar_Accent'
-  bar.position.set(-0.15, 0, 0.55)
+  bar.position.set(0, 0, -5.05)
   scene.add(bar)
   const addPart = (geometry, material, pos, rotation = null) => {
     const part = mesh(geometry, material, pos, bar, rotation)
@@ -1634,8 +1648,9 @@ function createCoffeeBarAccent() {
   const steelDark = mat(0x242d32, 0.27, 0.58)
   const porcelain = characterMat(0xf3ebdf, 0.2)
   const gold = mat(0xc59a56, 0.26, 0.7)
+  const barMarble = mat(0xe5ded1, 0.22, 0.14)
   addPart(new RoundedBoxGeometry(6.15, 0.96, 1.15, 8, 0.065), walnut, [0, 0.51, 0])
-  addPart(new RoundedBoxGeometry(6.28, 0.115, 1.28, 8, 0.04), marbleMat, [0, 1.055, 0])
+  addPart(new RoundedBoxGeometry(6.28, 0.115, 1.28, 8, 0.04), barMarble, [0, 1.055, 0])
   addPart(new RoundedBoxGeometry(5.98, 0.018, 1.2, 5, 0.009), gold, [0, 0.987, 0])
   for (let x = -2.65; x <= 2.66; x += 0.48) {
     addPart(new RoundedBoxGeometry(0.018, 0.72, 0.045, 2, 0.008), gold, [x, 0.48, 0.587])
@@ -1938,13 +1953,14 @@ function initScene() {
   scene.add(warm)
   buildLibraryRoom()
   createRetailAisle()
+  createCoffeeBarAccent()
   buildCharacter()
   raycaster = new THREE.Raycaster()
   // Use the custom-built retail scene as the single source of truth. Loading the benchmark café GLTF here
   // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
   highDetailRoomLoaded.value = true
   highDetailCafeLoaded.value = true
-  roomRenderStatus.value = '定制零售货架 + 商品陈列 + 3D 咨询桌'
+  roomRenderStatus.value = '彩色分区地板 + 咖啡吧台 + 零售货架 · REAL-TIME 3D'
   // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
   const initialWidth = Math.max(1, host.clientWidth),
     initialHeight = Math.max(1, host.clientHeight)
