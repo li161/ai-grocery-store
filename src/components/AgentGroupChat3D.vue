@@ -2243,9 +2243,12 @@ function initScene() {
   // The reference composition is a bookstore café, not a grocery aisle. Keep the café architecture as the only environment layer; the legacy aisle and duplicate bar were overlapping it and visually fighting the reference layout.
   buildLibraryRoom()
   createBusinessArchitecture()
+  buildBusinessRetailScene()
   const cafeArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
-  // Both visual modes retain a complete room; switching themes must never hide the only built environment.
-  if (cafeArchitecture) cafeArchitecture.visible = true
+  const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
+  // Business and fairytale modes now switch between separate environment geometry.
+  if (cafeArchitecture) cafeArchitecture.visible = !businessMode.value
+  if (retailScene) retailScene.visible = businessMode.value
   if (roomRoot) roomRoot.visible = false
   buildCharacter()
   raycaster = new THREE.Raycaster()
@@ -2368,8 +2371,10 @@ function toggleBusinessMode() {
   businessMode.value = !businessMode.value
   if (scene) {
     const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
-    // The cafe/library is the shared physical room in both themes; only its presentation changes.
-    if (businessArchitecture) businessArchitecture.visible = true
+    const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
+    // Switch whole environment layers; SpongeBob agents and chat UI remain shared.
+    if (businessArchitecture) businessArchitecture.visible = !businessMode.value
+    if (retailScene) retailScene.visible = businessMode.value
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
     if (scene.fog) {
