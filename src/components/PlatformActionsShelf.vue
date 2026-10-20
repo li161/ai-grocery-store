@@ -328,11 +328,7 @@ function formatDateTime(value) {
         keyword || activeType !== '全部' ? '没有匹配的记录' : '该筛选下暂时没有可展示记录'
       }}</strong>
       <p>不会用其他平台的数据填充空缺。可以切换时间范围，或清除平台、类型和关键词筛选。</p>
-      <button
-        @click="resetFilters"
-      >
-        重置筛选
-      </button>
+      <button @click="resetFilters">重置筛选</button>
     </div>
 
     <footer class="platform-footer">
