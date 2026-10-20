@@ -571,7 +571,7 @@ function onCanvasPointerUp(e){
 function onSceneKeyDown(e){
  // Keyboard movement is active after a character has been focused; keep typing controls untouched.
  const target=e.target
- if(target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select, button, [contenteditable="true"]')))return
+ if(target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select, [contenteditable="true"]')))return
  const key=e.key.toLowerCase()
  const directions={
   arrowup:[0,-1],w:[0,-1],
