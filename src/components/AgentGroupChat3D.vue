@@ -1724,9 +1724,9 @@ function buildLibraryRoom() {
   roomRoot.add(deli)
   const deliPart = (geo, material, pos, rot = null) => mesh(geo, material, pos, deli, rot)
   const enamelGreen = mat(0x397d68, 0.34, 0.08)
-  const oakTop = new THREE.MeshStandardMaterial({ map: makeWoodTexture(), color: 0xc49a68, roughness: 0.55 })
+  const oakTop = new THREE.MeshStandardMaterial({ map: makeWoodTexture(), color: 0xc49a68, roughness: 0.42, metalness: 0.015, envMapIntensity: 0.55 })
   const deliSteel = mat(0xb9c0bf, 0.26, 0.55)
-  const deliGlass = new THREE.MeshPhysicalMaterial({ color: 0xe8f4f1, roughness: 0.08, metalness: 0.02, transparent: true, opacity: 0.22, transmission: 0.42, thickness: 0.04, side: THREE.DoubleSide })
+  const deliGlass = new THREE.MeshPhysicalMaterial({ color: 0xe8f4f1, roughness: 0.045, metalness: 0.025, transparent: true, opacity: 0.2, transmission: 0.72, thickness: 0.08, ior: 1.48, envMapIntensity: 1.35, side: THREE.DoubleSide, depthWrite: false })
   deliPart(new RoundedBoxGeometry(6.8, 0.9, 1.25, 6, 0.045), enamelGreen, [0, 0.48, 0])
   deliPart(new RoundedBoxGeometry(6.92, 0.12, 1.36, 6, 0.035), oakTop, [0, 0.99, 0])
   deliPart(new THREE.BoxGeometry(6.55, 0.035, 0.04), oak, [0, 0.82, 0.635])
@@ -2050,9 +2050,11 @@ function initScene() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, headlessRender ? 0.85 : 1.35))
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.94
+  renderer.toneMappingExposure = 1.08
+  renderer.useLegacyLights = false
   renderer.shadowMap.enabled = !headlessRender
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.physicallyCorrectLights = true
   const pmremGenerator = new THREE.PMREMGenerator(renderer)
   const roomEnvironment = new RoomEnvironment()
   environmentTarget = pmremGenerator.fromScene(roomEnvironment, 0.04)
@@ -2065,8 +2067,18 @@ function initScene() {
     }
   })
   host.appendChild(renderer.domElement)
-  scene.add(new THREE.HemisphereLight(0xffedd6, 0x514237, 1.12))
-  scene.add(new THREE.AmbientLight(0xffffff, 0.18))
+  scene.add(new THREE.HemisphereLight(0xffedd6, 0x514237, 1.28))
+  scene.add(new THREE.AmbientLight(0xffffff, 0.24))
+  // Warm practicals layered over neutral fill produce the amber-lit deli reference look.
+  const practicalLights = new THREE.Group()
+  practicalLights.name = 'Warm_Deli_Practical_Lights'
+  for (const [x, z, intensity] of [[-7, -1.7, 28], [-3.5, -1.7, 32], [0, -1.7, 34], [3.5, -1.7, 32], [7, -1.7, 28]]) {
+    const lamp = new THREE.PointLight(0xffc77a, intensity, 8, 1.8)
+    lamp.position.set(x, 5.45, z)
+    lamp.castShadow = false
+    practicalLights.add(lamp)
+  }
+  scene.add(practicalLights)
   const sun = new THREE.DirectionalLight(0xffd8a4, 2.35)
   sun.position.set(-7, 10, 7)
   sun.castShadow = true
@@ -2080,6 +2092,9 @@ function initScene() {
   const fill = new THREE.DirectionalLight(0xfff4e7, 0.72)
   fill.position.set(5, 7, 3)
   scene.add(fill)
+  const coolGlassFill = new THREE.DirectionalLight(0xd8efff, 0.42)
+  coolGlassFill.position.set(0, 4, 8)
+  scene.add(coolGlassFill)
   const warm = new THREE.PointLight(0xffc06e, 22, 16)
   warm.position.set(-1, 5, 0)
   scene.add(warm)
@@ -2092,7 +2107,7 @@ function initScene() {
   // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
   highDetailRoomLoaded.value = true
   highDetailCafeLoaded.value = true
-  roomRenderStatus.value = '彩色分区地板 + 咖啡吧台 + 零售货架 · REAL-TIME 3D'
+  roomRenderStatus.value = '熟食店空间 · PBR 材质 · 实时阴影与暖光'
   // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
   const initialWidth = Math.max(1, host.clientWidth),
     initialHeight = Math.max(1, host.clientHeight)
