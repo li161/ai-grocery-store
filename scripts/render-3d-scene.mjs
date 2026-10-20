@@ -107,12 +107,22 @@ try {
   const fullPath = outputDir + '/agent-group-chat-3d-render.png'
   const canvasBox = await page.locator('.scene-shell .three-canvas canvas').boundingBox()
   if (!canvasBox || canvasBox.width < 300 || canvasBox.height < 200) throw new Error('The rendered canvas has invalid screen bounds: ' + JSON.stringify(canvasBox))
+  // Hide HTML overlays so the stage screenshot measures the WebGL pixels, not the colorful chat UI.
+  await page.evaluate(() => {
+    for (const selector of ['.scene-vignette','.left-glass','.environment-label','.agent-labels','.view-dock','.environment-credit','.scene-footnote','.chat-panel']) {
+      document.querySelectorAll(selector).forEach(el => { el.dataset.visualTestHidden = 'true'; el.style.visibility = 'hidden' })
+    }
+  })
   // Capture by viewport crop instead of locator.screenshot(): an animated WebGL canvas never becomes layout-stable.
   await page.screenshot({ path: stagePath, clip: { x: canvasBox.x, y: canvasBox.y, width: canvasBox.width, height: canvasBox.height } })
-  await page.screenshot({ path: fullPath })
   const stageQuality = countColorSamples(await readFile(stagePath))
+  await page.evaluate(() => document.querySelectorAll('[data-visual-test-hidden="true"]').forEach(el => {
+    el.style.visibility = ''
+    delete el.dataset.visualTestHidden
+  }))
+  await page.screenshot({ path: fullPath })
   if (stageQuality.uniqueSampledColors < 100) {
-    throw new Error('The WebGL scene screenshot appears visually blank: ' + JSON.stringify(stageQuality))
+    throw new Error('The WebGL-only scene appears blank or unlit after hiding HTML overlays: ' + JSON.stringify(stageQuality))
   }
   if (pageErrors.length) throw new Error('Browser runtime errors: ' + pageErrors.join(' | '))
 
