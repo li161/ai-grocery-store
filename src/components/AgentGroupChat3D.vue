@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
@@ -72,7 +72,8 @@ const agents = [
 ]
 const selected = ref(props.initialAgent ? [props.initialAgent] : agents.map((a) => a.id))
 const activeAgents = computed(() => agents.filter((a) => selected.value.includes(a.id)))
-const messages = ref([
+const CHAT_HISTORY_KEY = 'ai-grocery-agent-chat-history-v1'
+const initialMessages = [
   {
     id: 1,
     role: 'system',
@@ -85,7 +86,38 @@ const messages = ref([
     text: '我是店长。告诉我经营目标，我会拆解任务并协调各岗位协作。',
     time: '刚刚',
   },
-])
+]
+function loadChatHistory() {
+  try {
+    const saved = window.localStorage.getItem(CHAT_HISTORY_KEY)
+    if (!saved) return initialMessages
+    const parsed = JSON.parse(saved)
+    if (
+      Array.isArray(parsed) &&
+      parsed.every(
+        (message) =>
+          message &&
+          typeof message.id !== 'undefined' &&
+          typeof message.role === 'string' &&
+          typeof message.text === 'string',
+      )
+    ) {
+      return parsed.slice(-500)
+    }
+  } catch (error) {
+    console.warn('无法恢复群聊记录，将使用初始消息。', error)
+  }
+  return initialMessages
+}
+const messages = ref(loadChatHistory())
+function persistChatHistory() {
+  try {
+    window.localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages.value.slice(-500)))
+  } catch (error) {
+    console.warn('群聊记录暂时无法写入本地存储。', error)
+  }
+}
+watch(messages, persistChatHistory, { deep: true })
 const draft = ref('')
 const busy = ref(false)
 const status = ref('空间就绪 · 等待任务')
@@ -175,6 +207,9 @@ function resolveTargets(text) {
 }
 function addMessage(role, text) {
   messages.value.push({ id: Date.now() + Math.random(), role, text, time: now() })
+  // Persist synchronously as well, so an in-flight response is retained even if
+  // the chat component is unmounted by switching to another submenu.
+  persistChatHistory()
 }
 async function send() {
   const text = draft.value.trim()
