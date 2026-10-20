@@ -821,7 +821,7 @@ function buildBusinessRetailScene() {
   const previousRoomRoot = roomRoot
   roomRoot = retailRoot
   const concrete = mat(0x29363a, 0.82, 0.08)
-  const paleFloor = new THREE.MeshStandardMaterial({ map: marbleTex, color: 0xc9d0ce, roughness: 0.48, metalness: 0.04 })
+  const paleFloor = new THREE.MeshStandardMaterial({ map: makeMarbleTexture(), color: 0xc9d0ce, roughness: 0.48, metalness: 0.04 })
   const wall = mat(0x344448, 0.88, 0.02)
   const teal = mat(0x0d4549, 0.34, 0.18)
   const mint = mat(0x8fd1b4, 0.42, 0.04)
