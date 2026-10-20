@@ -21,6 +21,12 @@ const types = [
   '履约/供应链',
   '治理/算法',
 ]
+function resetFilters() {
+  keyword.value = ''
+  activeType.value = '全部'
+  activePlatform.value = '全部'
+  activeWindow.value = '7天'
+}
 function selectPlatform(platform) {
   activePlatform.value = platform
   activeType.value = '全部'
@@ -323,12 +329,7 @@ function formatDateTime(value) {
       }}</strong>
       <p>不会用其他平台的数据填充空缺。可以切换时间范围，或清除平台、类型和关键词筛选。</p>
       <button
-        @click="
-          keyword = ''
-          activeType = '全部'
-          activePlatform = '全部'
-          activeWindow = '7天'
-        "
+        @click="resetFilters"
       >
         重置筛选
       </button>
