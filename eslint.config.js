@@ -23,6 +23,9 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
+      'no-unused-vars': 'warn',
+      'no-empty': 'warn',
+      'no-useless-escape': 'warn',
     },
   },
   ...pluginVue.configs['flat/essential'],
@@ -30,6 +33,8 @@ export default [
     files: ['**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/no-unused-vars': 'warn',
+      'vue/require-toggle-inside-transition': 'warn',
     },
   },
 ]
