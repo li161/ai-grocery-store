@@ -19,6 +19,10 @@ const sceneStyle = computed(() => ({
   '--tilt-x-floor': sceneTilt.value.x * -0.04 + 'deg',
   '--tilt-y-floor': sceneTilt.value.y * 0.07 + 'deg',
 }))
+function selectOrbit(index, item) {
+  orbitIndex.value = index
+  props.onNavigate(item.target)
+}
 function rotateOrbit(step) {
   orbitIndex.value = (orbitIndex.value + step + orbitItems.length) % orbitItems.length
 }
@@ -33,7 +37,7 @@ function resetScene() {
   sceneTilt.value = { x: 0, y: 0 }
 }
 const baseUrl = import.meta.env.BASE_URL
-defineProps({
+const props = defineProps({
   onNavigate: { type: Function, required: true },
   onOpenTool: { type: Function, required: true },
   onOpenIndustry: { type: Function, required: true },
@@ -91,10 +95,7 @@ defineProps({
           class="orbit-node"
           :class="'orbit-node-' + index"
           :aria-pressed="orbitIndex === index"
-          @click="
-            orbitIndex = index
-            onNavigate(item.target)
-          "
+          @click="selectOrbit(index, item)"
         >
           <span>{{ item.icon }}</span
           ><small>{{ item.label }}</small>
