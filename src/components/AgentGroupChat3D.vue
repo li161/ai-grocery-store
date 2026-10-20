@@ -1483,9 +1483,50 @@ function buildLibraryRoom() {
   roomRoot = new THREE.Group()
   roomRoot.name = 'Realistic_Supermarket_Interior'
   scene.add(roomRoot)
-  const floorTile = mat(0xb8a58c, 0.3, 0.08),
+  const floorPattern = canvasTexture((ctx, w, h) => {
+    ctx.fillStyle = '#eee7d9'
+    ctx.fillRect(0, 0, w, h)
+    const tile = 128
+    for (let y = 0; y < h; y += tile) {
+      for (let x = 0; x < w; x += tile) {
+        ctx.fillStyle = ((x / tile + y / tile) % 2) ? '#e9e1d2' : '#f8f3e9'
+        ctx.fillRect(x + 2, y + 2, tile - 4, tile - 4)
+        ctx.save()
+        ctx.translate(x + tile / 2, y + tile / 2)
+        ctx.rotate(Math.PI / 4)
+        ctx.fillStyle = '#a95e4e'
+        ctx.fillRect(-18, -18, 36, 36)
+        ctx.fillStyle = '#657a78'
+        ctx.fillRect(-8, -48, 16, 96)
+        ctx.fillRect(-48, -8, 96, 16)
+        ctx.fillStyle = '#f8f2e8'
+        ctx.fillRect(-6, -6, 12, 12)
+        ctx.restore()
+      }
+    }
+    ctx.strokeStyle = '#b9ab98'
+    ctx.lineWidth = 3
+    for (let p = 0; p <= w; p += tile) {
+      ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, h); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0, p); ctx.lineTo(w, p); ctx.stroke()
+    }
+  }, 5, 5)
+  const floorTile = new THREE.MeshStandardMaterial({ map: floorPattern, color: 0xffffff, roughness: 0.34, metalness: 0.015 }),
     grout = mat(0x75614d, 0.8),
     wall = mat(0xe8e9e4, 0.88),
+    brickTexture = canvasTexture((ctx, w, h) => {
+      ctx.fillStyle = '#d5c5ad'; ctx.fillRect(0, 0, w, h)
+      const bh = 38, bw = 78
+      for (let row = 0; row < h / bh; row++) {
+        const offset = row % 2 ? -bw / 2 : 0
+        for (let x = offset; x < w + bw; x += bw) {
+          const shade = ['#8d4935', '#a9563c', '#b76447', '#984b38', '#c07454'][(row * 7 + Math.floor((x + bw) / bw) * 3) % 5]
+          ctx.fillStyle = shade; ctx.fillRect(x + 2, row * bh + 2, bw - 4, bh - 4)
+          ctx.fillStyle = '#d9c9b6'; ctx.fillRect(x, row * bh, bw, 3); ctx.fillRect(x, row * bh + bh - 3, bw, 3)
+        }
+      }
+    }, 3, 2),
+    brickMat = new THREE.MeshStandardMaterial({ map: brickTexture, color: 0xffffff, roughness: 0.92 }),
     trim = mat(0x293b40, 0.42, 0.46)
   const stainless = mat(0x9da8ab, 0.28, 0.62),
     dark = mat(0x273238, 0.4, 0.52),
@@ -1498,7 +1539,7 @@ function buildLibraryRoom() {
       transmission: 0.35,
       thickness: 0.06,
     })
-  const green = mat(0x2d6d52, 0.52),
+  const green = mat(0x4b9b83, 0.38),
     warm = mat(0xe5b44e, 0.42),
     red = mat(0xc34e3f, 0.48),
     white = mat(0xf5f2e9, 0.72)
@@ -1524,9 +1565,15 @@ function buildLibraryRoom() {
     add(new THREE.BoxGeometry(4.0, 0.02, 0.035), brassInlay, [6.85, -0.05, z])
   }
   // Tall neutral walls and a suspended retail ceiling frame.
-  add(new THREE.BoxGeometry(20, 7.7, 0.28), wall, [0, 3.75, -8.95])
-  add(new THREE.BoxGeometry(0.28, 7.7, 18.1), wall, [-9.85, 3.75, 0])
-  add(new THREE.BoxGeometry(0.28, 7.7, 18.1), wall, [9.85, 3.75, 0])
+  add(new THREE.BoxGeometry(20, 7.7, 0.28), brickMat, [0, 3.75, -8.95])
+  add(new THREE.BoxGeometry(0.28, 7.7, 18.1), brickMat, [-9.85, 3.75, 0])
+  add(new THREE.BoxGeometry(0.28, 7.7, 18.1), brickMat, [9.85, 3.75, 0])
+  // Timber pilasters and warm wood framing echo the reference deli shop.
+  const oak = mat(0x9b693d, 0.48, 0.06), oakHighlight = mat(0xc08a50, 0.42, 0.04)
+  for (const x of [-9.35, -6.2, -3.1, 0, 3.1, 6.2, 9.35]) {
+    add(new THREE.BoxGeometry(0.18, 6.9, 0.2), oak, [x, 3.6, -8.73])
+    add(new THREE.BoxGeometry(0.055, 6.7, 0.035), oakHighlight, [x + 0.065, 3.6, -8.61])
+  }
   add(new THREE.BoxGeometry(20, 0.18, 22), mat(0xe3e5e2, 0.82), [0, 7.55, 0])
   for (let x = -9; x <= 9; x += 3) add(new THREE.BoxGeometry(0.11, 0.22, 21.2), trim, [x, 7.38, 0])
   for (let z = -8; z <= 8; z += 3) add(new THREE.BoxGeometry(19.5, 0.12, 0.12), trim, [0, 7.38, z])
@@ -1625,6 +1672,46 @@ function buildLibraryRoom() {
         4.75,
       ])
   }
+  // Signature green-framed deli counter with a real glass sneeze guard and food display.
+  const deli = new THREE.Group()
+  deli.name = 'Photorealistic_Green_Deli_Counter'
+  deli.position.set(2.05, 0, 3.65)
+  roomRoot.add(deli)
+  const deliPart = (geo, material, pos, rot = null) => mesh(geo, material, pos, deli, rot)
+  const enamelGreen = mat(0x397d68, 0.34, 0.08)
+  const oakTop = new THREE.MeshStandardMaterial({ map: makeWoodTexture(), color: 0xc49a68, roughness: 0.55 })
+  const deliSteel = mat(0xb9c0bf, 0.26, 0.55)
+  const deliGlass = new THREE.MeshPhysicalMaterial({ color: 0xe8f4f1, roughness: 0.08, metalness: 0.02, transparent: true, opacity: 0.22, transmission: 0.42, thickness: 0.04, side: THREE.DoubleSide })
+  deliPart(new RoundedBoxGeometry(6.8, 0.9, 1.25, 6, 0.045), enamelGreen, [0, 0.48, 0])
+  deliPart(new RoundedBoxGeometry(6.92, 0.12, 1.36, 6, 0.035), oakTop, [0, 0.99, 0])
+  deliPart(new THREE.BoxGeometry(6.55, 0.035, 0.04), oak, [0, 0.82, 0.635])
+  for (const x of [-2.35, -0.8, 0.8, 2.35]) {
+    deliPart(new RoundedBoxGeometry(1.15, 0.5, 0.025, 4, 0.015), mat(0x2c6857, 0.45), [x, 0.47, 0.635])
+    deliPart(new THREE.BoxGeometry(1.0, 0.025, 0.02), oakHighlight, [x, 0.62, 0.655])
+  }
+  deliPart(new THREE.BoxGeometry(6.5, 0.055, 0.9), deliSteel, [0, 1.12, -0.05])
+  deliPart(new THREE.BoxGeometry(6.5, 0.05, 0.9), mat(0xf0e9dc, 0.28), [0, 1.17, -0.05])
+  // Glass planes lean slightly inward; slim metal posts and top rail catch the warm lighting.
+  for (const x of [-3.1, -1.55, 0, 1.55, 3.1]) {
+    deliPart(new THREE.BoxGeometry(0.035, 0.88, 0.04), deliSteel, [x, 1.68, -0.44])
+    deliPart(new THREE.BoxGeometry(0.035, 0.88, 0.04), deliSteel, [x, 1.68, 0.36])
+  }
+  deliPart(new THREE.BoxGeometry(6.35, 0.035, 0.04), deliSteel, [0, 2.12, -0.44])
+  deliPart(new THREE.BoxGeometry(6.35, 0.035, 0.04), deliSteel, [0, 2.12, 0.36])
+  deliPart(new THREE.PlaneGeometry(6.25, 0.86), deliGlass, [0, 1.68, -0.43])
+  deliPart(new THREE.PlaneGeometry(6.25, 0.86), deliGlass, [0, 1.68, 0.35])
+  // Cheese wheels, deli tubs and produce arranged in distinct display trays.
+  for (let i = 0; i < 6; i++) {
+    const x = -2.55 + i * 1.02
+    deliPart(new THREE.BoxGeometry(0.76, 0.16, 0.52), mat(0xddd3bd, 0.62), [x, 1.29, -0.16])
+    deliPart(new THREE.CylinderGeometry(0.19, 0.19, 0.18, 32), mat([0xd8b65b, 0xe7d39b, 0xc89c4b][i % 3], 0.48), [x, 1.43, -0.14])
+    deliPart(new THREE.CylinderGeometry(0.17, 0.17, 0.012, 32), mat(0xf2df9d, 0.5), [x, 1.53, -0.14])
+    for (let k = 0; k < 3; k++) {
+      deliPart(new THREE.SphereGeometry(0.095, 14, 10), mat([0x9f3f35, 0x6c8e4b, 0xd1a14b][(i + k) % 3], 0.42), [x - 0.18 + k * 0.18, 1.35, 0.13])
+    }
+  }
+  // Recessed warm LED strip inside the case.
+  deliPart(new THREE.BoxGeometry(6.2, 0.025, 0.025), mat(0xffd9a0, 0.24, 0.04, { emissive: 0xffb65b, emissiveIntensity: 1.15 }), [0, 2.02, 0.31])
   // Floor-level aisle endcaps and safety bollards anchor the gondolas visually.
   for (const x of [-7.0, -3.45, 0.3, 4.0, 7.1]) {
     add(new THREE.BoxGeometry(0.16, 0.65, 0.16), warm, [x, 0.33, 1.4])
@@ -1908,8 +1995,8 @@ function initScene() {
   scene.background = new THREE.Color(0x19150f)
   scene.fog = new THREE.FogExp2(0x19150f, 0.013)
   camera = new THREE.PerspectiveCamera(48, 1, 0.1, 120)
-  camera.position.set(0, 3.25, 12.5)
-  camera.lookAt(0, 1.55, -0.5)
+  camera.position.set(0, 4.15, 14.6)
+  camera.lookAt(0, 1.65, -1.25)
   renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: false,
