@@ -988,31 +988,36 @@ function faceEyes(parent, x, y, z, eyeScale = 0.13, irisColor = 0x3d7dbb) {
     pupil = mat(0x17202a, 0.18),
     shine = mat(0xffffff, 0.1)
   for (const dx of [-x, x]) {
+    const eye = new THREE.Group()
+    eye.position.set(dx, y, z)
+    eye.userData.isCharacterEye = true
+    eye.userData.blinkScale = 1
+    parent.add(eye)
     mesh(
       new THREE.SphereGeometry(eyeScale, 24, 20),
       white,
-      [dx, y, z],
-      parent,
+      [0, 0, 0],
+      eye,
       [0, 0, 0],
       [0.82, 1.05, 0.52],
     )
     mesh(
       new THREE.SphereGeometry(eyeScale * 0.49, 20, 16),
       iris,
-      [dx * 0.85, y, z + eyeScale * 0.42],
-      parent,
+      [dx * -0.15, 0, eyeScale * 0.42],
+      eye,
     )
     mesh(
       new THREE.SphereGeometry(eyeScale * 0.27, 16, 12),
       pupil,
-      [dx * 0.85, y, z + eyeScale * 0.67],
-      parent,
+      [dx * -0.15, 0, eyeScale * 0.67],
+      eye,
     )
     mesh(
       new THREE.SphereGeometry(eyeScale * 0.12, 10, 8),
       shine,
-      [dx * 0.85 - eyeScale * 0.1, y + eyeScale * 0.14, z + eyeScale * 0.84],
-      parent,
+      [dx * -0.15 - eyeScale * 0.1, eyeScale * 0.14, eyeScale * 0.84],
+      eye,
     )
   }
 }
@@ -1297,7 +1302,9 @@ function buildCharacter() {
   }
   for (const a of agents) {
     const character = createSpongeBob(a)
-    character.scale.setScalar(a.id === 'pm' ? 1.55 : 1.25)
+    character.userData.baseScale = a.id === 'pm' ? 1.55 : 1.25
+    character.scale.setScalar(character.userData.baseScale)
+    character.userData.characterEyes = character.children.filter((child) => child.userData.isCharacterEye)
     character.userData.labelHeight = labelHeights[a.id] || 2
   }
 }
@@ -1853,13 +1860,26 @@ function initScene() {
     raf = requestAnimationFrame(animate)
     const t = sceneClock.getElapsedTime()
     for (const [id, g] of characterGroups) {
+      const index = agents.findIndex((a) => a.id === id)
+      const phase = t * 1.8 + index * 1.17
       const focus = focusAgent.value === id
-      g.position.y =
-        Math.sin(t * 1.8 + agents.findIndex((a) => a.id === id)) * 0.025 +
-        (motion.value === 'wave' && focus ? Math.abs(Math.sin(t * 7)) * 0.12 : 0)
+      const talking = motion.value === 'wave' && focus
+      const bounce = Math.abs(Math.sin(phase * 1.35))
+      g.position.y = Math.sin(phase) * (focus ? 0.045 : 0.032) + (talking ? bounce * 0.16 : 0)
       g.rotation.y = Number.isFinite(g.userData.moveFacing)
         ? g.userData.moveFacing
-        : Math.sin(t * 0.45 + agents.findIndex((a) => a.id === id)) * 0.035
+        : Math.sin(t * 0.45 + index) * 0.055
+      // Tiny squash-and-stretch and character-specific head tilts keep the cast from feeling like statues.
+      const squash = 1 + Math.sin(phase * 2) * 0.012 + (talking ? bounce * 0.025 : 0)
+      g.scale.set(g.userData.baseScale * (2 - squash), g.userData.baseScale * squash, g.userData.baseScale * (2 - squash))
+      g.rotation.z = Math.sin(phase * 0.72) * (focus ? 0.035 : 0.022)
+      for (const eye of g.userData.characterEyes || []) {
+        const blinkWave = (t + index * 1.73) % 4.2
+        const blink = blinkWave > 3.92 && blinkWave < 4.08
+          ? Math.max(0.08, Math.abs((blinkWave - 4) / 0.08))
+          : 1
+        eye.scale.y = blink
+      }
       g.userData.ring.material.opacity = focus ? 0.95 : 0.38
     }
     const highDetail = highDetailRoomLoaded.value
