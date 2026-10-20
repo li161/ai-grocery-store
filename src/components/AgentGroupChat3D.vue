@@ -19,7 +19,7 @@ const agents = [
     id: 'manager',
     name: '店长',
     role: '经营负责人',
-    character: '海绵宝宝',
+    character: '门店负责人',
     emoji: '🧽',
     color: 0x9a7bff,
     guide: '统筹经营目标、拆解任务、协调岗位并汇总结果。',
@@ -28,7 +28,7 @@ const agents = [
     id: 'cashier',
     name: '小票',
     role: '收银员',
-    character: '派大星',
+    character: '收银专员',
     emoji: '⭐',
     color: 0x42c8ff,
     guide: '处理订单咨询、支付流程指引与售后分流。',
@@ -37,7 +37,7 @@ const agents = [
     id: 'guide',
     name: '小导',
     role: '导购顾问',
-    character: '章鱼哥',
+    character: '导购顾问',
     emoji: '🦑',
     color: 0xffbd65,
     guide: '识别顾客需求、比较商品并提供组合购买建议。',
@@ -46,7 +46,7 @@ const agents = [
     id: 'buyer',
     name: '采购',
     role: '采购补货',
-    character: '蟹老板',
+    character: '采购专员',
     emoji: '🦀',
     color: 0x50e0bd,
     guide: '整理缺货信号、供应商报价与补货建议。',
@@ -55,7 +55,7 @@ const agents = [
     id: 'inventory',
     name: '盘点员',
     role: '库存盘点',
-    character: '珊迪',
+    character: '库存专员',
     emoji: '🐿️',
     color: 0x65a6ff,
     guide: '核对库存差异，发现临期和损耗风险。',
@@ -64,7 +64,7 @@ const agents = [
     id: 'pm',
     name: '林舟',
     role: '产品经理',
-    character: '痞老板',
+    character: '产品经理',
     emoji: '🦠',
     color: 0xff79c6,
     guide: '将经营目标拆成流程、验收标准和迭代计划。',
@@ -233,7 +233,7 @@ const apiBase = ref(
 const sceneShell = ref(null)
 const canvasHost = ref(null)
 const roomRenderStatus = ref('正在加载高细节场景…')
-const businessMode = ref(false)
+const businessMode = ref(true)
 const highDetailRoomLoaded = ref(false)
 const highDetailCafeLoaded = ref(false)
 const messageList = ref(null)
@@ -1162,266 +1162,50 @@ function faceEyes(parent, x, y, z, eyeScale = 0.13, irisColor = 0x3d7dbb) {
     )
   }
 }
-function createSpongeBob(a) {
+function createProfessionalHuman(a) {
   const g = new THREE.Group()
   g.position.set(...agentPositions[a.id])
   g.userData.agentId = a.id
-  const yellow = characterMat(0xf5cf32, 0.48),
-    yellowShade = mat(0xd5a922, 0.65),
-    white = characterMat(0xfff4df, 0.42),
-    brown = characterMat(0x8b4e27, 0.62),
-    red = characterMat(0xdf3c34, 0.42),
-    black = mat(0x292a2d, 0.42),
-    blue = characterMat(0x2e8bc7, 0.3),
-    pink = characterMat(0xffa2b6, 0.48),
-    green = characterMat(0x74a94c, 0.5),
-    purple = characterMat(0x7665b8, 0.44),
-    teal = characterMat(0x3e9da0, 0.44)
-  const add = (geo, m, p, r = null, s = null) => {
-    const part = mesh(geo, m, p, g, r, s)
-    part.castShadow = true
-    part.receiveShadow = true
+  const skinTone = { manager: 0xc98f6d, cashier: 0xe0b08b, guide: 0xb97955, buyer: 0xd8a17c, inventory: 0xb77e5e, pm: 0xe2b999 }[a.id] || 0xc98f6d
+  const shirtTone = { manager: 0x243b4a, cashier: 0x202b34, guide: 0x384e48, buyer: 0x6a3d2e, inventory: 0xeee6d8, pm: 0x454b5c }[a.id] || 0x243b4a
+  const skin = characterMat(skinTone, 0.72), shirt = characterMat(shirtTone, 0.78)
+  const trousers = characterMat(a.id === 'inventory' ? 0x303b43 : 0x292e35, 0.84)
+  const hair = characterMat(({manager:0x30231d,cashier:0x211b19,guide:0x29201b,buyer:0x3c2920,inventory:0x4b3426,pm:0x302721})[a.id], 0.9)
+  const shoe = mat(0x17191c, 0.62)
+  const add = (geo, material, position, parent = g, rotation = null, scale = null) => {
+    const part = mesh(geo, material, position, parent, rotation, scale)
+    part.castShadow = true; part.receiveShadow = true
     return part
   }
-  const rounded = (w, h, d, rad, m, p) =>
-    add(new THREE.BoxGeometry(w, h, d, 8, 8, 4), m, p, null, [1, 1, 1])
-  const hit = mesh(
-    new THREE.SphereGeometry(0.86, 16, 12),
-    mat(0xffffff, 0.8, 0, { transparent: true, opacity: 0, depthWrite: false }),
-    [0, 1, 0],
-    g,
-  )
-  hit.castShadow = false
-  hit.receiveShadow = false
-  hit.userData.agentId = a.id
-  characterHitMeshes.push(hit)
-  const smileCurve = (pts, material, r = 0.018) => {
-    const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)))
-    const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 28, r, 8, false), material)
-    g.add(m)
+  const limb = (from, to, radiusA, radiusB, material) => makeLimb(g, material, from, to, radiusA, radiusB)
+  const hit = mesh(new THREE.CapsuleGeometry(0.43, 1.05, 5, 10), mat(0xffffff, 0.8, 0, { transparent: true, opacity: 0, depthWrite: false }), [0, 1.02, 0], g)
+  hit.castShadow = false; hit.receiveShadow = false; hit.userData.agentId = a.id; characterHitMeshes.push(hit)
+  for (const x of [-0.13, 0.13]) {
+    add(new THREE.BoxGeometry(0.19, 0.11, 0.34), shoe, [x, 0.08, 0.07])
+    add(new THREE.CylinderGeometry(0.075, 0.095, 0.48, 16), trousers, [x, 0.34, 0])
   }
-  if (a.id === 'manager') {
-    add(new RoundedBoxGeometry(0.91, 0.88, 0.46, 8, 0.075), yellow, [0, 1.45, 0])
-    // Spongebob's signature pores and soft specular highlights.
-    for (const [x, y, z, r] of [
-      [-0.34, 1.73, 0.238, 0.035],
-      [0.3, 1.68, 0.24, 0.03],
-      [-0.38, 1.37, 0.238, 0.045],
-      [0.39, 1.32, 0.238, 0.038],
-      [-0.26, 1.12, 0.238, 0.025],
-      [0.26, 1.13, 0.238, 0.03],
-      [0, 1.82, 0.23, 0.02],
-    ])
-      add(new THREE.SphereGeometry(r, 10, 8), yellowShade, [x, y, z])
-    faceEyes(g, 0.2, 1.58, 0.255, 0.17, 0x43a5ec)
-    add(
-      new THREE.SphereGeometry(0.06, 12, 10),
-      yellow,
-      [0, 1.39, 0.3],
-      [0, 0, 0],
-      [0.65, 1.6, 0.55],
-    )
-    smileCurve(
-      [
-        [-0.3, 1.28, 0.258],
-        [-0.18, 1.22, 0.28],
-        [0, 1.2, 0.29],
-        [0.18, 1.22, 0.28],
-        [0.3, 1.28, 0.258],
-      ],
-      black,
-      0.018,
-    )
-    add(new THREE.BoxGeometry(0.15, 0.075, 0.025), white, [0, 1.205, 0.296])
-    add(new THREE.BoxGeometry(0.9, 0.22, 0.47), white, [0, 0.95, 0])
-    add(new THREE.BoxGeometry(0.91, 0.43, 0.47), brown, [0, 0.62, 0])
-    add(new THREE.BoxGeometry(0.1, 0.31, 0.045), red, [0, 0.84, 0.26])
-    add(new THREE.ConeGeometry(0.09, 0.13, 4), red, [0, 0.63, 0.29], [Math.PI, 0, 0])
-    for (const dx of [-0.22, 0.22]) {
-      add(new THREE.BoxGeometry(0.12, 0.17, 0.045), white, [dx, 0.34, 0.02])
-      makeLimb(g, white, [dx, 0.32, 0], [dx, 0.14, 0], 0.045, 0.04)
-      add(
-        new THREE.SphereGeometry(0.12, 16, 12),
-        black,
-        [dx, 0.08, 0.06],
-        [0, 0, 0],
-        [1.25, 0.55, 1.55],
-      )
-    }
-    makeLimb(g, yellow, [-0.49, 1.08, 0], [-0.68, 0.83, 0.03], 0.06, 0.045)
-    makeLimb(g, yellow, [0.49, 1.08, 0], [0.69, 0.83, 0.03], 0.06, 0.045)
-    add(new THREE.SphereGeometry(0.06, 12, 10), yellow, [-0.68, 0.82, 0.03])
-    add(new THREE.SphereGeometry(0.06, 12, 10), yellow, [0.69, 0.82, 0.03])
-  } else if (a.id === 'cashier') {
-    // Patrick Star: a beveled five-point star body and green-purple shorts.
-    const shape = new THREE.Shape()
-    const cx = 0,
-      cy = 1.18,
-      outer = 0.68,
-      inner = 0.31
-    for (let i = 0; i < 10; i++) {
-      const ang = Math.PI / 2 + (i * Math.PI) / 5
-      const rr = i % 2 === 0 ? outer : inner
-      const x = cx + Math.cos(ang) * rr,
-        y = cy + Math.sin(ang) * rr
-      if (i === 0) shape.moveTo(x, y)
-      else shape.lineTo(x, y)
-    }
-    shape.closePath()
-    const starGeo = new THREE.ExtrudeGeometry(shape, {
-      depth: 0.27,
-      bevelEnabled: true,
-      bevelSegments: 4,
-      steps: 1,
-      bevelSize: 0.06,
-      bevelThickness: 0.05,
-      curveSegments: 12,
-    })
-    add(starGeo, pink, [0, 0, -0.13])
-    faceEyes(g, 0.125, 1.34, 0.24, 0.115, 0x3980bc)
-    add(new THREE.SphereGeometry(0.06, 12, 10), yellow, [0, 1.08, 0.24], [0, 0, 0], [1.4, 0.5, 0.4])
-    smileCurve(
-      [
-        [-0.18, 1.08, 0.22],
-        [0, 1.03, 0.255],
-        [0.18, 1.08, 0.22],
-      ],
-      black,
-      0.016,
-    )
-    add(new THREE.CylinderGeometry(0.33, 0.36, 0.36, 24), green, [0, 0.48, 0])
-    add(new THREE.BoxGeometry(0.66, 0.08, 0.29), purple, [0, 0.62, 0.03])
-    for (const dx of [-0.32, 0.32])
-      makeLimb(g, pink, [dx, 0.79, 0], [dx * 1.45, 0.49, 0.02], 0.075, 0.07)
-    for (const dx of [-0.18, 0.18]) {
-      makeLimb(g, pink, [dx, 0.3, 0], [dx, 0.12, 0], 0.055, 0.05)
-      add(
-        new THREE.SphereGeometry(0.12, 16, 12),
-        black,
-        [dx, 0.08, 0.05],
-        [0, 0, 0],
-        [1.2, 0.5, 1.6],
-      )
-    }
-  } else if (a.id === 'guide') {
-    // Squidward: long aqua head, tapered nose, six expressive tentacle limbs and a polo shirt.
-    const aqua = characterMat(0x7bc9bd, 0.42),
-      nose = characterMat(0x8bd1c5, 0.38),
-      shirt = characterMat(0x93674f, 0.66)
-    add(new THREE.SphereGeometry(0.37, 32, 24), aqua, [0, 1.65, 0.02], [0, 0, 0], [0.72, 1.35, 0.8])
-    faceEyes(g, 0.13, 1.74, 0.29, 0.12, 0xe4c86d)
-    add(new THREE.CylinderGeometry(0.07, 0.045, 0.32, 18), nose, [0, 1.43, 0.29], [0.28, 0, 0])
-    add(new THREE.BoxGeometry(0.5, 0.44, 0.31), shirt, [0, 0.93, 0])
-    for (let i = -1; i <= 1; i++)
-      makeLimb(g, aqua, [i * 0.12, 0.7, 0.02], [i * 0.16, 0.3, 0.1], 0.055, 0.045)
-    for (const dx of [-0.32, 0.32])
-      makeLimb(g, aqua, [dx, 1.12, 0], [dx * 1.65, 0.87, 0.12], 0.055, 0.045)
-    makeLimb(g, aqua, [-0.12, 0.7, 0], [-0.15, 0.12, 0], 0.05, 0.04)
-    makeLimb(g, aqua, [0.12, 0.7, 0], [0.15, 0.12, 0], 0.05, 0.04)
-  } else if (a.id === 'buyer') {
-    // Mr. Krabs: red shell, eyestalks, blue trousers and oversized claws.
-    const crab = characterMat(0xe74637, 0.4),
-      bluePants = characterMat(0x2a72a4, 0.56),
-      claw = characterMat(0xe94a3c, 0.36)
-    add(new THREE.SphereGeometry(0.47, 32, 24), crab, [0, 1.2, 0], [0, 0, 0], [1.18, 0.82, 0.76])
-    for (const dx of [-0.15, 0.15]) {
-      makeLimb(g, crab, [dx, 0.99, 0], [dx, 1.55, 0.02], 0.045, 0.04)
-      add(
-        new THREE.SphereGeometry(0.13, 20, 16),
-        white,
-        [dx, 1.62, 0.08],
-        [0, 0, 0],
-        [0.72, 1.15, 0.65],
-      )
-      add(new THREE.SphereGeometry(0.045, 14, 12), blue, [dx, 1.62, 0.15])
-      add(new THREE.SphereGeometry(0.023, 10, 8), black, [dx, 1.62, 0.19])
-    }
-    add(new THREE.BoxGeometry(0.49, 0.32, 0.31), bluePants, [0, 0.78, 0])
-    for (const dx of [-0.25, 0.25]) {
-      makeLimb(g, crab, [dx, 0.9, 0], [dx * 1.8, 0.67, 0.05], 0.075, 0.06)
-      add(
-        new THREE.SphereGeometry(0.17, 20, 16),
-        claw,
-        [dx * 2, 0.65, 0.05],
-        [0, 0, 0],
-        [1.2, 0.8, 0.7],
-      )
-      makeLimb(g, crab, [dx, 0.72, 0], [dx * 1.15, 0.38, 0.02], 0.05, 0.04)
-    }
-    for (const dx of [-0.12, 0.12]) {
-      makeLimb(g, crab, [dx, 0.66, 0], [dx, 0.22, 0], 0.05, 0.04)
-      add(
-        new THREE.SphereGeometry(0.11, 16, 12),
-        black,
-        [dx, 0.1, 0.04],
-        [0, 0, 0],
-        [1.5, 0.5, 1.5],
-      )
-    }
-  } else if (a.id === 'inventory') {
-    // Sandy Cheeks: squirrel silhouette, buck teeth and a clear astronaut helmet.
-    const fur = characterMat(0xc58b58, 0.63),
-      suit = characterMat(0xeee4d1, 0.42),
-      pink = characterMat(0xe8a1aa, 0.48)
-    add(new THREE.SphereGeometry(0.29, 28, 20), fur, [0, 1.42, 0], [0, 0, 0], [0.9, 1.12, 0.82])
-    for (const dx of [-0.19, 0.19]) {
-      add(
-        new THREE.ConeGeometry(0.12, 0.3, 16),
-        fur,
-        [dx, 1.68, -0.01],
-        [0, 0, dx < 0 ? -0.22 : 0.22],
-      )
-      add(new THREE.SphereGeometry(0.052, 12, 10), pink, [dx, 1.75, 0.02])
-    }
-    faceEyes(g, 0.105, 1.46, 0.23, 0.1, 0x6c9e62)
-    add(new THREE.SphereGeometry(0.05, 12, 10), fur, [0, 1.25, 0.25])
-    add(new THREE.BoxGeometry(0.09, 0.07, 0.025), white, [-0.035, 1.21, 0.27])
-    add(new THREE.BoxGeometry(0.09, 0.07, 0.025), white, [0.055, 1.21, 0.27])
-    add(
-      new THREE.SphereGeometry(0.35, 24, 20, 0, Math.PI * 2, 0, Math.PI),
-      mat(0xcfe8f1, 0.14, 0.08, { transparent: true, opacity: 0.22, side: THREE.DoubleSide }),
-      [0, 1.48, 0],
-    )
-    add(
-      new THREE.TorusGeometry(0.31, 0.025, 10, 36),
-      mat(0xd4dce2, 0.36, 0.45),
-      [0, 1.43, 0],
-      [Math.PI / 2, 0, 0],
-    )
-    add(new THREE.BoxGeometry(0.42, 0.53, 0.32), suit, [0, 0.78, 0])
-    add(new THREE.BoxGeometry(0.12, 0.12, 0.035), mat(0x4e88c4, 0.35), [0, 0.9, 0.18])
-    for (const dx of [-0.26, 0.26])
-      makeLimb(g, suit, [dx, 0.95, 0], [dx * 1.4, 0.69, 0.04], 0.06, 0.05)
-    for (const dx of [-0.13, 0.13]) {
-      makeLimb(g, suit, [dx, 0.52, 0], [dx, 0.17, 0], 0.06, 0.045)
-      add(new THREE.BoxGeometry(0.15, 0.09, 0.22), mat(0x514b45, 0.5), [dx, 0.08, 0.04])
-    }
-  } else {
-    // Plankton: compact green cyclops with two antennae and articulated feet.
-    const plank = characterMat(0x71bc3d, 0.38),
-      redMouth = characterMat(0x551d20, 0.48)
-    add(new THREE.SphereGeometry(0.25, 32, 24), plank, [0, 1.02, 0], [0, 0, 0], [0.8, 1.25, 0.65])
-    add(new THREE.SphereGeometry(0.17, 24, 20), white, [0, 1.1, 0.15], [0, 0, 0], [1, 1, 0.65])
-    add(new THREE.SphereGeometry(0.085, 20, 16), red, [0, 1.1, 0.25])
-    add(new THREE.SphereGeometry(0.045, 14, 10), black, [0, 1.1, 0.3])
-    for (const dx of [-0.11, 0.11]) {
-      makeLimb(g, plank, [dx, 0.85, 0], [dx * 1.9, 0.6, 0.02], 0.025, 0.02)
-      makeLimb(g, plank, [dx, 0.7, 0], [dx * 1.5, 0.45, 0.02], 0.025, 0.02)
-    }
-    makeLimb(g, plank, [-0.08, 1.23, 0], [-0.18, 1.52, 0], 0.02, 0.015)
-    makeLimb(g, plank, [0.08, 1.23, 0], [0.18, 1.52, 0], 0.02, 0.015)
-    add(new THREE.SphereGeometry(0.045, 12, 10), red, [0, 0.78, 0.15])
+  add(new RoundedBoxGeometry(0.53, 0.66, 0.3, 5, 0.045), shirt, [0, 0.91, 0])
+  add(new THREE.CylinderGeometry(0.095, 0.105, 0.16, 18), skin, [0, 1.31, 0])
+  add(new THREE.SphereGeometry(0.155, 24, 20), skin, [0, 1.56, 0.015], g, null, [0.88, 1.12, 0.82])
+  add(new THREE.SphereGeometry(0.16, 20, 12, 0, Math.PI * 2, 0, Math.PI * 0.56), hair, [0, 1.65, -0.006], g, null, [0.94, 0.8, 0.9])
+  for (const x of [-0.135, 0.135]) {
+    add(new THREE.SphereGeometry(0.035, 12, 10), hair, [x, 1.58, -0.015])
+    add(new THREE.SphereGeometry(0.027, 12, 10), skin, [x, 1.55, 0.01])
+    add(new THREE.SphereGeometry(0.014, 10, 8), mat(0x292522, 0.8), [x * 0.47, 1.57, 0.145])
+    add(new THREE.BoxGeometry(0.045, 0.012, 0.018), hair, [x * 0.47, 1.602, 0.14])
   }
-  const ring = mesh(
-    new THREE.TorusGeometry(0.42, 0.012, 8, 44),
-    new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0.55 }),
-    [0, 0.025, 0],
-    g,
-    [Math.PI / 2, 0, 0],
-  )
-  g.userData.ring = ring
-  scene.add(g)
-  characterGroups.set(a.id, g)
+  add(new THREE.SphereGeometry(0.022, 10, 8), skin, [0, 1.525, 0.15], g, null, [0.7, 0.85, 0.8])
+  for (const side of [-1, 1]) {
+    limb([side * 0.25, 1.14, 0], [side * 0.34, 0.78, 0.045], 0.075, 0.055, shirt)
+    limb([side * 0.34, 0.78, 0.045], [side * 0.31, 0.58, 0.09], 0.052, 0.038, skin)
+    add(new THREE.SphereGeometry(0.045, 12, 10), skin, [side * 0.31, 0.56, 0.09])
+  }
+  if (['manager','cashier','guide','buyer'].includes(a.id)) {
+    add(new THREE.BoxGeometry(0.105, 0.14, 0.018), mat(a.color, 0.42, 0.16), [0.105, 0.99, 0.158])
+    add(new THREE.BoxGeometry(0.055, 0.018, 0.012), mat(0xf4e8d0, 0.7), [0.105, 1.015, 0.17])
+  }
+  const ring = mesh(new THREE.TorusGeometry(0.42, 0.012, 8, 44), new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0.45 }), [0, 0.025, 0], g, [Math.PI / 2, 0, 0])
+  g.userData.ring = ring; scene.add(g); characterGroups.set(a.id, g)
   return g
 }
 const agentPositions = {
@@ -1509,7 +1293,7 @@ function buildCharacter() {
     pm: 1.64,
   }
   for (const a of agents) {
-    const character = createSpongeBob(a)
+    const character = createProfessionalHuman(a)
     character.userData.baseScale = a.id === 'pm' ? 1.55 : 1.25
     character.scale.setScalar(character.userData.baseScale)
     character.userData.characterEyes = character.children.filter((child) => child.userData.isCharacterEye)
@@ -2170,6 +1954,9 @@ function initScene() {
   createBusinessArchitecture()
   createRetailAisle()
   createCoffeeBarAccent()
+  const cafeArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
+  if (cafeArchitecture) cafeArchitecture.visible = true
+  if (roomRoot) roomRoot.visible = false
   buildCharacter()
   raycaster = new THREE.Raycaster()
   // Use the custom-built retail scene as the single source of truth. Loading the benchmark café GLTF here
