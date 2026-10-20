@@ -568,6 +568,28 @@ function onCanvasPointerUp(e){
  }
  pointerDown=null
 }
+function onSceneKeyDown(e){
+ // Keyboard movement is active after a character has been focused; keep typing controls untouched.
+ const target=e.target
+ if(target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select, button, [contenteditable="true"]')))return
+ const key=e.key.toLowerCase()
+ const directions={
+  arrowup:[0,-1],w:[0,-1],
+  arrowdown:[0,1],s:[0,1],
+  arrowleft:[-1,0],a:[-1,0],
+  arrowright:[1,0],d:[1,0]
+ }
+ const direction=directions[key]
+ if(!direction)return
+ const character=characterGroups.get(focusAgent.value)
+ if(!character)return
+ e.preventDefault()
+ const step=e.shiftKey?.42:.18
+ character.position.x=THREE.MathUtils.clamp(character.position.x+direction[0]*step,-8.35,8.35)
+ character.position.z=THREE.MathUtils.clamp(character.position.z+direction[1]*step,-7.35,8.1)
+ character.userData.moveFacing=Math.atan2(direction[0],direction[1])
+ motion.value='idle'
+}
 function initScene(){
  const host=canvasHost.value;if(!host)return
  const headlessRender=navigator.webdriver===true
@@ -602,10 +624,10 @@ function initScene(){
  host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',()=>{pointerDown=null})
  const wheel=e=>{e.preventDefault();zoom.value=Math.max(.7,Math.min(1.35,zoom.value+(e.deltaY>0?-.055:.055)))}
  host.addEventListener('wheel',wheel,{passive:false})
- sceneListeners=[[host,'pointerdown',down],[host,'pointermove',move],[host,'pointerup',up],[host,'wheel',wheel]]
+ window.addEventListener('keydown',onSceneKeyDown);sceneListeners=[[host,'pointerdown',down],[host,'pointermove',move],[host,'pointerup',up],[host,'wheel',wheel],[window,'keydown',onSceneKeyDown]]
  const animate=()=>{
   raf=requestAnimationFrame(animate);const t=sceneClock.getElapsedTime()
-  for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
+  for(const [id,g] of characterGroups){const focus=focusAgent.value===id;g.position.y=Math.sin(t*1.8+agents.findIndex(a=>a.id===id))*.025+(motion.value==='wave'&&focus?Math.abs(Math.sin(t*7))*.12:0);g.rotation.y=Number.isFinite(g.userData.moveFacing)?g.userData.moveFacing:Math.sin(t*.45+agents.findIndex(a=>a.id===id))*.035;g.userData.ring.material.opacity=focus?.95:.38}
   const highDetail=highDetailRoomLoaded.value
   const radius=(highDetail?12.8:15.5)/zoom.value
   const desired=new THREE.Vector3(Math.sin(orbitAngle)*radius,highDetail?2.7+orbitTilt*4:5.4+orbitTilt*8,(highDetail?-.5:3.0)+Math.cos(orbitAngle)*radius)
