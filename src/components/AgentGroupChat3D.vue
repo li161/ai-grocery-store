@@ -2480,47 +2480,51 @@ function initScene() {
 function zoomBy(delta) {
   zoom.value = Math.max(0.7, Math.min(1.35, zoom.value + delta))
 }
-function toggleBusinessMode() {
-  businessMode.value = !businessMode.value
-  if (scene) {
-    const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
-    const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
-    // Business = premium bookstore café; fairytale = separate retail-world set.
-    // SpongeBob agents, interaction targets and chat UI remain shared.
-    if (businessArchitecture) businessArchitecture.visible = businessMode.value
-    if (retailScene) retailScene.visible = !businessMode.value
-    for (const agent of agents) {
-      const cartoon = originalCharacterGroups.get(agent.id)
-      const professional = businessCharacterGroups.get(agent.id)
-      if (cartoon) cartoon.visible = !businessMode.value
-      if (professional) professional.visible = businessMode.value
-      const active = businessMode.value ? professional : cartoon
-      if (active) characterGroups.set(agent.id, active)
-    }
-    for (const hit of characterHitMeshes) {
-      if (hit.userData.businessCharacter) hit.visible = businessMode.value
-    }
-    const business = businessMode.value
-    scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
-    if (scene.fog) {
-      scene.fog.color.setHex(business ? 0x17222b : 0x19150f)
-      scene.fog.density = business ? 0.009 : 0.013
-    }
-    if (renderer) renderer.toneMappingExposure = business ? 1.02 : 1.08
-    const practicals = scene.getObjectByName('Warm_Deli_Practical_Lights')
-    if (practicals) {
-      practicals.children.forEach((light) => {
-        if (light.isLight) {
-          light.color.setHex(business ? 0xe4fff5 : 0x8abfff)
-          light.intensity = business ? 8 : 17
-        }
-      })
-    }
-    scene.traverse((object) => {
-      if (object.isLight && object.name === 'Warm_Deli_Practical_Lights') object.visible = true
+function applySceneMode() {
+  const business = businessMode.value
+  if (!scene) {
+    status.value = business ? '商务写实主题：场景初始化中' : '童话主题：场景初始化中'
+    return
+  }
+
+  // Switch both complete room roots explicitly. Never rely on the CSS theme alone.
+  const businessArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
+  const retailScene = scene.getObjectByName('Business_Supermarket_Scene')
+  if (businessArchitecture) businessArchitecture.visible = business
+  if (retailScene) retailScene.visible = !business
+
+  for (const agent of agents) {
+    const cartoon = originalCharacterGroups.get(agent.id)
+    const professional = businessCharacterGroups.get(agent.id)
+    if (cartoon) cartoon.visible = !business
+    if (professional) professional.visible = business
+    const active = business ? professional : cartoon
+    if (active) characterGroups.set(agent.id, active)
+  }
+  for (const hit of characterHitMeshes) {
+    if (hit.userData.businessCharacter) hit.visible = business
+  }
+
+  scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
+  if (scene.fog) {
+    scene.fog.color.setHex(business ? 0x17222b : 0x19150f)
+    scene.fog.density = business ? 0.009 : 0.013
+  }
+  if (renderer) renderer.toneMappingExposure = business ? 1.02 : 1.08
+  const practicals = scene.getObjectByName('Warm_Deli_Practical_Lights')
+  if (practicals) {
+    practicals.children.forEach((light) => {
+      if (light.isLight) {
+        light.color.setHex(business ? 0xe4fff5 : 0x8abfff)
+        light.intensity = business ? 8 : 17
+      }
     })
   }
-  status.value = businessMode.value ? '商务写实主题已启用' : '童话主题已启用'
+  status.value = business ? '商务写实主题已启用' : '童话主题已启用'
+}
+function toggleBusinessMode() {
+  businessMode.value = !businessMode.value
+  applySceneMode()
 }
 function resetView() {
   orbitAngle = 0
@@ -2596,7 +2600,7 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
       <div class="top-state">
         <i></i><span>协作空间在线</span><small>角色可用 · 等待调度</small>
       </div>
-      <button class="scene-mode-btn" @click="toggleBusinessMode" :aria-pressed="businessMode">
+      <button class="scene-mode-btn" type="button" @click.stop.prevent="toggleBusinessMode" :aria-pressed="businessMode">
         {{ businessMode ? '✦ 商务写实版' : '◈ 童话场景版' }}
       </button>
       <button class="mode-btn" @click="mode = mode === 'demo' ? 'deepseek' : 'demo'">
