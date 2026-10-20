@@ -2191,8 +2191,11 @@ function initScene() {
   if (!host) return
   const headlessRender = navigator.webdriver === true
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x19150f)
-  scene.fog = new THREE.FogExp2(0x19150f, 0.013)
+  scene.background = new THREE.Color(businessMode.value ? 0x17222b : 0x19150f)
+  scene.fog = new THREE.FogExp2(
+    businessMode.value ? 0x17222b : 0x19150f,
+    businessMode.value ? 0.009 : 0.013,
+  )
   camera = new THREE.PerspectiveCamera(48, 1, 0.1, 120)
   camera.position.set(0, 4.15, 14.6)
   camera.lookAt(0, 1.65, -1.25)
@@ -2268,7 +2271,9 @@ function initScene() {
   // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
   highDetailRoomLoaded.value = true
   highDetailCafeLoaded.value = true
-  roomRenderStatus.value = '熟食店空间 · PBR 材质 · 实时阴影与暖光'
+  roomRenderStatus.value = businessMode.value
+    ? '精品书店咖啡馆 · PBR 材质 · 实时阴影与暖光'
+    : '童话零售空间 · 实时 3D 场景'
   // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
   const initialWidth = Math.max(1, host.clientWidth),
     initialHeight = Math.max(1, host.clientHeight)
