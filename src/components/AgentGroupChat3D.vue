@@ -75,13 +75,30 @@ async function send(){
   }
   const base=apiBase.value.trim().replace(/\/$/,'')
   if(!base)throw new Error('后端 API 地址未配置')
-  const response=await fetch(base+'/api/chat?async=1',{method:'POST',headers:{'content-type':'application/json','idempotency-key':globalThis.crypto?.randomUUID?.()||'chat-'+Date.now()},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(0,-1).slice(-12).map(m=>({role:m.role,text:m.text}))})})
-  const data=await response.json().catch(()=>({}))
+  const requestController=new AbortController()
+  const requestTimer=setTimeout(()=>requestController.abort(),70000)
+  let response,data
+  try{
+   response=await fetch(base+'/api/chat?async=1',{method:'POST',signal:requestController.signal,headers:{'content-type':'application/json','idempotency-key':globalThis.crypto?.randomUUID?.()||'chat-'+Date.now()},body:JSON.stringify({message:text,agents:targets.map(({id,name,role,guide})=>({id,name,role,instructions:guide})),history:messages.value.slice(0,-1).slice(-12).map(m=>({role:m.role,text:m.text}))})})
+   data=await response.json().catch(()=>({}))
+  }catch(error){
+   if(error.name==='AbortError')throw new Error('请求超过 70 秒已中止；请检查后端日志，避免立即重复提交高成本任务。')
+   throw error
+  }finally{clearTimeout(requestTimer)}
   if(!response.ok)throw new Error(data.error||'Agent API 请求失败（HTTP '+response.status+'）')
   if(data.started&&data.taskId){
    const deadline=Date.now()+90000, shown=new Set(); let terminal=false
    while(Date.now()<deadline){
-    const pr=await fetch(base+'/api/tasks/'+encodeURIComponent(data.taskId));const pd=await pr.json().catch(()=>({}))
+    const pollController=new AbortController()
+    const pollTimer=setTimeout(()=>pollController.abort(),6000)
+    let pr,pd
+    try{
+     pr=await fetch(base+'/api/tasks/'+encodeURIComponent(data.taskId),{signal:pollController.signal})
+     pd=await pr.json().catch(()=>({}))
+    }catch(error){
+     if(error.name==='AbortError')throw new Error('任务状态查询超时；任务可能仍在后台运行，任务 ID：'+data.taskId)
+     throw error
+    }finally{clearTimeout(pollTimer)}
     if(!pr.ok)throw new Error(pd.error||'任务状态查询失败')
     const task=pd.task;if(!task)throw new Error('任务状态响应缺少 task');data.task=task
     for(const item of task.tasks||[]){
@@ -93,7 +110,7 @@ async function send(){
     if(terminal)break
     await new Promise(r=>setTimeout(r,900))
    }
-   if(!terminal)throw new Error('等待超过 90 秒，任务可能仍在后台执行。任务 ID：'+data.taskId)
+   if(!terminal)throw new Error('等待超过 90 秒，任务可能仍在后台执行。任务 ID：'+data.taskId+'；请稍后查询，不要重复提交。')
    if(data.task?.status!=='completed')status.value='部分岗位未完成 · '+data.taskId.slice(0,8)
    else status.value='协作完成 · '+data.taskId.slice(0,8)
   }else if(data.replies?.length){data.replies.forEach(item=>addMessage(item.agentId,item.text));status.value='协作完成'}
