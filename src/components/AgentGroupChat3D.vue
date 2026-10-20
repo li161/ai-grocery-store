@@ -212,6 +212,7 @@ function deleteConversation(id) {
   if (!conversation || !window.confirm('确定删除对话「' + conversation.title + '」吗？此操作无法撤销。'))
     return
   conversations.value = conversations.value.filter((item) => item.id !== id)
+  void deleteRemoteConversation(id)
   if (activeConversationId.value === id) {
     if (!conversations.value.length) {
       const replacement = makeConversation()
@@ -230,6 +231,102 @@ const mode = ref('deepseek')
 const apiBase = ref(
   import.meta.env.VITE_AGENT_API || 'https://ai-grocery-store-agent-api.onrender.com',
 )
+
+const CLIENT_ID_KEY = 'ai-grocery-agent-client-id-v1'
+const cloudSyncStatus = ref('正在连接云端')
+let conversationSyncTimer = null
+function getClientId() {
+  let id = window.localStorage.getItem(CLIENT_ID_KEY)
+  if (!id) {
+    id = globalThis.crypto?.randomUUID?.() || 'client-' + Date.now() + '-' + Math.random().toString(36).slice(2)
+    window.localStorage.setItem(CLIENT_ID_KEY, id)
+  }
+  return id
+}
+function conversationApiHeaders() {
+  return { 'content-type': 'application/json', 'x-client-id': getClientId() }
+}
+function scheduleConversationSync() {
+  if (conversationSyncTimer) clearTimeout(conversationSyncTimer)
+  conversationSyncTimer = setTimeout(() => {
+    void syncActiveConversationToBackend()
+  }, 800)
+}
+async function syncActiveConversationToBackend() {
+  const base = apiBase.value.trim().replace(/\/$/, '')
+  const conversation = conversations.value.find((item) => item.id === activeConversationId.value)
+  if (!base || !conversation) return
+  try {
+    const response = await fetch(base + '/api/conversations/' + encodeURIComponent(conversation.id), {
+      method: 'PUT',
+      headers: conversationApiHeaders(),
+      body: JSON.stringify({ ...conversation, messages: messages.value.slice(-500) }),
+    })
+    if (!response.ok) throw new Error('HTTP ' + response.status)
+    cloudSyncStatus.value = '云端已同步'
+  } catch (error) {
+    cloudSyncStatus.value = '仅本地保存'
+    console.warn('群聊云端同步失败，已保留本地记录。', error)
+  }
+}
+async function deleteRemoteConversation(id) {
+  const base = apiBase.value.trim().replace(/\/$/, '')
+  if (!base) return
+  try {
+    const response = await fetch(base + '/api/conversations/' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: conversationApiHeaders(),
+    })
+    if (!response.ok && response.status !== 404) throw new Error('HTTP ' + response.status)
+  } catch (error) {
+    cloudSyncStatus.value = '删除仅在本地生效'
+    console.warn('云端删除失败。', error)
+  }
+}
+async function hydrateConversationsFromBackend() {
+  const base = apiBase.value.trim().replace(/\/$/, '')
+  if (!base) {
+    cloudSyncStatus.value = '仅本地保存'
+    return
+  }
+  try {
+    const response = await fetch(base + '/api/conversations', {
+      headers: conversationApiHeaders(),
+    })
+    if (!response.ok) throw new Error('HTTP ' + response.status)
+    const data = await response.json()
+    const remoteConversations = data.conversations || []
+    const remoteIds = new Set(remoteConversations.map((item) => item.id))
+    const merged = new Map(conversations.value.map((item) => [item.id, item]))
+    for (const remote of remoteConversations) {
+      const local = merged.get(remote.id)
+      if (!local || Number(remote.updatedAt) > Number(local.updatedAt)) merged.set(remote.id, remote)
+    }
+    conversations.value = [...merged.values()]
+      .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt))
+      .slice(0, 200)
+    if (!conversations.value.some((item) => item.id === activeConversationId.value)) {
+      const fallback = conversations.value[0] || makeConversation()
+      if (!conversations.value.length) conversations.value = [fallback]
+      activeConversationId.value = fallback.id
+    }
+    messages.value = activeConversation.value?.messages?.slice(-500) || initialMessages
+    persistChatHistory()
+    cloudSyncStatus.value = '云端已连接'
+    for (const item of conversations.value) {
+      if (!remoteIds.has(item.id)) {
+        void fetch(base + '/api/conversations/' + encodeURIComponent(item.id), {
+          method: 'PUT',
+          headers: conversationApiHeaders(),
+          body: JSON.stringify(item),
+        }).catch(() => {})
+      }
+    }
+  } catch (error) {
+    cloudSyncStatus.value = '仅本地保存'
+    console.warn('无法连接群聊云端历史，继续使用本地记录。', error)
+  }
+}
 const sceneShell = ref(null)
 const canvasHost = ref(null)
 const roomRenderStatus = ref('正在加载高细节场景…')
@@ -2062,7 +2159,10 @@ function resetView() {
   focusAgent.value = 'manager'
   motion.value = 'wave'
 }
-onMounted(() => initScene())
+onMounted(() => {
+  initScene()
+  void hydrateConversationsFromBackend()
+})
 onBeforeUnmount(() => {
   cancelAnimationFrame(raf)
   resizeObserver?.disconnect()
@@ -2264,7 +2364,7 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
           <div>
             <span class="eyebrow">SHARED CONVERSATION</span>
             <h2>团队群聊 <span class="live-pill">● LIVE</span></h2>
-            <p>{{ conversations.length }} 个本地对话 · 自动保存</p>
+            <p>{{ conversations.length }} 个对话 · {{ cloudSyncStatus }}</p>
           </div>
           <div class="conversation-head-actions">
             <button class="panel-menu" aria-label="管理对话记录" :aria-expanded="showConversationManager" @click="showConversationManager = !showConversationManager">
