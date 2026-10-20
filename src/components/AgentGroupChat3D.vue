@@ -264,6 +264,8 @@ let orbitAngle = 0,
   orbitTilt = 0.12,
   targetZoom = 1
 const characterGroups = new Map(),
+  originalCharacterGroups = new Map(),
+  businessCharacterGroups = new Map(),
   characterHitMeshes = []
 const sceneClock = new THREE.Clock()
 function toggleAgent(id) {
@@ -1594,14 +1596,15 @@ function buildCharacter() {
     inventory: 2.34,
     pm: 1.64,
   }
-  const originalGroups = new Map()
+  originalCharacterGroups.clear()
+  businessCharacterGroups.clear()
   for (const a of agents) {
     const character = createSpongeBob(a)
     character.userData.baseScale = a.id === 'pm' ? 1.55 : 1.25
     character.scale.setScalar(character.userData.baseScale)
     character.userData.characterEyes = character.children.filter((child) => child.userData.isCharacterEye)
     character.userData.labelHeight = labelHeights[a.id] || 2
-    originalGroups.set(a.id, character)
+    originalCharacterGroups.set(a.id, character)
   }
   const businessGroups = new Map()
   const businessHitMeshes = []
@@ -1680,12 +1683,12 @@ function buildCharacter() {
     human.add(hit)
     businessHitMeshes.push(hit)
     scene.add(human)
-    businessGroups.set(a.id, human)
+    businessCharacterGroups.set(a.id, human)
   }
   // Switch the active animation/label/movement targets with the selected visual theme.
   for (const a of agents) {
-    const cartoon = originalGroups.get(a.id)
-    const business = businessGroups.get(a.id)
+    const cartoon = originalCharacterGroups.get(a.id)
+    const business = businessCharacterGroups.get(a.id)
     cartoon.visible = !businessMode.value
     business.visible = businessMode.value
     characterGroups.set(a.id, businessMode.value ? business : cartoon)
@@ -2484,7 +2487,15 @@ function toggleBusinessMode() {
     if (businessArchitecture) businessArchitecture.visible = businessMode.value
     if (retailScene) retailScene.visible = !businessMode.value
     for (const agent of agents) {
-      const cartoon = scene.getObjectByName('') // groups are switched through the registered character maps below
+      const cartoon = originalCharacterGroups.get(agent.id)
+      const professional = businessCharacterGroups.get(agent.id)
+      if (cartoon) cartoon.visible = !businessMode.value
+      if (professional) professional.visible = businessMode.value
+      const active = businessMode.value ? professional : cartoon
+      if (active) characterGroups.set(agent.id, active)
+    }
+    for (const hit of characterHitMeshes) {
+      if (hit.userData.businessCharacter) hit.visible = businessMode.value
     }
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
