@@ -1,9 +1,9 @@
-# Harness Runtime vs LangGraph comparison lab
+# Harness Runtime vs LangGraph — TypeScript comparison lab
 
 This independent lab executes the same deterministic retail-operations brief in two ways:
 
-1. A custom Harness Runtime with explicit DAG validation, dependency scheduling, bounded concurrency, per-task timeout, failure isolation, lifecycle events, and process-local idempotency.
-2. LangGraph with the same two parallel specialist nodes and a summary join node.
+1. **Custom Harness Runtime** — explicit DAG validation, dependency scheduling, bounded concurrency, task timeouts, dependency-failure propagation, lifecycle events, and process-local idempotency.
+2. **LangGraph** — the equivalent state graph with two parallel specialist nodes and a summary join.
 
 The fixture intentionally does not call an LLM. This isolates orchestration mechanics from model quality, provider latency, and token cost.
 
@@ -16,43 +16,36 @@ The fixture intentionally does not call an LLM. This isolates orchestration mech
 
 From this directory:
 
-    npm install
-    npm test
-    npm run demo
-    npm run demo:langgraph
+```bash
+npm install
+npm run typecheck
+npm test
+npm run demo
+npm run demo:langgraph
+```
 
-## What to inspect
+## Files
 
-- src/custom-runtime.mjs: scheduling mechanics the application owns in the custom implementation.
-- src/langgraph.mjs: the equivalent state graph and graph execution delegated to LangGraph.
-- The two implementations use identical input signals and business rules.
+- `src/runtime.ts`: custom runtime and DAG validation.
+- `src/workflow.ts`: shared typed input and deterministic task definitions.
+- `src/demo.ts`: custom runtime demo with lifecycle events.
+- `src/langgraph-demo.ts`: LangGraph equivalent using the same fixture.
+- `src/runtime.test.ts`: tests for graph validation, dependency order/failure, timeout and idempotency.
 
-## Honest limitations
-
-- Task/run state is in memory; process restarts lose it.
-- Idempotency is process-local, not distributed.
-- Timeout stops waiting and aborts the provided signal, but work that ignores AbortSignal may continue running.
-- No database, durable queue, cross-process lease, auth, or production-grade tracing is included.
-- LangGraph demo has no checkpointer configured, so it does not claim durable recovery.
-- A single timing sample is not a meaningful performance benchmark. For latency comparisons, run repeated trials with realistic I/O and report median and p95.
-
-## Comparison
+## What this comparison demonstrates
 
 | Concern | Custom runtime | LangGraph |
 |---|---|---|
-| Workflow | Task array and dependsOn | StateGraph and edges |
-| DAG validation | Explicit implementation | Graph engine handles graph structure; business validation remains ours |
-| Ready-task scheduling | Explicit implementation | Delegated to graph runtime |
-| Shared state | Our result map | Typed graph state / node updates |
-| Lifecycle observability | Our callback events | Graph streaming/events APIs; application must wire them |
-| Timeout/cancellation | Explicit timeout and AbortSignal | Must be designed around node and external-operation semantics |
-| Idempotency | Process-local cache | Not a business-level idempotency guarantee |
-| Durable recovery | Not implemented | Possible with a configured checkpointer; not enabled here |
-| Business logic, auth, budgets, storage, deployment | Application responsibility | Application responsibility |
+| Graph declaration | Task definitions + `dependsOn` | StateGraph nodes and edges |
+| DAG validation | Explicitly implemented | Graph construction/compile |
+| Dependency scheduling | Application code | Framework executor |
+| Timeout policy | Per-task timeout in this lab | Must be added around node execution/configured separately |
+| Failure propagation | Explicit failed/timed-out/skipped states | Framework execution/error semantics |
+| Idempotency | Process-local completed-run cache | Not provided by this example; durable checkpointing is a separate concern |
+| Observability | Callback lifecycle events | Can be integrated with LangSmith or custom callbacks |
 
-## Learning questions
+## Honest limitations
 
-1. Which scheduling code disappears in the LangGraph version?
-2. Which state transitions become declarative?
-3. Which reliability requirements remain application responsibilities in both?
-4. What changes when a durable checkpointer and persistent task store are introduced?
+This is an executable comparison scaffold, not a production orchestration service. State and idempotency are in memory and are lost on restart; the idempotency cache is process-local and has no concurrent duplicate-run lock; there is no database, durable queue, cross-process lease, authentication, retry policy, rate limiter, or production tracing. An AbortSignal can notify work to stop, but cannot forcibly terminate a task that ignores it. The timeout test intentionally checks the timeout result; the underlying example promise is not forcibly cancelled.
+
+The LangGraph example has no checkpointer configured and no LLM/tool calls. Do not interpret this as a benchmark of framework speed or model quality. Run the commands locally/CI and compare the code paths before choosing an implementation.
