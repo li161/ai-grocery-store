@@ -812,6 +812,49 @@ function createRetailAisle() {
       )
   }
 }
+function buildBusinessRetailScene() {
+  // Separate supermarket geometry: no cafe counter, bookcases, mezzanine or staircase.
+  const retailRoot = new THREE.Group()
+  retailRoot.name = 'Business_Supermarket_Scene'
+  retailRoot.visible = false
+  scene.add(retailRoot)
+  const previousRoomRoot = roomRoot
+  roomRoot = retailRoot
+  const concrete = mat(0x29363a, 0.82, 0.08)
+  const paleFloor = new THREE.MeshStandardMaterial({ map: marbleTex, color: 0xc9d0ce, roughness: 0.48, metalness: 0.04 })
+  const wall = mat(0x344448, 0.88, 0.02)
+  const teal = mat(0x0d4549, 0.34, 0.18)
+  const mint = mat(0x8fd1b4, 0.42, 0.04)
+  const amber = mat(0xf0b84f, 0.36, 0.06)
+  box(16.2, 0.18, 14.2, 0, -0.12, 0, concrete, retailRoot)
+  box(15.9, 0.035, 13.9, 0, -0.018, 0, paleFloor, retailRoot)
+  box(16.2, 6.8, 0.28, 0, 3.35, -6.9, wall, retailRoot)
+  box(16.2, 0.28, 0.32, 0, 6.65, -6.68, teal, retailRoot)
+  box(7.6, 0.72, 0.08, 0, 5.82, -6.72, teal, retailRoot)
+  box(4.8, 0.055, 0.035, 0, 5.45, -6.66, mint, retailRoot)
+  for (const x of [-6.4, -2.2, 2.0, 6.2]) {
+    box(3.15, 0.08, 0.22, x, 3.0, -2.05, amber, retailRoot)
+    box(3.15, 0.08, 0.22, x, 0.035, -2.05, teal, retailRoot)
+  }
+  createRetailAisle()
+  const fixture = mat(0xe5f2ee, 0.28, 0.12, { emissive: 0xb8e7dc, emissiveIntensity: 0.35 })
+  for (const z of [-4.6, -1.0, 2.6]) {
+    box(12.8, 0.055, 0.13, 0, 5.9, z, teal, retailRoot)
+    for (const x of [-5.1, -1.7, 1.7, 5.1]) {
+      box(2.15, 0.045, 0.22, x, 5.82, z, fixture, retailRoot)
+    }
+  }
+  // Checkout island and circulation markings make this read as retail, not hospitality.
+  box(1.9, 1.0, 0.78, -6.15, 0.5, 2.0, teal, retailRoot)
+  box(1.98, 0.09, 0.86, -6.15, 1.03, 2.0, paleFloor, retailRoot)
+  box(0.78, 0.1, 0.12, -6.15, 1.12, 1.88, mint, retailRoot)
+  for (const x of [-7.2, -3.85, -0.1, 3.65, 7.2]) {
+    box(0.025, 0.012, 8.0, x, 0.008, 1.4, mint, retailRoot)
+  }
+  roomRoot = previousRoomRoot
+  return retailRoot
+}
+
 function buildLegacyLibraryRoom() {
   roomRoot = new THREE.Group()
   scene.add(roomRoot)
