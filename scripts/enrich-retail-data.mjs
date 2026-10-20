@@ -8,18 +8,18 @@ const sourceRules = [
   { test: /官方|official/i, trust: 'A', label: '官方信源' },
   { test: /上市公司|交易所|财报|公告/i, trust: 'A', label: '披露信源' },
   { test: /行业媒体|媒体/i, trust: 'B', label: '行业媒体' },
-  { test: /行业聚合/i, trust: 'C', label: '聚合信源' }
+  { test: /行业聚合/i, trust: 'C', label: '聚合信源' },
 ]
 
 function evidence(item) {
-  const rule = sourceRules.find(x => x.test.test(item.sourceType || ''))
+  const rule = sourceRules.find((x) => x.test.test(item.sourceType || ''))
   const official = rule?.trust === 'A'
   const hasUrl = /^https?:\/\//i.test(item.url || '')
   return {
     level: hasUrl ? (official ? 'A' : rule?.trust || 'C') : 'D',
     label: hasUrl ? (official ? '可核验' : '可追溯') : '缺少原文',
     sourceClass: rule?.label || '未知信源',
-    verification: official ? 'source_confirmed' : hasUrl ? 'source_traceable' : 'needs_source'
+    verification: official ? 'source_confirmed' : hasUrl ? 'source_traceable' : 'needs_source',
   }
 }
 
@@ -31,35 +31,43 @@ function dimensions(item) {
     /inventory|stock|waste|损耗|库存|缺货/i.test(t) ? '降损耗' : null,
     /store|坪效|门店|throughput|效率/i.test(t) ? '提坪效' : null,
     /payment|checkout|支付|结账/i.test(t) ? '支付' : null,
-    /delivery|fulfillment|履约/i.test(t) ? '履约' : null
+    /delivery|fulfillment|履约/i.test(t) ? '履约' : null,
   ].filter(Boolean)
 }
 
 const news = JSON.parse(await readFile(newsFile, 'utf8'))
-news.items = (news.items || []).map(item => ({
+news.items = (news.items || []).map((item) => ({
   ...item,
   evidence: item.evidence || evidence(item),
   businessDimensions: item.businessDimensions?.length ? item.businessDimensions : dimensions(item),
   factBoundary: item.factBoundary || '事实以原始信源为准；AI 摘要仅用于导航。',
-  updatedAt: news.generatedAt
+  updatedAt: news.generatedAt,
 }))
 
 const events = JSON.parse(await readFile(eventsFile, 'utf8'))
-events.events = (events.events || []).map(event => {
+events.events = (events.events || []).map((event) => {
   const reports = event.reports || event.items || []
-  const enrichedReports = reports.map(report => ({
+  const enrichedReports = reports.map((report) => ({
     ...report,
     evidence: report.evidence || evidence(report),
-    businessDimensions: report.businessDimensions?.length ? report.businessDimensions : dimensions(report)
+    businessDimensions: report.businessDimensions?.length
+      ? report.businessDimensions
+      : dimensions(report),
   }))
-  const confirmed = enrichedReports.filter(x => x.evidence?.level === 'A').length
+  const confirmed = enrichedReports.filter((x) => x.evidence?.level === 'A').length
   return {
     ...event,
     reports: enrichedReports,
-    evidenceLevel: confirmed ? 'A' : enrichedReports.some(x => x.evidence?.level === 'B') ? 'B' : 'C',
+    evidenceLevel: confirmed
+      ? 'A'
+      : enrichedReports.some((x) => x.evidence?.level === 'B')
+        ? 'B'
+        : 'C',
     evidenceCount: confirmed,
-    businessDimensions: [...new Set(enrichedReports.flatMap(x => x.businessDimensions || []))].slice(0, 6),
-    factBoundary: '事件聚合不等于事实确认；以各时间点的原始披露为准。'
+    businessDimensions: [
+      ...new Set(enrichedReports.flatMap((x) => x.businessDimensions || [])),
+    ].slice(0, 6),
+    factBoundary: '事件聚合不等于事实确认；以各时间点的原始披露为准。',
   }
 })
 

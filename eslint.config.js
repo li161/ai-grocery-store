@@ -4,12 +4,7 @@ import globals from 'globals'
 
 export default [
   {
-    ignores: [
-      'dist/**',
-      'node_modules/**',
-      'public/**',
-      'coverage/**',
-    ],
+    ignores: ['dist/**', 'node_modules/**', 'public/**', 'coverage/**'],
   },
   {
     files: ['**/*.{js,mjs,vue}'],
