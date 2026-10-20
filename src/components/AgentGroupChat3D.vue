@@ -400,6 +400,9 @@ function normalizeAsset(root,targetWidth){
  root.position.set(-center.x*scale,-bounds.min.y*scale,-center.z*scale)
  root.updateMatrixWorld(true)
  root.traverse(object=>{
+  // The source benchmark room includes opaque presentation walls that sit between the camera and the interior.
+  // Remove those shell meshes and its own floor; the locally built library shell supplies the room architecture.
+  if(/walls|floortiles/i.test(object.name)){object.visible=false;return}
   if(!object.isMesh)return
   object.castShadow=false
   object.receiveShadow=true
@@ -508,7 +511,7 @@ function loadHighDetailRoom(){
   const result=normalizeAsset(gltf.scene,14.2)
   result.root.name='CCBY_Wig42_BreakfastRoom_PBR_Environment'
   scene.add(result.root)
-  if(roomRoot)roomRoot.visible=false
+  if(roomRoot)roomRoot.visible=true
   highDetailRoomLoaded.value=true
   createCoffeeBarAccent()
   roomRenderStatus.value='高细节 PBR 室内 + 咖啡吧 · REAL-TIME 3D'
