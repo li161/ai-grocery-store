@@ -387,7 +387,14 @@ function createSpongeBob(a){
  g.userData.ring=ring;scene.add(g);characterGroups.set(a.id,g);return g
 }
 const agentPositions={manager:[-5.1,0,3.15],cashier:[-3.4,0,4.05],guide:[-1.7,0,3.0],buyer:[0,0,4.0],inventory:[1.7,0,3.05],pm:[3.4,0,4.0]}
-function buildCharacter(){for(const a of agents){const character=createSpongeBob(a);character.scale.setScalar(a.id==='pm'?1.55:1.25)}}
+function buildCharacter(){
+ const labelHeights={manager:1.96,cashier:2.08,guide:2.12,buyer:2.35,inventory:2.34,pm:1.64}
+ for(const a of agents){
+  const character=createSpongeBob(a)
+  character.scale.setScalar(a.id==='pm'?1.55:1.25)
+  character.userData.labelHeight=labelHeights[a.id]||2
+ }
+}
 
 const LIBRARY_SCENE_URL='/models/breakfast_room_extended.gltf'
 function normalizeAsset(root,targetWidth){
@@ -591,7 +598,7 @@ function initScene(){
   if(Math.floor(t*18)!==Math.floor((t-1/60)*18)){
    const width=renderer.domElement.clientWidth,height=renderer.domElement.clientHeight,next={}
    for(const [id,g] of characterGroups){
-    const anchor=g.localToWorld(new THREE.Vector3(0,2.55,0));anchor.project(camera)
+    const anchor=g.localToWorld(new THREE.Vector3(0,g.userData.labelHeight||2.05,0));anchor.project(camera)
     const x=(anchor.x*.5+.5)*width,y=(-anchor.y*.5+.5)*height
     const visible=anchor.z>-1&&anchor.z<1&&x>4&&x<width-4&&y>88&&y<height-8
     next[id]={left:x+'px',top:y+'px',visibility:visible?'visible':'hidden'}
