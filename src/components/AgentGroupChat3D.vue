@@ -47,6 +47,7 @@ let orbitAngle=0, orbitTilt=.12, targetZoom=1
 const characterGroups=new Map(), characterHitMeshes=[]
 const sceneClock=new THREE.Clock()
 function toggleAgent(id){ if(busy.value)return; selected.value=selected.value.includes(id)?selected.value.filter(x=>x!==id):[...selected.value,id]; focusAgent.value=id; motion.value='wave' }
+function focusOnly(id){ focusAgent.value=id; motion.value='wave'; if(!selected.value.includes(id))status.value='已聚焦 '+(agents.find(a=>a.id===id)?.name||'角色')+'；点击右侧 + 将其加入本轮协作' }
 function addPrompt(p){draft.value=p}
 function resolveTargets(text){
  const tokens=[...text.matchAll(/@([\w\u4e00-\u9fa5]+)/g)].map(m=>m[1].toLowerCase())
@@ -150,51 +151,38 @@ function makeMarbleTexture(){
 }
 function createBookcase(x,z,width=2.5,height=4.6,depth=.48,side=false){
  const g=new THREE.Group();g.position.set(x,0,z);if(side)g.rotation.y=Math.PI/2;(roomRoot||scene).add(g)
- const oak=woodMat,dark=darkWoodMat,gold=brassMat
- mesh(new THREE.BoxGeometry(width,height,depth),oak,[0,height/2,0],g)
- mesh(new THREE.BoxGeometry(width+.07,.11,depth+.08),gold,[0,height+.02,0],g)
- // Stable per-shelf randomization keeps the books natural without changing on every rebuild.
- let seed=Math.abs(Math.floor((x+30)*7919+(z+30)*104729))||1
- const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
- const booksByMaterial=bookMaterials.map(()=>[])
- const spineBands=[]
- for(let row=1;row<5;row++){
-  const y=row*(height/5)
-  mesh(new THREE.BoxGeometry(width-.08,.065,depth+.035),dark,[0,y,0],g)
-  let x0=-width/2+.09;const shelfY=y+.07
-  while(x0<width/2-.1){
-   const bw=Math.min(.075+random()*.105,width/2-.1-x0)
-   const bh=.28+random()*.42
-   const materialIndex=Math.floor(random()*bookMaterials.length)
-   booksByMaterial[materialIndex].push({x:x0+bw/2,y:shelfY+bh/2,z:.01,w:bw,h:bh,d:.18,rotation:(random()-.5)*.035})
-   spineBands.push({x:x0+bw*.5,y:shelfY+bh*.68,z:.104,w:bw*.36,h:.018,d:.008})
-   x0+=bw+.018
+ const frame=mat(0x263640,.46,.42),back=mat(0x35434a,.78),edge=mat(0xd3a66b,.34,.48)
+ mesh(new RoundedBoxGeometry(width,height,depth,4,.055),back,[0,height/2,0],g)
+ for(const px of [-width/2+.045,width/2-.045])mesh(new RoundedBoxGeometry(.085,height+.08,depth+.09,3,.025),frame,[px,height/2,.015],g)
+ mesh(new RoundedBoxGeometry(width+.12,.13,depth+.12,4,.035),edge,[0,height+.035,0],g)
+ const rows=4
+ for(let row=0;row<rows;row++){
+  const y=.36+row*(height-.62)/(rows-1)
+  mesh(new RoundedBoxGeometry(width-.08,.065,depth+.1,3,.018),frame,[0,y,0],g)
+  mesh(new THREE.BoxGeometry(width-.12,.018,.018),mat(0xffd995,.25,.15,{emissive:0xffb34f,emissiveIntensity:.45}),[0,y+.044,depth*.52],g)
+  let seed=Math.abs(Math.floor((x+30)*7919+(z+30)*104729+row*7919))||1
+  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+  let px=-width/2+.13
+  while(px<width/2-.14){
+   const pw=.14+random()*.18,ph=.22+random()*.31
+   const color=[0xe8b64e,0x4f9c82,0xc9684e,0x628dc4,0xe7dfc9,0x9a79b4,0xd9dfe2][Math.floor(random()*7)]
+   const productMat=mat(color,.48,.04),pz=depth*.18+random()*.035
+   if(random()>.35){
+    mesh(new RoundedBoxGeometry(pw,ph,.18,3,.025),productMat,[px+pw/2,y+.045+ph/2,pz],g)
+    mesh(new THREE.BoxGeometry(pw*.64,.025,.012),mat(0xf5ead4,.55),[px+pw/2,y+.045+ph*.63,pz+.096],g)
+    if(random()>.45)mesh(new THREE.BoxGeometry(pw*.42,.012,.013),mat(0x35434a,.6),[px+pw/2,y+.045+ph*.48,pz+.097],g)
+   }else{
+    const radius=Math.min(.065,pw*.32)
+    mesh(new THREE.CylinderGeometry(radius,radius,ph*.72,16),productMat,[px+pw/2,y+.045+ph*.36,pz],g,[0,0,Math.PI/2])
+    mesh(new THREE.CylinderGeometry(radius*.9,radius*.9,.025,16),edge,[px+pw/2,y+.045+ph*.72,pz],g)
+   }
+   px+=pw+.045
   }
  }
- // Instancing draws hundreds of books in a handful of GPU calls instead of one draw per book.
- const unitBookGeometry=new THREE.BoxGeometry(1,1,1)
- const dummy=new THREE.Object3D()
- for(let materialIndex=0;materialIndex<booksByMaterial.length;materialIndex++){
-  const items=booksByMaterial[materialIndex]
-  if(!items.length)continue
-  const instances=new THREE.InstancedMesh(unitBookGeometry,bookMaterials[materialIndex],items.length)
-  items.forEach((book,index)=>{
-   dummy.position.set(book.x,book.y,book.z);dummy.rotation.set(0,0,book.rotation);dummy.scale.set(book.w,book.h,book.d);dummy.updateMatrix()
-   instances.setMatrixAt(index,dummy.matrix)
-  })
-  instances.instanceMatrix.needsUpdate=true;instances.castShadow=false;instances.receiveShadow=true;g.add(instances)
- }
- if(spineBands.length){
-  const bandGeometry=new THREE.BoxGeometry(1,1,1)
-  const bands=new THREE.InstancedMesh(bandGeometry,brassMat,spineBands.length)
-  spineBands.forEach((band,index)=>{
-   dummy.position.set(band.x,band.y,band.z);dummy.rotation.set(0,0,0);dummy.scale.set(band.w,band.h,band.d);dummy.updateMatrix()
-   bands.setMatrixAt(index,dummy.matrix)
-  })
-  bands.instanceMatrix.needsUpdate=true;bands.castShadow=false;bands.receiveShadow=true;g.add(bands)
- }
- for(let px=-width/2+.08;px<width/2;px+=width>2?1.05:.72){
-  mesh(new THREE.BoxGeometry(.055,height,depth+.055),gold,[px,height/2,0],g)
+ for(let row=0;row<rows;row++){
+  const y=.36+row*(height-.62)/(rows-1)
+  mesh(new THREE.BoxGeometry(width-.12,.045,.035),mat(0xf0e7d7,.62),[0,y+.07,depth*.57],g)
+  for(let px=-width/2+.22;px<width/2-.1;px+=.48)mesh(new THREE.BoxGeometry(.12,.025,.012),mat(0x3c4b50,.55),[px,y+.07,depth*.595],g)
  }
  return g
 }
@@ -286,15 +274,27 @@ function buildLibraryRoom(){
   const bulb=new THREE.Mesh(new THREE.SphereGeometry(.08,16,12),mat(0xffd99c,.2,.05,{emissive:0xffbc56,emissiveIntensity:1.8}));bulb.position.set(x,5.26,-.3);roomRoot.add(bulb)
   const lamp=new THREE.PointLight(0xffbd6b,15,7.5);lamp.position.set(x,5.15,-.3);roomRoot.add(lamp)
  }
- // Reading tables, chairs and potted greenery.
+ // Product consultation tables with rounded walnut tops, inset brass trim and real tabletop props.
+ const tableWood=mat(0x805238,.38,.08),tableEdge=mat(0xd2ad73,.28,.55),chairLeather=mat(0x355d61,.48,.06)
  for(const [x,z] of [[1.7,4.7],[5.8,4.1],[3.5,6.5],[-7.2,4.3]]){
-  box(1.55,.11,1.0,x,.82,z,woodMat);box(1.48,.035,.93,x,.9,z,brassMat)
-  for(const dx of [-.62,.62])for(const dz of [-.35,.35])box(.085,.76,.085,x+dx,.4,z+dz,darkWoodMat)
-  for(const side of [-1,1]){
-   box(.49,.1,.47,x+side*.98,.47,z,woodMat)
-   box(.48,.45,.075,x+side*.98,.7,z-.18,darkWoodMat)
-   box(.075,.62,.075,x+side*.98,.21,z,darkWoodMat)
+  mesh(new RoundedBoxGeometry(1.7,.16,1.12,5,.055),tableWood,[x,.84,z],roomRoot)
+  mesh(new RoundedBoxGeometry(1.62,.025,1.04,5,.012),tableEdge,[x,.925,z],roomRoot)
+  mesh(new RoundedBoxGeometry(1.55,.025,.97,5,.012),marbleMat,[x,.947,z],roomRoot)
+  for(const [dx,dz] of [[-.62,-.36],[.62,-.36],[-.62,.36],[.62,.36]]){
+   mesh(new RoundedBoxGeometry(.1,.76,.1,3,.025),darkWoodMat,[x+dx,.39,z+dz],roomRoot)
+   mesh(new RoundedBoxGeometry(.105,.12,.105,3,.025),tableEdge,[x+dx,.12,z+dz],roomRoot)
   }
+  for(const side of [-1,1]){
+   const sx=x+side*1.03
+   mesh(new RoundedBoxGeometry(.54,.12,.52,4,.045),chairLeather,[sx,.49,z],roomRoot)
+   mesh(new RoundedBoxGeometry(.54,.48,.1,4,.045),chairLeather,[sx,.75,z-.21],roomRoot)
+   for(const dx of [-.2,.2])mesh(new RoundedBoxGeometry(.065,.48,.065,3,.02),darkWoodMat,[sx+dx,.23,z+.19],roomRoot)
+  }
+  mesh(new RoundedBoxGeometry(.38,.025,.25,3,.018),mat(0x25333a,.28,.45),[x-.28,.978,z-.12],roomRoot,[0,-.18,0])
+  mesh(new THREE.PlaneGeometry(.32,.19),mat(0x72b5c9,.24,.1,{emissive:0x15313b,emissiveIntensity:.18,side:THREE.DoubleSide}),[x-.28,.994,z-.12],roomRoot,[-Math.PI/2,0,-.18])
+  mesh(new THREE.CylinderGeometry(.07,.065,.13,24),mat(0xf1e6d2,.25),[x+.34,1.04,z+.12],roomRoot)
+  mesh(new THREE.TorusGeometry(.052,.012,8,20),tableEdge,[x+.34,1.11,z+.12],roomRoot,[Math.PI/2,0,0])
+  mesh(new THREE.BoxGeometry(.2,.13,.16),mat(0xd6a75f,.45),[x+.12,1.035,z-.28],roomRoot)
  }
  const potMat=mat(0x995f42,.83),leafMats=[0x355f3e,0x4e794c,0x6c8a4a].map(c=>mat(c,.9))
  for(const [x,z] of [[7.8,-4.7],[7.7,.8],[-7.4,5.2],[0,2.0]]){
@@ -583,7 +583,11 @@ function initScene(){
  const fill=new THREE.DirectionalLight(0xfff4e7,.72);fill.position.set(5,7,3);scene.add(fill)
  const warm=new THREE.PointLight(0xffc06e,22,16);warm.position.set(-1,5,0);scene.add(warm)
  buildLibraryRoom();buildCharacter();raycaster=new THREE.Raycaster()
- loadHighDetailRoom()
+ // Use the custom-built retail scene as the single source of truth. Loading the benchmark café GLTF here
+ // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
+ highDetailRoomLoaded.value=true
+ highDetailCafeLoaded.value=true
+ roomRenderStatus.value='定制零售货架 + 商品陈列 + 3D 咨询桌'
  // Cinematic render pipeline: contact shadows, richer material depth, controlled highlight bloom.
  const initialWidth=Math.max(1,host.clientWidth),initialHeight=Math.max(1,host.clientHeight)
  composer=new EffectComposer(renderer);composer.setPixelRatio(renderer.getPixelRatio())
@@ -633,7 +637,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
  <header class="space-top">
   <button class="back" @click="props.onBack" aria-label="返回杂货铺">‹</button>
   <div class="brand"><span class="brand-orb"><span>AI</span></span><span><b>门店经营协作室</b><small>6 个岗位数字人 · 共享群聊</small></span></div>
-  <div class="top-agents"><button v-for="a in agents" :key="a.id" class="top-agent" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" @click="focusAgent=a.id;motion='wave';toggleAgent(a.id)" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}"><span class="top-agent-avatar">{{a.emoji}}</span><span><b>{{a.name}}</b><small>{{a.character}}</small></span></button></div>
+  <div class="top-agents"><button v-for="a in agents" :key="a.id" class="top-agent" :class="{focused:focusAgent===a.id,muted:!selected.includes(a.id)}" @click="focusOnly(a.id)" :style="{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')}"><span class="top-agent-avatar">{{a.emoji}}</span><span><b>{{a.name}}</b><small>{{a.character}}</small></span></button></div>
   <div class="top-state"><i></i><span>协作空间在线</span><small>角色可用 · 等待调度</small></div>
   <button class="mode-btn" @click="mode=mode==='demo'?'deepseek':'demo'">{{mode==='demo'?'演示模式':'DeepSeek Runtime'}}</button>
  </header>
@@ -650,7 +654,7 @@ const selectedAgent=computed(()=>agents.find(a=>a.id===focusAgent.value)||agents
     </div>
     <div class="environment-label">LIBRARY CAFÉ <span>·</span> {{roomRenderStatus}} <small>Environment: The Breakfast Room by Wig42 · CC BY 3.0</small></div>
     <div class="agent-labels">
-     <button v-for="(a,i) in agents" :key="a.id" class="agent-label" :class="['agent-'+a.id,{focused:focusAgent===a.id,muted:!selected.includes(a.id)}]" :style="[{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')},labelPositions[a.id] || {}]" @click="focusAgent=a.id;motion='wave';if(!selected.includes(a.id))toggleAgent(a.id)">
+     <button v-for="(a,i) in agents" :key="a.id" class="agent-label" :class="['agent-'+a.id,{focused:focusAgent===a.id,muted:!selected.includes(a.id)}]" :style="[{'--agent-color':'#'+a.color.toString(16).padStart(6,'0')},labelPositions[a.id] || {}]" @click="focusOnly(a.id)">
       <i></i><span class="character-emoji">{{a.emoji}}</span><span class="agent-label-name"><b>{{a.name}}</b></span>
      </button>
     </div>
