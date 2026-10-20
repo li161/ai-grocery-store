@@ -584,7 +584,7 @@ function onSceneKeyDown(e){
  const character=characterGroups.get(focusAgent.value)
  if(!character)return
  e.preventDefault()
- const step=e.shiftKey?.42:.18
+ const step=e.shiftKey ? 0.42 : 0.18
  character.position.x=THREE.MathUtils.clamp(character.position.x+direction[0]*step,-8.35,8.35)
  character.position.z=THREE.MathUtils.clamp(character.position.z+direction[1]*step,-7.35,8.1)
  character.userData.moveFacing=Math.atan2(direction[0],direction[1])
