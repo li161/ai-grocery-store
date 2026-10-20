@@ -2045,10 +2045,9 @@ function initScene() {
   const warm = new THREE.PointLight(0xffc06e, 22, 16)
   warm.position.set(-1, 5, 0)
   scene.add(warm)
+  // The reference composition is a bookstore café, not a grocery aisle. Keep the café architecture as the only environment layer; the legacy aisle and duplicate bar were overlapping it and visually fighting the reference layout.
   buildLibraryRoom()
   createBusinessArchitecture()
-  createRetailAisle()
-  createCoffeeBarAccent()
   const cafeArchitecture = scene.getObjectByName('Business_Cafe_Architecture')
   if (cafeArchitecture) cafeArchitecture.visible = true
   if (roomRoot) roomRoot.visible = false
