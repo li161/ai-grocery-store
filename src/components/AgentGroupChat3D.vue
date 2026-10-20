@@ -258,15 +258,10 @@ function buildLibraryRoom(){
   box(.5,.12,.9,x,1.01,z,marbleMat)
   box(.04,.025,.82,x,.95,z+.04,brassMat)
  }
- // Espresso machine, grinder, cups and menu-board details.
- box(.92,.75,.55,-3.8,1.48,.3,mat(0x7d898b,.25,.75))
+ // Espresso machine details; the foreground coffee bar owns the readable menu board.
+ box(.92,.75,.55,-3.8,1.48,.3,characterMat(0x747e83,.24))
  box(.58,.17,.42,-3.8,1.95,.3,darkWoodMat)
- for(let i=0;i<4;i++)mesh(new THREE.CylinderGeometry(.065,.055,.16,20),mat(0xf0e4cd,.24),[-2.8+i*.18,1.32,.3],roomRoot)
- for(let x=-7.8;x<=-3.5;x+=2.1){
-  box(1.7,1.2,.06,x,3.3,.15,mat(0x262629,.85))
-  box(1.62,1.11,.025,x,3.3,.04,mat(0x101a22,.9))
-  for(let row=0;row<4;row++)box(1.22,.014,.012,x,3.65-row*.23,.017,mat(0xd9c7a8,.7))
- }
+ for(let i=0;i<4;i++)mesh(new THREE.CylinderGeometry(.065,.055,.16,20),characterMat(0xf0e4cd,.22),[-2.8+i*.18,1.32,.3],roomRoot)
  // Brass pendant fixtures with warm point sources.
  for(const x of [-4.6,-1.2,2.2,5.3]){
   mesh(new THREE.CylinderGeometry(.012,.012,1.35,10),darkWoodMat,[x,6.1,-.3],roomRoot)
