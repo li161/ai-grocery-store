@@ -828,6 +828,9 @@ function buildBusinessRetailScene() {
   const teal = mat(0x0d4549, 0.34, 0.18)
   const mint = mat(0x8fd1b4, 0.42, 0.04)
   const amber = mat(0xf0b84f, 0.36, 0.06)
+  // This scene owns its box helper; the bookstore builder's helper is function-local.
+  const box = (w, h, d, x, y, z, material = wall, parent = retailRoot, rot = null) =>
+    mesh(new THREE.BoxGeometry(w, h, d), material, [x, y, z], parent, rot)
   box(16.2, 0.18, 14.2, 0, -0.12, 0, concrete, retailRoot)
   box(15.9, 0.035, 13.9, 0, -0.018, 0, paleFloor, retailRoot)
   box(16.2, 6.8, 0.28, 0, 3.35, -6.9, wall, retailRoot)
