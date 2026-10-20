@@ -1610,6 +1610,51 @@ function buildLibraryRoom() {
     }),
     [0, 6.05, -8.545],
   )
+  // Arched industrial windows with brick reveals and black steel muntins.
+  const windowGlass = new THREE.MeshPhysicalMaterial({ color: 0xd8e8e9, roughness: 0.1, metalness: 0.02, transparent: true, opacity: 0.18, transmission: 0.3, side: THREE.DoubleSide })
+  const windowFrame = mat(0x252c2b, 0.3, 0.55)
+  for (const wx of [-7.3, -3.8, 3.8, 7.3]) {
+    const wz = 8.68
+    add(new THREE.BoxGeometry(2.0, 3.8, 0.12), mat(0x9c533c, 0.85), [wx, 3.0, wz])
+    add(new THREE.BoxGeometry(1.68, 3.42, 0.035), windowGlass, [wx, 3.0, wz - 0.08])
+    // Vertical jambs and arch built from a smooth half-circle tube.
+    add(new THREE.BoxGeometry(0.075, 3.35, 0.11), windowFrame, [wx - 0.82, 3.0, wz - 0.14])
+    add(new THREE.BoxGeometry(0.075, 3.35, 0.11), windowFrame, [wx + 0.82, 3.0, wz - 0.14])
+    const arc = new THREE.EllipseCurve(wx, 4.67, 0.82, 0.82, Math.PI, 0, false, 0)
+    const arcPoints = arc.getPoints(40).map(p => new THREE.Vector3(p.x, p.y, wz - 0.14))
+    add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPoints), 40, 0.045, 8, false), windowFrame, [0, 0, 0])
+    add(new THREE.BoxGeometry(1.62, 0.055, 0.1), windowFrame, [wx, 3.0, wz - 0.16])
+    add(new THREE.BoxGeometry(0.055, 3.2, 0.1), windowFrame, [wx, 3.0, wz - 0.16])
+    add(new THREE.BoxGeometry(1.58, 0.055, 0.1), windowFrame, [wx, 4.0, wz - 0.16])
+  }
+  // Tall oak-framed specialty shelves: bottles, jars and paper-wrapped goods.
+  const shelfOak = new THREE.MeshStandardMaterial({ map: makeWoodTexture(), color: 0xb17c49, roughness: 0.5 })
+  for (const sideX of [-9.35, 9.35]) {
+    for (let level = 0; level < 5; level++) {
+      const y = 1.0 + level * 1.05
+      add(new THREE.BoxGeometry(0.62, 0.095, 13.6), shelfOak, [sideX * 0.985, y, -0.15])
+      for (let n = 0; n < 13; n++) {
+        const z = -6.2 + n * 1.0
+        const bottleMat = mat([0x293d31, 0x4c2523, 0x7d4a28, 0x263b4b][(n + level) % 4], 0.24, 0.28)
+        add(new THREE.CylinderGeometry(0.105, 0.13, 0.48, 12), bottleMat, [sideX * 0.95, y + 0.29, z])
+        add(new THREE.CylinderGeometry(0.045, 0.06, 0.16, 10), bottleMat, [sideX * 0.95, y + 0.6, z])
+        add(new THREE.BoxGeometry(0.13, 0.13, 0.012), mat([0xd6bd87, 0xe5dfcf, 0xb55b43][(n + level) % 3], 0.75), [sideX * 0.945, y + 0.28, z + 0.132])
+      }
+    }
+    add(new THREE.BoxGeometry(0.78, 5.55, 0.22), shelfOak, [sideX * 0.985, 3.45, -7.0])
+    add(new THREE.BoxGeometry(0.78, 5.55, 0.22), shelfOak, [sideX * 0.985, 3.45, 6.7])
+  }
+  // Warm pendant lamps with brass shades, glowing bulbs and dark suspension cords.
+  const brass = mat(0x80602d, 0.28, 0.68)
+  const lampShade = mat(0x6d552b, 0.32, 0.52)
+  const bulbMat = new THREE.MeshStandardMaterial({ color: 0xffe4a4, emissive: 0xffc96b, emissiveIntensity: 1.8, roughness: 0.2 })
+  for (const lx of [-7.0, -3.5, 0, 3.5, 7.0]) {
+    const lz = -1.7
+    add(new THREE.CylinderGeometry(0.018, 0.018, 1.2, 8), dark, [lx, 6.55, lz])
+    add(new THREE.CylinderGeometry(0.14, 0.52, 0.48, 24, 1, true), lampShade, [lx, 5.88, lz])
+    add(new THREE.SphereGeometry(0.22, 18, 12), bulbMat, [lx, 5.65, lz])
+    add(new THREE.TorusGeometry(0.47, 0.025, 8, 24), brass, [lx, 5.66, lz], [Math.PI / 2, 0, 0])
+  }
   // Back-wall refrigerated display: stainless plinth, dark interior, glass doors,
   // illuminated shelves and colorful fresh-food packages.
   for (let i = 0; i < 5; i++) {
