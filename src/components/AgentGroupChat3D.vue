@@ -2357,48 +2357,6 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
             LIBRARY CAFÉ <span>·</span> {{ roomRenderStatus }}
             <small>Environment: The Breakfast Room by Wig42 · CC BY 3.0</small>
           </div>
-          <div class="movement-pad" aria-label="角色移动控制">
-            <div class="movement-pad-heading">
-              <span>角色移动</span>
-              <b>{{ selectedAgent.name }}</b>
-            </div>
-            <button
-              class="move-up"
-              aria-label="向前移动"
-              title="向前 (↑ / W)"
-              @click="moveFocusedAgent(0, -1)"
-            >
-              ↑
-            </button>
-            <button
-              class="move-left"
-              aria-label="向左移动"
-              title="向左 (← / A)"
-              @click="moveFocusedAgent(-1, 0)"
-            >
-              ←
-            </button>
-            <button class="move-stop" aria-label="当前控制对象" title="当前控制对象">
-              {{ selectedAgent.emoji }}
-            </button>
-            <button
-              class="move-right"
-              aria-label="向右移动"
-              title="向右 (→ / D)"
-              @click="moveFocusedAgent(1, 0)"
-            >
-              →
-            </button>
-            <button
-              class="move-down"
-              aria-label="向后移动"
-              title="向后 (↓ / S)"
-              @click="moveFocusedAgent(0, 1)"
-            >
-              ↓
-            </button>
-            <small>先点击角色切换控制对象 · Shift 加速</small>
-          </div>
           <div class="agent-labels">
             <button
               v-for="(a, i) in agents"
