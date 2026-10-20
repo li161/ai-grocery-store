@@ -1594,13 +1594,103 @@ function buildCharacter() {
     inventory: 2.34,
     pm: 1.64,
   }
+  const originalGroups = new Map()
   for (const a of agents) {
     const character = createSpongeBob(a)
     character.userData.baseScale = a.id === 'pm' ? 1.55 : 1.25
     character.scale.setScalar(character.userData.baseScale)
     character.userData.characterEyes = character.children.filter((child) => child.userData.isCharacterEye)
     character.userData.labelHeight = labelHeights[a.id] || 2
+    originalGroups.set(a.id, character)
   }
+  const businessGroups = new Map()
+  const businessHitMeshes = []
+  const professionalPalette = {
+    manager: { skin: 0xc98f69, hair: 0x29211e, suit: 0x263a4b, shirt: 0xf3eee3, tie: 0x4e9d91 },
+    cashier: { skin: 0xe0b08a, hair: 0x4a3026, suit: 0xeee5d7, shirt: 0xffffff, tie: 0xd88a50 },
+    guide: { skin: 0xe8bd9c, hair: 0x2d2928, suit: 0x54786e, shirt: 0xf5f0e5, tie: 0xd4b16d },
+    buyer: { skin: 0xb97e5a, hair: 0x312b28, suit: 0x59473b, shirt: 0xece4d7, tie: 0xb95e4b },
+    inventory: { skin: 0xf0c8a4, hair: 0x7a5438, suit: 0x3f6d78, shirt: 0xf7f1e7, tie: 0xc6a15c },
+    pm: { skin: 0xd6a17c, hair: 0x3b302d, suit: 0x47445d, shirt: 0xf6f0e8, tie: 0x8d7cb8 },
+  }
+  for (const a of agents) {
+    const palette = professionalPalette[a.id]
+    const human = new THREE.Group()
+    human.name = 'Business_Character_' + a.id
+    human.position.set(...agentPositions[a.id])
+    human.visible = businessMode.value
+    human.userData.agentId = a.id
+    human.userData.baseScale = a.id === 'pm' ? 1.12 : 1.0
+    human.userData.labelHeight = 2.05
+    const material = (color, roughness = 0.62) => new THREE.MeshStandardMaterial({ color, roughness })
+    const add = (geometry, color, x, y, z, sx = 1, sy = 1, sz = 1) => {
+      const part = new THREE.Mesh(geometry, material(color))
+      part.position.set(x, y, z)
+      part.scale.set(sx, sy, sz)
+      part.castShadow = true
+      part.receiveShadow = true
+      human.add(part)
+      return part
+    }
+    const limb = (start, end, radius, color) => {
+      const a0 = new THREE.Vector3(...start), b0 = new THREE.Vector3(...end)
+      const direction = b0.clone().sub(a0)
+      const part = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.78, radius, direction.length(), 10), material(color))
+      part.position.copy(a0).add(b0).multiplyScalar(0.5)
+      part.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize())
+      part.castShadow = true
+      human.add(part)
+    }
+    // Distinct, stylized human coworkers: head, hairstyle, tailored jacket, shirt, tie/scarf and limbs.
+    add(new THREE.CylinderGeometry(0.105, 0.12, 0.16, 16), palette.skin, 0, 1.37, 0)
+    add(new THREE.SphereGeometry(0.285, 24, 20), palette.skin, 0, 1.72, 0.015, 0.86, 1.08, 0.82)
+    add(new THREE.SphereGeometry(0.292, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.53), palette.hair, 0, 1.83, -0.015, 0.94, 0.8, 0.88)
+    add(new THREE.SphereGeometry(0.055, 12, 10), 0xffffff, -0.105, 1.75, 0.247, 1, 1, 0.45)
+    add(new THREE.SphereGeometry(0.055, 12, 10), 0xffffff, 0.105, 1.75, 0.247, 1, 1, 0.45)
+    add(new THREE.SphereGeometry(0.026, 10, 8), 0x302a27, -0.095, 1.75, 0.27)
+    add(new THREE.SphereGeometry(0.026, 10, 8), 0x302a27, 0.115, 1.75, 0.27)
+    add(new THREE.SphereGeometry(0.035, 10, 8), palette.skin, 0, 1.67, 0.265, 0.75, 1, 0.65)
+    add(new THREE.BoxGeometry(0.52, 0.56, 0.3), palette.suit, 0, 0.99, 0)
+    add(new THREE.BoxGeometry(0.22, 0.52, 0.025), palette.shirt, 0, 1.0, 0.163)
+    add(new THREE.BoxGeometry(0.075, 0.34, 0.035), palette.tie, 0, 0.98, 0.183)
+    add(new THREE.BoxGeometry(0.13, 0.1, 0.035), palette.shirt, -0.12, 1.18, 0.17, 1, 0.65, 1)
+    limb([-0.27, 1.18, 0], [-0.39, 0.76, 0.04], 0.075, palette.suit)
+    limb([0.27, 1.18, 0], [0.39, 0.78, 0.08], 0.075, palette.suit)
+    add(new THREE.SphereGeometry(0.075, 12, 10), palette.skin, -0.39, 0.74, 0.04)
+    add(new THREE.SphereGeometry(0.075, 12, 10), palette.skin, 0.39, 0.76, 0.08)
+    limb([-0.13, 0.72, 0], [-0.14, 0.18, 0.015], 0.085, 0x292b30)
+    limb([0.13, 0.72, 0], [0.14, 0.18, 0.015], 0.085, 0x292b30)
+    add(new THREE.BoxGeometry(0.19, 0.11, 0.29), 0x292b30, -0.14, 0.1, 0.06)
+    add(new THREE.BoxGeometry(0.19, 0.11, 0.29), 0x292b30, 0.14, 0.1, 0.06)
+    if (a.id === 'manager' || a.id === 'buyer') {
+      add(new THREE.BoxGeometry(0.16, 0.13, 0.035), 0x4d8dbe, -0.12, 1.12, 0.19)
+    } else if (a.id === 'inventory') {
+      add(new THREE.BoxGeometry(0.14, 0.22, 0.035), 0x79b9a7, 0.19, 0.94, 0.19)
+    } else if (a.id === 'cashier') {
+      add(new THREE.BoxGeometry(0.13, 0.17, 0.035), 0xd7a75b, -0.12, 0.94, 0.19)
+    }
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.012, 8, 44), new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0.55 }))
+    ring.rotation.x = Math.PI / 2
+    ring.position.y = 0.025
+    human.add(ring)
+    const hit = new THREE.Mesh(new THREE.SphereGeometry(0.86, 16, 12), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }))
+    hit.position.set(0, 1, 0)
+    hit.userData.agentId = a.id
+    hit.userData.businessCharacter = true
+    human.add(hit)
+    businessHitMeshes.push(hit)
+    scene.add(human)
+    businessGroups.set(a.id, human)
+  }
+  // Switch the active animation/label/movement targets with the selected visual theme.
+  for (const a of agents) {
+    const cartoon = originalGroups.get(a.id)
+    const business = businessGroups.get(a.id)
+    cartoon.visible = !businessMode.value
+    business.visible = businessMode.value
+    characterGroups.set(a.id, businessMode.value ? business : cartoon)
+  }
+  characterHitMeshes.push(...businessHitMeshes)
 }
 
 const LIBRARY_SCENE_URL = '/models/breakfast_room_extended.gltf'
@@ -2393,6 +2483,9 @@ function toggleBusinessMode() {
     // SpongeBob agents, interaction targets and chat UI remain shared.
     if (businessArchitecture) businessArchitecture.visible = businessMode.value
     if (retailScene) retailScene.visible = !businessMode.value
+    for (const agent of agents) {
+      const cartoon = scene.getObjectByName('') // groups are switched through the registered character maps below
+    }
     const business = businessMode.value
     scene.background = new THREE.Color(business ? 0x17222b : 0x19150f)
     if (scene.fog) {
