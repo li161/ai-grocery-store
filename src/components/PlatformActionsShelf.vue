@@ -21,6 +21,10 @@ const types = [
   '履约/供应链',
   '治理/算法',
 ]
+function selectPlatform(platform) {
+  activePlatform.value = platform
+  activeType.value = '全部'
+}
 function category(item) {
   if (item.actionType && types.includes(item.actionType)) return item.actionType
   const s = [item.title, item.summary, ...(item.tags || [])].join(' ')
@@ -216,10 +220,7 @@ function formatDateTime(value) {
         role="tab"
         :aria-selected="activePlatform === p"
         :class="{ active: activePlatform === p }"
-        @click="
-          activePlatform = p
-          activeType = '全部'
-        "
+        @click="selectPlatform(p)"
       >
         {{ p === '全部' ? '全部平台' : p }} <b>{{ counts[p] }}</b>
       </button>
