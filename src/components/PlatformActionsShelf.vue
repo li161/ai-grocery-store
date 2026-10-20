@@ -140,7 +140,7 @@ function formatDateTime(value) {
             <div v-if="item.impact"><strong>潜在经营影响 · 分析推断</strong><p>{{ item.impact }}</p></div>
             <div v-if="item.action"><strong>建议核查</strong><p>{{ item.action }}</p></div>
           </div>
-          <div class="action-foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join('　') }}</span><a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">{{ isGoogleRedirect(item) ? '打开检索结果（非原文） ↗' : '查看来源原文 ↗' }}</a></div>
+          <div class="action-foot"><span>{{ (item.tags||[]).map(t=>'#'+t).join(' ') }}</span><a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">{{ isGoogleRedirect(item) ? '打开检索结果（非原文） ↗' : '查看来源原文 ↗' }}</a></div>
         </div>
       </article>
     </div>
