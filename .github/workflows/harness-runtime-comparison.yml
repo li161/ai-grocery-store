@@ -1,0 +1,32 @@
+name: Harness Runtime comparison
+
+on:
+  pull_request:
+    paths:
+      - "experiments/harness-runtime-comparison/**"
+      - ".github/workflows/harness-runtime-comparison.yml"
+  push:
+    branches:
+      - "feat/harness-runtime-comparison"
+    paths:
+      - "experiments/harness-runtime-comparison/**"
+      - ".github/workflows/harness-runtime-comparison.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: experiments/harness-runtime-comparison
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: experiments/harness-runtime-comparison/package.json
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run demo
+      - run: npm run demo:langgraph
