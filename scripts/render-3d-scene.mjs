@@ -152,6 +152,39 @@ try {
       'High-detail GLB unavailable in this network; captured the local real-time 3D fallback',
     )
   }
+  // Exercise the actual theme control, not just the existence of a WebGL canvas.
+  const modeButton = page.locator('.scene-mode-btn')
+  await modeButton.waitFor({ state: 'visible', timeout: 5000 })
+  const initialPressed = await modeButton.getAttribute('aria-pressed')
+  const initialTheme = await page.locator('.space3d').getAttribute('class')
+  await modeButton.click()
+  await page.waitForFunction(() => {
+    const button = document.querySelector('.scene-mode-btn')
+    const root = document.querySelector('.space3d')
+    return button?.getAttribute('aria-pressed') === 'true' && root?.classList.contains('business-theme')
+  }, null, { timeout: 5000 })
+  const businessTheme = await page.locator('.space3d').getAttribute('class')
+  if (businessTheme === initialTheme) throw new Error('Theme root class did not change after enabling business mode.')
+  await modeButton.click()
+  await page.waitForFunction(() => {
+    const button = document.querySelector('.scene-mode-btn')
+    const root = document.querySelector('.space3d')
+    return button?.getAttribute('aria-pressed') === 'false' && !root?.classList.contains('business-theme')
+  }, null, { timeout: 5000 })
+  if (initialPressed !== 'false') throw new Error('Expected fairytale mode to be the initial mode; got aria-pressed=' + initialPressed)
+
+  // Check the responsive control at a phone-sized viewport too.
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.waitForTimeout(150)
+  const mobileToggle = await modeButton.evaluate((el) => {
+    const rect = el.getBoundingClientRect()
+    const style = getComputedStyle(el)
+    return { display: style.display, visibility: style.visibility, width: rect.width, height: rect.height }
+  })
+  if (mobileToggle.display === 'none' || mobileToggle.visibility === 'hidden' || mobileToggle.width < 1 || mobileToggle.height < 1) {
+    throw new Error('Theme toggle is not visible on mobile viewport: ' + JSON.stringify(mobileToggle))
+  }
+  await page.setViewportSize({ width: 1440, height: 900 })
   await page.waitForTimeout(900)
   // Freeze the app's perpetual RAF loop after several real frames so software Chromium can take a stable capture.
   await page.evaluate(() => {

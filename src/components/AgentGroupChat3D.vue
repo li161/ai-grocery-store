@@ -2362,6 +2362,9 @@ function initScene() {
   if (retailScene) retailScene.visible = !businessMode.value
   if (roomRoot) roomRoot.visible = false
   buildCharacter()
+  // Apply visibility after both character sets exist; this keeps the room and cast in sync
+  // on first render as well as on subsequent mode toggles.
+  applySceneMode()
   raycaster = new THREE.Raycaster()
   // Use the custom-built retail scene as the single source of truth. Loading the benchmark café GLTF here
   // layered stock furniture over the authored fixtures, making the tables and shelves look unchanged.
@@ -2857,7 +2860,7 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
   .scene-mode-btn { padding: 8px 9px; font-size: 10px; }
 }
 @media (max-width: 860px) {
-  .scene-mode-btn { display: none; }
+  .scene-mode-btn { display: inline-flex; max-width: 46vw; white-space: nowrap; }
 }
 
 .space3d {
