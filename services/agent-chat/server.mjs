@@ -314,7 +314,7 @@ const server = http.createServer(async (req, res) => {
               'task.failed': 'agent.failed',
               'task.skipped': 'task.skipped',
             }
-            void conversationObserver.publish({
+            return conversationObserver.publish({
               conversationId,
               type: typeMap[event.type] || event.type,
               source: { type: 'agent', id: String(event.agentId || 'harness') },
