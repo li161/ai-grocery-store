@@ -161,7 +161,14 @@ try {
   await page.waitForFunction(() => {
     const button = document.querySelector('.scene-mode-btn')
     const root = document.querySelector('.space3d')
-    return button?.getAttribute('aria-pressed') === 'true' && root?.classList.contains('business-theme')
+    const canvas = document.querySelector('.three-canvas')
+    return button?.getAttribute('aria-pressed') === 'true' &&
+      root?.classList.contains('business-theme') &&
+      canvas?.dataset.sceneMode === 'business' &&
+      canvas?.dataset.sceneModeApplied === 'business' &&
+      canvas?.dataset.businessArchitectureVisible === 'true' &&
+      canvas?.dataset.retailSceneVisible === 'false' &&
+      Number(canvas?.dataset.activeCharacterCount) === 6
   }, null, { timeout: 5000 })
   const businessTheme = await page.locator('.space3d').getAttribute('class')
   if (businessTheme === initialTheme) throw new Error('Theme root class did not change after enabling business mode.')
@@ -169,7 +176,14 @@ try {
   await page.waitForFunction(() => {
     const button = document.querySelector('.scene-mode-btn')
     const root = document.querySelector('.space3d')
-    return button?.getAttribute('aria-pressed') === 'false' && !root?.classList.contains('business-theme')
+    const canvas = document.querySelector('.three-canvas')
+    return button?.getAttribute('aria-pressed') === 'false' &&
+      !root?.classList.contains('business-theme') &&
+      canvas?.dataset.sceneMode === 'fairytale' &&
+      canvas?.dataset.sceneModeApplied === 'fairytale' &&
+      canvas?.dataset.businessArchitectureVisible === 'false' &&
+      canvas?.dataset.retailSceneVisible === 'true' &&
+      Number(canvas?.dataset.activeCharacterCount) === 6
   }, null, { timeout: 5000 })
   if (initialPressed !== 'false') throw new Error('Expected fairytale mode to be the initial mode; got aria-pressed=' + initialPressed)
 
