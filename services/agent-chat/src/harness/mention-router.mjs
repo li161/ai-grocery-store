@@ -4,10 +4,10 @@
  */
 export function routeMentionedAgents(message, agents) {
   const text = String(message || '')
-  const mentions = [...text.matchAll(/@([\\p{L}\\p{N}_-]{1,40})/gu)].map((match) => match[1])
+  const mentions = [...text.matchAll(/@([\p{L}\p{N}_-]{1,40})/gu)].map((match) => match[1])
   if (!mentions.length) return { agents, mentions: [], mode: 'default' }
 
-  const normalized = (value) => String(value || '').toLocaleLowerCase().replace(/[\\s_-]/g, '')
+  const normalized = (value) => String(value || '').toLocaleLowerCase().replace(/[\s_-]/g, '')
   const all = mentions.some((mention) => ['all', '全体', '所有人', '大家'].includes(normalized(mention)))
   if (all) return { agents, mentions, mode: 'broadcast' }
 
