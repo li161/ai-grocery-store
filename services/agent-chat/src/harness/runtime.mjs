@@ -47,7 +47,7 @@ export async function executeAgentRun({
   async function executeOne(agent) {
     const startedAt = new Date().toISOString()
     await taskStore.updateTask(run.id, agent.id, { status: 'running', startedAt })
-    onEvent({
+    await onEvent({
       type: 'task.started',
       runId: run.id,
       agentId: agent.id,
@@ -67,7 +67,7 @@ export async function executeAgentRun({
         completedAt,
         result: result.text,
       })
-      onEvent({ type: 'task.succeeded', runId: run.id, agentId: agent.id, at: completedAt })
+      await onEvent({ type: 'task.succeeded', runId: run.id, agentId: agent.id, at: completedAt })
     } catch (error) {
       const completedAt = new Date().toISOString()
       const message = String(error?.message || 'Agent failed').slice(0, 250)
@@ -78,7 +78,7 @@ export async function executeAgentRun({
         completedAt,
         error: message,
       })
-      onEvent({ type: 'task.failed', runId: run.id, agentId: agent.id, error: message, at: completedAt })
+      await onEvent({ type: 'task.failed', runId: run.id, agentId: agent.id, error: message, at: completedAt })
     }
   }
 
@@ -97,7 +97,7 @@ export async function executeAgentRun({
         completedAt: new Date().toISOString(),
       })
       errors.push({ agentId: id, message: '依赖任务失败，已跳过执行' })
-      onEvent({ type: 'task.skipped', runId: run.id, agentId: id, error: '依赖任务失败，已跳过执行', at: new Date().toISOString() })
+      await onEvent({ type: 'task.skipped', runId: run.id, agentId: id, error: '依赖任务失败，已跳过执行', at: new Date().toISOString() })
     }
     const ready = [...pending].filter((id) =>
       (byId.get(id).dependsOn || []).every((dep) => states.get(dep)?.status === 'succeeded'),
