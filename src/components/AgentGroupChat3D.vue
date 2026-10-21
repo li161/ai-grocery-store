@@ -2523,6 +2523,15 @@ function applySceneMode() {
       }
     })
   }
+  // Publish the applied Three.js state for diagnostics and browser smoke tests.
+  if (canvasHost.value) {
+    canvasHost.value.dataset.sceneModeApplied = business ? 'business' : 'fairytale'
+    canvasHost.value.dataset.businessArchitectureVisible = String(Boolean(businessArchitecture?.visible))
+    canvasHost.value.dataset.retailSceneVisible = String(Boolean(retailScene?.visible))
+    canvasHost.value.dataset.activeCharacterCount = String(
+      agents.filter((agent) => (business ? businessCharacterGroups : originalCharacterGroups).get(agent.id)?.visible).length,
+    )
+  }
   status.value = business ? '商务写实主题已启用' : '童话主题已启用'
 }
 function toggleBusinessMode() {
@@ -2616,6 +2625,7 @@ const selectedAgent = computed(() => agents.find((a) => a.id === focusAgent.valu
           <div
             ref="canvasHost"
             class="three-canvas"
+            :data-scene-mode="businessMode ? 'business' : 'fairytale'"
             :data-room-ready="highDetailRoomLoaded ? 'true' : 'false'"
             :data-cafe-ready="highDetailCafeLoaded ? 'true' : 'false'"
             :data-room-status="roomRenderStatus"
