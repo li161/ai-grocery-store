@@ -78,7 +78,7 @@ export async function executeAgentRun({
         completedAt,
         error: message,
       })
-      onEvent({ type: 'task.failed', runId: run.id, agentId: agent.id, at: completedAt })
+      onEvent({ type: 'task.failed', runId: run.id, agentId: agent.id, error: message, at: completedAt })
     }
   }
 
@@ -97,7 +97,7 @@ export async function executeAgentRun({
         completedAt: new Date().toISOString(),
       })
       errors.push({ agentId: id, message: '依赖任务失败，已跳过执行' })
-      onEvent({ type: 'task.skipped', runId: run.id, agentId: id, at: new Date().toISOString() })
+      onEvent({ type: 'task.skipped', runId: run.id, agentId: id, error: '依赖任务失败，已跳过执行', at: new Date().toISOString() })
     }
     const ready = [...pending].filter((id) =>
       (byId.get(id).dependsOn || []).every((dep) => states.get(dep)?.status === 'succeeded'),
