@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test",
-    "check": "node --check server.mjs && node --check src/task-store.mjs && node --check src/harness/runtime.mjs"
+    "check": "node --check server.mjs && node --check src/task-store.mjs && node --check src/harness/runtime.mjs && node --check src/harness/group-chat-observer.mjs && node --check src/harness/mention-router.mjs"
   },
   "dependencies": {
     "pg": "^8.16.3"

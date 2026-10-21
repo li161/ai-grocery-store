@@ -2,6 +2,8 @@ import http from 'node:http'
 import { randomUUID } from 'node:crypto'
 import { taskStore } from './src/task-store.mjs'
 import { executeAgentRun, validateTaskGraph } from './src/harness/runtime.mjs'
+import { conversationObserver } from './src/harness/group-chat-observer.mjs'
+import { routeMentionedAgents } from './src/harness/mention-router.mjs'
 
 const port = Number(process.env.PORT || 8787)
 const deepseekApiKey = process.env.DEEPSEEK_API_KEY
@@ -145,6 +147,49 @@ const server = http.createServer(async (req, res) => {
       return res.end()
     }
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
+    if (req.method === 'GET' && url.pathname.startsWith('/api/conversations/') && url.pathname.endsWith('/events')) {
+      const conversationId = decodeURIComponent(url.pathname.slice('/api/conversations/'.length, -'/events'.length))
+      if (!conversationId || conversationId.includes('/')) return send(res, 400, { error: 'invalid conversation id', traceId })
+      res.writeHead(200, {
+        'content-type': 'text/event-stream; charset=utf-8',
+        'cache-control': 'no-cache, no-transform',
+        connection: 'keep-alive',
+        'x-accel-buffering': 'no',
+      })
+      res.write(': connected\\n\\n')
+      let closed = false
+      let replaying = true
+      const buffered = []
+      let lastSent = Math.max(0, Number(req.headers['last-event-id'] || url.searchParams.get('after') || 0) || 0)
+      const writeEvent = (event) => {
+        if (closed || event.sequence <= lastSent) return
+        res.write(`id: ${event.sequence}\\nevent: ${event.type}\\ndata: ${JSON.stringify(event)}\\n\\n`)
+        lastSent = event.sequence
+      }
+      const unsubscribe = conversationObserver.subscribe(conversationId, (event) => {
+        if (replaying) buffered.push(event)
+        else writeEvent(event)
+      })
+      const heartbeat = setInterval(() => { if (!closed) res.write(': heartbeat\\n\\n') }, 20000)
+      req.on('close', () => {
+        closed = true
+        clearInterval(heartbeat)
+        unsubscribe()
+      })
+      try {
+        const replay = await conversationObserver.replay(conversationId, lastSent, 500)
+        for (const event of replay) writeEvent(event)
+        replaying = false
+        buffered.sort((a, b) => a.sequence - b.sequence).forEach(writeEvent)
+      } catch (error) {
+        res.write(`event: observer.error\\ndata: ${JSON.stringify({ error: 'event replay failed', traceId })}\\n\\n`)
+        res.end()
+        closed = true
+        clearInterval(heartbeat)
+        unsubscribe()
+      }
+      return
+    }
     if (req.method === 'GET' && url.pathname === '/health') {
       const database = await taskStore.checkConnection()
       const configured = Boolean(process.env.DATABASE_URL)
@@ -206,6 +251,17 @@ const server = http.createServer(async (req, res) => {
         traceId,
       })
     }
+    const conversationId = String(input.conversationId || input.roomId || 'default').slice(0, 120)
+    const routing = routeMentionedAgents(message, agents)
+    if (routing.mode === 'unresolved') {
+      return send(res, 422, { error: 'Mention did not match any Agent; use a configured Agent name or @all', mentions: routing.mentions, traceId })
+    }
+    const routedAgents = routing.agents
+    try {
+      validateTaskGraph(routedAgents)
+    } catch (error) {
+      return send(res, 400, { error: String(error?.message || 'Invalid routed task graph').slice(0, 250), traceId })
+    }
     const history = normalizeHistory(input.history)
     const key =
       String(req.headers['idempotency-key'] || '')
@@ -217,7 +273,7 @@ const server = http.createServer(async (req, res) => {
       message,
       provider: 'DeepSeek',
       model: deepseekModel,
-      agents,
+      agents: routedAgents,
     })
     if (!created) {
       const replies = run.tasks
@@ -234,6 +290,14 @@ const server = http.createServer(async (req, res) => {
         idempotentReplay: true,
       })
     }
+    await conversationObserver.publish({
+      eventId: `message:${run.id}`,
+      conversationId,
+      type: 'message.created',
+      source: { type: 'user', id: String(input.userId || 'user').slice(0, 80) },
+      correlationId: run.id,
+      payload: { message, routeMode: routing.mode, mentions: routing.mentions, agentIds: routedAgents.map((agent) => agent.id) },
+    })
     const execute = async () => {
       try {
         const result = await executeAgentRun({
@@ -242,7 +306,22 @@ const server = http.createServer(async (req, res) => {
           taskStore,
           executeAgent: (agent, dependencyResults) =>
             callDeepSeek({ message, agent, history, traceId, dependencyResults }),
-          onEvent: (event) => console.log(JSON.stringify({ traceId, ...event })),
+          onEvent: (event) => {
+            console.log(JSON.stringify({ traceId, ...event }))
+            const typeMap = {
+              'task.started': 'agent.started',
+              'task.succeeded': 'agent.completed',
+              'task.failed': 'agent.failed',
+              'task.skipped': 'task.skipped',
+            }
+            return conversationObserver.publish({
+              conversationId,
+              type: typeMap[event.type] || event.type,
+              source: { type: 'agent', id: String(event.agentId || 'harness') },
+              correlationId: traceId,
+              payload: { ...event, agentId: event.agentId || null },
+            }).catch((error) => console.error(JSON.stringify({ traceId, phase: 'observer-publish', error: String(error?.message || error).slice(0, 200) })))
+          },
         })
         console.log(
           JSON.stringify({
