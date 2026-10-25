@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T07:21:52.747Z",
+  "generatedAt": "2026-10-25T07:38:22.468Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,23 +95,35 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 5,
-    "archivedItems": 82,
+    "newlyFound": 20,
+    "archivedItems": 88,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 18,
-      "京东": 30,
-      "美团": 14,
-      "拼多多": 20
+      "淘宝": 19,
+      "京东": 31,
+      "美团": 15,
+      "拼多多": 23
     }
   },
   "items": [
+    {
+      "title": "豆包抢成交，千问造“铲子”：“双11”撕开字节与阿里AI电商分水岭 - https://www.mrjjxw.com/",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1WeE01ampEb1lJQWlCYjc1NlB2ZkpESHBWeFF4dDNLQ0tXZ0g3MVNSVF9ZdldndVJkNzlDZHByaHBUc1k3NTN3SElJWTA3dVVlaXJFTENTZGhLSi03UkZ0S1dIMzMydw?oc=5",
+      "publishedAt": "2026-10-23",
+      "summary": "豆包抢成交，千问造“铲子”：“双11”撕开字节与阿里AI电商分水岭 &nbsp;&nbsp; https://www.mrjjxw.com/",
+      "source": "https://www.mrjjxw.com/",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
     {
       "title": "双十一将至，鸿蒙版淘宝全新支持AI试穿、深色模式等功能，购物更智能、更沉浸！ - 飞象网",
       "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1tcTZneEc4RkExY1pyWU5rY3pVMHhxQjB2YldRamxXN0V0VnF5MFJuYXpCYTYyalZsekFueXJ5b1dXT0lPNFR2U3BoVmY?oc=5",
@@ -192,6 +204,18 @@
       "source": "亿邦动力",
       "platform": "淘宝",
       "query": "天猫 AI空间站 Token充值中心 数字商品 上线 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "10月14日电商早报：千问AI眼镜耳机新品发布；拼多多双11招商开启- 栏目 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFB5RS1idnBvM3hVelRzWk54aEFHOEhVNGU3cGVvcHJsSUVKRTYtN0JaM0xTbi1yNnQ4LTRzMW1vcEFJV01fTmZ1OEhwVUZyYUliM09rT1FR?oc=5",
+      "publishedAt": "2026-10-13",
+      "summary": "10月14日电商早报：千问AI眼镜耳机新品发布；拼多多双11招商开启- 栏目 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
       "actionType": "AI导购/购物助手",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
@@ -578,6 +602,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "AI开始懂经营京东正在重做商家的生意系统- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9fU0x3QmZESW1WRDIwZEt5SUpUQ0J0MkE2Z2pyUVhqcE5IZzBtdF92MWlWNTFpb0MxUUdUX1ZoQmVCTk1DUGRiU3RQQ0ZmS3g4UEdwc0l3?oc=5",
+      "publishedAt": "2026-09-23",
+      "summary": "AI开始懂经营京东正在重做商家的生意系统- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "meituan-flash-flower-image-2026-09-18",
       "lane": "美团",
       "date": "2026-09-18",
@@ -921,6 +957,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "拼多多商家版隐私政策 - Pinduoduo",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNcGV4ZXM4LTJNeWtoMVZ2S24zMFF0N0w4bTRDOEwtVm13bmE0TVJMN2FKRHdfV0FQM0tnS0x4TkI3d3ZsRWtpTUxpQ1A1V1UzaXhnM2VtRG40MEdfbEFmNXFqb0lCdHZYdG0yRG5IbEtmZGJ0bk5tNllZeGxzRTdIOHU4VHliQXJwNFVacS1Iek9jbUk?oc=5",
+      "publishedAt": "2026-05-14",
+      "summary": "拼多多商家版隐私政策 &nbsp;&nbsp; Pinduoduo",
+      "source": "Pinduoduo",
+      "platform": "拼多多",
+      "query": "site:pinduoduo.com OR site:yangkeduo.com 拼多多 商家 规则 政策 公告 费用 2026",
+      "actionType": "治理/算法",
+      "sourceType": "官方检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "实测千问×淘宝：AI购物，更隐蔽的“竞价排名”？ - 36Kr",
       "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB3QmM4NVFDNEYySk9KY1pENWtCSU1xeWRVcVVuUUFKY1JWYUdPQlJySnZTcjdETUtuMWlSSWhjWlNBVEt2MnhoRm5idkI4Zw?oc=5",
       "publishedAt": "2026-05-13",
@@ -1012,6 +1060,18 @@
       "platform": "淘宝",
       "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
       "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” - Moomoo",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB2VV8zWXV6czVJWUlWX3hqcV83Ulk3TUNxdG1LRWlKU2dXMXdTNjBfQkoyY0hzSDVVRWtucUsyTDFiYkFlOV9YRXY4UC1mUU9JeXFfX3l4ZlAzZw?oc=5",
+      "publishedAt": "2026-05-10",
+      "summary": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” &nbsp;&nbsp; Moomoo",
+      "source": "Moomoo",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
+      "actionType": "流量/营销/补贴",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
@@ -1147,6 +1207,18 @@
       "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
       "actionType": "平台规则/费用",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "美团外卖去年清理下线十余项营销活动，外卖商家营销开支减少16.2亿元 - 劳动观察",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNV2x6S1VDckR1NWpYYWNTZXNEMzlIOXZhN2hYbG9rSEZUby1XeDF4WVBZZm44S1V4WUVxeG9NZFI0LUk3NFREaF9sejNybGtDZFpiOGp2NFR0RTBuOWNoS0tzVXFkcWxKal9yaDdCWnpRR012Z3lDdVE5TFhyQjZnNk9n?oc=5",
+      "publishedAt": "2026-02-08",
+      "summary": "美团外卖去年清理下线十余项营销活动，外卖商家营销开支减少16.2亿元 &nbsp;&nbsp; 劳动观察",
+      "source": "劳动观察",
+      "platform": "美团",
+      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
