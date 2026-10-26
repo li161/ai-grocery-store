@@ -1522,6 +1522,24 @@ function createBusinessArchitecture() {
   const bookMaterials = [0x355b50, 0x7d4535, 0x263b50, 0xb28a50, 0x60486d, 0xc3b18a, 0x8b5c42].map((color) =>
     material(color, 0.72),
   )
+  // Repeated book spines are instanced: hundreds of tiny meshes otherwise dominate draw calls.
+  const bookGeometry = new THREE.BoxGeometry(1, 1, 1)
+  const bookInstances = bookMaterials.map((bookMaterial) => {
+    const instances = new THREE.InstancedMesh(bookGeometry, bookMaterial, 7 * 5 * 13)
+    instances.name = 'Instanced_Library_Books'
+    instances.castShadow = false
+    instances.receiveShadow = true
+    root.add(instances)
+    return { mesh: instances, count: 0 }
+  })
+  const giltGeometry = new THREE.BoxGeometry(1, 1, 1)
+  const giltInstances = new THREE.InstancedMesh(giltGeometry, brass, 7 * 5 * 13)
+  giltInstances.name = 'Instanced_Book_Gilt_Details'
+  giltInstances.castShadow = false
+  giltInstances.receiveShadow = true
+  root.add(giltInstances)
+  const instanceTransform = new THREE.Object3D()
+  let giltCount = 0
   for (let bay = 0; bay < 7; bay++) {
     const x = -7.8 + bay * 2.6
     add(new THREE.BoxGeometry(2.42, 5.25, 0.24), walnut, x, 2.92, -8.42)
@@ -1533,13 +1551,26 @@ function createBusinessArchitecture() {
       for (let book = 0; book < 13; book++) {
         const bw = 0.105 + ((bay * 3 + level + book) % 3) * 0.018
         const bh = 0.48 + ((bay * 7 + level * 2 + book) % 5) * 0.075
-        const spine = bookMaterials[(bay + level + book) % bookMaterials.length]
+        const materialIndex = (bay + level + book) % bookMaterials.length
         const bx = x - 1.12 + book * 0.185
-        add(new THREE.BoxGeometry(bw, bh, 0.12), spine, bx, y + 0.075 + bh / 2, -8.16)
-        add(new THREE.BoxGeometry(bw * 0.62, 0.025, 0.012), brass, bx, y + 0.18, -8.09)
+        const instance = bookInstances[materialIndex]
+        instanceTransform.position.set(bx, y + 0.075 + bh / 2, -8.16)
+        instanceTransform.scale.set(bw, bh, 0.12)
+        instanceTransform.updateMatrix()
+        instance.mesh.setMatrixAt(instance.count++, instanceTransform.matrix)
+        instanceTransform.position.set(bx, y + 0.18, -8.09)
+        instanceTransform.scale.set(bw * 0.62, 0.025, 0.012)
+        instanceTransform.updateMatrix()
+        giltInstances.setMatrixAt(giltCount++, instanceTransform.matrix)
       }
     }
   }
+  for (const instance of bookInstances) {
+    instance.mesh.count = instance.count
+    instance.mesh.instanceMatrix.needsUpdate = true
+  }
+  giltInstances.count = giltCount
+  giltInstances.instanceMatrix.needsUpdate = true
   // A subtle brass compass inlay frames the social space without competing with the cast.
   const floorInlay = material(0x9b7548, 0.28, 0.55)
   for (const z of [-7.1, 7.1]) add(new THREE.BoxGeometry(15.5, 0.018, 0.035), floorInlay, 0, -0.045, z)
