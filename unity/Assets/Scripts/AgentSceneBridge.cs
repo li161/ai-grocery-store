@@ -33,6 +33,12 @@ public sealed class AgentSceneBridge : MonoBehaviour
 
     [SerializeField] private string currentMode = "fairytale";
 
+    private static bool IsSupportedState(string state)
+    {
+        return state == "idle" || state == "speaking" || state == "working" ||
+               state == "success" || state == "error";
+    }
+
     public void ReceiveFromVue(string json)
     {
         if (string.IsNullOrWhiteSpace(json) || json.Length > 4096)
@@ -65,14 +71,29 @@ public sealed class AgentSceneBridge : MonoBehaviour
                 Debug.LogWarning("[AgentSceneBridge] Unsupported scene mode.");
                 return;
             }
-
             currentMode = command.mode;
         }
-        else if (command.type == "focusAgent" || command.type == "agentState" || command.type == "chatMessage")
+        else if (command.type == "focusAgent")
         {
-            if (string.IsNullOrWhiteSpace(command.agentId) || command.agentId.Length > 64)
+            if (!IsValidAgentId(command.agentId))
             {
-                Debug.LogWarning("[AgentSceneBridge] Ignored command without a valid agentId.");
+                Debug.LogWarning("[AgentSceneBridge] Ignored focus command with invalid agentId.");
+                return;
+            }
+        }
+        else if (command.type == "agentState")
+        {
+            if (!IsValidAgentId(command.agentId) || !IsSupportedState(command.state))
+            {
+                Debug.LogWarning("[AgentSceneBridge] Ignored invalid agent state command.");
+                return;
+            }
+        }
+        else if (command.type == "chatMessage")
+        {
+            if (!IsValidAgentId(command.agentId))
+            {
+                Debug.LogWarning("[AgentSceneBridge] Ignored chat command with invalid agentId.");
                 return;
             }
         }
@@ -93,15 +114,22 @@ public sealed class AgentSceneBridge : MonoBehaviour
         });
     }
 
+    private static bool IsValidAgentId(string agentId)
+    {
+        return !string.IsNullOrWhiteSpace(agentId) && agentId.Length <= 64;
+    }
+
     public void NotifyAgentSelected(string agentId)
     {
-        if (string.IsNullOrWhiteSpace(agentId) || agentId.Length > 64) return;
-        RaiseEvent(new SceneEvent
-        {
-            type = "agentSelected",
-            mode = currentMode,
-            agentId = agentId
-        });
+        if (!IsValidAgentId(agentId)) return;
+        RaiseEvent(new SceneEvent { type = "agentSelected", mode = currentMode, agentId = agentId });
+    }
+
+    public void NotifyModeApplied(string mode)
+    {
+        if (mode != "business" && mode != "fairytale") return;
+        currentMode = mode;
+        RaiseEvent(new SceneEvent { type = "modeApplied", mode = currentMode });
     }
 
     public void NotifySceneReady()
@@ -112,8 +140,7 @@ public sealed class AgentSceneBridge : MonoBehaviour
     private static void RaiseEvent(SceneEvent sceneEvent)
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        string json = JsonUtility.ToJson(sceneEvent);
-        AgentSceneBridgeWebGL.SendSceneEvent(json);
+        AgentSceneBridgeWebGL.SendSceneEvent(JsonUtility.ToJson(sceneEvent));
 #else
         Debug.Log("[AgentSceneBridge] Scene event: " + JsonUtility.ToJson(sceneEvent));
 #endif
