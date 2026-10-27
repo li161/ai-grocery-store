@@ -22,27 +22,42 @@ const checks = [
       bridge.includes('"' + state + '"'),
     ),
   ],
-  ['bridge dispatches accepted commands', bridge.includes('CommandReceived?.Invoke(command)')],
+  [
+    'bridge dispatches accepted commands',
+    bridge.includes('CommandReceived?.Invoke(command)'),
+  ],
   [
     'controller switches real scene roots',
-    controller.includes('fairytaleRoot.SetActive') && controller.includes('businessRoot.SetActive'),
+    controller.includes('fairytaleRoot.SetActive') &&
+      controller.includes('businessRoot.SetActive'),
   ],
-  ['controller binds stable agent IDs', controller.includes('agentsById.TryGetValue(agentId, out binding)')],
+  [
+    'controller binds stable agent IDs',
+    controller.includes('agentsById.TryGetValue(agentId, out binding)'),
+  ],
   [
     'controller drives animator state parameters',
     ['Speaking', 'Working', 'Success', 'Error'].every((state) =>
       controller.includes('"' + state + '"'),
     ),
   ],
-  ['controller unsubscribes event handlers', controller.includes('AgentSceneBridge.CommandReceived -= HandleCommand')],
-  ['WebGL adapter declares internal call', webgl.includes('AgentSceneBridge_SendSceneEvent')],
+  [
+    'controller unsubscribes event handlers',
+    controller.includes('AgentSceneBridge.CommandReceived -= HandleCommand'),
+  ],
+  [
+    'WebGL adapter declares internal call',
+    webgl.includes('AgentSceneBridge_SendSceneEvent'),
+  ],
   [
     'browser adapter dispatches a structured event',
     jslib.includes("new CustomEvent('unity-scene-event', { detail: detail })"),
   ],
   [
     'documentation does not claim Unity build is done',
-    readme.includes('Not verified yet: Unity compilation, WebGL output, browser runtime'),
+    readme.includes(
+      'Not verified yet: Unity compilation, WebGL output, browser runtime',
+    ),
   ],
 ]
 
