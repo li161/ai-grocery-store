@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T08:36:34.159Z",
+  "generatedAt": "2026-10-30T08:43:29.523Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -98,15 +98,15 @@
     "queries": 32,
     "healthy": 32,
     "failed": 0,
-    "newlyFound": 2,
-    "archivedItems": 89,
+    "newlyFound": 6,
+    "archivedItems": 91,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
-    "meituanRulesStatus": "error",
+    "meituanRulesStatus": "ok",
     "byPlatform": {
       "淘宝": 19,
-      "京东": 32,
+      "京东": 34,
       "美团": 15,
       "拼多多": 23
     }
@@ -121,6 +121,18 @@
       "platform": "淘宝",
       "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
       "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "2026年京东淘宝天猫双十一活动正式开启！京东搜索【有红包999】【有红包900】，淘宝搜索【一起拿福利】，保存口令每日可领3次红包！今晚8点准时放出年度底价 - 凤凰网",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5ZZktvdlotMUc2TjVzbjhwOVdMcjVDeXMwZlk1QzdTRkxhdHRQY3RQekpScUZvM2lvdDhKbVkzNWx2bUV0b2kzbjl0ZFc?oc=5",
+      "publishedAt": "2026-10-21",
+      "summary": "2026年京东淘宝天猫双十一活动正式开启！京东搜索【有红包999】【有红包900】，淘宝搜索【一起拿福利】，保存口令每日可领3次红包！今晚8点准时放出年度底价 &nbsp;&nbsp; 凤凰网",
+      "source": "凤凰网",
+      "platform": "京东",
+      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
+      "actionType": "平台规则/费用",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
@@ -181,6 +193,18 @@
       "platform": "京东",
       "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
       "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "苹果首款折叠iPhone Duo 预购来了！京东搜索【苹果福利多】预约锁资格，提前领取购机优惠。机型挑选、下单流程、eSIM 提醒，提高首发抢单成功率 - 凤凰网",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBQVTF3UGhFZGtYeWxVeHQwLXBjZi1wcU4yVlg4MDRDMXV1Z3lCdUt5RFkyWFcta2gtaTlLcE5FcGtrb2FmeDhUSHVuUXk?oc=5",
+      "publishedAt": "2026-10-15",
+      "summary": "苹果首款折叠iPhone Duo 预购来了！京东搜索【苹果福利多】预约锁资格，提前领取购机优惠。机型挑选、下单流程、eSIM 提醒，提高首发抢单成功率 &nbsp;&nbsp; 凤凰网",
+      "source": "凤凰网",
+      "platform": "京东",
+      "query": "京东 App 更新版本 新功能 购物 订单 AI 2026",
+      "actionType": "流量/营销/补贴",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
