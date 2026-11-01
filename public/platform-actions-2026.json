@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T08:29:00.517Z",
+  "generatedAt": "2026-11-01T09:21:03.384Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,20 +95,20 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 5,
-    "archivedItems": 92,
+    "newlyFound": 25,
+    "archivedItems": 100,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 20,
+      "淘宝": 22,
       "京东": 34,
-      "美团": 15,
-      "拼多多": 23
+      "美团": 18,
+      "拼多多": 26
     }
   },
   "items": [
@@ -902,6 +902,18 @@
       "actionType": "平台规则/费用"
     },
     {
+      "title": "美团闪购商户违规管理规则 - 美团规则中心",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE4wZnNQU3c3Mm0wRDAtREx1YnFTZ01TYUNJVWctWXAxNzg1WUpOTTJMaFI1YUV0bnNyMmx5NHQtcEtYaHMxVW5OSV96eG5EMHltYVhUSUdhYUl4T0hkSjc5Zk1MaUhWNUczclpvYlVZNEQ?oc=5",
+      "publishedAt": "2026-06-28",
+      "summary": "美团闪购商户违规管理规则 &nbsp;&nbsp; 美团规则中心",
+      "source": "美团规则中心",
+      "platform": "美团",
+      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "官方检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "meituan-ai-merchant-guard-2026-06-24",
       "lane": "美团",
       "platform": "美团",
@@ -936,6 +948,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "拼多多Q1营收1062亿元；可灵AI一季度营业收入同比增长超300%丨零售电商周报- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5FakNXY3pXVkJFUTJ4UEpCRFdNWVp0T2xNUzFsanZDVnBHVXR5Q1lWb3U0ZktYVFpkd2YyRlJ2X3BSSmlOaEs5UHotM0wtNFlkalJmLUVn?oc=5",
+      "publishedAt": "2026-05-31",
+      "summary": "拼多多Q1营收1062亿元；可灵AI一季度营业收入同比增长超300%丨零售电商周报- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "拼多多",
+      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
+      "actionType": "平台规则/费用",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBHTHFoOFpYel9ETGJRelZ2ZVRoMTlaQXlxNjZnUmR0SHhYTlNyOElkbkc2V3ExWV9oSHZuaFFybkdEVkdSRVZWTjBzUjczelBHMXNzYlZsOUlMTzVCcnQ2OWZ5MVRuOHZlTXRxZEtERTNjWW5yT05nMEkwRk04LXM?oc=5",
       "publishedAt": "2026-05-27",
@@ -945,6 +969,18 @@
       "query": "拼多多商家版 App 版本更新 新功能 2026",
       "actionType": "App/产品功能",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9xdW5aWWJVZ3ctbGxfS2N1aV9MekFqMGljSWphMHAtX09jcDU1RVE1cENEZ1FFVUp3TWJfSEw0VFZrRVU1NmNqa05SOEMxTTgxQjBTQzlR?oc=5",
+      "publishedAt": "2026-05-27",
+      "summary": "独家｜“只字不谈AI”的拼多多 悄悄上线了AI搜索 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "拼多多",
+      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
@@ -1148,6 +1184,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "淘宝闪购商家端AI Agent再升级：一句话可完成开票商品下架- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9pNzNKYkZpd2NNMUtqZHc3U24zZlNZcC1IS29ocDV4bFNrWjlVMU1teFY1VHNDRlItUHowTVVCbV9ESGFoMmk2cXBGN0tIbXI3Rm1HNGdn?oc=5",
+      "publishedAt": "2026-04-09",
+      "summary": "淘宝闪购商家端AI Agent再升级：一句话可完成开票商品下架- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 - EBRUN.com",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE0yUldVZEVKQmRfY0M5cmR0WEk2Qm5LWU9QTkJ2N0RxNkRST1ZUUGk1Q0N0RTlqRGpXUl84M2I5WV9rekVHTVFvUEkwVUEzVGdSMWRiWjN3?oc=5",
       "publishedAt": "2026-04-01",
@@ -1165,6 +1213,18 @@
       "publishedAt": "2026-04-01",
       "summary": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 &nbsp;&nbsp; 亿邦动力",
       "source": "亿邦动力",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE0yUldVZEVKQmRfY0M5cmR0WEk2Qm5LWU9QTkJ2N0RxNkRST1ZUUGk1Q0N0RTlqRGpXUl84M2I5WV9rekVHTVFvUEkwVUEzVGdSMWRiWjN3?oc=5",
+      "publishedAt": "2026-04-01",
+      "summary": "拼多多力推“优惠联合营销”：平台掏钱补贴商家仅需按优惠开票- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
       "platform": "拼多多",
       "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
       "actionType": "流量/营销/补贴",
@@ -1326,6 +1386,30 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "零售日报：美团上线AI搜索问小团 本地生活战火蔓延至AI战场 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBmR2hLa1V6NXpGM2FfWGMxYXFub3pmWHFSQ19YYml5MTJidWZZcTA3eWF1SDJ6SzQxc3RHellFRlhvVlZsdTU4SWRlWnNHWVgxUlJwMU5R?oc=5",
+      "publishedAt": "2026-01-23",
+      "summary": "零售日报：美团上线AI搜索问小团 本地生活战火蔓延至AI战场 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "美团",
+      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9HV1VrZjN1TU9iSHB0ckU3X1hOcW5nMWd2NWxvc3E3cTFSbXFweEpnc2VlRFZNM3hPeDByUF9VWGFxV2VJVUxLSzQ3VUgxZzZIV0ZNYlJn?oc=5",
+      "publishedAt": "2026-01-23",
+      "summary": "美团上线“问小团”AI搜索功能 本地生活战火蔓延至AI &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "美团",
+      "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "拼多多“千亿扶持”加码“2026年货节”，百亿补贴推出三大重磅补贴 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5CVVJWWjNoRld6Unk2R1FLdlRfZVFmaTliOW5JU0F0RUhjcmJmaWVyQmJXNENQalZZaE1Gbk1pNlctSGdWb1VpN0FjY0RWY2k2aGFSeG9RY2x0RjFOM1BYdkNBbWhhZjZ0SUFmRXp6Y2V3MUhBYnZvWVRBYUYxdGM?oc=5",
       "publishedAt": "2026-01-19",
@@ -1365,6 +1449,18 @@
       "publishedAt": "2026-01-15",
       "summary": "进入“AI办事时代”！千问App接入淘宝、闪购、支付宝 &nbsp;&nbsp; 中国科技网",
       "source": "中国科技网",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "阿里AI直连购物车，超越谷歌、OpenAI率先走向商业履约|Google|淘宝闪购|支付宝|飞猪旅行|千问_手机新浪网 - 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOLVVQUlRCbUUtSFZHTHlZZXRaRzFWb3ZSYVU2R2F1bnhORWFUT3Boay1lbURZVk9FYWoyeFA3OVU3UGFfOTFKejU5SUxmNU5uNVd0M2g3NHk2cEd6LVVFUVptazZodjhsdWxNd1B4eXdqQ2dKQy1OZDR5WU5ZSHZFY3RoTjQycUE?oc=5",
+      "publishedAt": "2026-01-15",
+      "summary": "阿里AI直连购物车，超越谷歌、OpenAI率先走向商业履约|Google|淘宝闪购|支付宝|飞猪旅行|千问_手机新浪网 &nbsp;&nbsp; 新浪网",
+      "source": "新浪网",
       "platform": "淘宝",
       "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
       "actionType": "AI导购/购物助手",
