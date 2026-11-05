@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-05T06:44:03.581Z",
+  "generatedAt": "2026-11-05T17:23:35.106Z",
   "window": "7d",
   "summary": {
     "feeds": 147,
     "healthy": 147,
     "failed": 0,
-    "rawCandidates": 374,
+    "rawCandidates": 319,
     "accepted": 160
   },
   "sources": [
@@ -15,7 +15,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-11-05T06:43:59.630Z"
+      "checkedAt": "2026-11-05T17:23:30.816Z"
     },
     {
       "name": "OpenAI News RSS · direct",
@@ -23,7 +23,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-11-05T06:43:59.628Z"
+      "checkedAt": "2026-11-05T17:23:30.814Z"
     },
     {
       "name": "Google AI RSS · direct",
@@ -31,15 +31,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-11-05T06:43:59.629Z"
+      "checkedAt": "2026-11-05T17:23:30.815Z"
     },
     {
-      "name": "AI Shopping · 2026-11-02~2026-11-05",
+      "name": "Amazon AI · 2026-11-02~2026-11-05",
       "lane": "AI 导购",
-      "sourceType": "行业媒体",
+      "sourceType": "官方",
       "status": "ok",
-      "items": 9,
-      "checkedAt": "2026-11-05T06:43:59.610Z"
+      "items": 2,
+      "checkedAt": "2026-11-05T17:23:30.819Z"
     },
     {
       "name": "China Retail AI · 2026-11-02~2026-11-05",
@@ -47,31 +47,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:43:59.632Z"
-    },
-    {
-      "name": "Amazon AI · 2026-11-02~2026-11-05",
-      "lane": "AI 导购",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 3,
-      "checkedAt": "2026-11-05T06:43:59.633Z"
+      "checkedAt": "2026-11-05T17:23:30.818Z"
     },
     {
       "name": "Agentic Commerce · 2026-11-02~2026-11-05",
       "lane": "Agentic Commerce",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 22,
-      "checkedAt": "2026-11-05T06:43:59.633Z"
+      "items": 21,
+      "checkedAt": "2026-11-05T17:23:30.819Z"
     },
     {
-      "name": "Retail AI · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
+      "name": "AI Shopping · 2026-11-02~2026-11-05",
+      "lane": "AI 导购",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 12,
-      "checkedAt": "2026-11-05T06:43:59.631Z"
+      "items": 8,
+      "checkedAt": "2026-11-05T17:23:30.798Z"
     },
     {
       "name": "Google Commerce · 2026-11-02~2026-11-05",
@@ -79,7 +71,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:43:59.709Z"
+      "checkedAt": "2026-11-05T17:23:30.916Z"
     },
     {
       "name": "OpenAI Shopping · 2026-11-02~2026-11-05",
@@ -87,7 +79,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:43:59.760Z"
+      "checkedAt": "2026-11-05T17:23:30.941Z"
+    },
+    {
+      "name": "Retail AI · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-11-05T17:23:30.817Z"
     },
     {
       "name": "Alibaba Qwen · 2026-11-02~2026-11-05",
@@ -95,7 +95,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:43:59.819Z"
+      "checkedAt": "2026-11-05T17:23:31.004Z"
     },
     {
       "name": "Walmart AI · 2026-11-02~2026-11-05",
@@ -103,15 +103,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:43:59.903Z"
-    },
-    {
-      "name": "Retail Dive AI · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 20,
-      "checkedAt": "2026-11-05T06:43:59.918Z"
+      "checkedAt": "2026-11-05T17:23:31.068Z"
     },
     {
       "name": "JD AI Retail · 2026-11-02~2026-11-05",
@@ -119,7 +111,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:43:59.914Z"
+      "checkedAt": "2026-11-05T17:23:31.110Z"
     },
     {
       "name": "Retail Dive Commerce · 2026-11-02~2026-11-05",
@@ -127,7 +119,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:43:59.961Z"
+      "checkedAt": "2026-11-05T17:23:31.158Z"
     },
     {
       "name": "Modern Retail · 2026-11-02~2026-11-05",
@@ -135,7 +127,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:43:59.977Z"
+      "checkedAt": "2026-11-05T17:23:31.163Z"
+    },
+    {
+      "name": "Retail Dive AI · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 16,
+      "checkedAt": "2026-11-05T17:23:31.134Z"
     },
     {
       "name": "Retail AI China · 2026-11-02~2026-11-05",
@@ -143,23 +143,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:43:59.955Z"
-    },
-    {
-      "name": "Retail Brew · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 9,
-      "checkedAt": "2026-11-05T06:43:59.990Z"
+      "checkedAt": "2026-11-05T17:23:31.149Z"
     },
     {
       "name": "Grocery AI · 2026-11-02~2026-11-05",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 9,
-      "checkedAt": "2026-11-05T06:43:59.954Z"
+      "items": 11,
+      "checkedAt": "2026-11-05T17:23:31.135Z"
     },
     {
       "name": "Chain Store Age · 2026-11-02~2026-11-05",
@@ -167,7 +159,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 37,
-      "checkedAt": "2026-11-05T06:44:00.062Z"
+      "checkedAt": "2026-11-05T17:23:31.263Z"
+    },
+    {
+      "name": "Retail Brew · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 8,
+      "checkedAt": "2026-11-05T17:23:31.260Z"
+    },
+    {
+      "name": "Grocery Dive · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 14,
+      "checkedAt": "2026-11-05T17:23:31.354Z"
     },
     {
       "name": "NRF Retail · 2026-11-02~2026-11-05",
@@ -175,39 +183,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:00.107Z"
-    },
-    {
-      "name": "Grocery Dive · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 12,
-      "checkedAt": "2026-11-05T06:44:00.120Z"
-    },
-    {
-      "name": "Retail Personalization · 2026-11-02~2026-11-05",
-      "lane": "AI 导购",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:00.204Z"
-    },
-    {
-      "name": "Retail Loss Prevention · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:00.160Z"
-    },
-    {
-      "name": "Retail Pricing · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:00.182Z"
+      "checkedAt": "2026-11-05T17:23:31.306Z"
     },
     {
       "name": "Supply Chain AI · 2026-11-02~2026-11-05",
@@ -215,7 +191,31 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 26,
-      "checkedAt": "2026-11-05T06:44:00.148Z"
+      "checkedAt": "2026-11-05T17:23:31.354Z"
+    },
+    {
+      "name": "Retail Pricing · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 2,
+      "checkedAt": "2026-11-05T17:23:31.390Z"
+    },
+    {
+      "name": "Retail Personalization · 2026-11-02~2026-11-05",
+      "lane": "AI 导购",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:31.448Z"
+    },
+    {
+      "name": "Retail Loss Prevention · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:31.359Z"
     },
     {
       "name": "Shopify AI · 2026-11-02~2026-11-05",
@@ -223,7 +223,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.308Z"
+      "checkedAt": "2026-11-05T17:23:31.520Z"
     },
     {
       "name": "Instacart AI · 2026-11-02~2026-11-05",
@@ -231,7 +231,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.311Z"
+      "checkedAt": "2026-11-05T17:23:31.553Z"
     },
     {
       "name": "Agent Checkout · 2026-11-02~2026-11-05",
@@ -239,15 +239,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 4,
-      "checkedAt": "2026-11-05T06:44:00.222Z"
-    },
-    {
-      "name": "Kroger AI · 2026-11-02~2026-11-05",
-      "lane": "零售运营",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.357Z"
+      "checkedAt": "2026-11-05T17:23:31.512Z"
     },
     {
       "name": "Carrefour AI · 2026-11-02~2026-11-05",
@@ -255,7 +247,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.424Z"
+      "checkedAt": "2026-11-05T17:23:31.642Z"
     },
     {
       "name": "Tesco AI · 2026-11-02~2026-11-05",
@@ -263,7 +255,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.437Z"
+      "checkedAt": "2026-11-05T17:23:31.656Z"
+    },
+    {
+      "name": "Kroger AI · 2026-11-02~2026-11-05",
+      "lane": "零售运营",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:31.613Z"
     },
     {
       "name": "Amazon Marketplace · 2026-11-02~2026-11-05",
@@ -271,15 +271,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.443Z"
+      "checkedAt": "2026-11-05T17:23:31.669Z"
     },
     {
       "name": "Alibaba Retail AI · 2026-11-02~2026-11-05",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 8,
-      "checkedAt": "2026-11-05T06:44:00.448Z"
+      "items": 9,
+      "checkedAt": "2026-11-05T17:23:31.693Z"
     },
     {
       "name": "JD Retail AI · 2026-11-02~2026-11-05",
@@ -287,31 +287,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:00.478Z"
+      "checkedAt": "2026-11-05T17:23:31.753Z"
     },
     {
       "name": "Meituan Retail AI · 2026-11-02~2026-11-05",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 3,
-      "checkedAt": "2026-11-05T06:44:00.503Z"
-    },
-    {
-      "name": "Pinduoduo AI · 2026-11-02~2026-11-05",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 7,
-      "checkedAt": "2026-11-05T06:44:00.504Z"
-    },
-    {
-      "name": "China Supermarket AI · 2026-11-02~2026-11-05",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.539Z"
+      "items": 2,
+      "checkedAt": "2026-11-05T17:23:31.759Z"
     },
     {
       "name": "China Store Tech · 2026-11-02~2026-11-05",
@@ -319,7 +303,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.592Z"
+      "checkedAt": "2026-11-05T17:23:31.836Z"
+    },
+    {
+      "name": "China Supermarket AI · 2026-11-02~2026-11-05",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:31.815Z"
+    },
+    {
+      "name": "京东物流与供应链 AI · 2026-11-02~2026-11-05",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 4,
+      "checkedAt": "2026-11-05T17:23:31.855Z"
     },
     {
       "name": "京东官方 AI 零售 · 2026-11-02~2026-11-05",
@@ -327,15 +327,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.596Z"
+      "checkedAt": "2026-11-05T17:23:31.849Z"
     },
     {
-      "name": "京东物流与供应链 AI · 2026-11-02~2026-11-05",
+      "name": "Pinduoduo AI · 2026-11-02~2026-11-05",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 3,
-      "checkedAt": "2026-11-05T06:44:00.624Z"
+      "items": 8,
+      "checkedAt": "2026-11-05T17:23:31.797Z"
     },
     {
       "name": "淘宝天猫 AI 经营 · 2026-11-02~2026-11-05",
@@ -343,7 +343,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:00.659Z"
+      "checkedAt": "2026-11-05T17:23:31.922Z"
     },
     {
       "name": "拼多多官方与商家技术 · 2026-11-02~2026-11-05",
@@ -351,7 +351,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.715Z"
+      "checkedAt": "2026-11-05T17:23:31.995Z"
     },
     {
       "name": "阿里千问淘宝购物 · 2026-11-02~2026-11-05",
@@ -359,31 +359,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.695Z"
+      "checkedAt": "2026-11-05T17:23:31.994Z"
     },
     {
       "name": "拼多多商家运营与推荐 · 2026-11-02~2026-11-05",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.717Z"
-    },
-    {
-      "name": "中国电商平台公告 · 2026-11-02~2026-11-05",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 3,
-      "checkedAt": "2026-11-05T06:44:00.731Z"
-    },
-    {
-      "name": "中国即时零售 AI · 2026-11-02~2026-11-05",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.778Z"
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:32.014Z"
     },
     {
       "name": "中国电商 AI 媒体 · 2026-11-02~2026-11-05",
@@ -391,7 +375,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.779Z"
+      "checkedAt": "2026-11-05T17:23:32.072Z"
+    },
+    {
+      "name": "中国即时零售 AI · 2026-11-02~2026-11-05",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.067Z"
     },
     {
       "name": "中国零售科技媒体 · 2026-11-02~2026-11-05",
@@ -399,7 +391,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:00.798Z"
+      "checkedAt": "2026-11-05T17:23:32.074Z"
+    },
+    {
+      "name": "中国电商平台公告 · 2026-11-02~2026-11-05",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:32.034Z"
     },
     {
       "name": "Retail AI Results · 2026-11-02~2026-11-05",
@@ -407,15 +407,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.879Z"
-    },
-    {
-      "name": "China Retail AI · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.921Z"
+      "checkedAt": "2026-11-05T17:23:32.191Z"
     },
     {
       "name": "AI Shopping · 2026-10-30~2026-11-02",
@@ -423,7 +415,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-11-05T06:44:00.893Z"
+      "checkedAt": "2026-11-05T17:23:32.211Z"
+    },
+    {
+      "name": "China Retail AI · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.246Z"
+    },
+    {
+      "name": "Retail AI Investment · 2026-11-02~2026-11-05",
+      "lane": "平台博弈",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 10,
+      "checkedAt": "2026-11-05T17:23:32.164Z"
     },
     {
       "name": "Amazon AI · 2026-10-30~2026-11-02",
@@ -431,23 +439,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:00.969Z"
+      "checkedAt": "2026-11-05T17:23:32.312Z"
     },
     {
       "name": "Agentic Commerce · 2026-10-30~2026-11-02",
       "lane": "Agentic Commerce",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 12,
-      "checkedAt": "2026-11-05T06:44:00.949Z"
-    },
-    {
-      "name": "Retail AI Investment · 2026-11-02~2026-11-05",
-      "lane": "平台博弈",
-      "sourceType": "行业媒体",
-      "status": "ok",
       "items": 9,
-      "checkedAt": "2026-11-05T06:44:00.863Z"
+      "checkedAt": "2026-11-05T17:23:32.260Z"
     },
     {
       "name": "Google Commerce · 2026-10-30~2026-11-02",
@@ -455,31 +455,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.000Z"
+      "checkedAt": "2026-11-05T17:23:32.331Z"
     },
     {
       "name": "Retail AI · 2026-10-30~2026-11-02",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 28,
-      "checkedAt": "2026-11-05T06:44:00.897Z"
-    },
-    {
-      "name": "Alibaba Qwen · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.105Z"
-    },
-    {
-      "name": "JD AI Retail · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.146Z"
+      "items": 26,
+      "checkedAt": "2026-11-05T17:23:32.224Z"
     },
     {
       "name": "OpenAI Shopping · 2026-10-30~2026-11-02",
@@ -487,15 +471,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.080Z"
-    },
-    {
-      "name": "Retail Dive Commerce · 2026-10-30~2026-11-02",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:01.166Z"
+      "checkedAt": "2026-11-05T17:23:32.414Z"
     },
     {
       "name": "Walmart AI · 2026-10-30~2026-11-02",
@@ -503,7 +479,23 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.113Z"
+      "checkedAt": "2026-11-05T17:23:32.476Z"
+    },
+    {
+      "name": "JD AI Retail · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.482Z"
+    },
+    {
+      "name": "Alibaba Qwen · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.475Z"
     },
     {
       "name": "Retail Dive AI · 2026-10-30~2026-11-02",
@@ -511,7 +503,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 4,
-      "checkedAt": "2026-11-05T06:44:01.148Z"
+      "checkedAt": "2026-11-05T17:23:32.494Z"
     },
     {
       "name": "Retail AI China · 2026-10-30~2026-11-02",
@@ -519,23 +511,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.158Z"
+      "checkedAt": "2026-11-05T17:23:32.519Z"
+    },
+    {
+      "name": "Retail Dive Commerce · 2026-10-30~2026-11-02",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:32.553Z"
     },
     {
       "name": "Grocery AI · 2026-10-30~2026-11-02",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 6,
-      "checkedAt": "2026-11-05T06:44:01.154Z"
-    },
-    {
-      "name": "Retail Brew · 2026-10-30~2026-11-02",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.303Z"
+      "items": 5,
+      "checkedAt": "2026-11-05T17:23:32.495Z"
     },
     {
       "name": "Modern Retail · 2026-10-30~2026-11-02",
@@ -543,7 +535,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.261Z"
+      "checkedAt": "2026-11-05T17:23:32.610Z"
+    },
+    {
+      "name": "Retail Brew · 2026-10-30~2026-11-02",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.654Z"
+    },
+    {
+      "name": "Chain Store Age · 2026-10-30~2026-11-02",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 9,
+      "checkedAt": "2026-11-05T17:23:32.655Z"
     },
     {
       "name": "NRF Retail · 2026-10-30~2026-11-02",
@@ -551,7 +559,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:01.332Z"
+      "checkedAt": "2026-11-05T17:23:32.660Z"
     },
     {
       "name": "Grocery Dive · 2026-10-30~2026-11-02",
@@ -559,15 +567,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:01.338Z"
-    },
-    {
-      "name": "Chain Store Age · 2026-10-30~2026-11-02",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 11,
-      "checkedAt": "2026-11-05T06:44:01.329Z"
+      "checkedAt": "2026-11-05T17:23:32.707Z"
     },
     {
       "name": "Retail Loss Prevention · 2026-10-30~2026-11-02",
@@ -575,23 +575,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 2,
-      "checkedAt": "2026-11-05T06:44:01.367Z"
+      "checkedAt": "2026-11-05T17:23:32.746Z"
     },
     {
-      "name": "Supply Chain AI · 2026-10-30~2026-11-02",
-      "lane": "零售运营",
+      "name": "Retail Personalization · 2026-10-30~2026-11-02",
+      "lane": "AI 导购",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 17,
-      "checkedAt": "2026-11-05T06:44:01.357Z"
-    },
-    {
-      "name": "Shopify AI · 2026-10-30~2026-11-02",
-      "lane": "AI 导购",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.491Z"
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:32.813Z"
     },
     {
       "name": "Retail Pricing · 2026-10-30~2026-11-02",
@@ -599,7 +591,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 2,
-      "checkedAt": "2026-11-05T06:44:01.440Z"
+      "checkedAt": "2026-11-05T17:23:32.778Z"
+    },
+    {
+      "name": "Supply Chain AI · 2026-10-30~2026-11-02",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 17,
+      "checkedAt": "2026-11-05T17:23:32.746Z"
+    },
+    {
+      "name": "Shopify AI · 2026-10-30~2026-11-02",
+      "lane": "AI 导购",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:32.881Z"
     },
     {
       "name": "Instacart AI · 2026-10-30~2026-11-02",
@@ -607,15 +615,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.527Z"
-    },
-    {
-      "name": "Retail Personalization · 2026-10-30~2026-11-02",
-      "lane": "AI 导购",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:01.483Z"
+      "checkedAt": "2026-11-05T17:23:32.882Z"
     },
     {
       "name": "Kroger AI · 2026-10-30~2026-11-02",
@@ -623,7 +623,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.553Z"
+      "checkedAt": "2026-11-05T17:23:32.929Z"
     },
     {
       "name": "Agent Checkout · 2026-10-30~2026-11-02",
@@ -631,15 +631,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-11-05T06:44:01.486Z"
-    },
-    {
-      "name": "Tesco AI · 2026-10-30~2026-11-02",
-      "lane": "零售运营",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.630Z"
+      "checkedAt": "2026-11-05T17:23:32.841Z"
     },
     {
       "name": "Carrefour AI · 2026-10-30~2026-11-02",
@@ -647,7 +639,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.629Z"
+      "checkedAt": "2026-11-05T17:23:33.051Z"
     },
     {
       "name": "Amazon Marketplace · 2026-10-30~2026-11-02",
@@ -655,23 +647,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.677Z"
+      "checkedAt": "2026-11-05T17:23:33.056Z"
     },
     {
-      "name": "JD Retail AI · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
+      "name": "Tesco AI · 2026-10-30~2026-11-02",
+      "lane": "零售运营",
+      "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.709Z"
-    },
-    {
-      "name": "Alibaba Retail AI · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 4,
-      "checkedAt": "2026-11-05T06:44:01.688Z"
+      "checkedAt": "2026-11-05T17:23:33.051Z"
     },
     {
       "name": "Meituan Retail AI · 2026-10-30~2026-11-02",
@@ -679,15 +663,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:01.711Z"
+      "checkedAt": "2026-11-05T17:23:33.060Z"
     },
     {
-      "name": "Pinduoduo AI · 2026-10-30~2026-11-02",
+      "name": "Alibaba Retail AI · 2026-10-30~2026-11-02",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:01.715Z"
+      "checkedAt": "2026-11-05T17:23:33.058Z"
+    },
+    {
+      "name": "JD Retail AI · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:33.059Z"
     },
     {
       "name": "China Supermarket AI · 2026-10-30~2026-11-02",
@@ -695,7 +687,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.751Z"
+      "checkedAt": "2026-11-05T17:23:33.130Z"
+    },
+    {
+      "name": "Pinduoduo AI · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:33.127Z"
     },
     {
       "name": "China Store Tech · 2026-10-30~2026-11-02",
@@ -703,15 +703,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.783Z"
-    },
-    {
-      "name": "京东官方 AI 零售 · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.787Z"
+      "checkedAt": "2026-11-05T17:23:33.242Z"
     },
     {
       "name": "京东物流与供应链 AI · 2026-10-30~2026-11-02",
@@ -719,7 +711,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.835Z"
+      "checkedAt": "2026-11-05T17:23:33.270Z"
     },
     {
       "name": "阿里千问淘宝购物 · 2026-10-30~2026-11-02",
@@ -727,15 +719,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.897Z"
+      "checkedAt": "2026-11-05T17:23:33.282Z"
     },
     {
-      "name": "淘宝天猫 AI 经营 · 2026-10-30~2026-11-02",
+      "name": "京东官方 AI 零售 · 2026-10-30~2026-11-02",
       "lane": "中国零售",
-      "sourceType": "行业媒体",
+      "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.892Z"
+      "checkedAt": "2026-11-05T17:23:33.249Z"
     },
     {
       "name": "拼多多官方与商家技术 · 2026-10-30~2026-11-02",
@@ -743,7 +735,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.904Z"
+      "checkedAt": "2026-11-05T17:23:33.306Z"
+    },
+    {
+      "name": "淘宝天猫 AI 经营 · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:33.271Z"
     },
     {
       "name": "拼多多商家运营与推荐 · 2026-10-30~2026-11-02",
@@ -751,7 +751,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.923Z"
+      "checkedAt": "2026-11-05T17:23:33.351Z"
+    },
+    {
+      "name": "中国电商平台公告 · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 4,
+      "checkedAt": "2026-11-05T17:23:33.374Z"
     },
     {
       "name": "中国即时零售 AI · 2026-10-30~2026-11-02",
@@ -759,7 +767,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.946Z"
+      "checkedAt": "2026-11-05T17:23:33.457Z"
     },
     {
       "name": "中国电商 AI 媒体 · 2026-10-30~2026-11-02",
@@ -767,47 +775,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:01.985Z"
-    },
-    {
-      "name": "中国电商平台公告 · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 5,
-      "checkedAt": "2026-11-05T06:44:01.943Z"
-    },
-    {
-      "name": "中国零售科技媒体 · 2026-10-30~2026-11-02",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.002Z"
-    },
-    {
-      "name": "Retail AI Investment · 2026-10-30~2026-11-02",
-      "lane": "平台博弈",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 4,
-      "checkedAt": "2026-11-05T06:44:02.058Z"
-    },
-    {
-      "name": "AI Shopping · 2026-10-27~2026-10-30",
-      "lane": "AI 导购",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 14,
-      "checkedAt": "2026-11-05T06:44:02.095Z"
-    },
-    {
-      "name": "China Retail AI · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.116Z"
+      "checkedAt": "2026-11-05T17:23:33.460Z"
     },
     {
       "name": "Retail AI Results · 2026-10-30~2026-11-02",
@@ -815,15 +783,39 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.085Z"
+      "checkedAt": "2026-11-05T17:23:33.482Z"
     },
     {
-      "name": "Agentic Commerce · 2026-10-27~2026-10-30",
-      "lane": "Agentic Commerce",
+      "name": "中国零售科技媒体 · 2026-10-30~2026-11-02",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:33.461Z"
+    },
+    {
+      "name": "AI Shopping · 2026-10-27~2026-10-30",
+      "lane": "AI 导购",
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 11,
-      "checkedAt": "2026-11-05T06:44:02.145Z"
+      "checkedAt": "2026-11-05T17:23:33.495Z"
+    },
+    {
+      "name": "China Retail AI · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:33.599Z"
+    },
+    {
+      "name": "Retail AI Investment · 2026-10-30~2026-11-02",
+      "lane": "平台博弈",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 4,
+      "checkedAt": "2026-11-05T17:23:33.473Z"
     },
     {
       "name": "Amazon AI · 2026-10-27~2026-10-30",
@@ -831,31 +823,23 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.172Z"
-    },
-    {
-      "name": "Google Commerce · 2026-10-27~2026-10-30",
-      "lane": "Agentic Commerce",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:02.188Z"
+      "checkedAt": "2026-11-05T17:23:33.663Z"
     },
     {
       "name": "Retail AI · 2026-10-27~2026-10-30",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 32,
-      "checkedAt": "2026-11-05T06:44:02.108Z"
+      "items": 30,
+      "checkedAt": "2026-11-05T17:23:33.546Z"
     },
     {
-      "name": "Alibaba Qwen · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "官方",
+      "name": "Agentic Commerce · 2026-10-27~2026-10-30",
+      "lane": "Agentic Commerce",
+      "sourceType": "行业媒体",
       "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.329Z"
+      "items": 6,
+      "checkedAt": "2026-11-05T17:23:33.637Z"
     },
     {
       "name": "OpenAI Shopping · 2026-10-27~2026-10-30",
@@ -863,15 +847,23 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.328Z"
+      "checkedAt": "2026-11-05T17:23:33.730Z"
     },
     {
-      "name": "JD AI Retail · 2026-10-27~2026-10-30",
+      "name": "Alibaba Qwen · 2026-10-27~2026-10-30",
       "lane": "中国零售",
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.345Z"
+      "checkedAt": "2026-11-05T17:23:33.749Z"
+    },
+    {
+      "name": "Google Commerce · 2026-10-27~2026-10-30",
+      "lane": "Agentic Commerce",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 2,
+      "checkedAt": "2026-11-05T17:23:33.725Z"
     },
     {
       "name": "Walmart AI · 2026-10-27~2026-10-30",
@@ -879,39 +871,23 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.336Z"
+      "checkedAt": "2026-11-05T17:23:33.816Z"
+    },
+    {
+      "name": "JD AI Retail · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:33.840Z"
     },
     {
       "name": "Retail Dive AI · 2026-10-27~2026-10-30",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 11,
-      "checkedAt": "2026-11-05T06:44:02.359Z"
-    },
-    {
-      "name": "Retail Dive Commerce · 2026-10-27~2026-10-30",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 4,
-      "checkedAt": "2026-11-05T06:44:02.383Z"
-    },
-    {
-      "name": "Retail AI China · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.369Z"
-    },
-    {
-      "name": "Grocery AI · 2026-10-27~2026-10-30",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 11,
-      "checkedAt": "2026-11-05T06:44:02.368Z"
+      "items": 10,
+      "checkedAt": "2026-11-05T17:23:33.849Z"
     },
     {
       "name": "Modern Retail · 2026-10-27~2026-10-30",
@@ -919,7 +895,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.482Z"
+      "checkedAt": "2026-11-05T17:23:33.931Z"
+    },
+    {
+      "name": "Retail AI China · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:33.889Z"
+    },
+    {
+      "name": "Grocery AI · 2026-10-27~2026-10-30",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 11,
+      "checkedAt": "2026-11-05T17:23:33.867Z"
     },
     {
       "name": "Retail Brew · 2026-10-27~2026-10-30",
@@ -927,23 +919,31 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-11-05T06:44:02.495Z"
+      "checkedAt": "2026-11-05T17:23:33.943Z"
     },
     {
       "name": "Chain Store Age · 2026-10-27~2026-10-30",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 18,
-      "checkedAt": "2026-11-05T06:44:02.509Z"
+      "items": 14,
+      "checkedAt": "2026-11-05T17:23:33.987Z"
+    },
+    {
+      "name": "Retail Dive Commerce · 2026-10-27~2026-10-30",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:33.924Z"
     },
     {
       "name": "NRF Retail · 2026-10-27~2026-10-30",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:02.526Z"
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:34.017Z"
     },
     {
       "name": "Grocery Dive · 2026-10-27~2026-10-30",
@@ -951,39 +951,23 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-11-05T06:44:02.569Z"
-    },
-    {
-      "name": "Retail Loss Prevention · 2026-10-27~2026-10-30",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:02.598Z"
-    },
-    {
-      "name": "Retail Pricing · 2026-10-27~2026-10-30",
-      "lane": "零售运营",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 2,
-      "checkedAt": "2026-11-05T06:44:02.629Z"
+      "checkedAt": "2026-11-05T17:23:34.052Z"
     },
     {
       "name": "Supply Chain AI · 2026-10-27~2026-10-30",
       "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 27,
-      "checkedAt": "2026-11-05T06:44:02.573Z"
+      "items": 28,
+      "checkedAt": "2026-11-05T17:23:34.111Z"
     },
     {
-      "name": "Retail Personalization · 2026-10-27~2026-10-30",
-      "lane": "AI 导购",
+      "name": "Retail Pricing · 2026-10-27~2026-10-30",
+      "lane": "零售运营",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 6,
-      "checkedAt": "2026-11-05T06:44:02.658Z"
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:34.134Z"
     },
     {
       "name": "Instacart AI · 2026-10-27~2026-10-30",
@@ -991,15 +975,15 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.724Z"
+      "checkedAt": "2026-11-05T17:23:34.222Z"
     },
     {
-      "name": "Kroger AI · 2026-10-27~2026-10-30",
-      "lane": "零售运营",
-      "sourceType": "官方",
+      "name": "Retail Personalization · 2026-10-27~2026-10-30",
+      "lane": "AI 导购",
+      "sourceType": "行业媒体",
       "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.769Z"
+      "items": 6,
+      "checkedAt": "2026-11-05T17:23:34.158Z"
     },
     {
       "name": "Shopify AI · 2026-10-27~2026-10-30",
@@ -1007,15 +991,31 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.717Z"
+      "checkedAt": "2026-11-05T17:23:34.182Z"
+    },
+    {
+      "name": "Retail Loss Prevention · 2026-10-27~2026-10-30",
+      "lane": "零售运营",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 2,
+      "checkedAt": "2026-11-05T17:23:34.118Z"
     },
     {
       "name": "Agent Checkout · 2026-10-27~2026-10-30",
       "lane": "Agentic Commerce",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 8,
-      "checkedAt": "2026-11-05T06:44:02.678Z"
+      "items": 7,
+      "checkedAt": "2026-11-05T17:23:34.180Z"
+    },
+    {
+      "name": "Kroger AI · 2026-10-27~2026-10-30",
+      "lane": "零售运营",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:34.309Z"
     },
     {
       "name": "Amazon Marketplace · 2026-10-27~2026-10-30",
@@ -1023,7 +1023,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.872Z"
+      "checkedAt": "2026-11-05T17:23:34.400Z"
     },
     {
       "name": "Carrefour AI · 2026-10-27~2026-10-30",
@@ -1031,7 +1031,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.846Z"
+      "checkedAt": "2026-11-05T17:23:34.385Z"
     },
     {
       "name": "Tesco AI · 2026-10-27~2026-10-30",
@@ -1039,31 +1039,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.848Z"
-    },
-    {
-      "name": "JD Retail AI · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:02.910Z"
-    },
-    {
-      "name": "Meituan Retail AI · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 4,
-      "checkedAt": "2026-11-05T06:44:02.926Z"
-    },
-    {
-      "name": "China Supermarket AI · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:02.950Z"
+      "checkedAt": "2026-11-05T17:23:34.399Z"
     },
     {
       "name": "Alibaba Retail AI · 2026-10-27~2026-10-30",
@@ -1071,15 +1047,39 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:02.888Z"
+      "checkedAt": "2026-11-05T17:23:34.421Z"
+    },
+    {
+      "name": "JD Retail AI · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:34.422Z"
     },
     {
       "name": "Pinduoduo AI · 2026-10-27~2026-10-30",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
+      "items": 4,
+      "checkedAt": "2026-11-05T17:23:34.449Z"
+    },
+    {
+      "name": "Meituan Retail AI · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
       "items": 5,
-      "checkedAt": "2026-11-05T06:44:02.929Z"
+      "checkedAt": "2026-11-05T17:23:34.423Z"
+    },
+    {
+      "name": "China Supermarket AI · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:34.494Z"
     },
     {
       "name": "China Store Tech · 2026-10-27~2026-10-30",
@@ -1087,15 +1087,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.019Z"
-    },
-    {
-      "name": "京东物流与供应链 AI · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "行业媒体",
-      "status": "ok",
-      "items": 1,
-      "checkedAt": "2026-11-05T06:44:03.042Z"
+      "checkedAt": "2026-11-05T17:23:34.563Z"
     },
     {
       "name": "京东官方 AI 零售 · 2026-10-27~2026-10-30",
@@ -1103,23 +1095,7 @@
       "sourceType": "官方",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.028Z"
-    },
-    {
-      "name": "阿里千问淘宝购物 · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.138Z"
-    },
-    {
-      "name": "拼多多官方与商家技术 · 2026-10-27~2026-10-30",
-      "lane": "中国零售",
-      "sourceType": "官方",
-      "status": "ok",
-      "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.144Z"
+      "checkedAt": "2026-11-05T17:23:34.572Z"
     },
     {
       "name": "淘宝天猫 AI 经营 · 2026-10-27~2026-10-30",
@@ -1127,15 +1103,31 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.123Z"
+      "checkedAt": "2026-11-05T17:23:34.630Z"
     },
     {
-      "name": "拼多多商家运营与推荐 · 2026-10-27~2026-10-30",
+      "name": "京东物流与供应链 AI · 2026-10-27~2026-10-30",
       "lane": "中国零售",
       "sourceType": "行业媒体",
       "status": "ok",
+      "items": 1,
+      "checkedAt": "2026-11-05T17:23:34.578Z"
+    },
+    {
+      "name": "阿里千问淘宝购物 · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "官方",
+      "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.164Z"
+      "checkedAt": "2026-11-05T17:23:34.657Z"
+    },
+    {
+      "name": "拼多多官方与商家技术 · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "官方",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:34.667Z"
     },
     {
       "name": "中国即时零售 AI · 2026-10-27~2026-10-30",
@@ -1143,7 +1135,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.199Z"
+      "checkedAt": "2026-11-05T17:23:34.736Z"
+    },
+    {
+      "name": "拼多多商家运营与推荐 · 2026-10-27~2026-10-30",
+      "lane": "中国零售",
+      "sourceType": "行业媒体",
+      "status": "ok",
+      "items": 0,
+      "checkedAt": "2026-11-05T17:23:34.697Z"
     },
     {
       "name": "中国电商 AI 媒体 · 2026-10-27~2026-10-30",
@@ -1151,7 +1151,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.204Z"
+      "checkedAt": "2026-11-05T17:23:34.751Z"
     },
     {
       "name": "中国电商平台公告 · 2026-10-27~2026-10-30",
@@ -1159,7 +1159,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 3,
-      "checkedAt": "2026-11-05T06:44:03.177Z"
+      "checkedAt": "2026-11-05T17:23:34.709Z"
     },
     {
       "name": "中国零售科技媒体 · 2026-10-27~2026-10-30",
@@ -1167,7 +1167,7 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.221Z"
+      "checkedAt": "2026-11-05T17:23:34.826Z"
     },
     {
       "name": "Retail AI Results · 2026-10-27~2026-10-30",
@@ -1175,15 +1175,15 @@
       "sourceType": "行业媒体",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-11-05T06:44:03.309Z"
+      "checkedAt": "2026-11-05T17:23:34.843Z"
     },
     {
       "name": "Retail AI Investment · 2026-10-27~2026-10-30",
       "lane": "平台博弈",
       "sourceType": "行业媒体",
       "status": "ok",
-      "items": 4,
-      "checkedAt": "2026-11-05T06:44:03.300Z"
+      "items": 3,
+      "checkedAt": "2026-11-05T17:23:34.830Z"
     }
   ]
 }
