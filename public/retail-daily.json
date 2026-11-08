@@ -1,6 +1,6 @@
 {
   "date": "2026-11-08",
-  "generatedAt": "2026-11-08T00:34:21.463Z",
+  "generatedAt": "2026-11-08T10:18:43.798Z",
   "title": "AI 零售日报",
   "lead": "日报于 2026-11-08 自动重建：近 7 日发现 160 条有日期和原文链接的信号，筛出 6 个优先事件（来源标识 8 个）。请以原文核验事实与经营影响。",
   "sections": [
@@ -32,6 +32,15 @@
       "evidence": "可追溯"
     },
     {
+      "title": "WMT Brings Tap-To-Pay To US Stores — Walmart Adding Google Pay To Its Checkout Options, Apple Pay Also Reportedly In The Mix - Stocktwits",
+      "summary": "信源原文自动同步；事实以原始报道为准。",
+      "eventId": "event-1vj6lgr",
+      "date": "2026-11-07",
+      "source": "Stocktwits",
+      "sourceUrl": "https://news.google.com/rss/articles/CBMikwJBVV95cUxOd1hCb3pSVTZMVDM5Mi1CUUwwODBINDAwaUQtVmNmcFdCWEtDTzJkZDNoWEhLUmZpWDZkYnhRVWJzb2FIUVVNWjlDdUl0bHMyYUVVWHA4Z2dxWUtCaGdjeTA2VHQtT0taT1F2dDRKdTZ5RnVhVTFzU00tbkhJNXc5Vm5xZmVZUzM3b0lpRV9LMEpLWUxiaEdSWWlfZnVyYmFPRGRhMGpEVXZPR0E4d0JYa21HS1NtYVExcmFnQXRYaTluY2Y0Vzd4Y1ZKN0FSUnZKZmt5WUZQNXlmREk0XzZaWjRPdmk3WHF3eTFNSUhjUFFWZG5kMXVSZm5uM0JIcFlRRVN6bXNvZDh4YnktMlZaczY0QQ",
+      "evidence": "可追溯"
+    },
+    {
       "title": "From AI Agents To In-Store BNPL: Payment Technology Is Being Reshaped On Multiple Fronts - SMBtech",
       "summary": "信源原文自动同步；事实以原始报道为准。",
       "eventId": "event-1w4szgm",
@@ -48,23 +57,14 @@
       "source": "ad-hoc-news.de",
       "sourceUrl": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQa1htd29tMi1YY0xac0tvSkpnX3UtXzNXeEV2c243bTE3ak5fV0lhVG5TN1VNOG1BNjlENElmVGNfX3hyY3hKbF8wd0gzdnN5dGttNnlLTGxGaFY0eHM1b29vdHVsLTA2RDJxMHZyVXJQeExBbEtSWlVDLXlLOGdKVjYxTkxCWkwzc0JZTE9Ga25YNlFDUTlwaG5IWV9UT196OFhuWm9CTHRaR3NjWVpZMVM2TU1jZlk5TWdldXZ4LTNSU29x",
       "evidence": "可追溯"
-    },
-    {
-      "title": "Black Friday: ESET warns about fake stores recommended by AI. - Grande Consumo",
-      "summary": "信源原文自动同步；事实以原始报道为准。",
-      "eventId": "event-f9a6yd",
-      "date": "2026-11-06",
-      "source": "Grande Consumo",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPdWk3TW1leVNPYmtnRXpaa2VHcTlxbDVTZGtVOHJtdWFmRUJIZTNzcWlKdTE0eDcxUHJZYnM0LTFvYUVqcFo0Z2UyTWRtLW5ScTlpQ3E2MzNOd3BBWnFtUmpwMmRSblY0azNfem1fbW41Mm1wc3ZvRExKQlY2Q1pKZkllQzc4bGFRcENFVmtPTHJVZVFF",
-      "evidence": "可追溯"
     }
   ],
   "watchlist": [
     "核验「Costco Store Inventory API “Scavio” Now Availabl」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Self-checkout was supposed to cut costs. Instead」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Firmly raises $15 million from Squarepoint, J.P.」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「From AI Agents To In-Store BNPL: Payment Technol」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「Mastercard stock extends payments strategy with 」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
+    "核验「WMT Brings Tap-To-Pay To US Stores — Walmart Add」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
+    "核验「From AI Agents To In-Store BNPL: Payment Technol」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
   ],
   "method": "多源采集 → 日期与原文链接校验 → 事件去重 → 来源追溯 → 日报重建",
   "factBoundary": "日报是公开信号导航，不等同于事实确认；关键结论需核对原始公告、报道正文或财报。",
