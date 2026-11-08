@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T08:52:09.051Z",
+  "generatedAt": "2026-11-08T09:05:09.215Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,20 +95,20 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 3,
-    "archivedItems": 101,
+    "newlyFound": 30,
+    "archivedItems": 111,
     "jdOfficialNotices": 3,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 23,
-      "京东": 34,
-      "美团": 18,
-      "拼多多": 26
+      "淘宝": 28,
+      "京东": 36,
+      "美团": 20,
+      "拼多多": 27
     }
   },
   "items": [
@@ -485,6 +485,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "AI能力赋能、四大升级举措加持商家在京东里的增长新机会来了- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE02aGFhb0l5enVCdEZtSmVGTnd6S1BxR3dXU214QjJuS0N2WDJHcFdoaTRrUzlWTGxaM1JnNjdoMEE2NV85VmZzM0R1OXplRHJ6V1Y2MVd3?oc=5",
+      "publishedAt": "2026-09-28",
+      "summary": "AI能力赋能、四大升级举措加持商家在京东里的增长新机会来了- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "pdd-seller-app-campaign-updates-2026-09-26",
       "lane": "拼多多",
       "platform": "拼多多",
@@ -836,6 +848,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "一周电商大事：天猫上线Token充值中心；字节跳动获近300亿美元贷款- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1rUUpESXUtZEhqRUlqUmZ4OTRwekhLX1otY004V1JfYVQwN0RJc0Ewak1RcXZRNHVSWGVRVG1VeWQ0LWd4bFZTcURhQ3JjSGRKWkVYY3hR?oc=5",
+      "publishedAt": "2026-09-05",
+      "summary": "一周电商大事：天猫上线Token充值中心；字节跳动获近300亿美元贷款- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "淘宝",
+      "query": "天猫 AI空间站 Token充值中心 数字商品 上线 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "到店餐饮商家规则中心 - 美团规则中心",
       "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBRUlVJU3hmWVdIMURxR2VGQ0kwSnpFZzZ0UlNOZ2dwa3gta3cxNHVOd1dFcU52Rkx4OFozMjFFVDc4S05rbDU5OXdOdXhBdDNvbTJybEhGT0UwdHROWmxpdkRjZzJrOHFLVm1pZGxKNA?oc=5",
       "publishedAt": "2026-08-19",
@@ -871,6 +895,18 @@
       "status": "已由应用版本记录确认"
     },
     {
+      "title": "2026年淘宝AI详情页制作工具推荐：打造高转化商品详情页 - 驱动之家",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFAzX0xldmZZbjFjMjBMazFOM3VJOEJyMm96VUpSS04wUjF1RGJWNkF4aUN0Ymk0b09pdVNpSnBUMW15Smp0U1Z4YXMtY091cmZITk95MzNjQ28?oc=5",
+      "publishedAt": "2026-07-29",
+      "summary": "2026年淘宝AI详情页制作工具推荐：打造高转化商品详情页 &nbsp;&nbsp; 驱动之家",
+      "source": "驱动之家",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "id": "meituan-catpaw-agent-platform-2026-07-28",
       "lane": "美团",
       "platform": "美团",
@@ -892,6 +928,18 @@
       ],
       "url": "https://tech.meituan.com/2026/07/28/CatPaw-LongCat.html",
       "status": "已由官方技术博客确认"
+    },
+    {
+      "title": "京东AI赋能商家经营 全量开放智能工具矩阵|具身之家 - 具身之家",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBWTVJDMmY4R0M0NWFwcWNNRXVPalJYc1JobUtkdnF0a2E1Rm9tZ3JnU2xsZ1h6NXAzbTJmeEViVnptU3h5elNNb0VlQUk5b3M5SDNaUmloVQ?oc=5",
+      "publishedAt": "2026-07-16",
+      "summary": "京东AI赋能商家经营 全量开放智能工具矩阵|具身之家 &nbsp;&nbsp; 具身之家",
+      "source": "具身之家",
+      "platform": "京东",
+      "query": "京东 京麦 AI经营中心 AI专家团 商品信息分 商家大会 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
       "id": "jd-service-provider-migration-2026",
@@ -960,6 +1008,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "订单处理、数据分析超省心！鸿蒙PC端美团商家版日常管店更轻松 - 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE11aFZncGppdUwxc1pyay00SGU1VUlMRlNYLVZKVUJscTNnbGR1VFNIMjNkbDBnX3dVVFI1LXNrdk1xb0F2djRIc256RFFDWkpNbFhyNWpNcHpYeEJQbFBLU0RpWXNfMDhEaHRzUTVGX09OZWVIVkFQcw?oc=5",
+      "publishedAt": "2026-06-03",
+      "summary": "订单处理、数据分析超省心！鸿蒙PC端美团商家版日常管店更轻松 &nbsp;&nbsp; 新浪财经",
+      "source": "新浪财经",
+      "platform": "美团",
+      "query": "美团 商家 流量 营销 补贴 活动 经营工具 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "拼多多Q1营收1062亿元；可灵AI一季度营业收入同比增长超300%丨零售电商周报- 零售 - 亿邦动力网",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5FakNXY3pXVkJFUTJ4UEpCRFdNWVp0T2xNUzFsanZDVnBHVXR5Q1lWb3U0ZktYVFpkd2YyRlJ2X3BSSmlOaEs5UHotM0wtNFlkalJmLUVn?oc=5",
       "publishedAt": "2026-05-31",
@@ -969,6 +1029,18 @@
       "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
       "actionType": "平台规则/费用",
       "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "美团·医药健康商家规则中心 - 美团规则中心",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1LT3o1RzhUT05nT0dyaXJMbnk3bFNYcVZaS1p6ZzFxYzJucXd4VG1tNFFIdTJOOUpjS2J6OVl6OWpNQWF3Y28zMzlJZFA4R014T2x5bC1PUV9FV3lmQmpNZTg5c2NOMUFCVHJXWVh1aHd0QQ?oc=5",
+      "publishedAt": "2026-05-28",
+      "summary": "美团·医药健康商家规则中心 &nbsp;&nbsp; 美团规则中心",
+      "source": "美团规则中心",
+      "platform": "美团",
+      "query": "site:rules-center.meituan.com 商户规则 公告 履约 品质 违规 2026",
+      "actionType": "商家经营工具",
+      "sourceType": "官方检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
@@ -1148,6 +1220,30 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE95MFh5Z1RIVUxUcTl0Tl9JMGQ5ZTFOX2NFeHlOT3kySUU1WXpvRFd4OElOeWJRZGRvakFPS05kcGhUUW5xNXVBT0FHdWEtZW1kc0Z4bnV3?oc=5",
+      "publishedAt": "2026-05-11",
+      "summary": "拼多多618：全程41天持续至6月底 带大促标识商品需“降价补差” &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
+      "platform": "拼多多",
+      "query": "拼多多商家版 免费流量 活动报名 补贴 营销工具 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "阿里巴巴Qwen模型深度整合淘宝：对话式购物取代搜索，优化移动端购物体验 - CSDN博客",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBfbTZVRG9icnRYTTVIeUdUcXlWVEtIY3ZGMDBnOXBheXBieWkwTjQtYjlYNGE3ZGRaWUkwLTFBTExYbmtlVHZGOG9TUTRpUEtxemlVUHlTSE5RZVRlbG1LdEljcGV6MFNIX0RN?oc=5",
+      "publishedAt": "2026-05-11",
+      "summary": "阿里巴巴Qwen模型深度整合淘宝：对话式购物取代搜索，优化移动端购物体验 &nbsp;&nbsp; CSDN博客",
+      "source": "CSDN博客",
+      "platform": "淘宝",
+      "query": "淘宝 千问 AI购物助手 虚拟试穿 价格追踪 自动下单 2026",
+      "actionType": "平台规则/费用",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "据报阿里巴巴将整合千问AI与淘宝 推出对话式智能购物服务 - 观点网",
       "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1zSVR5VXFmeXlYaUJCOWlGM3FTNF9rSEdIajB3aUl1SS1PQ05McjBZZ2ZtRkdhUUV6eXN2RlBkT1VDMHBPdFg3eU5oMHM0M1k2Z19CRnhwdXE5cWN5WG11V2hB?oc=5",
       "publishedAt": "2026-05-10",
@@ -1189,6 +1285,18 @@
       "publishedAt": "2026-04-29",
       "summary": "天猫服饰618划重点：新增多个会员拉新入口流量向差异化款式倾斜- 零售 &nbsp;&nbsp; 亿邦动力",
       "source": "亿邦动力",
+      "platform": "淘宝",
+      "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
+      "actionType": "流量/营销/补贴",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "天猫服饰618划重点：新增多个会员拉新入口流量向差异化款式倾斜- 零售 - 亿邦动力网",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE03eDhidGJMZnlnQmN0ZVE3VGpaQzl6WTdtX0k3dGNnUGw3V21yUDB1aFB5QkE4eFI4SXVhNnJPZFdHdmx0ZkVJQU1oMkhyM2dEazFIaW5B?oc=5",
+      "publishedAt": "2026-04-29",
+      "summary": "天猫服饰618划重点：新增多个会员拉新入口流量向差异化款式倾斜- 零售 &nbsp;&nbsp; 亿邦动力网",
+      "source": "亿邦动力网",
       "platform": "淘宝",
       "query": "淘宝 天猫 商家 流量 搜索推荐 广告 营销 补贴 618 2026",
       "actionType": "流量/营销/补贴",
@@ -1418,6 +1526,18 @@
       "platform": "美团",
       "query": "美团 App 更新 新功能 即时零售 搜索 推荐 购物 2026",
       "actionType": "App/产品功能",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "《淘宝网商品评价、销量特殊计算逻辑说明》将变更 - 新榜",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5WNDJsa3F6Z25ZdzlnaktKNDBHV1BZY0JFOFR6YW9pQ1Bzc1JPUHdGV2l1NFdnNHVXVzBFQ1VOTm1wQUNkQWMydnRqS1RUSG1D?oc=5",
+      "publishedAt": "2026-01-22",
+      "summary": "《淘宝网商品评价、销量特殊计算逻辑说明》将变更 &nbsp;&nbsp; 新榜",
+      "source": "新榜",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "平台规则/费用",
       "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
