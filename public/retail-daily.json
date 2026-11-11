@@ -1,6 +1,6 @@
 {
   "date": "2026-11-11",
-  "generatedAt": "2026-11-11T14:26:10.462Z",
+  "generatedAt": "2026-11-11T21:56:16.265Z",
   "title": "AI 零售日报",
   "lead": "日报于 2026-11-11 自动重建：近 7 日发现 160 条有日期和原文链接的信号，筛出 6 个优先事件（来源标识 8 个）。请以原文核验事实与经营影响。",
   "sections": [
@@ -11,6 +11,15 @@
       "date": "2026-11-05",
       "source": "USA Today",
       "sourceUrl": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxORUdqSmp3UERWNXRwd2J5TzhXOG9CVFlhdjBlSXdHcmppZkExSEFLVWE0emduVF9kMjdqOVBYTmwxMkg3bHhQOG1Ob2xHRWRFSWxuZW1VVmloS3hEMkdLQmtXTmlwUFhJZk9fcFRUbUgzTXhHZXpVamtSV2ZIaEZkb2Z4Wmc4VGlTZDlFZ2Z1cW5kQk4tX2ZiY0pMLVM4OEtpTU81OE1Zc3MtTkN6LWhmX3Y1Z0dDRTRPdFY1ZlhRdTN3WFo0a0FfMUZfSWFQcjNwcF92NHhDekE5bkFURW9FaVl0Tm9xUkhoWnBSS0twU3ROdGl0RnFJ",
+      "evidence": "可追溯"
+    },
+    {
+      "title": "AI and the explosive impact on shopping and payments - IT-Online",
+      "summary": "信源原文自动同步；事实以原始报道为准。",
+      "eventId": "event-19ll5ld",
+      "date": "2026-11-11",
+      "source": "IT-Online",
+      "sourceUrl": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZ0FTVkhqYW1FS04yM2JfdVZrVk41bjAzOEh0amljQ1pXTkt6QnRXMHh0V1pYY2x2Zlc1bnN1VUl3RVRLa3ppMEtWSkFCODZFSzNfcXhaZVBhWHU3RF96SzNFR2U4MEY3U2xPT0VKRkg3WHltYThNdE54QVl6Y3VSdWotT2FsaDNkczVRQmFPWHdBUQ",
       "evidence": "可追溯"
     },
     {
@@ -29,15 +38,6 @@
       "date": "2026-11-11",
       "source": "The Financial Express",
       "sourceUrl": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPVHcwd2wydThJc1JyMzNfMG5nemtzNjl0UDhlUkZmVUpNbzNOREc0Vm44enlVV1BIeW1JM3g5Z0pkbHhxa2dnX2VxWDhjZTZBd2hMSDhmd2toWGVHbDg4bW5sbGdqZDhtRTlTd3AtZ1NFQlppcDZteUJ3dGNvaVJsNkVTaUp3T2xrSFBtNl9hMUw5NUcyOHNBYtIBnwFBVV95cUxNbTZYMVF1SWtMQ0tibWlMRV9WX2xwWGRJalY3VDRzVENLcTZxbEZNVnFXM2owaGdMektpSHg2YzJwNDJCMFJZZGtFUzZiTnA2c1lJWXE5Y3dZOTE2OFpaSlJuaUhyLUZsQVJqMExtZW45cHU0dy02cHhMS2NMRmc1NU9kekhxdTBlSDNLWE9pTGJ6OFcwMV9SVUhZcXMtc3M",
-      "evidence": "可追溯"
-    },
-    {
-      "title": "OpenAI integrates business products and inventory with ChatGPT, enhancing shopping search features - 재경일보",
-      "summary": "信源原文自动同步；事实以原始报道为准。",
-      "eventId": "event-1dtkzk5",
-      "date": "2026-11-10",
-      "source": "재경일보",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5KT1gtRmw4TTZ6T21KZVdIRVVON0VCN2RCdDR3QnpYU09BZy1xNV9RQUdid3pwZHA2d2RHTGN6dTV6X09oYzNoTkpteENfS0t0R1huZnFOQ0hHdzJhbDY3c3Jn",
       "evidence": "可追溯"
     },
     {
@@ -61,9 +61,9 @@
   ],
   "watchlist": [
     "核验「Costco Store Inventory API “Scavio” Now Availabl」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
+    "核验「AI and the explosive impact on shopping and paym」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「How to get AI tools recommending your products b」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「AI gives kirana stores a pricing edge - The Fina」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
-    "核验「OpenAI integrates business products and inventor」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。",
     "核验「Regional grocer DeCicco & Sons expands inventory」原文中的发布时间、适用对象及结果数据，不要仅凭标题作经营决策。"
   ],
   "method": "多源采集 → 日期与原文链接校验 → 事件去重 → 来源追溯 → 日报重建",
