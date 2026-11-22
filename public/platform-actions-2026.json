@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T09:54:32.445Z",
+  "generatedAt": "2026-11-22T09:51:56.902Z",
   "year": 2026,
   "coverageNote": "平台动作雷达覆盖淘宝、京东、美团、拼多多的官方公告、开放平台、规则中心、App 版本与行业报道，并增加微信公众号文章的公开索引检索。公众号检索仅作为线索发现渠道，不代表账号身份或文章内容已获官方核验；自动发现记录需回查原文；Google News RSS 链接是跳转页，不能标注为原文直链。公开索引有覆盖限制，不能保证覆盖所有公众号、商家后台、私域或灰度发布内容。",
   "sourceDirectory": [
@@ -95,23 +95,35 @@
     }
   ],
   "sourceHealth": {
-    "queries": 32,
-    "healthy": 32,
+    "queries": 128,
+    "healthy": 128,
     "failed": 0,
-    "newlyFound": 3,
-    "archivedItems": 115,
+    "newlyFound": 28,
+    "archivedItems": 118,
     "jdOfficialNotices": 2,
     "jdOfficialStatus": "ok",
     "meituanRuleNotices": 0,
     "meituanRulesStatus": "ok",
     "byPlatform": {
-      "淘宝": 29,
+      "淘宝": 30,
       "京东": 36,
       "美团": 23,
-      "拼多多": 27
+      "拼多多": 29
     }
   },
   "items": [
+    {
+      "title": "电商周报：阿里/京东/腾讯/快手/拼多多Q3财报发布；天猫/抖音双11最终榜单出炉- 零售 - 亿邦动力",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBnbzRuTEVjZnpKLVpaZHUtQVppMThiQURwTzNuZ2E5eTBKdm5qLXBFbV8wV2RYSzRXWXQyUXVaZWZZMXMyNklQR0pqZ0tYWURVdkoyWW5n?oc=5",
+      "publishedAt": "2026-11-21",
+      "summary": "电商周报：阿里/京东/腾讯/快手/拼多多Q3财报发布；天猫/抖音双11最终榜单出炉- 零售 &nbsp;&nbsp; 亿邦动力",
+      "source": "亿邦动力",
+      "platform": "拼多多",
+      "query": "拼多多 AI搜索 自然语言搜索 灰度测试 上线 2026",
+      "actionType": "平台规则/费用",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
     {
       "title": "字节上线重磅功能，和美团杠上了 - 电商派",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBrU1hYX2VtYldxVm5aSWVoWnpyMldSOFNBNGJ1dWoxb09UaTRETXRmdGlXQ2tmMUl5eDNBdHc3U3EwN0FMUU9DbVZReHRFSFQzbnBSdF8zRGRWcmJMVkFNcw?oc=5",
@@ -1032,6 +1044,18 @@
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
+      "title": "快手APP推出AI购物助手|拼多多|抖音|商品|导购|淘宝_手机新浪网 - 新浪财经_金融信息服务商",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNTWE2alE5SFFMdXFTZHJhOW40VlZQOVdxejRDVFVIdzFTNldKUWN0dndVMlFXbkVEUEJlZDdPWWs5TUxhVW10WU5ENDNfTGtxTVNkS082OTNoVFJLOWJfV19nTmdpZ1dfQkNqMy15aFBOcmEydm1XTGRfV3Zpbl80TG45RmVubGotY2d6TXNFclFoQQ?oc=5",
+      "publishedAt": "2026-06-04",
+      "summary": "快手APP推出AI购物助手|拼多多|抖音|商品|导购|淘宝_手机新浪网 &nbsp;&nbsp; 新浪财经_金融信息服务商",
+      "source": "新浪财经_金融信息服务商",
+      "platform": "拼多多",
+      "query": "拼多多 AI 导购 商品推荐 购物助手 新功能 2026",
+      "actionType": "AI导购/购物助手",
+      "sourceType": "公开检索",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
       "title": "订单处理、数据分析超省心！鸿蒙PC端美团商家版日常管店更轻松 - 新浪财经",
       "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE11aFZncGppdUwxc1pyay00SGU1VUlMRlNYLVZKVUJscTNnbGR1VFNIMjNkbDBnX3dVVFI1LXNrdk1xb0F2djRIc256RFFDWkpNbFhyNWpNcHpYeEJQbFBLU0RpWXNfMDhEaHRzUTVGX09OZWVIVkFQcw?oc=5",
       "publishedAt": "2026-06-03",
@@ -1459,6 +1483,18 @@
       "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
       "actionType": "App/产品功能",
       "sourceType": "公开检索候选",
+      "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
+    },
+    {
+      "title": "淘宝 PC 版上线 AI MCP 工具：支持 OpenClaw 搜索比价加购，仍需手动付款 - 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNV3doN19MM3ZOQ3h6Y0pfVThwdUQ3ZDh1WkhOT0VwT3RMaHdCOTFEV2lxQVZ2eERWWTNlcWxhMkZwa0ZFSUV4bDV1MHNMc042YVZjcDBjMXhRZEZENWFxMnFDcTF1Y2dSTHlCNWZRUEJBdHRmWHhqc3p1MllCUWt6al9zMEZ4dDR2WFJKYkZR?oc=5",
+      "publishedAt": "2026-03-13",
+      "summary": "淘宝 PC 版上线 AI MCP 工具：支持 OpenClaw 搜索比价加购，仍需手动付款 &nbsp;&nbsp; 新浪财经",
+      "source": "新浪财经",
+      "platform": "淘宝",
+      "query": "淘宝 App 版本更新 新功能 搜索 推荐 商品详情 2026",
+      "actionType": "App/产品功能",
+      "sourceType": "公开检索",
       "status": "自动发现·待核验（Google News 跳转链接，非原文直链）"
     },
     {
